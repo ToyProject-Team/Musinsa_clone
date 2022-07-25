@@ -13,6 +13,7 @@ const httpServer = createServer(app)
 
 //내부모듈
 const db = require('./models')
+const authRouter = require('./routes/auth')
 
 //swagger
 const swaggerUi = require("swagger-ui-express");
@@ -41,6 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use('/api/auth', authRouter)
 app.use(
     "/api-docs",
     swaggerUi.serve,
