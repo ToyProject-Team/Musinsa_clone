@@ -1,0 +1,30 @@
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: Musinsa-API-docs
+  description: Musinsa API문서
+  servers:
+    - description: Musinsa-Clone dev
+      url: http://localhost:80/
+tags:
+  - name: user
+    description: API about user
+
+paths:
+  $ref: "./userAPI.yaml"
+
+success:
+  description: 성공
+  schema:
+    properties:
+      success:
+        type: boolean
+        example: true
+
+serverError:
+  description: 서버 에러
+  schema:
+    properties:
+      message:
+        type: string
+        example: 서버 에러
