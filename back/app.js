@@ -14,6 +14,7 @@ const httpServer = createServer(app)
 //내부모듈
 const db = require('./models')
 const authRouter = require('./routes/auth')
+const productRouter = require('./routes/product')
 
 //swagger
 const swaggerUi = require("swagger-ui-express");
@@ -23,7 +24,8 @@ const swaggerSpec = YAML.load(path.join(__dirname, "swagger.yaml"));
 //서버 가동
 dotenv.config();
 db.sequelize
-  .sync()
+  // .sync()
+  .sync( force=true)
   .then(() => {
     console.log("db 연결 성공");
   })
@@ -42,6 +44,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use('/api/product', productRouter)
 app.use('/api/auth', authRouter)
 app.use(
     "/api-docs",

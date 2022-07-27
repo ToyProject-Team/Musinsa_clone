@@ -1,8 +1,13 @@
 const Sequelize = require("sequelize");
+
 const user = require('./user')
+const product = require('./product')
+const bigCategory = require('./bigCategory')
 
 const db = {};
 db.User = user;
+db.Product = product;
+db.BigCategory = bigCategory;
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];

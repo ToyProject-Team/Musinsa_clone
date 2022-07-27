@@ -170,8 +170,8 @@ paths:
                 example: accessToken이 지급되지 않았습니다
         '500':
           $ref: '#/serverError'
-  /api/product/ranking:
-    post:
+  /api/product/productList:
+    get:
       tags:
         - product
       summary: 상품 리스트
@@ -179,23 +179,18 @@ paths:
         - name: Authorization
           in: header
           required: true
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: object
+            properties:
+              page:
+                type: string
+                description: 아무것도 주지 않을경우 0으로 처리
       responses:
         '200':
           $ref: '#/success'
-        '401':
-          description: 이메일 중복
-          schema:
-            properties:
-              message:
-                type: string
-                example: 이미 사용중인 아이디 입니다
-        '402':
-          description: 닉네임 중복
-          schema:
-            properties:
-              message:
-                type: string
-                example: 이미 사용중인 이메일 입니다!
         '500':
           $ref: '#/serverError'
 success:

@@ -25,8 +25,11 @@ module.exports = class User extends Model {
                 },
                 phoneNumber: {
                     type: DataTypes.STRING(30),
+                    allowNull: true
+                },
+                address: {
+                    type: DataTypes.STRING(100),
                     allowNull: true,
-                    unique: true
                 }
             },
             {
@@ -40,6 +43,15 @@ module.exports = class User extends Model {
         )
     }
     static associate(db) {
-        
+        db.User.belongsToMany(db.Product, {
+            through: 'ProductThumbsUp'
+        })
+        db.User.belongsToMany(db.Product, {
+            through: 'Views',
+            as: 'Viewer'
+        })
+        db.User.belongsToMany(db.Product, {
+            through: 'rate'
+        })
     }
 }
