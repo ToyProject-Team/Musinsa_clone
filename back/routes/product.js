@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const Sequelize = require('Sequelize')
 
 const Product = require('../models/product')
 const User = require('../models/user')
@@ -12,8 +11,7 @@ router.get('/productList', async (req, res, next) => {
         const productData = await Product.findAll({
             limit: 10,
             offset: startIndx,
-            attributes: ['id', 'productTitle', 'productInfo','productPrice', 'views', 'likes', 'comments',]
-            
+            attributes: ['id', 'productTitle', 'productPrice', 'likes', 'comments',]
         })
         res.json({ productData })
     } catch(e) {

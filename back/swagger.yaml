@@ -179,18 +179,36 @@ paths:
         - name: Authorization
           in: header
           required: true
-        - name: query
-          in: query
-          required: true
+        - in: query
+          name: page
           schema:
-            type: object
-            properties:
-              page:
-                type: string
-                description: 아무것도 주지 않을경우 0으로 처리
+            type: integer
+          description: 홈화면 페이지 쿼리. 아무것도 지급되지 않을 경우 자동으로 0 처리됩니다
       responses:
         '200':
-          $ref: '#/success'
+          description: 성공 - productData 배열에 담긴체 100개 전달(아래의 경우는 1개의 경우)
+          schema:
+            properties:
+              productData:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    productTitle:
+                      type: string
+                      example: '[MONSTA X 민혁 착용] 리커버리 슬리퍼'
+                    productPrice:
+                      type: integer
+                      example: 19900
+                    likes:
+                      type: integer
+                      example: 9504
+                    comments:
+                      type: integer
+                      example: 1450
         '500':
           $ref: '#/serverError'
 success:
