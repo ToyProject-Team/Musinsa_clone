@@ -1,6 +1,5 @@
 //외부모듈
 const express = require("express");
-const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
@@ -9,7 +8,7 @@ const hpp = require("hpp");
 const helmet = require("helmet");
 const path = require("path");
 const { createServer } = require('http')
-const httpServer = createServer(app)
+const morgan = require('morgan')
 
 //내부모듈
 const db = require('./models')
@@ -23,6 +22,8 @@ const swaggerSpec = YAML.load(path.join(__dirname, "swagger.yaml"));
 
 //서버 가동
 dotenv.config();
+const app = express();
+const httpServer = createServer(app)
 db.sequelize
   // .sync()
   .sync()
@@ -30,6 +31,12 @@ db.sequelize
     console.log("db 연결 성공");
   })
   .catch(console.error);
+
+if (process.env.NODE.ENV === 'production') {
+  app.use(morgan('combined'))
+} else {
+  app.use(morgan('dev'))
+}
 app.use(
   cors({
     origin: true,
