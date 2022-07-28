@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "api-docs": "swagger-cli bundle swagger/openapi.yaml --outfile swagger.yaml --type yaml",
-    "start": "nodemon app"
+    "start": "node app.js"
   },
   "author": "",
   "license": "MIT",
