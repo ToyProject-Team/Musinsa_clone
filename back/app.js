@@ -25,7 +25,7 @@ const swaggerSpec = YAML.load(path.join(__dirname, "swagger.yaml"));
 dotenv.config();
 db.sequelize
   // .sync()
-  .sync( force=true)
+  .sync()
   .then(() => {
     console.log("db 연결 성공");
   })
@@ -51,6 +51,9 @@ app.use(
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, { explorer: true }) //검색 허용가능
 );
+app.use('/', (req, res) => {
+  res.send({ message: "Hello, express" })
+})
 
 //포트 설정
 httpServer.listen(80);
