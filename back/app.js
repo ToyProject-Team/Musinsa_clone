@@ -34,6 +34,8 @@ db.sequelize
 
 if (process.env.NODE.ENV === 'production') {
   app.use(morgan('combined'))
+  app.use(hpp());
+  app.use(helmet());
 } else {
   app.use(morgan('dev'))
 }
