@@ -32,11 +32,13 @@ db.sequelize
   })
   .catch(console.error);
 
-if (process.env.NODE.ENV === 'production') {
-  app.use(morgan('combined'))
-} else {
-  app.use(morgan('dev'))
-}
+// if (process.env.NODE.ENV === 'production') {
+//   app.use(morgan('combined'))
+//   app.use(hpp());
+//   app.use(helmet());
+// } else {
+//   app.use(morgan('dev'))
+// }
 app.use(
   cors({
     origin: true,

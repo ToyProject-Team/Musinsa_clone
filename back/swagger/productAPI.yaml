@@ -40,4 +40,3 @@
                   
       500:
         $ref: "./openapi.yaml#/serverError"
-

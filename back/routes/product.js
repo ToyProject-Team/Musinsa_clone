@@ -20,5 +20,15 @@ router.get('/productList', async (req, res, next) => {
     }
 })
 
+// router.get('/product', authJWT, (req, res) => {
+//     const product = await Product.findOne({
+//         where: req.query.productId,
+//         attributes: ['id', 'productTitle', 'productPrice', 'likes', 'comments',]
+//     })
+    
+//     if (!product) {
+//         return res.status(400).json({ message: '상품 조회 결과가 없습니다'})
+//     }
+// })
 
 module.exports = router
