@@ -51,7 +51,7 @@ module.exports = class User extends Model {
             as: 'Viewer'
         })
         db.User.belongsToMany(db.Product, {
-            through: 'rate'
+            through: 'isLikes'
         })
     }
 }

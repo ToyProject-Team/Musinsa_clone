@@ -28,8 +28,63 @@ module.exports = class Product extends Model {
                 comments: {
                     type: DataTypes.INTEGER(11),
                     allowNull: false
+                },
+                gender: {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false
+                },
+                season : {
+                    type: DataTypes.STRING(10),
+                    allowNull: false
+                },
+                beRleased : {
+                    type: DataTypes.DATE,
+                    allowNull: false
+                },
+                deliveryFrom : {
+                    type: DataTypes.BOOLEAN,
+                    allowNull: false
+                },
+                deliveryWay : {
+                    type: DataTypes.BOOLEAN,
+                    allowNull: false
+                },
+                deliveryCompany : {
+                    type: DataTypes.STRING(30),
+                    // allowNull: false
+                },
+                nonMemberPrice : {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false
+                },
+                rookiePrice : {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false
+                },
+                memberPrice : {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false
+                },
+                bronzePrice : {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false
+                },
+                silverPrice : {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false
+                },
+                goldPrice : {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false
+                },
+                platinumPrice : {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false
+                },
+                diamondPrice : {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false
                 }
-
             },
             {
                 modelName: 'Product',
@@ -42,6 +97,7 @@ module.exports = class Product extends Model {
         )
     }
     static associate(db) {
+        db.Product.hasOne(db.ProductImg)
         db.Product.belongsToMany(db.User, {
             through: 'ProductThumbsUp'
         })
@@ -50,10 +106,8 @@ module.exports = class Product extends Model {
             as:'IsViewed'
         })
         db.Product.belongsToMany(db.User, {
-            through: 'rate'
+            through: 'isLikes'
         })
-        db.Product.belongsToMany(db.BigCategory, {
-            through: 'productCategory'
-        })
+        db.Product.belongsTo(db.BigCategory)
     }
 }

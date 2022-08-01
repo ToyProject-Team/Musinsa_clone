@@ -9,6 +9,7 @@ const helmet = require("helmet");
 const path = require("path");
 const { createServer } = require('http')
 const morgan = require('morgan')
+const multer = require('multer');
 
 //내부모듈
 const db = require('./models')
@@ -60,8 +61,85 @@ app.use(
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, { explorer: true }) //검색 허용가능
 );
-app.use('/', (req, res) => {
+
+var AWS = require('aws-sdk');
+var fs = require('fs');
+require('dotenv')
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region : 'ap-northeast-2'
+});
+
+
+
+app.use('/S3upload', (req, res) => {
+  const category = 'Womanbag'
+  defaultStart = 1
+  defaultI = 172
+  for (i = defaultStart; i<= defaultI; i ++) {
+    function isJpg(i) {
+      try {
+      check = fs.existsSync('../prepare/'+ category + '/' + category + String(i)+'.jpg')
+      if (check) {
+        return 'jpg'
+      } else {
+        return 'png'
+      }
+      } catch (e) {
+        return 'png'
+      }
+    }
+    fileExt = isJpg(i)
+    console.log(fileExt)
+    s3.upload({
+      'Bucket':'musinsa-s3',
+      'Key': 'image/'+ category + '/' + category + String(i),
+      'ACL':'public-read',
+      'Body':fs.createReadStream('../prepare/'+ category + '/' + category + String(i)+'.'+ fileExt),
+      'ContentType':'image/'+ fileExt
+    }, function(err, data){
+      if(err) {
+          console.log(err);
+      }
+      console.log(data);
+    });
+  }
+  for (i= defaultStart; i <= defaultI; i++) {
+    s3.getObject({ Bucket: 'musinsa-s3', Key: 'image/'+ category + '/' + category + String(i)}, (err, data) => {
+      if (err) {
+        console.log(err, err.stack); // an error occurred
+      }
+      else  {
+        console.log(data);           // successful response
+      }
+    })
+  }
   res.send({ message: "Hello, express" })
+})
+
+// for( var i = Idx; i <= productData.length; i++ ) {
+        //     // console.log("?")
+        //     const file = await s3
+        //         .getObject({ Bucket: 'musinsa-s3', Key: 'image/'+ category + '/' + category + String(i)})
+        //         .promise();
+        //     console.log(file)
+        // } 
+
+app.use('/temp', (req, res) => {
+  const category = 'Accessory'
+  for (i= 1; i<= 179; i++) {
+    s3.getObject({ Bucket: 'musinsa-s3', Key: 'image/'+ category + '/' + category + String(i)}, (err, data) => {
+      if (err) {
+        console.log(err, err.stack); // an error occurred
+      }
+      else  {
+          console.log(data);           // successful response
+      }
+    })
+  }
+  res.json("success")
 })
 
 //포트 설정
