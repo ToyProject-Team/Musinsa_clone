@@ -3,15 +3,16 @@ import { BrowserRouter, Routes, Redirect, Route } from 'react-router-dom';
 import loadable from '@loadable/component';
 
 const LogIn = loadable(() => import('./pages/login/index.js'));
+const MyPage = loadable(() => import('./pages/mypage/index.js'));
 
 function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<LogIn />} /> {/* => 메인페이지 */}
+				<Route path="main/*" element={<LogIn />} /> {/* => 메인페이지 */}
 				<Route path="login/*" element={<LogIn />} />
-				<Route path="" element={<LogIn />} /> {/* => 상세페이지 */}
-				<Route path="" element={<LogIn />} /> {/* => 마이페이지 */}
+				<Route path="detail/*" element={<LogIn />} /> {/* => 상세페이지 */}
+				<Route path="" element={<MyPage />} /> {/* => 마이페이지 */}
 			</Routes>
 		</BrowserRouter>
 	);
