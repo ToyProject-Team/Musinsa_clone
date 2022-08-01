@@ -1,8 +1,8 @@
 import React from 'react';
-// import { Form } from './styles';
+import { Hello } from './styles';
 
 const LogIn = () => {
-	return <div>로그인페이지</div>;
+	return <Hello>로그인페이지</Hello>;
 };
 
 export default LogIn;

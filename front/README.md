@@ -1,3 +1,9 @@
+# Clone Coding First Start
+
+### `npm install`
+
+Please complete the installation on initial startup
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
