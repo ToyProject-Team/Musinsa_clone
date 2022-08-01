@@ -90,7 +90,7 @@ router.get('/productDetail', async (req, res) => {
         where: {
             id: req.query.productId
         },
-        attributes: ['id', 'productTitle', 'productPrice', 'likes', 'comments',]
+        attributes: ['id', 'productTitle', 'season', 'gender', 'views', 'sells', 'likes', 'comments', 'productPrice']
     })
     
     if (!product) {

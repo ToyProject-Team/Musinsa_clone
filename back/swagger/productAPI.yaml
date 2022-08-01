@@ -67,7 +67,7 @@
                     properties:
                       src:
                         type: string
-                        example: Accessory2
+                        example: Accessory/Accessory2
       400:
         description: 상품 조회 결과가 없을 경우
         schema:

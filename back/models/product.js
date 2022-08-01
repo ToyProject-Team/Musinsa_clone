@@ -84,6 +84,10 @@ module.exports = class Product extends Model {
                 diamondPrice : {
                     type: DataTypes.INTEGER(11),
                     allowNull: false
+                },
+                sells: {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false
                 }
             },
             {
@@ -97,6 +101,9 @@ module.exports = class Product extends Model {
         )
     }
     static associate(db) {
+        db.Product.belongsToMany(db.CustomCategory, {
+            through: 'CustomCategoriesMatch'
+        })
         db.Product.hasOne(db.ProductImg)
         db.Product.belongsToMany(db.User, {
             through: 'ProductThumbsUp'
