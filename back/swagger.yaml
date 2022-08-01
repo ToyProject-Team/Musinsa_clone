@@ -183,7 +183,32 @@ paths:
           name: page
           schema:
             type: integer
-          description: 홈화면 페이지 쿼리. 아무것도 지급되지 않을 경우 자동으로 0 처리됩니다
+          description: 현재페이지 쿼리입니다. 현재 페이지 인덱스를 보내주세요. 아무것도 지급되지 않을 경우 자동으로 0 처리됩니다<br>`2페이지를 조회할 경우 2`
+        - in: query
+          name: price
+          schema:
+            type: integer
+          description: '가격필터링용 쿼리입니다 가격 분류 인덱스를 정수로 보내주세요<br>`5만~10만의 상품을 조회할 경우 2`<br>[0 ~ 5만, 2- 5만~10만, 10만~20만, 20만~30만, 30만이상]'
+        - in: query
+          name: priceMin
+          schema:
+            type: integer
+          description: 사용자지정 최소가격필터용 쿼리입니다. 최소 가격을 정수로 보내주세요<br>`최소가격 3만의 경우 - 30000`
+        - in: query
+          name: priceMax
+          schema:
+            type: integer
+          description: 사용자지정 최대가격필터용 쿼리입니다. 최대 가격을 정수로 보내주세요<br>`최대가격 10만의 경우 - 100000`
+        - in: query
+          name: bigCategoryId
+          schema:
+            type: integer
+          description: '상품 카테고리(대) 범주 필터링입니다. 대분류 카테고리 인덱스를 정수로 보내주세요 <br> `상의조회의 경우 1, 아우터조회의 경우 2`<br>대분류 - [''상의'', ''아우터'', ''바지'', ''원피스'', ''스커트'', ''스니커즈'', ''신발'', ''가방'', ''여성 가방'', ''스포츠/용품'', ''모자'', ''양말/레그웨어'', ''속옷'', ''선글라스/안경테'', ''악세서리'', ''시계'', ''주얼리'', ''뷰티'', ''디지털/테크'', ''생활/취미/예술'', ''책/음악/티켓'', ''반려동물'']'
+        - in: query
+          name: smallCategoryId
+          schema:
+            type: integer
+          description: '상품 카테고리(소) 범주 필터링입니다. 소분류 카테고리 인덱스를 정수로 보내주세요 <br>`백팩 조회의 경우 bigCategoryId:1 && smallCategoryId:1` <br>대분류당 갯수 - [9, 12, 8, 3, 3, 3, 11, 13, 9, 13, 7, 2, 5, 3, 8, 5, 7, 12, 11, 11, 2, 2]'
       responses:
         '200':
           description: 성공 - productData 배열에 담긴체 100개 전달합니다(아래는 예시용 1개)
@@ -202,13 +227,26 @@ paths:
                       example: '[MONSTA X 민혁 착용] 리커버리 슬리퍼'
                     productPrice:
                       type: integer
-                      example: 19900
+                      example: 305360
                     likes:
                       type: integer
-                      example: 9504
+                      example: 222
                     comments:
                       type: integer
-                      example: 1450
+                      example: 826
+                    ProductImg:
+                      type: object
+                      properties:
+                        src:
+                          type: string
+                          example: Accessory2
+        '401':
+          description: 상품 조회 결과가 없을 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 상품 조회 결과가 없습니다 입력값을 다시 확인해주세요
         '500':
           $ref: '#/serverError'
 success:

@@ -1,18 +1,19 @@
 const DataTypes = require('sequelize');
 const { Model } = DataTypes
 
-module.exports = class BigCategory extends Model {
+module.exports = class CustomCategory extends Model {
     static init(sequelize) {
         return super.init(
             {
                 categoryName: {
                     type: DataTypes.STRING(100),
                     allowNull: false,
+                    unique: true
                 }
             },
             {
-                modelName: 'BigCategory',
-                tableName: 'BigCategories',
+                modelName: 'CustomCategory',
+                tableName: 'CustomCategories',
                 paranoid: true,
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
@@ -21,6 +22,8 @@ module.exports = class BigCategory extends Model {
         )
     }
     static associate(db) {
-        db.BigCategory.hasMany(db.Product)
+        db.ProductImg.belongsToMany(db.Product, {
+            through: 'CustomCategoryMatch'
+        })
     }
 }
