@@ -2,7 +2,9 @@ import './App.css';
 import { BrowserRouter, Routes, Redirect, Route } from 'react-router-dom';
 import loadable from '@loadable/component';
 
-const LogIn = loadable(() => import('./pages/login/index.js'));
+const LogIn = loadable(() => import('pages/login'), {
+	fallback: <div>로딩중</div>,
+});
 
 function App() {
 	return (
