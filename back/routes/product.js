@@ -73,7 +73,7 @@ router.get('/productList', async (req, res, next) => {
             offset: startIndx,
             attributes: ['id', 'productTitle', 'productPrice', 'likes', 'comments']
         })
-
+        //a
         if (!productData) {
             return res.status(400).json({ message: "상품 조회 결과가 없습니다 입력값을 다시 확인해주세요" })
         }
