@@ -126,4 +126,5 @@ router.get('/productDetail', async (req, res) => {
     res.status(200).json({ product })
 })
 
+
 module.exports = router

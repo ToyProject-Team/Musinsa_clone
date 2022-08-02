@@ -77,7 +77,7 @@
               example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요        
       500:
         $ref: "./openapi.yaml#/serverError"
-/api/product/productdetail:
+/api/product/productDetail:
   get:
     tags:
       - product
@@ -189,3 +189,5 @@
               example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요        
       500:
         $ref: "./openapi.yaml#/serverError"
+
+$ref: "./myPageAPI.yaml"
