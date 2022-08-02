@@ -101,8 +101,12 @@ module.exports = class Product extends Model {
         )
     }
     static associate(db) {
+        db.Product.belongsToMany(db.User, {
+            through: db.Comment,
+            as: "comment"
+        })
         db.Product.belongsToMany(db.CustomCategory, {
-            through: 'CustomCategoriesMatch'
+            through: 'CustomCategoryMatch'
         })
         db.Product.hasOne(db.ProductImg)
         db.Product.belongsToMany(db.User, {

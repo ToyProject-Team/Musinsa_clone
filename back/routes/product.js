@@ -2,6 +2,8 @@ const express = require('express')
 const Product = require('../models/product')
 const User = require('../models/user')
 const ProductImg = require('../models/productImg')
+const CustomCategory = require('../models/customCategory')
+const Comment = require('../models/comment')
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const {sequelize, Op} = require('sequelize')
@@ -86,16 +88,40 @@ router.get('/productList', async (req, res, next) => {
 })
 
 router.get('/productDetail', async (req, res) => {
-    const product = await Product.findOne({
+    console.log(req.query.productId)
+    let product = await Product.findOne({
+        include: [
+            {
+                model: CustomCategory,
+                attributes: ["id"],
+                through: {attributes: []}
+            }
+        ],
         where: {
             id: req.query.productId
         },
-        attributes: ['id', 'productTitle', 'season', 'gender', 'views', 'sells', 'likes', 'comments', 'productPrice']
+        attributes: {exclude: ['productInfo', "createdAt", "updatedAt", "deletedAt", ]},
     })
-    
+
+        
     if (!product) {
         return res.status(400).json({ message: '상품 조회 결과가 없습니다'})
     }
+    const comment = await Comment.findAndCountAll({
+        raw: true,
+        where: {
+            ProductId: product.id
+        },
+    })
+    sum = 0
+    for (let i = 0; i < comment.count; i++) {
+        sum += comment.rows[i].ValueBrightness
+        sum += comment.rows[i].ValueColorSense
+        sum += comment.rows[i].ValueStorageSpace
+    }
+    rated = (sum / (comment.count * 3)).toFixed(1)
+    product.setDataValue('commentCount', comment.count)
+    product.setDataValue('rated', rated)
     
     res.status(200).json({ product })
 })
