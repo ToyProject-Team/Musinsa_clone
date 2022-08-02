@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 const jwt = require("../utils/jwt-utils");
 const { sequelize, User } = require('../models')
 const redisClient = require("../utils/redis");
+const authJWT = require('../utils/authJWT')
 
 router.post('/signup', async (req, res, next) => {
     try {
@@ -74,5 +75,17 @@ router.post("/signin", async (req, res, next) => {
       accessToken,
     });
   });
+
+  router.post("/logout", authJWT, async (req, res, next) => {
+    const client = redisClient;
+    client.get(req.myId, function (err, clientCheck) {
+      if (!clientCheck) {
+        return res.status(405).send({ message: "유효하지 않은 토큰입니다." });
+      }
+      client.del(req.myId);
+      return res.status(200).send({ message: "ok" });
+    });
+  });
+  
 
 module.exports = router
