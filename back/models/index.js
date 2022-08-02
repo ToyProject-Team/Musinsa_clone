@@ -6,6 +6,7 @@ const bigCategory = require('./bigCategory')
 const ProductImg = require('./productImg');
 const SmallCategory = require("./smallCategory");
 const CustomCategory = require('./customCategory')
+const Comment = require('./comment')
 
 const db = {};
 db.User = user;
@@ -14,6 +15,7 @@ db.BigCategory = bigCategory;
 db.ProductImg = ProductImg;
 db.SmallCategory = SmallCategory;
 db.CustomCategory = CustomCategory;
+db.Comment = Comment
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];

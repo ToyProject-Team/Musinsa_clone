@@ -17,12 +17,15 @@ module.exports = {
       }
     }
 
-    function whoDeliver (randIdx) {
-      if (randIdx = 0) {
+    function whoDeliver (ran) {
+      if (ran == 0) {
         return 'CJ대한통운'
-      } else if (randIdx == 1) {
+      }
+      if (ran == 1) {
+        console.log()
         return '로젠택배'
-      } else if (randIdx == 2) {
+      }
+      if (ran == 2) {
         return '롯데택배'
       }
     }
@@ -53,6 +56,7 @@ module.exports = {
     let Idx = 0
     let dividedCount = 0 
     let ImgSmallIdx = 0
+    // console.log(categoryImgCOunt.reduce((a,b) => a + b))
     for (var i = 0; i < categoryImgCOunt.reduce((a,b) => a + b); i++) {
       if (sum == categoryImgCOunt[Idx]) {
         Idx +=1
@@ -60,7 +64,7 @@ module.exports = {
         ImgSmallIdx = 0
         sum = 0 
       }
-      console.log(sum, ImgSmallIdx, dividedCount)
+      // console.log(sum, ImgSmallIdx, dividedCount)
       if (sum % dividedCount == 0) {
         ImgSmallIdx +=1
       }

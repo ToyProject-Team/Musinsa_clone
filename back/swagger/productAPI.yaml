@@ -77,3 +77,115 @@
               example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요        
       500:
         $ref: "./openapi.yaml#/serverError"
+/api/product/productdetail:
+  get:
+    tags:
+      - product
+    summary: 상품 상세보기
+    parameters:
+      - name: Authorization
+        in: header
+        required: true
+      - in: query
+        name: productId
+        schema:
+          type: integer
+        required: true
+        description: 상품 id 쿼리입니다. 상품 식별 id 를 보내주세요
+    responses:
+      200:
+        description: 성공 - product 배열에 데이터들이 지급됩니다
+        schema:
+          properties:
+            product:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 33
+                  productTitle:
+                    type: string
+                    example: Chips
+                  productPrice:
+                    type: integer
+                    example: 94160
+                  views:
+                    type: integer
+                    example: 1661
+                  likes:
+                    type: integer
+                    example: 418
+                  comments:
+                    type: integer
+                    example: 541
+                  gender:
+                    type: integer
+                    example: 0
+                  season:
+                    type: string
+                    example: 2021 ALL
+                  beRleased:
+                    type: string
+                    example: 2022-07-29T19:06:04.000Z
+                  deliveryFrom:
+                    type: boolean
+                    example: true
+                  deliveryWay:
+                    type: boolean
+                    example: true
+                  deliveryCompany:
+                    type: integer
+                    example: 'CJ대한통운'
+                  nonMemberPrice:
+                    type: integer
+                    example: 85600
+                  rookiePrice:
+                    type: integer
+                    example: 77040
+                  memberPrice:
+                    type: integer
+                    example: 76184
+                  bronzePrice:
+                    type: integer
+                    example: 75328
+                  silverPrice:
+                    type: integer
+                    example: 74472
+                  goldPrice:
+                    type: integer
+                    example: 73616
+                  platinumPrice:
+                    type: integer
+                    example: 72760
+                  diamondPrice:
+                    type: integer
+                    example: 71904
+                  sells:
+                    type: integer
+                    example: 1843
+                  BigCategoryId:
+                    type: integer
+                    example: 1
+                  SmallCategoryId:
+                    type: integer
+                    example: 1
+                  CustomCategories:
+                    type: integer
+                    example: 33
+                  commentCount:
+                    type: integer
+                    example: 3
+                  rated:
+                    type: integer
+                    example: 4.1
+      400:
+        description: 상품 조회 결과가 없을 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요        
+      500:
+        $ref: "./openapi.yaml#/serverError"
