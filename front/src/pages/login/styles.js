@@ -332,13 +332,7 @@ export const KakaoLogIn = styled.a`
 		vertical-align: top;
 	}
 `;
-export const LinkContainer = styled.div`
-	margin-top: 40px;
-	padding-right: 15px;
-	padding-left: 15px;
-	color: #0078ff;
-	text-align: center;
-`;
+
 export const SignupLink = styled.div`
 	margin-top: 40px;
 	padding-right: 15px;

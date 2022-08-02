@@ -11,10 +11,6 @@ import {
 	LoginCheck,
 	FindLogin,
 	KakaoLogIn,
-	KakaoLink,
-	KakaoSVG,
-	LinkContainer,
-	Signup,
 	SignupLink,
 } from './styles';
 
