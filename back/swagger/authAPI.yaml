@@ -1,7 +1,7 @@
-/api/user/signup:
+/api/auth/signup:
   post:
     tags:
-      - user
+      - auth
     summary: 회원가입
     parameters:
       - name: body
@@ -36,10 +36,10 @@
       500:
         $ref: "./openapi.yaml#/serverError"
 
-/api/user/signin:
+/api/auth/signin:
   post:
     tags:
-      - user
+      - auth
     summary: 로그인
     parameters:
       - name: body
@@ -96,10 +96,10 @@
       500:
         $ref: "./openapi.yaml#/serverError"
 
-/api/user/logout:
+/api/auth/logout:
   post:
     tags:
-      - user
+      - auth
     summary: 로그아웃
     parameters:
       - name: Authorization
@@ -108,10 +108,10 @@
     responses:
       200:
         $ref: "./openapi.yaml#/success"
-/api/user/refresh:
+/api/auth/refresh:
   get:
     tags:
-      - user
+      - auth
     summary: 토큰 refresh
     parameters:
       - name: Authorization
@@ -160,5 +160,19 @@
               example: accessToken이 지급되지 않았습니다
       500:
         $ref: "./openapi.yaml#/serverError"
-
+/api/auth/kakao:
+  post:
+    tags:
+      - auth
+    summary: 소셜 로그인(카카오)
+    responses:
+      200:
+        schema:
+          properties:
+            refreshToken:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTk1MTI5OTQsImV4cCI6MTY2MDcyMjU5NH0.I-9dst19UegB0a0RLXGND00auSNabUywhfUf97-waRM
+            accessToken:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTk1MTI5OTQsImV4cCI6MTY1OTU5OTM5NH0.vME0u2mgPL1xeu0riuwXnIFyD50fBm2bd9R3zzDpuI4
 $ref: "./productAPI.yaml"
