@@ -17,12 +17,13 @@ import {
 import { useState, useCallback } from 'react';
 
 const ProductInfoRight = ({ data }) => {
-	const [toggle, setToggle] = useState(false);
-	const onToggle = useCallback(() => {
-		if (!toggle) {
-		} else {
-		}
-	}, []);
+	// const [toggle, setToggle] = useState(false);
+	// const onToggle = useCallback(() => {
+	// 	if (!toggle) {
+	// 	} else {
+	// 	}
+	// }, []);
+	console.log(data);
 
 	return (
 		<ProductInfo>
@@ -101,7 +102,7 @@ const ProductInfoRight = ({ data }) => {
 					</DetailInfo>
 					<DetailInfo>
 						<PriceTitle>무신사 회원가</PriceTitle>
-						<PriceContent onClick={onToggle}>
+						<PriceContent>
 							{data.RookiePrice}
 							<span style={{ 'font-size': '15px', 'font-weight': 'bold', 'padding-left': '2px' }}>
 								원

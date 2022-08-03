@@ -1,13 +1,14 @@
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 /* index.js */
 export const ProductInfo = styled.div`
 	width: 900;
-	InfoWrapper {
+	height: 100vh;
+	/* InfoWrapper {
 		&not(:first-child) {
 			padding-top: 0px !important;
 		}
-	}
+	} */
 	margin-left: 20px;
 `;
 

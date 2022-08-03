@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 const CategoryWrapper = styled.div`
 	font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
