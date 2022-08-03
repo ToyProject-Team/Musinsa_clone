@@ -12,9 +12,9 @@ function App() {
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<Main />} /> {/* => 메인페이지 */}
-				<Route path="login/*" element={<LogIn />} />
-				<Route path="" element={<LogIn />} /> {/* => 상세페이지 */}
-				<Route path="" element={<LogIn />} /> {/* => 마이페이지 */}
+				<Route path="login/*" element={<LogIn />} /> {/* => 로그인페이지 */}
+				<Route path="detail/*" element={<LogIn />} /> {/* => 상세페이지 */}
+				<Route path="mypage/*" element={<MyPage />} /> {/* => 마이페이지 */}
 			</Routes>
 		</BrowserRouter>
 	);
