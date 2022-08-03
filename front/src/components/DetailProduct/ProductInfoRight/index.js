@@ -2,9 +2,9 @@ import {
 	ProductInfo,
 	InfoWrapper,
 	DetailInfoWrapper,
+	DetailInfo,
 	TitleBox,
 	Title,
-	DetailInfo,
 	InfoTitle,
 	InfoContent,
 	SubTitle,
@@ -12,18 +12,18 @@ import {
 	PriceTitle,
 	PriceContent,
 	InfoWrapperProduct,
+	AAA,
 } from './styles';
 
 import { useState, useCallback } from 'react';
 
 const ProductInfoRight = ({ data }) => {
-	// const [toggle, setToggle] = useState(false);
-	// const onToggle = useCallback(() => {
-	// 	if (!toggle) {
-	// 	} else {
-	// 	}
-	// }, []);
-	console.log(data);
+	const [toggle, setToggle] = useState(false);
+	const onToggle = useCallback(() => {
+		if (!toggle) {
+		} else {
+		}
+	}, []);
 
 	return (
 		<ProductInfo>
@@ -33,12 +33,6 @@ const ProductInfoRight = ({ data }) => {
 					<p>제품정보</p>
 				</TitleBox>
 				<DetailInfoWrapper>
-					<DetailInfo>
-						<p>브랜드 / 품번</p>
-						<InfoContent>{data.brandId}</InfoContent>
-						<span>/</span>
-						<InfoContent>{data.brandName}</InfoContent>
-					</DetailInfo>
 					<DetailInfo>
 						<p>시즌 / 성별</p>
 						<InfoContent>{data.season}</InfoContent>
@@ -53,7 +47,7 @@ const ProductInfoRight = ({ data }) => {
 						<p>좋아요</p>
 						<img
 							src="	https://image.msscdn.net/skin/musinsa/images/icon_like_small_on.png"
-							style={{ 'padding-right': '6px', width: 15, height: 15 }}
+							style={{ paddingRight: '6px', width: 15, height: 15 }}
 						/>
 						<InfoContent style={{ color: 'red' }}>{data.likes}</InfoContent>
 					</DetailInfo>
@@ -87,26 +81,16 @@ const ProductInfoRight = ({ data }) => {
 				<DetailInfoWrapper>
 					<DetailInfo>
 						<p>무신사 판매가</p>
-						<PriceContent
-							style={{
-								color: '#a9a9a9',
-								'text-decoration-line': 'line-through',
-								'text-decoration-thickness': '1px',
-							}}
-						>
+						<PriceContent className="line">
 							{data.NonMemberPrice}
-							<span style={{ 'font-size': '15px', 'font-weight': 'bold', 'padding-left': '2px' }}>
-								원
-							</span>
+							<span style={{ fontSize: '15px', fontWeight: 'bold', paddingLeft: '2px' }}>원</span>
 						</PriceContent>
 					</DetailInfo>
 					<DetailInfo>
 						<PriceTitle>무신사 회원가</PriceTitle>
 						<PriceContent>
 							{data.RookiePrice}
-							<span style={{ 'font-size': '15px', 'font-weight': 'bold', 'padding-left': '2px' }}>
-								원
-							</span>
+							<span style={{ fontSize: '15px', fontWeight: 'bold', paddingLeft: '2px' }}>원</span>
 						</PriceContent>
 					</DetailInfo>
 				</DetailInfoWrapper>

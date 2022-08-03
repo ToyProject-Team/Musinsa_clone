@@ -9,6 +9,10 @@ export const ProductInfo = styled.div`
 			padding-top: 0px !important;
 		}
 	} */
+
+	font-weight: 900;
+	color: black;
+	width: auto;
 	margin-left: 20px;
 `;
 
@@ -39,6 +43,12 @@ export const InfoTitle = styled.p`
 
 export const DetailInfoWrapper = styled.ul`
 	font-size: 12px;
+
+	& .line {
+		color: #a9a9a9;
+		text-decoration: line-through;
+		text-decoration-thickness: 3px;
+	}
 `;
 
 export const DetailInfo = styled.li`
@@ -51,11 +61,6 @@ export const DetailInfo = styled.li`
 	}
 	p {
 		width: 110px;
-	}
-	${InfoContent} {
-		font-weight: 900;
-		color: black;
-		width: auto;
 	}
 `;
 
