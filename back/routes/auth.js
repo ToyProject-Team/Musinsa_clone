@@ -91,7 +91,7 @@ router.post("/logout", authJWT, async (req, res, next) => {
   });
 });
   
-router.get('/kakao', (req,res) => {
+router.post('/kakao', (req,res) => {
   const kakao = {
     clientID: process.env.KAKAO_ID,
     redirectUri: 'http://localhost/api/auth/kakao/callback'
