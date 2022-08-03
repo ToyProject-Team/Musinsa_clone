@@ -1,4 +1,4 @@
-const { verify } = require("./jwt-util");
+const { verify } = require("./jwt-utils");
 
 const authJWT = (req, res, next) => {
   if (req.headers.authorization) {

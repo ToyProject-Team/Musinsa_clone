@@ -11,7 +11,8 @@ module.exports = {
 
     var dummyUser = [];
     
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 50; i++) {
+      // console.log(i)
       dummyUser.push({
         loginId: faker.internet.email(),
         email: faker.internet.email(),
