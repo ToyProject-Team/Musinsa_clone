@@ -1,15 +1,21 @@
-import React from "react";
-import MyHeader from '../../components/mypage/mypage_header';
-import MyMain from '../../components/mypage/mypage_main';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import axios from "axios";
 
-const mypage = () => {
+import MyHeader from 'components/mypage/header';
+import MyMain from 'components/mypage/table';
+
+
+const useMypage = () => {
+  
   return (
     <div>
-    <MyHeader />
-    <MyMain />
+      <div>
+          <MyHeader />
+          <MyMain />
+          
+      </div>
     </div>
-    
   );
 };
 
-export default mypage;
+export default useMypage;

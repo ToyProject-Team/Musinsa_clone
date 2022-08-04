@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Header, MypageTitle, PRFL_IMAGE, NickName, Profile, Navi, NaviList, StyleLink } from "./styles";
+import { Header, MypageTitle, PRFL_IMAGE, NickName, Profile, Navi, NaviList, StyleLink } from "../../../pages/mypage/styles";
 
 function mypage_header() {
   return <Header>
