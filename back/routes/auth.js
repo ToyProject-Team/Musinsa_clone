@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt')
 const dotenv = require('dotenv');
 const axios = require('axios')
 const qs = require('qs')
+const CryptoJS = require('crypto-js');
+const request = require('request'); 
 
 const jwt = require("../utils/jwt-utils");
 const { sequelize, User } = require('../models')
@@ -181,7 +183,7 @@ router.post('/authEmail', async (req, res) => {
     await smtpTransport.sendMail(mailOptions, (error, responses) => {
         if (error) {
             console.error(error)
-            return res.status(200).send({ message: "fail" })
+            return res.status(400).send({ message: "유효하지 않은 이메일입니다" })
         } else {
         /* 클라이언트에게 인증 번호를 보내서 사용자가 맞게 입력하는지 확인! */
             return res.status(200).send({ number: number })
@@ -194,4 +196,82 @@ router.post('/authEmail', async (req, res) => {
   }
 })
 
+router.post('/sendSMS', async (req, res, next) => {
+  try {
+    const user_phone_number = req.body.phoneNumber;//수신 전화번호 기입
+    var resultCode = 404;
+    const date = Date.now().toString();
+    const uri = process.env.SERVICE_ID; //서비스 ID
+    const secretKey = process.env.NCP_SECRET_KEY;// Secret Key
+    const accessKey = process.env.NCP_KEY;//Access Key
+    const method = "POST";
+    const space = " ";
+    const newLine = "\n";
+    const url = `https://sens.apigw.ntruss.com/sms/v2/services/${uri}/messages`;
+    const url2 = `/sms/v2/services/${uri}/messages`;
+    const hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, secretKey);
+    hmac.update(method);
+    hmac.update(space);
+    hmac.update(url2);
+    hmac.update(newLine);
+    hmac.update(date);
+    hmac.update(newLine);
+    hmac.update(accessKey);
+    const hash = hmac.finalize();
+    const signature = hash.toString(CryptoJS.enc.Base64);
+    const code = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000
+    request({
+      method: method,
+      json: true,
+      uri: url,
+      headers: {
+        "Contenc-type": "application/json; charset=utf-8",
+        "x-ncp-iam-access-key": accessKey,
+        "x-ncp-apigw-timestamp": date,
+        "x-ncp-apigw-signature-v2": signature,
+      },
+      body: {
+        type: "SMS",
+        countryCode: "82",
+        from: '01062077206',
+        content: `인증 번호입니다 ${code}`,
+        messages: [
+          { to: `${user_phone_number}`, },],
+      },
+    },
+    );
+    await redisClient.set(user_phone_number, code);
+    await redisClient.expire(user_phone_number, 180)
+    res.status(200).send({ message: "success" })
+  } catch (e) {
+    console.error(e)
+    next(e)
+  }
+})
+
+router.post('/checkSMS', async (req, res, next) => {
+  try {
+    const { phoneNum, code } = req.body;
+
+    const client = await redisClient;
+    client.get(phoneNum, function (err, clientCheck) {
+      
+      console.log(clientCheck)
+      console.log(req.body.code)
+      if (!clientCheck) {
+        console.log("?")
+        return res.status(400).send({ message: "인증 시간이 만료됐습니다" });
+      }
+      if (code != clientCheck) {
+      return res.status(401).send({ message: "인증 번호가 틀리셨습니다" })
+    }
+      return res.status(200).send({ success: true });
+    });
+    // console.log(phoneNum);
+    // console.log(code, typeof(code))
+  } catch (e) {
+    console.error(e)
+    next(e)
+  }
+})
 module.exports = router
