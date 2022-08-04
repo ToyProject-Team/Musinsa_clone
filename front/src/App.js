@@ -2,17 +2,27 @@ import './App.css';
 import { BrowserRouter, Routes, Redirect, Route } from 'react-router-dom';
 import loadable from '@loadable/component';
 
-const LogIn = loadable(() => import('./pages/login/index.js'));
-const MyPage = loadable(() => import('./pages/mypage/index.js'));
+const Main = loadable(() => import('pages/main'), {
+	fallback: <div>로딩중</div>,
+});
+const LogIn = loadable(() => import('pages/login'), {
+	fallback: <div>로딩중</div>,
+});
+const Detail = loadable(() => import('pages/detail'), {
+	fallback: <div>로딩중</div>,
+});
+const MyPage = loadable(() => import('pages/mypage'), {
+	fallback: <div>로딩중</div>,
+});
 
 function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="main/*" element={<LogIn />} /> {/* => 메인페이지 */}
-				<Route path="login/*" element={<LogIn />} />
-				<Route path="detail/*" element={<LogIn />} /> {/* => 상세페이지 */}
-				<Route path="" element={<MyPage />} /> {/* => 마이페이지 */}
+				<Route path="/" element={<Main />} /> {/* => 메인페이지 */}
+				<Route path="login/*" element={<LogIn />} /> {/* => 로그인페이지 */}
+				<Route path="detail/*" element={<Detail />} /> {/* => 상세페이지 */}
+				<Route path="mypage/*" element={<MyPage />} /> {/* => 마이페이지 */}
 			</Routes>
 		</BrowserRouter>
 	);

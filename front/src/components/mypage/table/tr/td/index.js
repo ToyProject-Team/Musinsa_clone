@@ -8,7 +8,7 @@ function Td({item}) {
       <td>{item.username}</td>
       <td>{item.id}</td>
       <td>{item.address.geo.lng}</td>
-      <td>{item.address.city}</td>
+      <td colSpan="2">{item.address.city}</td>
     </tr>
     </>
   )

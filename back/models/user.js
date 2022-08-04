@@ -7,17 +7,17 @@ module.exports = class User extends Model {
             {
                 loginId: {
                     type: DataTypes.STRING(100),
-                    allowNull: false,
+                    allowNull: true,
                     unique: true
                 },
                 email: {
                     type: DataTypes.STRING(100),
-                    allowNull: false,
+                    allowNull: true,
                     unique: true
                 },
                 password: {
                     type: DataTypes.STRING(200),
-                    allowNull: false
+                    allowNull: true
                 },
                 nickname: {
                     type: DataTypes.STRING(30),
@@ -28,6 +28,10 @@ module.exports = class User extends Model {
                     allowNull: true
                 },
                 address: {
+                    type: DataTypes.STRING(100),
+                    allowNull: true,
+                },
+                socialEmail: {
                     type: DataTypes.STRING(100),
                     allowNull: true,
                 }
@@ -44,7 +48,12 @@ module.exports = class User extends Model {
     }
     static associate(db) {
         db.User.belongsToMany(db.Product, {
-            through: 'ProductThumbsUp'
+            through: db.Comment,
+            as: "commented"
+        })
+        db.User.belongsToMany(db.Product, {
+            through: 'ProductThumbsUp',
+            as: 'liker'
         })
         db.User.belongsToMany(db.Product, {
             through: 'Views',

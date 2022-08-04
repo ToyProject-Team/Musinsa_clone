@@ -1,6 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import axios from "axios";
-
+import React from "react";
 import MyHeader from 'components/mypage/header';
 import MyMain from 'components/mypage/table';
 
@@ -16,6 +14,6 @@ const useMypage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default useMypage;
