@@ -126,5 +126,11 @@ router.get('/productDetail', async (req, res) => {
     res.status(200).json({ product })
 })
 
+router.post('/purchase', (req, res) => {
+    // const IMP = window.IMP; // 생략 가능
+    IMP.init("imp40845004")
+    // console.log(IMP)
+    res.status(200)
+})
 
 module.exports = router
