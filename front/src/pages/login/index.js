@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import useInput from 'hooks/useInput';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
 	Container,
 	LoginSection,
@@ -15,20 +17,55 @@ import {
 } from './styles';
 
 const LogIn = () => {
-	const onSubmitForm = useCallback(() => {}, []);
-	const [checkedOne, setCheckedOne] = useState(false);
-	const [delayClass, setDelayClass] = useState('');
+	const [email, onChangeEmail, setEmail] = useInput('');
+	const [password, onChangePassword, setPassword] = useInput('');
+	const [passwordLookButton, setPasswordLookButton] = useState(false);
+	const passwordRef = useRef();
 
-	const hello = useCallback(e => {
-		const value = e.target.className;
-		setCheckedOne(v => !v);
+	const [autoLoginCheck, setAutoLoginCheck] = useState(false);
+	const [keyframesClass, setKeyframesClass] = useState('');
 
-		if (value === 'hide') {
-			setDelayClass('active');
-		} else {
-			setDelayClass('hide');
-		}
-	}, []);
+	// auto Login Toggle button
+	const toggleAutoLogin = useCallback(
+		e => {
+			const value = e.target.className;
+			setAutoLoginCheck(v => !v);
+
+			if (value === 'hide') setKeyframesClass('active');
+			else setKeyframesClass('hide');
+		},
+		[setAutoLoginCheck, setKeyframesClass],
+	);
+
+	// input clear button
+	const onClickClear = useCallback(
+		event => {
+			if (event === 'email') setEmail('');
+			else if (event === 'password') setPassword('');
+		},
+		[setEmail, setPassword],
+	);
+
+	// password input look
+	const onClickLookPassword = useCallback(() => {
+		setPasswordLookButton(v => !v);
+
+		if (passwordLookButton) passwordRef.current.type = 'password';
+		else passwordRef.current.type = 'text';
+	}, [passwordLookButton]);
+
+	// onClick login button event
+	const onSubmitForm = useCallback(
+		e => {
+			e.preventDefault();
+
+			if (!email || !email.trim()) return alert('아이디를 입력해 주세요.');
+			if (!password || !password.trim()) return alert('비밀번호를 입력해 주세요.');
+
+			// axios(success => login, failed => alter('아이디 또는 패스워드를 확인하세요.'))
+		},
+		[email, password],
+	);
 
 	return (
 		<Container>
@@ -38,45 +75,66 @@ const LogIn = () => {
 					<form onSubmit={onSubmitForm}>
 						<LoginContainer>
 							<div>
-								<input className="login-input" placeholder="아이디" />
-								<button type="button">
-									<svg
-										width="20"
-										height="20"
-										viewBox="0 0 20 20"
-										fill="none"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<title>입력한 내용 삭제</title>
-										<circle cx="10" cy="10" r="10" fill="#B3B3B3"></circle>
-										<path
-											d="M5.52786 5.52742L14.4722 14.4718M14.4722 5.52734L5.52783 14.4717"
-											stroke="white"
-										></path>
-									</svg>
-								</button>
+								<input
+									className="email"
+									value={email}
+									onChange={onChangeEmail}
+									placeholder="아이디"
+								/>
+								{email.length > 0 && (
+									<button type="button" onClick={() => onClickClear('email')}>
+										<svg
+											width="20"
+											height="20"
+											viewBox="0 0 20 20"
+											fill="none"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<title>입력한 내용 삭제</title>
+											<circle cx="10" cy="10" r="10" fill="#B3B3B3"></circle>
+											<path
+												d="M5.52786 5.52742L14.4722 14.4718M14.4722 5.52734L5.52783 14.4717"
+												stroke="white"
+											></path>
+										</svg>
+									</button>
+								)}
 							</div>
 						</LoginContainer>
 						<LoginContainer>
 							<div>
-								<input placeholder="비밀번호" />
-								<button type="button">
-									<svg
-										width="20"
-										height="20"
-										viewBox="0 0 20 20"
-										fill="none"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<title>입력한 내용 삭제</title>
-										<circle cx="10" cy="10" r="10" fill="#B3B3B3"></circle>
-										<path
-											d="M5.52786 5.52742L14.4722 14.4718M14.4722 5.52734L5.52783 14.4717"
-											stroke="white"
-										></path>
-									</svg>
-								</button>
-								<LookButton type="button" aria-label="비밀번호 보이기"></LookButton>
+								<input
+									className={passwordLookButton ? 'look' : ''}
+									type="password"
+									value={password}
+									onChange={onChangePassword}
+									ref={passwordRef}
+									placeholder="비밀번호"
+								/>
+								{password.length > 0 && (
+									<button type="button" onClick={() => onClickClear('password')}>
+										<svg
+											width="20"
+											height="20"
+											viewBox="0 0 20 20"
+											fill="none"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<title>입력한 내용 삭제</title>
+											<circle cx="10" cy="10" r="10" fill="#B3B3B3"></circle>
+											<path
+												d="M5.52786 5.52742L14.4722 14.4718M14.4722 5.52734L5.52783 14.4717"
+												stroke="white"
+											></path>
+										</svg>
+									</button>
+								)}
+								<LookButton
+									className={passwordLookButton ? 'look' : ''}
+									type="button"
+									aria-label="비밀번호 보이기"
+									onClick={onClickLookPassword}
+								></LookButton>
 							</div>
 						</LoginContainer>
 						<LoginButton>
@@ -86,19 +144,22 @@ const LogIn = () => {
 						</LoginButton>
 						<LoginMember>
 							<LoginCheck>
-								<label onClick={e => hello(e)} className={checkedOne ? 'active' : 'hide'}>
+								<label
+									onClick={e => toggleAutoLogin(e)}
+									className={autoLoginCheck ? 'active' : 'hide'}
+								>
 									자동로그인
 								</label>
-								<div className={delayClass}>
+								<div className={keyframesClass}>
 									개인 정보 보호를 위해 본인 기기에서만 이용해주세요.
 								</div>
 							</LoginCheck>
 							<FindLogin>
 								<li>
-									<a href="#">아이디 찾기</a>
+									<Link to="id">아이디 찾기</Link>
 								</li>
 								<li>
-									<a href="#">비밀번호 찾기</a>
+									<Link to="password">비밀번호 찾기</Link>
 								</li>
 							</FindLogin>
 						</LoginMember>

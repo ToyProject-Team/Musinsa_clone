@@ -164,6 +164,14 @@ export const LookButton = styled.button`
 	margin-right: 7px;
 	background: url('https://static.msscdn.net/ui/build/m/img/login/ic-30-show-button.svg?v=20220720164756')
 		no-repeat 50% 50% !important;
+
+	&.look {
+		min-width: 30px;
+		height: 30px;
+		margin-right: 7px;
+		background: url('https://static.msscdn.net/ui/build/m/img/login/ic-30-hide-button.svg?v=20220802142734')
+			no-repeat 50% 50% !important;
+	}
 `;
 
 export const LoginButton = styled.div`
