@@ -1,8 +1,10 @@
 import React from 'react';
-import ProductInfoRight from 'components/DetailProduct/ProductInfoRight';
-// import ProductInfoLeft from 'components/DetailProduct/ProductInfoLeft';
 import { DetailWrapper, ProductWrapper } from './styles';
-import HeaderInfo from 'components/DetailProduct/HeaderInfo';
+
+import ProductInfoRight from 'components/DetailProduct/ProductInfoRight/InfoRight';
+import ProductInfoLeft from 'components/DetailProduct/ProductInfoLeft';
+import HeaderInfo from 'components/DetailProduct/ProductInfoRight/HeaderInfo';
+import ProductInfo from 'components/DetailProduct/ProductInfo';
 
 const dummyProduct = {
 	BigCategoryName: '가방',
@@ -35,10 +37,11 @@ const DetailProduct = () => {
 			<DetailWrapper>
 				<HeaderInfo data={dummyProduct} />
 				<ProductWrapper>
-					{/* <ProductInfoLeft data={dummyProduct} /> */}
+					<ProductInfoLeft data={dummyProduct} />
 					<ProductInfoRight data={dummyProduct} />
 				</ProductWrapper>
 			</DetailWrapper>
+			<ProductInfo />
 		</div>
 	);
 };
