@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
 	Container,
 	LoginSection,
@@ -16,6 +16,19 @@ import {
 
 const LogIn = () => {
 	const onSubmitForm = useCallback(() => {}, []);
+	const [checkedOne, setCheckedOne] = useState(false);
+	const [delayClass, setDelayClass] = useState('');
+
+	const hello = useCallback(e => {
+		const value = e.target.className;
+		setCheckedOne(v => !v);
+
+		if (value === 'hide') {
+			setDelayClass('active');
+		} else {
+			setDelayClass('hide');
+		}
+	}, []);
 
 	return (
 		<Container>
@@ -73,9 +86,12 @@ const LogIn = () => {
 						</LoginButton>
 						<LoginMember>
 							<LoginCheck>
-								<input type="checkbox" />
-								<label>자동로그인</label>
-								<div className="active">개인 정보 보호를 위해 본인 기기에서만 이용해주세요.</div>
+								<label onClick={e => hello(e)} className={checkedOne ? 'active' : 'hide'}>
+									자동로그인
+								</label>
+								<div className={delayClass}>
+									개인 정보 보호를 위해 본인 기기에서만 이용해주세요.
+								</div>
 							</LoginCheck>
 							<FindLogin>
 								<li>
@@ -95,12 +111,12 @@ const LogIn = () => {
 								viewBox="0 0 30 30"
 								fill="none"
 								xmlns="http://www.w3.org/2000/svg"
-								class="login-button__item__logo"
+								className="login-button__item__logo"
 							>
 								<title>kakao 로고</title>
 								<path
-									fill-rule="evenodd"
-									clip-rule="evenodd"
+									fillRule="evenodd"
+									clipRule="evenodd"
 									d="M15 7C10.029 7 6 10.129 6 13.989C6 16.389 7.559 18.505 9.932 19.764L8.933 23.431C8.845 23.754 9.213 24.013 9.497 23.826L13.874 20.921C14.243 20.958 14.618 20.978 15 20.978C19.971 20.978 24 17.849 24 13.989C24 10.129 19.971 7 15 7Z"
 									fill="black"
 								></path>

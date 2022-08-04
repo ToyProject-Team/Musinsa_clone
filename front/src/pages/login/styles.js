@@ -146,10 +146,6 @@ export const LoginContainer = styled.div`
 		flex: 0 1 auto;
 	}
 
-	& input:first-child {
-		margin-top: 0;
-	}
-
 	& input:focus-visible {
 		outline: none;
 	}
@@ -197,14 +193,6 @@ export const LoginCheck = styled.div`
 	color: #000;
 	align-items: center;
 
-	& > input {
-		overflow: hidden;
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		margin: -1px;
-		clip: rect(0 0 0 0);
-	}
 	& > label {
 		display: inline-flex;
 		position: relative;
@@ -229,6 +217,27 @@ export const LoginCheck = styled.div`
 			border-radius: 100%;
 			background-color: #f1f1f1;
 			content: '';
+		}
+
+		&.active {
+			&::before {
+				border-color: #0078ff;
+				background-color: #0078ff;
+			}
+
+			&::after {
+				content: '';
+				position: absolute;
+				top: 12px;
+				left: 9px;
+				width: 4px;
+				height: 8px;
+				border-right: 1px solid #fff;
+				border-bottom: 1px solid #fff;
+				transform: translateY(calc(-50% - 2px)) rotate(45deg);
+				display: block;
+				box-sizing: border-box;
+			}
 		}
 	}
 
@@ -278,6 +287,14 @@ export const LoginCheck = styled.div`
 			${fadeIn} 0.3s ease forwards;
 		animation: ${tooltipInSlide} 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
 			${fadeIn} 0.3s ease forwards;
+	}
+
+	& > div.hide {
+		display: block;
+		-webkit-animation: ${tooltipOutSlide} 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
+			${fadeOut} 0.3s ease forwards;
+		animation: ${tooltipOutSlide} 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
+			${fadeOut} 0.3s ease forwards;
 	}
 `;
 
