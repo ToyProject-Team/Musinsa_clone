@@ -1,9 +1,9 @@
 import React from 'react';
-import { MainSection, Category, Division, PageTitle, BrandCategory, BrandGroup, Name, ItemList, Items, SelectBox, SortBox, ListBox} from './styles';
+import { MainContainer, Category, PageTitle, BrandCategory, Category2nd, CategoryBrand, CategoryEtc, BrandGroup, Name, ItemSection, Items, SelectBox, SortBox, ListBox } from './styles';
 
 const Main = () => {
 	return (
-      <MainSection>
+      <MainContainer>
       {/* 카테고리 */}
       <Category>
         <PageTitle>
@@ -12,39 +12,50 @@ const Main = () => {
           <div className='hash_tag'>#캐주얼</div>
         </PageTitle>
       
-        <Division>
+        <Category2nd>
           <Name>중분류</Name>
           <div className='all_item'>전체</div>
-          <div className='hash_tag'>
+          <div className='all_item_list'>
             <ul>
               <li>백팩</li>
               <li>메신저백</li>
+              <li>등등</li><li>백팩</li>
+              <li>메신저백</li>
               <li>등등</li>
+              <li>백팩</li>
+              <li>메신저백</li>
+              <li>등등</li>
+              <li>백팩</li>
             </ul>
           </div>
-        </Division>
+        </Category2nd>
 
-        <Division>
+        <CategoryBrand>
           <Name>
-            <span>브랜드</span>
-            <span>
+            <div>브랜드</div>
+            <div>
               <input type="text" title="브랜드 검색" style={{width: "65px"}}></input>
-            </span>
+            </div>
           </Name>
           <div>
-            <BrandCategory>
+            <BrandCategory style={{paddingBottom: "15px"}}>
               <BrandGroup>좋아요</BrandGroup>
-              <div className='hash_tag'>
-              등록된 관심브랜드가 없습니다. / 좋아요 브랜드 추가
+              <div style={{minWidth: "600px"}}>
+              등록된 관심브랜드가 없습니다.
               </div>
             </BrandCategory>
 
             <BrandCategory>
               <BrandGroup>인기</BrandGroup>
-              <div className='hash_tag'>
+              <div>
                 <ul>
                   <li>..상품들</li>
                   <li>..상품들</li>
+                  <li>..상품들</li>
+                  <li>..상품들</li>
+                  <li>..상품들</li>
+                  <li>..상품들</li>
+
                 </ul>
               </div>
             </BrandCategory>
@@ -57,13 +68,19 @@ const Main = () => {
                 </div>
                 <div>
                   <p>상품수 | </p>
-                  <p>가나다</p>
+                  <p>&#160;가나다</p>
                 </div>
               </BrandGroup>
-              <div className='hash_tag'>
+              <div>
                 <ul>
-                  <li>..상품들</li>
-                  <li>..상품들</li>
+                <li>백팩</li>
+              <li>메신저백</li>
+              <li>등등</li><li>백팩</li>
+              <li>메신저백</li>
+              <li>등등</li>
+              <li>백팩</li>
+              <li>메신저백</li>
+              <li>등등</li>
                 </ul>
               </div>
             </BrandCategory>
@@ -76,10 +93,10 @@ const Main = () => {
                 </div>
                 <div>
                   <p>상품수 | </p>
-                  <p>가나다</p>
+                  <p>&#160;가나다</p>
                 </div>
               </BrandGroup>
-              <div className='hash_tag'>
+              <div>
                 <ul>
                   <li>..상품들</li>
                   <li>..상품들</li>
@@ -87,43 +104,43 @@ const Main = () => {
               </div>
             </BrandCategory>
           </div>
-        </Division>
+        </CategoryBrand>
 
-        <Division>
+        <CategoryEtc>
           <Name>색상</Name>
-          <div className='hash_tag'>
+          <div className='color'>
             <ul>
               <li>..빨강</li>
               <li>..파랑</li>
             </ul>
           </div>
-        </Division>
+        </CategoryEtc>
 
-        <Division>
+        <CategoryEtc>
         <Name>가격</Name>
-        <div className='hash_tag'>
+        <div className='price'>
           <ul>
             <li>전체보기</li>
-            <li>..빨강</li>
-            <li>..파랑</li>
+            <li>..10000원</li>
+            <li>..1000000원</li>
           </ul>
         </div>
-        </Division>
+        </CategoryEtc>
 
-        <Division>
+        <CategoryEtc>
           <Name>검색</Name>
           <div className='search_items'>
             <input type="text" id="search_items"/>
             <span type='submit' className='search_btn'>검색</span>
           </div>
-        </Division>
+        </CategoryEtc>
         </Category>
 
       {/* Item List - 컴포넌트로 따로 빼기 */}
-      <ItemList>
+      <ItemSection>
         <SelectBox>
           <span className='select-medium'>중분류: 백팩</span>
-          <span className='select-medium-button'>X</span>
+          <span className='select-medium-button'>&#160;X</span>
         </SelectBox>
         <Items>
           <SortBox>
@@ -148,12 +165,44 @@ const Main = () => {
                     <p>...</p>
                   </div>
                 </div>
+                <div className='option'>
+                    <span>M</span>
+                    <span className='option_btn'>OPTION ▼</span>
+                </div>
+              </li>
+              <li>
+                <div className='li_inner'>
+                  <div className='list_img'>이미지 주소</div>
+                  <div className='item_info'>
+                    <p>노스페이스</p>
+                    <p>NM2DN51A_빅샷</p>
+                    <p>135,000원</p>
+                    <p>MEMBERSHIP PRICE</p>
+                    <p>...</p>
+                  </div>
+                </div>
+                <div className='option'>
+                    <span>M</span>
+                    <span className='option_btn'>OPTION ▼</span>
+                </div>
+              </li>
+              <li>
+                <div className='li_inner'>
+                  <div className='list_img'>이미지 주소</div>
+                  <div className='item_info'>
+                    <p>노스페이스</p>
+                    <p>NM2DN51A_빅샷</p>
+                    <p>135,000원</p>
+                    <p>MEMBERSHIP PRICE</p>
+                    <p>...</p>
+                  </div>
+                </div>
               </li>
             </ul>
           </ListBox>
         </Items>
-      </ItemList>
-      </MainSection>
+      </ItemSection>
+      </MainContainer>
   )
 };
 
