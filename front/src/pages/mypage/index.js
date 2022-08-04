@@ -1,14 +1,16 @@
 import React from 'react';
-import MyHeader from 'components/mypage/mypage_header';
-import MyMain from 'components/mypage/mypage_main';
+import MyHeader from 'components/mypage/header';
+import MyMain from 'components/mypage/table';
 
-const mypage = () => {
+const useMypage = () => {
 	return (
 		<div>
-			<MyHeader />
-			<MyMain />
+			<div>
+				<MyHeader />
+				<MyMain />
+			</div>
 		</div>
 	);
 };
 
-export default mypage;
+export default useMypage;
