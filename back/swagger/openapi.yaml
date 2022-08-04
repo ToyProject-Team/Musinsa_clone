@@ -7,11 +7,11 @@ info:
     - description: Musinsa-Clone dev
       url: http://localhost:80/
 tags:
-  - name: user
-    description: API about user
+  - name: auth
+    description: API about auth
 
 paths:
-  $ref: "./userAPI.yaml"
+  $ref: "./authAPI.yaml"
 
 success:
   description: 성공

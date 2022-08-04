@@ -8,7 +8,6 @@ module.exports = class CustomCategory extends Model {
                 categoryName: {
                     type: DataTypes.STRING(100),
                     allowNull: false,
-                    unique: true
                 }
             },
             {
@@ -22,7 +21,7 @@ module.exports = class CustomCategory extends Model {
         )
     }
     static associate(db) {
-        db.ProductImg.belongsToMany(db.Product, {
+        db.CustomCategory.belongsToMany(db.Product, {
             through: 'CustomCategoryMatch'
         })
     }
