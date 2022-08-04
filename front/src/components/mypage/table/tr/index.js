@@ -1,5 +1,5 @@
 import React from "react";
-import Td from "components/mypage/table/tr/td"
+import Td from "components/mypage/table/tr/Td"
 
 function Tr({info}) {
   return (

@@ -63,3 +63,7 @@ export const StyleLink = styled(Link)`
 	color: #fff;
 	text-decoration: none;
 `;
+
+export const StyleNav = styled.nav`
+
+`;
