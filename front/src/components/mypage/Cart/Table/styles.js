@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 
+
 export const OrderTable = styled.table`
     width: 100%;
     font-size: 14px;
@@ -13,6 +14,7 @@ export const OrderTable = styled.table`
         font-weight: normal;
     }
     td{
+        position: relative;
         height: 70px;
         padding: 10px;
         box-sizing: border-box;
@@ -20,6 +22,13 @@ export const OrderTable = styled.table`
         text-align: center;
         vertical-align: middle;
         word-break: break-all;
+        &:first-of-type{
+            text-align: left;
+        }
 }
 `;
 
+export const ImgSpan = styled.span`
+    float: left;
+    margin-right: 10px;
+`;

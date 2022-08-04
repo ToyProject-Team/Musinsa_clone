@@ -15,6 +15,14 @@ const MyPage = loadable(() => import('pages/Mypage'), {
 	fallback: <div>로딩중</div>,
 });
 
+const Like = loadable(() => import('pages/Like'), {
+	fallback: <div>로딩중</div>,
+});
+
+const Cart = loadable(() => import('pages/Cart'), {
+	fallback: <div>로딩중</div>,
+});
+
 function App() {
 	return (
 		<BrowserRouter>
@@ -23,6 +31,8 @@ function App() {
 				<Route path="login/*" element={<LogIn />} /> {/* => 로그인페이지 */}
 				<Route path="detail/*" element={<Detail />} /> {/* => 상세페이지 */}
 				<Route path="mypage/*" element={<MyPage />} /> {/* => 마이페이지 */}
+				<Route path="like/*" element={<Like />} /> {/* => 좋아요 */}
+				<Route path="cart/*" element={<Cart />} /> {/* => 장바구니 */}
 			</Routes>
 		</BrowserRouter>
 	);
