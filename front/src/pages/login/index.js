@@ -15,7 +15,9 @@ import {
 } from './styles';
 
 const LogIn = () => {
-	const onSubmitForm = useCallback(() => {}, []);
+	const onSubmitForm = useCallback(e => {
+		e.preventDefault();
+	}, []);
 
 	return (
 		<Container>
