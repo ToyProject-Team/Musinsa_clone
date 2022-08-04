@@ -9,6 +9,7 @@ const jwt = require("../utils/jwt-utils");
 const { sequelize, User } = require('../models')
 const redisClient = require("../utils/redis");
 const authJWT = require('../utils/authJWT')
+const { smtpTransport } = require('../utils/email');
 
 dotenv.config();
 router.post('/signup', async (req, res, next) => {
@@ -153,6 +154,40 @@ router.get('/kakao/callback', async (req, res, next) => {
       refreshToken,
       accessToken,
     })
+  } catch (e) {
+    console.error(e)
+    next(e)
+  }
+})
+
+router.post('/authEmail', async (req, res) => {
+    
+  /* min ~ max까지 랜덤으로 숫자를 생성하는 함수 */ 
+  try {
+    var generateRandom = function (min, max) {
+        var ranNum = Math.floor(Math.random()*(max-min+1)) + min;
+        return ranNum;
+    }
+    const number = generateRandom(111111,999999)
+
+    const sendEmail = req.body.email;
+
+    const mailOptions = {
+        from: "sola2014@naver.com",
+        to: sendEmail,
+        subject: "[무신사]인증 관련 이메일 입니다",
+        text: "오른쪽 숫자 6자리를 입력해주세요 : " + number
+    };
+    await smtpTransport.sendMail(mailOptions, (error, responses) => {
+        if (error) {
+            console.error(error)
+            return res.status(200).send({ message: "fail" })
+        } else {
+        /* 클라이언트에게 인증 번호를 보내서 사용자가 맞게 입력하는지 확인! */
+            return res.status(200).send({ number: number })
+        }
+        smtpTransport.close();
+    });
   } catch (e) {
     console.error(e)
     next(e)
