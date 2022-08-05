@@ -11,7 +11,7 @@ const HeaderInfo = ({ data }) => {
 					<span> &gt; </span>
 					<p onClick={() => navigate(`/${data.SmallCategoryName}`)}>{data.SmallCategoryName}</p>
 				</CategoryWrapper>
-				<Title>{data.ProductTitle}</Title>
+				<Title>{data.productTitle}</Title>
 			</Header>
 		</div>
 	);
