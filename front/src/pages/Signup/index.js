@@ -7,16 +7,14 @@ import {
 	SignupContainer,
 	LookButton,
 	SignupCheckBox,
-	LoginButton,
-	LoginMember,
-	LoginCheck,
-	FindLogin,
-	KakaoLogIn,
-	SignupLink,
+	SignupButton,
 } from './styles';
 
 const LogIn = () => {
-	const onSubmitForm = useCallback(() => {}, []);
+	const onSubmitForm = useCallback(e => {
+		e.preventDefault();
+		console.log(e);
+	}, []);
 
 	return (
 		<Container>
@@ -123,11 +121,26 @@ const LogIn = () => {
 							<p class="login-input__validation">8~30자 이내로 입력해 주십시오.</p>
 						</SignupContainer>
 						<SignupContainer>
+							<div className="all-check">
+								<input
+									type="checkbox"
+									id="loginJoinMembershipAllCheckbox"
+									name="loginJoinMembershipAllCheckbox"
+								/>
+								<label for="loginJoinMembershipAllCheckbox">이메일</label>
+							</div>
+							<div className="all-check">
+								<input
+									type="checkbox"
+									id="loginJoinMembershipAllCheckbox"
+									name="loginJoinMembershipAllCheckbox"
+								/>
+								<label for="loginJoinMembershipAllCheckbox">휴대폰</label>
+							</div>
 							<label>
-								이메일
 								<span>필수 입력</span>
 							</label>
-							<div>
+							<div className="email-check">
 								<input type="email" />
 								<button type="button">
 									<svg
@@ -146,6 +159,29 @@ const LogIn = () => {
 										></path>
 									</svg>
 								</button>
+								<button className="auth-confirm">본인인증</button>
+							</div>
+
+							<div className="phone-check" style={{ display: 'none' }}>
+								<input type="text" />
+								<button type="button">
+									<svg
+										width="20"
+										height="20"
+										viewBox="0 0 20 20"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+										class="login-input__button-clear__svg"
+									>
+										<title>입력한 내용 삭제</title>
+										<circle cx="10" cy="10" r="10" fill="#B3B3B3"></circle>
+										<path
+											d="M5.52786 5.52742L14.4722 14.4718M14.4722 5.52734L5.52783 14.4717"
+											stroke="white"
+										></path>
+									</svg>
+								</button>
+								<button className="auth-confirm">본인인증</button>
 							</div>
 							<p>이메일 주소가 올바르지 않습니다.</p>
 							<p className="helper-text">계정 분실 시 본인인증 정보로 활용됩니다.</p>
@@ -185,12 +221,96 @@ const LogIn = () => {
 									자세히
 								</a>
 							</div>
+
+							<div class="check">
+								<input type="checkbox" id="privacyAgreeCheckbox" name="privacyAgreeCheckbox" />
+								<label for="privacyAgreeCheckbox">
+									<svg
+										width="16"
+										height="16"
+										viewBox="0 0 16 16"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+										class="login-checkbox--version__svg"
+									>
+										<title></title>
+										<path
+											d="M2.6665 8L6.39952 11.7333L13.8665 4.26666"
+											stroke="#D1D1D1"
+											stroke-width="1.5"
+											stroke-linecap="square"
+											class="svg-color"
+										></path>
+									</svg>
+									[필수] 무신사, 무신사 스토어 이용 악관
+								</label>
+								<a href="signup/agreement/privacy-usage" target="_blank">
+									자세히
+								</a>
+							</div>
+
+							<div class="check">
+								<input type="checkbox" id="privacyAgreeCheckbox" name="privacyAgreeCheckbox" />
+								<label for="privacyAgreeCheckbox">
+									<svg
+										width="16"
+										height="16"
+										viewBox="0 0 16 16"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+										class="login-checkbox--version__svg"
+									>
+										<title></title>
+										<path
+											d="M2.6665 8L6.39952 11.7333L13.8665 4.26666"
+											stroke="#D1D1D1"
+											stroke-width="1.5"
+											stroke-linecap="square"
+											class="svg-color"
+										></path>
+									</svg>
+									[필수] 만 14세 미만 가입 제한
+								</label>
+								<a href="signup/agreement/privacy-usage" target="_blank">
+									자세히
+								</a>
+							</div>
+
+							<div class="check">
+								<input type="checkbox" id="privacyAgreeCheckbox" name="privacyAgreeCheckbox" />
+								<label for="privacyAgreeCheckbox">
+									<svg
+										width="16"
+										height="16"
+										viewBox="0 0 16 16"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+										class="login-checkbox--version__svg"
+									>
+										<title></title>
+										<path
+											d="M2.6665 8L6.39952 11.7333L13.8665 4.26666"
+											stroke="#D1D1D1"
+											stroke-width="1.5"
+											stroke-linecap="square"
+											class="svg-color"
+										></path>
+									</svg>
+									[선택] 마케팅 활용 및 광고성 정보 수신 동의
+								</label>
+								<a href="signup/agreement/privacy-usage" target="_blank">
+									자세히
+								</a>
+							</div>
 						</SignupCheckBox>
+
+						<SignupButton>
+							<button type="submit" className="signup-button__item active">
+								본인인증하고 가입하기
+							</button>
+						</SignupButton>
 					</form>
 				</SignupInner>
-				<SignupLink>
-					<a href="/signup">회원가입</a>
-				</SignupLink>
 			</SignupSection>
 		</Container>
 	);

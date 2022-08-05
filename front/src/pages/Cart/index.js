@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MyHeader from 'components/Mypage/Header';
-import Main from 'components/Mypage/OrderList';
-import { StyleNav, MypageLayout, MypageMain } from './styles';
+import Main from 'components/Mypage/Cart';
+import { StyleNav, MypageLayout, MypageMain } from 'pages/Mypage/styles';
 import { Link } from 'react-router-dom';
 
-const Mypage = () => {
+function cart() {
 	return (
 		<MypageLayout>
 			<MyHeader />
@@ -25,6 +25,6 @@ const Mypage = () => {
 			</StyleNav>
 		</MypageLayout>
 	);
-};
+}
 
-export default Mypage;
+export default cart;

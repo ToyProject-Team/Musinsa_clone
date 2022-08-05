@@ -40,7 +40,6 @@ const fadeOut = keyframes`
 
 /* Styled */
 export const Container = styled.div`
-	height: 100vh;
 	background-color: #f1f1f1;
 	overflow: hidden;
 
@@ -72,7 +71,7 @@ export const Container = styled.div`
 		cursor: pointer;
 	}
 
-	.login-button__item {
+	.signup-button__item {
 		display: block;
 		box-sizing: border-box;
 		width: 100%;
@@ -86,11 +85,10 @@ export const Container = styled.div`
 `;
 
 export const SignupSection = styled.section`
-	max-width: 340px;
-	height: 100vh;
+	max-width: 380px;
 	margin: 0 auto;
 	background-color: #fff;
-	padding: 62px;
+	padding: 40px;
 `;
 
 export const Header = styled.h2`
@@ -129,10 +127,10 @@ export const SignupContainer = styled.div`
 
 		& > span {
 			display: inline-block;
-			overflow: hidden;
 			width: 4px;
 			height: 4px;
-			margin-top: 4px;
+			margin-top: 6px;
+			margin-left: 5px;
 			border-radius: 50%;
 			background-color: red;
 			text-indent: -9999px;
@@ -184,6 +182,74 @@ export const SignupContainer = styled.div`
 		font-size: 11px;
 		line-height: 16.5px;
 		color: #6e6e6e;
+	}
+
+	& > .all-check {
+		display: inline-flex;
+		margin-bottom: 4px;
+		color: #000;
+		align-items: center;
+		border: 0;
+
+		& input {
+			overflow: hidden;
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			margin: -1px;
+			clip: rect(0 0 0 0);
+		}
+		& label {
+			font-weight: 700;
+			font-size: 15px;
+			display: inline-flex;
+			position: relative;
+			width: auto;
+			min-height: 24px;
+			padding: 0 0 0 31px;
+			color: inherit;
+			text-align: left;
+			white-space: normal;
+			cursor: pointer;
+			align-items: center;
+
+			&::before {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				display: block;
+				width: 24px;
+				height: 24px;
+				border: 1px solid #ccc;
+				border-radius: 100%;
+				background-color: #f1f1f1;
+				box-sizing: border-box;
+				content: '';
+			}
+		}
+	}
+
+	& > .all-check:not(:first-child) {
+		margin-left: 10px;
+	}
+
+	& .auth-confirm {
+		font-size: 12px;
+		border-radius: 3px;
+		font-weight: 600;
+		background-color: #e5e5e5;
+		color: #fff;
+		transition: 0.2s;
+		cursor: pointer;
+
+		&:hover {
+			background-color: #0078ffa1;
+		}
+
+		&.success {
+			background-color: #0078ff;
+		}
 	}
 `;
 
@@ -280,183 +346,21 @@ export const LookButton = styled.button`
 		no-repeat 50% 50% !important;
 `;
 
-export const LoginButton = styled.div`
-	margin-top: 20px;
-	padding-bottom: 0;
+export const SignupButton = styled.div`
 	position: static;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	max-width: 355px;
-
-	& .login-button__item {
-		background-color: #000;
-		color: #fff;
-	}
-`;
-
-export const LoginMember = styled.div`
-	position: relative;
-	height: 21px;
-	padding: 16px 0 4px;
-`;
-
-export const LoginCheck = styled.div`
-	display: inline-flex;
-	position: relative;
-	color: #000;
-	align-items: center;
-
-	& > input {
-		overflow: hidden;
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		margin: -1px;
-		clip: rect(0 0 0 0);
-	}
-	& > label {
-		display: inline-flex;
-		position: relative;
-		width: auto;
-		min-height: 20px;
-		padding: 0 0 0 26px;
-		font-size: 14px;
-		color: inherit;
-		text-align: left;
-		white-space: normal;
-		align-items: center;
-		cursor: pointer;
-
-		&::before {
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			width: 20px;
-			height: 20px;
-			border: 1px solid #ccc;
-			border-radius: 100%;
-			background-color: #f1f1f1;
-			content: '';
-		}
-	}
-
-	& > div {
-		display: none;
-		position: absolute;
-		top: calc(100% + 8px);
-		left: 0;
-		box-sizing: border-box;
-		width: auto;
-		height: auto;
-		padding: 8px 8px 6px;
-		border-radius: 4px;
-		background: #0078ff;
-		opacity: 0;
-		font-weight: 400;
-		font-size: 11px;
-		font-family: '-apple-system', 'Apple SD Gothic Neo', Roboto, 'Noto Sans KR', helvetica, Gulim,
-			sans-serif;
-		line-height: 1.5;
-		color: #fff;
-		text-align: left;
-		white-space: nowrap;
-		transform: translate3d(0, -8px, 0);
-		-webkit-animation: ${tooltipOutSlide} 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
-			${fadeOut} 0.3s ease forwards;
-		animation: ${tooltipOutSlide} 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
-			${fadeOut} 0.3s ease forwards;
-		align-items: flex-start;
-		justify-content: space-between;
-
-		&::before {
-			position: absolute;
-			top: -3px;
-			left: 7px;
-			width: 6px;
-			height: 6px;
-			background: #0078ff;
-			transform: rotate(45deg) translateZ(0);
-			content: '';
-		}
-	}
-
-	& > div.active {
-		display: inline-flex;
-		-webkit-animation: ${tooltipInSlide} 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
-			${fadeIn} 0.3s ease forwards;
-		animation: ${tooltipInSlide} 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
-			${fadeIn} 0.3s ease forwards;
-	}
-`;
-
-export const FindLogin = styled.ul`
-	position: absolute;
-	top: 16px;
-	right: 0;
-
-	& li {
-		display: inline-block;
-		position: relative;
-		padding-left: 15px;
-		font-size: 14px;
-		line-height: 21px;
-		color: #aaa;
-
-		&:last-child::before {
-			display: block;
-			position: absolute;
-			top: 3px;
-			left: 5px;
-			width: 1px;
-			height: 14px;
-			background-color: #d8d8d8;
-			content: '';
-		}
-	}
-
-	& a {
-		font-size: 14px;
-		line-height: 21px;
-	}
-`;
-
-export const KakaoLogIn = styled.a`
-	&.login-button__item.login-button__item--kakao {
-		height: 45px;
-		padding-top: 11px;
-		padding-bottom: 10px;
-		border-color: #fee500;
-		background-color: #fee500;
-		font-size: 15px;
-		line-height: 22px;
-		cursor: pointer;
-	}
-
-	& svg {
-		display: inline-block;
-		margin-top: -5px;
-		margin-right: 0px;
-		vertical-align: top;
-	}
-`;
-
-export const SignupLink = styled.div`
 	margin-top: 40px;
-	padding-right: 15px;
-	padding-left: 15px;
-	color: #0078ff;
-	text-align: center;
 
-	& a {
-		display: inline-block;
-		box-sizing: border-box;
-		padding: 3px 8px;
-		border: 1px solid #0078ff;
-		border-radius: 4px;
-		font-size: 14px;
-		line-height: 21px;
-		cursor: pointer;
+	& > button.signup-button__item {
+		border-color: #f3f3f3;
+		background-color: #f3f3f3;
+		color: #b3b3b3;
+		cursor: default;
+
+		&.active {
+			border-color: #0078ff;
+			background-color: #0078ff;
+			color: #fff;
+			cursor: pointer;
+		}
 	}
 `;
