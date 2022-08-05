@@ -40,6 +40,7 @@ const fadeOut = keyframes`
 
 /* Styled */
 export const Container = styled.div`
+	min-height: 100vh;
 	background-color: #f1f1f1;
 	overflow: hidden;
 
@@ -85,6 +86,7 @@ export const Container = styled.div`
 `;
 
 export const SignupSection = styled.section`
+	min-height: calc(100vh - 80px);
 	max-width: 380px;
 	margin: 0 auto;
 	background-color: #fff;
