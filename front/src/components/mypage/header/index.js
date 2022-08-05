@@ -1,15 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import {
-	Header,
-	MypageTitle,
-	PRFL_IMAGE,
-	NickName,
-	Profile,
-	Navi,
-	NaviList,
-	StyleLink,
-} from 'pages/Mypage/styles';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Header, MypageTitle, PRFL_IMAGE, NickName, Profile, Navi, NaviList, StyleLink } from "../../../pages/Mypage/styles";
 
 function mypage_header() {
 	return (

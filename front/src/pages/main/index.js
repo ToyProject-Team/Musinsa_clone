@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { MainContainer, Category, PageTitle, BrandCategory, Category2nd, CategoryBrand, CategoryEtc, BrandGroup, Name, ItemSection, Items, SelectBox, SortBox, ListBox } from './styles';
+import Data from './data.json';
+// import axios from 'axios';
 
 const Main = () => {
+  const [dummyData, setDummyData] = useState(Data);
+  // const [selectBox, setSelectBox] = useState(true);
+
+  // axios.get('./data.json')
+  //   .then((res) => {
+  //     setDummyData(res.data)
+  //   })
+  //   .catch((err) =>{
+  //     console.log(err);
+  //   })   
+
 	return (
       <MainContainer>
       {/* 카테고리 */}
@@ -17,15 +30,13 @@ const Main = () => {
           <div className='all_item'>전체</div>
           <div className='all_item_list'>
             <ul>
-              <li>백팩</li>
-              <li>메신저백</li>
-              <li>등등</li><li>백팩</li>
-              <li>메신저백</li>
-              <li>등등</li>
-              <li>백팩</li>
-              <li>메신저백</li>
-              <li>등등</li>
-              <li>백팩</li>
+              {
+                dummyData.map(data => {
+                  return <li key={data.id}>
+                    {data.item}
+                  </li>
+                })
+              }
             </ul>
           </div>
         </Category2nd>
@@ -73,14 +84,13 @@ const Main = () => {
               </BrandGroup>
               <div>
                 <ul>
-                <li>백팩</li>
-              <li>메신저백</li>
-              <li>등등</li><li>백팩</li>
-              <li>메신저백</li>
-              <li>등등</li>
-              <li>백팩</li>
-              <li>메신저백</li>
-              <li>등등</li>
+                  {
+                  dummyData.map(data => {
+                    return <li key={data.id}>
+                      {data.brandName}
+                    </li>
+                  })
+                  }
                 </ul>
               </div>
             </BrandCategory>
@@ -154,50 +164,28 @@ const Main = () => {
           </SortBox>
           <ListBox>
             <ul>
-              <li>
-                <div className='li_inner'>
-                  <div className='list_img'>이미지 주소</div>
-                  <div className='item_info'>
-                    <p>노스페이스</p>
-                    <p>NM2DN51A_빅샷</p>
-                    <p>135,000원</p>
-                    <p>MEMBERSHIP PRICE</p>
-                    <p>...</p>
-                  </div>
-                </div>
-                <div className='option'>
-                    <span>M</span>
-                    <span className='option_btn'>OPTION ▼</span>
-                </div>
-              </li>
-              <li>
-                <div className='li_inner'>
-                  <div className='list_img'>이미지 주소</div>
-                  <div className='item_info'>
-                    <p>노스페이스</p>
-                    <p>NM2DN51A_빅샷</p>
-                    <p>135,000원</p>
-                    <p>MEMBERSHIP PRICE</p>
-                    <p>...</p>
-                  </div>
-                </div>
-                <div className='option'>
-                    <span>M</span>
-                    <span className='option_btn'>OPTION ▼</span>
-                </div>
-              </li>
-              <li>
-                <div className='li_inner'>
-                  <div className='list_img'>이미지 주소</div>
-                  <div className='item_info'>
-                    <p>노스페이스</p>
-                    <p>NM2DN51A_빅샷</p>
-                    <p>135,000원</p>
-                    <p>MEMBERSHIP PRICE</p>
-                    <p>...</p>
-                  </div>
-                </div>
-              </li>
+              {
+                dummyData.map((data) => {
+                  return(
+                    <li key={data.id}>
+                      <div className='li_inner'>
+                        <div className='list_img'><img src={data.url}></img></div>
+                        <div className='item_info'>
+                          <p>{data.brandName}</p>
+                          <p>{data.model}</p>
+                          <p>{data.price}</p>
+                          <p>MEMBERSHIP PRICE</p>
+                          <p>...</p>
+                        </div>
+                      </div>
+                      <div className='option'>
+                          <span>M</span>
+                          <span className='option_btn'>OPTION ▼</span>
+                      </div>
+                    </li>
+                  )
+                })
+              }
             </ul>
           </ListBox>
         </Items>

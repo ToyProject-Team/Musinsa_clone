@@ -4,7 +4,7 @@ export const MainContainer = styled.div`
 	height: 100vh;
 	font-size: 12px;
 	min-width: 100%;
-	overflow: hidden;
+	// overflow: hidden;
 `;
 
 export const Category = styled.div`
@@ -18,7 +18,6 @@ export const PageTitle = styled.div`
 	border-bottom: solid 1px;
 	border-color: rgb(212, 212, 212);
 	padding: 10px 10px 10px 15px;
-	hover: rgb(212, 212, 212);
 
 	.page_title {
 		float: left;
@@ -63,7 +62,11 @@ export const Category2nd = styled.div`
 	border-bottom: solid 1px;
 	border-color: rgb(212, 212, 212);
 	padding-left: 15px;
-	hover: rgb(212, 212, 212);
+
+	&:hover {
+		background-color: #f2f2f2;
+		z-index: 1;
+	}
 
 	.all_item {
 		min-width: 100px;
@@ -85,7 +88,7 @@ export const Category2nd = styled.div`
 
 		& ul {
 			display: inline-block;
-			min-width: 700px;
+			max-width: 800px;
 			& li {
 				float: left;
 				width: 100px;
@@ -108,7 +111,11 @@ export const CategoryBrand = styled.div`
 	border-bottom: solid 1px;
 	border-color: rgb(212, 212, 212);
 	padding-left: 15px;
-	hover: rgb(212, 212, 212);
+
+	&:hover {
+		background-color: #f2f2f2;
+		z-index: 1;
+	}
 
 	& div {
 		width: 100%;
@@ -125,7 +132,11 @@ export const CategoryEtc = styled.div`
 	border-bottom: solid 1px;
 	border-color: rgb(212, 212, 212);
 	padding-left: 15px;
-	hover: rgb(212, 212, 212);
+
+	&:hover {
+		background-color: #f2f2f2;
+		z-index: 1;
+	}
 
 	.color,
 	.price {
@@ -134,7 +145,7 @@ export const CategoryEtc = styled.div`
 
 		& ul {
 			display: inline-block;
-			min-width: 700px;
+			max-width: 800px;
 
 			& li {
 				float: left;
@@ -191,7 +202,7 @@ export const BrandCategory = styled.div`
 	& div {
 		& ul {
 			display: inline-block;
-			min-width: 700px;
+			max-width: 800px;
 
 			& li {
 				float: left;
@@ -253,8 +264,15 @@ export const BrandGroup = styled.div`
 
 // Item List
 export const ItemSection = styled.div`
-	padding: 15px;
-	min-width: 1500px;
+	padding-top: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
+	width: 100%;
+
+	&:hover {
+		background-color: #f2f2f2;
+		z-index: 1;
+	}
 `;
 
 export const SelectBox = styled.div`
@@ -281,7 +299,8 @@ export const SelectBox = styled.div`
 export const Items = styled.div`
 	min-width: 912px;
 	background-color: #fff;
-	border-right: 1px solid #ddd;
+	height: auto;
+	// border-right: 1px solid #ddd;
 `;
 
 export const SortBox = styled.div`
@@ -290,10 +309,9 @@ export const SortBox = styled.div`
 	width: 100%;
 	height: 42px;
 	line-height: 42px;
-	border-top: 1px solid #ddd;
-	border-left: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
+	border: 1px solid #ddd;
 	box-sizing: border-box;
+	background-color: white;
 	// -moz-box-sizing: border-box;
 	// -webkit-box-sizing: border-box;
 
@@ -319,88 +337,85 @@ export const SortBox = styled.div`
 `;
 
 export const ListBox = styled.div`
-	width: 100%;
-
 	& ul {
+		// overflow: hidden;
 		border-left: 1px solid #ddd;
+	}
 
-		& li {
-			position: relative;
-			min-width: 154px;
-			float: left;
-			width: 100px;
-			// padding: 0 0 15px;
-			margin: 0;
-			border-right: 1px solid #ddd;
-			border-bottom: 1px solid #ddd;
+	& li {
+		min-width: 154px;
+		float: left;
+		width: 100px;
+		margin: 0;
+		background-color: white;
+		border-right: 1px solid #ddd;
+		border-bottom: 1px solid #ddd;
+	}
+
+	.li_inner {
+		border: 0;
+		vertical-align: top;
+		background: transparent;
+		width: 154px;
+		height: 335px;
+		padding-top: 15px;
+		&:hover {
+			background-color: #f2f2f2;
+			z-index: 1;
+		}
+	}
+
+	.list_img {
+		position: relative;
+		width: 125px;
+		height: 150px;
+		margin: 0 auto 10px;
+		text-align: center;
+		overflow: hidden;
+		background-color: white;
+
+		:hover {
+			opacity: 0.5;
 		}
 
-		// &ul {
-		//   display: inline-block;
-
-		// &li {
-		//     position: relative;
-		//     min-width: 154px;
-		//     float: left;
-		//     color: #b2b2b2;
-		//     background: #fff;
-		//     border-right: 1px solid #ddd;
-		//     border-bottom: 1px solid #ddd;
-		//     box-sizing: border-box;
-		//   }
-		// }
-
-		.li_inner {
-			border: 0;
-			vertical-align: top;
-			background: transparent;
-			width: 154px;
-			height: 335px;
-			margin: 0;
-			// margin: 15px auto 20px;
+		img {
+			width: 120px;
+			height: 145px;
+			object-fit: cover;
 		}
+	}
 
-		.list_img {
-			position: relative;
-			width: 125px;
-			margin: 0 auto 10px;
-			text-align: center;
-			height: 150px;
-			overflow: hidden;
+	.item_info {
+		position: relative;
+		width: 125px;
+		margin: 0 auto;
+		text-align: left;
+
+		&p {
+			display: block;
+			margin-block-start: 1em;
+			margin-block-end: 1em;
+			margin-inline-start: 0px;
+			margin-inline-end: 0px;
+			// color: #000;
+			// line-height: 16px;
+			// text-overflow: ellipsis;
+			// max-height: 30px;
+			// overflow: hidden;
 		}
+	}
 
-		.item_info {
-			position: relative;
-			width: 125px;
-			margin: 0 auto;
-			text-align: left;
+	.option {
+		display: flex;
+		justify-content: space-between;
+		// margin: 0 10px 0 10px;
+		padding-left: 7px;
 
-			&p {
-				display: block;
-				margin-block-start: 1em;
-				margin-block-end: 1em;
-				margin-inline-start: 0px;
-				margin-inline-end: 0px;
-				// color: #000;
-				// line-height: 16px;
-				// text-overflow: ellipsis;
-				// max-height: 30px;
-				// overflow: hidden;
-			}
-		}
-
-		.option {
-			display: flex;
-			justify-content: space-between;
-			// margin: 0 10px 0 10px;
-			padding-left: 7px;
-
-			.option_btn {
-				border-top: 1px solid #ddd;
-				border-left: 1px solid #ddd;
-				padding: 3px 8px 3px 8px;
-				cursor: pointer;
-			}
+		.option_btn {
+			border-top: 1px solid #ddd;
+			border-left: 1px solid #ddd;
+			padding: 3px 8px 3px 8px;
+			cursor: pointer;
 		}
 	}
 `;
