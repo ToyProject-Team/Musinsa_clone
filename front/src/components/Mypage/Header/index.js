@@ -1,6 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Header, MypageTitle, PRFL_IMAGE, NickName, Profile, Navi, NaviList, StyleLink } from "../../../pages/Mypage/styles";
+import { Header, MypageTitle, PRFL_IMAGE, NickName, Profile, Navi, NaviList, StyleLink } from "pages/Mypage/styles";
 
 function mypage_header() {
 	return (
@@ -12,7 +11,7 @@ function mypage_header() {
 			</Profile>
 			<Navi>
 				<NaviList>
-					<StyleLink to="">장바구니</StyleLink>
+					<StyleLink to="/cart">장바구니</StyleLink>
 				</NaviList>
 				<NaviList>
 					<StyleLink to="">로그아웃</StyleLink>

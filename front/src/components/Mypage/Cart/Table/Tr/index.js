@@ -18,7 +18,7 @@ function Tr({data}) {
         </ul>
         </td>
       <td>{data.ProductPrice}</td>
-      <td><input type="number" min="0" value={value} onChange={handleChange}></input></td>
+      <td><input type="text" value={value} onChange={handleChange}></input></td>
       <td>{data.ProductPrice}</td>
       <td colSpan="2">{data.Orderstatus}</td>
       </tr>

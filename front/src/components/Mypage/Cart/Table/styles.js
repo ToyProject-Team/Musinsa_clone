@@ -25,6 +25,19 @@ export const OrderTable = styled.table`
         &:first-of-type{
             text-align: left;
         }
+        input{
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 20px;
+            text-indent: 0;
+            width: 32px;
+            height: 30px;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+            color: #000000;
+            float: left;
+        }
 }
 `;
 
