@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState } from "react";
 import MyHeader from 'components/Mypage/Header';
 import Main from 'components/Mypage/OrderList';
@@ -24,21 +23,5 @@ const Mypage = () => {
     </MypageLayout>
   );
 }
-=======
-import React from 'react';
-import MyHeader from 'components/mypage/header';
-import MyMain from 'components/mypage/table';
-
-const useMypage = () => {
-	return (
-		<div>
-			<div>
-				<MyHeader />
-				<MyMain />
-			</div>
-		</div>
-	);
-};
->>>>>>> a1b58fe9ee58b79f0e2e379ec30e6b72e204aa6d
 
 export default Mypage;
