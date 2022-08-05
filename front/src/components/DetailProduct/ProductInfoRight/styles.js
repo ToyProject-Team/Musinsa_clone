@@ -1,9 +1,18 @@
-/* index.js */
 import styled from '@emotion/styled';
 
+/* index.js */
 export const ProductInfo = styled.div`
-	font-weight: bold;
+	width: 900;
+	height: 100vh;
+	/* InfoWrapper {
+		&not(:first-child) {
+			padding-top: 0px !important;
+		}
+	} */
+
+	font-weight: 900;
 	color: black;
+	width: auto;
 	margin-left: 20px;
 `;
 
@@ -11,7 +20,6 @@ export const InfoWrapper = styled.div`
 	padding-top: 20px;
 	padding-bottom: 20px;
 	border-bottom: 1px solid #dcdcdc;
-	width: 400px;
 `;
 
 export const InfoWrapperProduct = styled.div`
@@ -20,13 +28,17 @@ export const InfoWrapperProduct = styled.div`
 `;
 
 export const InfoContent = styled.p`
-	font-weight: bold;
+	font-weight: 900;
 	color: black;
 `;
 
 export const InfoSplit = styled.p`
 	color: darkgray;
 	padding: 0px 3px 0px 3px;
+`;
+
+export const InfoTitle = styled.p`
+	width: 110px;
 `;
 
 export const DetailInfoWrapper = styled.ul`
@@ -40,7 +52,6 @@ export const DetailInfoWrapper = styled.ul`
 `;
 
 export const DetailInfo = styled.li`
-	position: relative;
 	display: flex;
 	flex-direction: row;
 	padding: 5px 0px 5px 0px;
@@ -48,11 +59,9 @@ export const DetailInfo = styled.li`
 		color: darkgray;
 		padding: 0px 3px 0px 3px;
 	}
-`;
-
-export const InfoTitle = styled.p`
-	width: 110px;
-	font-weight: 500;
+	p {
+		width: 110px;
+	}
 `;
 
 export const Title = styled.div`
@@ -70,10 +79,10 @@ export const SubTitle = styled.p`
 export const TitleBox = styled.div`
 	display: flex;
 	padding-bottom: 15px;
-	h4 {
+	& h4 {
 		font-size: 20px;
 	}
-	p {
+	& p {
 		font-weight: bold;
 		font-size: 12px;
 		color: #a9a9a9;
@@ -91,31 +100,12 @@ export const PriceContent = styled.div`
 export const PriceTitle = styled.div`
 	width: 110px;
 	padding-top: 5px;
-	font-weight: 500;
 `;
 
-export const Price = styled.p`
-	font-size: 12px;
-	display: inline-block;
-	padding-left: 5px;
-`;
+/* PurchaseForm.js */
 
-export const TextBox = styled.ul``;
+export const Purchase = styled.div``;
 
-export const Box = styled.li`
-	display: inline-block;
-	color: #000;
-	font-size: 12px;
-	font-weight: 500;
-	padding: 15px;
-	margin-top: 20px;
-	border: 1px solid #000;
-	width: 85px;
+export const ProductOption = styled.div``;
 
-	:not(:last-child) {
-		color: #f00;
-		border: 1px solid #f00;
-		width: 185px;
-		margin-right: 5px;
-	}
-`;
+export const PurchaseForm = styled.div``;
