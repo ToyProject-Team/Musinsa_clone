@@ -9,9 +9,9 @@ import {
 	Navi,
 	NaviList,
 	StyleLink,
-} from 'pages/Mypage/styles';
+} from 'pages/mypage/styles';
 
-function mypage_header() {
+function MyHeader() {
 	return (
 		<Header>
 			<MypageTitle>My Page</MypageTitle>
@@ -31,4 +31,4 @@ function mypage_header() {
 	);
 }
 
-export default mypage_header;
+export default MyHeader;

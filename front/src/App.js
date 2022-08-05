@@ -2,19 +2,19 @@ import './App.css';
 import { BrowserRouter, Routes, Redirect, Route } from 'react-router-dom';
 import loadable from '@loadable/component';
 
-const Main = loadable(() => import('pages/Main'), {
+const Main = loadable(() => import('pages/main'), {
 	fallback: <div>로딩중</div>,
 });
-const LogIn = loadable(() => import('pages/Login'), {
+const LogIn = loadable(() => import('pages/login'), {
 	fallback: <div>로딩중</div>,
 });
 const SignUp = loadable(() => import('pages/Signup'), {
 	fallback: <div>로딩중</div>,
 });
-const Detail = loadable(() => import('pages/Detail'), {
+const Detail = loadable(() => import('pages/detail'), {
 	fallback: <div>로딩중</div>,
 });
-const MyPage = loadable(() => import('pages/Mypage'), {
+const MyPage = loadable(() => import('pages/mypage'), {
 	fallback: <div>로딩중</div>,
 });
 
