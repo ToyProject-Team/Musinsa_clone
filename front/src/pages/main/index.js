@@ -5,7 +5,8 @@ import Data from './data.json';
 
 const Main = () => {
   const [dummyData, setDummyData] = useState(Data);
-  // const [selectBox, setSelectBox] = useState(true);
+  const [selectBox, setSelectBox] = useState(true);
+  const [button, setButton] = useState(true);
 
   // axios.get('./data.json')
   //   .then((res) => {
@@ -46,11 +47,15 @@ const Main = () => {
             <div>브랜드</div>
             <div>
               <input type="text" title="브랜드 검색" style={{width: "65px"}}></input>
+              <img src='https://image.msscdn.net/skin/musinsa/images/search_grey_14.gif'></img>
             </div>
           </Name>
           <div>
-            <BrandCategory style={{paddingBottom: "15px"}}>
-              <BrandGroup>좋아요</BrandGroup>
+            <BrandCategory style={{paddingBottom: "10px"}}>
+              <BrandGroup style={{"display" : "flex", "alignItems": "center"}}>
+              <img src='https://image.msscdn.net/skin/musinsa/images/icon_like_small_on.png?20171024'></img>
+              <span>좋아요</span>
+              </BrandGroup>
               <div style={{minWidth: "600px"}}>
               등록된 관심브랜드가 없습니다.
               </div>
@@ -148,10 +153,17 @@ const Main = () => {
 
       {/* Item List - 컴포넌트로 따로 빼기 */}
       <ItemSection>
-        <SelectBox>
-          <span className='select-medium'>중분류: 백팩</span>
-          <span className='select-medium-button'>&#160;X</span>
-        </SelectBox>
+          { selectBox === true
+            ?
+              <SelectBox onClick={()=>{
+                setSelectBox(false)
+              }}>
+                <span className='select-medium'>중분류: 백팩</span>
+                <span className='select-medium-button'>&#160;X</span>
+            </SelectBox>
+            : null
+          }
+
         <Items>
           <SortBox>
             <span className='sort'>무신사 추천순</span>

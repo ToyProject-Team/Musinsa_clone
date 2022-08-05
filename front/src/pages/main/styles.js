@@ -90,6 +90,7 @@ export const Category2nd = styled.div`
 
     & ul {
       display: inline-block;
+      min-width: 600px;
       max-width: 800px;
       & li {
         float: left;
@@ -152,6 +153,7 @@ export const CategoryEtc = styled.div`
 
     & ul {
       display: inline-block;
+      min-width: 600px;
       max-width: 800px;
 
       & li {
@@ -209,6 +211,7 @@ export const BrandCategory = styled.div`
   & div {
     & ul {
       display: inline-block;
+      min-width: 600px;
       max-width: 800px;
 
       & li {
@@ -233,6 +236,11 @@ export const BrandGroup = styled.div`
   min-width: 100px;
   padding-right: 16px;
   font-weight: bold;
+
+  & span {
+    padding-left: 5px;
+    color: #f33;
+  }
 
   div:first-of-type {
     margin-bottom: 15px;
