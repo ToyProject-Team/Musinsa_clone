@@ -29,8 +29,8 @@ function Tr({data}) {
                 )
             })
         } */}
-    </tbody>
-  )
+		</tbody>
+	);
 }
 
 export default Tr;

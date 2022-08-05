@@ -86,11 +86,11 @@ export const Container = styled.div`
 `;
 
 export const LoginSection = styled.section`
-	max-width: 340px;
 	height: 100vh;
+	max-width: 380px;
 	margin: 0 auto;
 	background-color: #fff;
-	padding: 62px;
+	padding: 40px;
 `;
 
 export const Header = styled.h2`
