@@ -2,7 +2,7 @@ import React from 'react';
 import MyHeader from 'components/mypage/header';
 import MyMain from 'components/mypage/table';
 
-const useMypage = () => {
+const Mypage = () => {
 	return (
 		<div>
 			<div>
@@ -13,4 +13,4 @@ const useMypage = () => {
 	);
 };
 
-export default useMypage;
+export default Mypage;
