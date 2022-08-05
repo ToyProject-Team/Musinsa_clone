@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 
+export const MypageLayout = styled.div`
+	width: auto;
+    padding: 0px 40px;
+    margin: 0px auto;
+    box-sizing: border-box;
+	background: #000;
+`;
+
+
 export const Header = styled.div`
-	position: relative;
 	background: black;
 	padding: 20px 20px 40px;
 `;
@@ -10,8 +18,8 @@ export const Header = styled.div`
 export const MypageTitle = styled.h2`
 	font-size: 24px;
 	line-height: 52px;
-	color: white;
-	margin-bottom: 10px;
+	color: rgb(255, 255, 255);
+	padding: 20px 0px 24px;
 `;
 
 export const Profile = styled.dl`
@@ -63,3 +71,42 @@ export const StyleLink = styled(Link)`
 	color: #fff;
 	text-decoration: none;
 `;
+
+export const StyleNav = styled.nav`
+	width: 170px;
+    float: left;
+    margin: 54px 40px 0px 0px;
+    font-size: 14px;
+	h3{
+		padding: 13px 0px 2px;
+		font-size: 24px;
+		font-weight: normal;
+		line-height: 40px;
+	}
+	ul{
+		display: flex;
+		flex-direction: column;
+    	padding-bottom: 15px;
+		li{
+			display: flex;
+			margin-top: 2px;
+			a{
+				font-size: 16px;
+				line-height: 40px;
+				color: rgb(110, 110, 110) !important;
+				text-decoration: none;
+			}
+		}
+	}
+`;
+
+export const MypageMain = styled.section`
+    width: calc(100% - 210px);
+    padding: 0;
+    float: right;
+	margin-top: 80px;
+	h3{
+		display: inline-block;
+    	font-size: 24px;
+	}
+`
