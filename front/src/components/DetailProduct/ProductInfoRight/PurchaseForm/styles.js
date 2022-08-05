@@ -18,4 +18,21 @@ export const BuyOption = styled.select`
 `;
 
 export const SelectOption = styled.div``;
-export const TotalPrice = styled.div``;
+export const TotalPrice = styled.div`
+	height: 16px;
+	margin-left: 20px;
+	padding: 15px;
+	border: 1px solid #ddd;
+	border-top: none;
+	p {
+		font-size: 16px;
+		font-weight: bold;
+		float: left;
+		padding-right: 214px;
+	}
+	div {
+		font-size: 16px;
+		font-weight: bold;
+		float: left;
+	}
+`;

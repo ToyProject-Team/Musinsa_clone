@@ -4,6 +4,7 @@ import {
 	DetailInfoWrapper,
 	TitleBox,
 	DetailInfo,
+	DownIcon,
 	InfoContent,
 	InfoTitle,
 	PriceTitle,
@@ -38,7 +39,7 @@ const ProductInfoRight = ({ data }) => {
 							<InfoTitle>시즌 / 성별</InfoTitle>
 							<InfoContent>{data.season}</InfoContent>
 							<span>/</span>
-							<InfoContent>{data.sex}</InfoContent>
+							<InfoContent>{data.gender}</InfoContent>
 						</DetailInfo>
 						<DetailInfo>
 							<InfoTitle>조회수(1개월)</InfoTitle>
@@ -62,15 +63,15 @@ const ProductInfoRight = ({ data }) => {
 					<DetailInfoWrapper>
 						<DetailInfo>
 							<InfoTitle>출고 정보</InfoTitle>
-							<InfoContent>{data.BeReleased}</InfoContent>
+							<InfoContent>{data.beReleased}</InfoContent>
 						</DetailInfo>
 						<DetailInfo>
 							<InfoTitle>배송 방법</InfoTitle>
-							<InfoContent>{data.DeliveryFrom}</InfoContent>
+							<InfoContent>{data.deliveryFrom}</InfoContent>
 							<span>/</span>
-							<InfoContent>{data.DeliveryWay}</InfoContent>
+							<InfoContent>{data.deliveryWay}</InfoContent>
 							<span>/</span>
-							<InfoContent>{data.DeliveryCompany}</InfoContent>
+							<InfoContent>{data.deliveryCompany}</InfoContent>
 						</DetailInfo>
 					</DetailInfoWrapper>
 				</InfoWrapper>
@@ -83,15 +84,27 @@ const ProductInfoRight = ({ data }) => {
 						<DetailInfo>
 							<PriceTitle>무신사 판매가</PriceTitle>
 							<PriceContent className="line">
-								{data.NonMemberPrice}
+								{data.productPrice}
 								<Price>원</Price>
 							</PriceContent>
 						</DetailInfo>
 						<DetailInfo>
 							<PriceTitle>무신사 회원가</PriceTitle>
 							<PriceContent onClick={onToggle}>
-								{data.RookiePrice}
+								{data.rookiePrice}
 								<Price>원</Price>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 16 16"
+									width="16"
+									height="16"
+									style={{ paddingLeft: '6px' }}
+								>
+									<path
+										fill-rule="evenodd"
+										d="M12.78 6.22a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06 0L3.22 7.28a.75.75 0 011.06-1.06L8 9.94l3.72-3.72a.75.75 0 011.06 0z"
+									></path>
+								</svg>
 							</PriceContent>
 							{toggle ? <PriceList data={data} /> : <></>}
 						</DetailInfo>
@@ -100,9 +113,11 @@ const ProductInfoRight = ({ data }) => {
 						<Box>무신사는 전 상품 무료배송입니다.</Box>
 						<Box>회원 특별 혜택</Box>
 					</TextBox>
+					{/* <Add_1>무신사는 전 상품 무료배송입니다.</Add_1>
+					<Add_2>회원 특별 혜택</Add_2> */}
 				</InfoWrapper>
 			</ProductInfo>
-			<PurchaseForm />
+			<PurchaseForm data={data} />
 		</div>
 	);
 };
