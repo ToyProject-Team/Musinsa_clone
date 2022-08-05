@@ -7,6 +7,18 @@ export const ProductImage = styled.div`
 
 export const MainImage = styled.div`
 	border: 1px solid #cdcdcd;
-	width: 500px;
-	height: 600px;
+`;
+
+export const ImageList = styled.div`
+	margin: 20px;
+`;
+
+export const Image = styled.div`
+	width: 60px;
+	height: 72px;
+	display: inline-flex;
+	margin-left: 8px;
+	& :hover {
+		border: 1px solid #f00;
+	}
 `;
