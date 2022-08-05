@@ -1,0 +1,164 @@
+/api/user/signup:
+  post:
+    tags:
+      - user
+    summary: 회원가입
+    parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            loginId:
+              type: string
+            password:
+              type: string
+            email:
+              type: string
+    responses:
+      200:
+        $ref: "./openapi.yaml#/success"
+      401:
+        description: 로그인 아이디 중복
+        schema:
+          properties:
+            message:
+              type: string
+              example: 이미 사용중인 아이디 입니다
+      402:
+        description: 이메일 중복
+        schema:
+          properties:
+            message:
+              type: string
+              example: 이미 사용중인 이메일 입니다
+      500:
+        $ref: "./openapi.yaml#/serverError"
+
+/api/user/signin:
+  post:
+    tags:
+      - user
+    summary: 로그인
+    parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            loginId:
+              type: string
+            password:
+              type: string
+            passwordCheck:
+              type: string
+    responses:
+      200:
+        description: 성공
+        schema:
+          properties:
+            userData:
+              type: object
+              properties:
+                id:
+                  type: integer
+                email:
+                  type: string
+                nickname:
+                  type: string
+                checkedCalendar:
+                  type: string
+                ProfileImages:
+                  type: object
+                  properties:
+                    src:
+                      type: string
+                refreshToken:
+                  type: string
+                accessToken:
+                  type: string
+      401:
+        description: 존재하지 않는 유저 (로그인 아이디가 틀린 경우)
+        schema:
+          properties:
+            message:
+              type: string
+              example: 
+      402:
+        description: 비밀번호 일치하지 않음 (로그인 아이디는 맞지만 비밀번호가 틀린 경우)
+        schema:
+          properties:
+            message:
+              type: string
+              example: 패스워드가 일치하지 않습니다!
+      500:
+        $ref: "./openapi.yaml#/serverError"
+
+/api/user/logout:
+  post:
+    tags:
+      - user
+    summary: 로그아웃
+    parameters:
+      - name: Authorization
+        in: header
+        required: true
+    responses:
+      200:
+        $ref: "./openapi.yaml#/success"
+/api/user/refresh:
+  get:
+    tags:
+      - user
+    summary: 토큰 refresh
+    parameters:
+      - name: Authorization
+        in: header
+        required: true
+      - name: refresh
+        in: header
+        required: true
+    responses:
+      200:
+        description: 성공
+        schema:
+          properties:
+            ok:
+              type: boolean
+              example: true
+            data:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                  exmaple: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU4MjA4NDQzLCJleHAiOjE2NTgyOTQ4NDN9.xI5ylpNtkeC5wnf4mnqcP3nbFMpm1mKjrHySxLJyN_4"
+                refreshToken:
+                  type: string
+                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU4MjA4NDQzLCJleHAiOjE2NTgyOTQ4NDN9.xI5ylpNtkeC5wnf4mnqcP3nbFMpm1mKjrHySxLJyN_4"
+      403:
+        description: refresh 토큰 발급 도중 access token, refresh token이 모두 헤더에 없는 경우
+        schema:
+          properties:
+            success:
+              type: string
+              example: Access token and refresh token are need for refresh!
+      405:
+        description: refresh 토큰 발급 도중 토큰에 유저 정보가 없을 경우
+        schema:
+          properties:
+            success:
+              type: string
+              example: No authorized!
+      406:
+        description: refresh 토큰 발급 도중 토큰이 지급되지 않을 경우
+        schema:
+          properties:
+            success:
+              type: string
+              example: accessToken이 지급되지 않았습니다
+      500:
+        $ref: "./openapi.yaml#/serverError"
+
+$ref: "./productAPI.yaml"
