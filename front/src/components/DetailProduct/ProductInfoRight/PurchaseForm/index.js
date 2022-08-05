@@ -1,11 +1,29 @@
-import { FormWrapper, BuyOption, SelectOption, Option, TotalPrice } from './styles';
+import {
+	FormWrapper,
+	BuyOption,
+	ButtonBuy,
+	ButtonWrapper,
+	TotalPrice,
+	ButtonLike,
+	ButtonCart,
+	Button,
+	Like,
+	SelectedOption,
+	Selected,
+	Amount,
+	Price,
+	Decrease,
+} from './styles';
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import SelectForm from '../SelectedForm';
 
 const PurchaseForm = ({ data }) => {
+	const navigate = useNavigate();
 	const [size, setSize] = useState('옵션 선택');
 	const [color, setColor] = useState('옵션 선택');
 	const [selected, setSelected] = useState(false);
+	const [clickedlike, setClickedlike] = useState(true);
 
 	const sizeSelected = e => {
 		setSize(e.target.value);
@@ -20,6 +38,12 @@ const PurchaseForm = ({ data }) => {
 		} else {
 		}
 	}, [size, color]);
+
+	const onLikeClicked = useCallback(() => {
+		// navigate(`/${mypage}`);
+		setClickedlike(prev => !prev);
+		console.log(clickedlike);
+	}, [clickedlike]);
 
 	return (
 		<div>
@@ -49,6 +73,16 @@ const PurchaseForm = ({ data }) => {
 				<p>총 상품 금액</p>
 				<div>{data.productPrice}원</div>
 			</TotalPrice>
+			<ButtonWrapper>
+				<ButtonBuy>바로구매</ButtonBuy>
+				<ButtonLike clickedlike={clickedlike}>
+					<Button clickedlike={clickedlike} onClick={onLikeClicked} />
+					<Like clickedlike={clickedlike}>{data.likes}</Like>
+				</ButtonLike>
+				<ButtonCart>
+					<i></i>
+				</ButtonCart>
+			</ButtonWrapper>
 		</div>
 	);
 };
