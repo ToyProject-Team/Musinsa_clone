@@ -9,7 +9,7 @@
 },
 {
   "id" : 2,
-  "item" : "백팩",
+  "item" : "크로스백",
   "brandName" : "노스페이스",
   "model" : "NM2DN51A_빅샷",
   "price" : "124,000원",
@@ -17,7 +17,7 @@
 },
 {
   "id" : 3,
-  "item" : "백팩",
+  "item" : "새들백",
   "brandName" : "노스페이스",
   "model" : "NM2DN51A_빅샷",
   "price" : "124,000원",
@@ -41,7 +41,7 @@
 },
 {
   "id" : 6,
-  "item" : "백팩",
+  "item" : "크로스백",
   "brandName" : "노스페이스",
   "model" : "NM2DN51A_빅샷",
   "price" : "124,000원",
@@ -49,7 +49,7 @@
 },
 {
   "id" : 7,
-  "item" : "백팩",
+  "item" : "크로스백",
   "brandName" : "노스페이스",
   "model" : "NM2DN51A_빅샷",
   "price" : "124,000원",
@@ -73,7 +73,7 @@
 },
 {
   "id" : 10,
-  "item" : "백팩",
+  "item" : "크로스백",
   "brandName" : "노스페이스",
   "model" : "NM2DN51A_빅샷",
   "price" : "124,000원",
