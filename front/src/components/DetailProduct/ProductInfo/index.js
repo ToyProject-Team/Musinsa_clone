@@ -1,18 +1,53 @@
-import { InfoWrapper, Button, TitleBox, ImageInfo, MoreInfo } from './styles';
+import { useState, useMemo } from 'react';
+import {
+	InfoWrapper,
+	Button,
+	TitleBox,
+	ImageInfo,
+	MoreInfo,
+	ImagagaInfo,
+	ButtonWrapper,
+} from './styles';
 
 const ProductInfo = () => {
+	const [buttonClick, setButtonClick] = useState(false);
+
+	// const IsMore = useMemo(() => {
+	// 	const ImageSimpleInfo = () => {
+	// 		return (
+	// 			<ImageInfo clicked={buttonClick}>
+	// 				<img src="https://www.dummyimage.com/943x1800/bdbdbd/000000&text=productInfo" />
+	// 			</ImageInfo>
+	// 		);
+	// 	};
+	// 	if (buttonClick === false) {
+	// 		return <ImageSimpleInfo />;
+	// 	}
+	// 	return <ImageSimpleInfo />;
+	// }, [buttonClick]);
+
+	const IsMore = () => {
+		return (
+			<div>
+				<MoreInfo />
+				<Button>상품정보 더보기</Button>
+			</div>
+		);
+	};
+
 	return (
-		<InfoWrapper>
+		<InfoWrapper clicked={buttonClick}>
 			<TitleBox>
 				<h4>Product Info</h4>
 				<p>제품정보</p>
 				<div>해당 상품정보에 문제가 있으면 알려주세요.</div>
 			</TitleBox>
-			<ImageInfo>
-				<img src="http://via.placeholder.com/963x800/000000/ffffff?text=productImage4" />
+			<ImageInfo clicked={buttonClick}>
+				<img src="https://www.dummyimage.com/943x1800/bdbdbd/000000&text=productInfo" />
 			</ImageInfo>
-			<MoreInfo />
-			<Button>상품 더보기</Button>
+			<ButtonWrapper onClick={() => setButtonClick(!buttonClick)}>
+				{!buttonClick ? <IsMore /> : <Button>상품정보 접기</Button>}
+			</ButtonWrapper>
 		</InfoWrapper>
 	);
 };
