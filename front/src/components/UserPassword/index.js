@@ -1,11 +1,18 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { LoginContainer, LookButton } from './styles';
+import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 
-const UserPassword = ({ props, look, dom }) => {
-	const { password, onChangePassword, setPassword } = props;
-	const { passwordLookButton, setPasswordLookButton } = look;
-	const { passwordRef } = dom;
-
+const UserPassword = ({
+	password,
+	setPassword,
+	onChnage,
+	lookBtn,
+	setLookBtn,
+	dom,
+	placeholder,
+	title,
+	validation,
+}) => {
 	// input clear button
 	const onClickClear = useCallback(() => {
 		setPassword('');
@@ -13,48 +20,43 @@ const UserPassword = ({ props, look, dom }) => {
 
 	// password input look
 	const onClickLookPassword = useCallback(() => {
-		setPasswordLookButton(v => !v);
+		setLookBtn(v => !v);
 
-		if (passwordLookButton) passwordRef.current.type = 'password';
-		else passwordRef.current.type = 'text';
-	}, [passwordLookButton]);
+		if (lookBtn) dom.current.type = 'password';
+		else dom.current.type = 'text';
+	}, [lookBtn]);
 
 	return (
 		<LoginContainer>
+			{title && (
+				<label>
+					비밀번호
+					<span>필수 입력</span>
+				</label>
+			)}
 			<div>
 				<input
-					className={passwordLookButton ? 'look' : ''}
+					className={lookBtn ? 'look' : ''}
 					type="password"
 					value={password}
-					onChange={onChangePassword}
-					ref={passwordRef}
-					placeholder="비밀번호"
+					onChange={onChnage}
+					ref={dom}
+					placeholder={placeholder}
 				/>
-				{password.length > 0 && (
+				{password?.length > 0 && (
 					<button type="button" onClick={() => onClickClear('password')}>
-						<svg
-							width="20"
-							height="20"
-							viewBox="0 0 20 20"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<title>입력한 내용 삭제</title>
-							<circle cx="10" cy="10" r="10" fill="#B3B3B3"></circle>
-							<path
-								d="M5.52786 5.52742L14.4722 14.4718M14.4722 5.52734L5.52783 14.4717"
-								stroke="white"
-							></path>
-						</svg>
+						<CancelIcon />
 					</button>
 				)}
 				<LookButton
-					className={passwordLookButton ? 'look' : ''}
+					className={lookBtn ? 'look' : ''}
 					type="button"
 					aria-label="비밀번호 보이기"
 					onClick={onClickLookPassword}
 				></LookButton>
 			</div>
+
+			{validation && <p className="login-input__validation">8~30자 이내로 입력해 주십시오.</p>}
 		</LoginContainer>
 	);
 };

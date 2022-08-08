@@ -14,7 +14,7 @@ const UserFind = () => {
 					질문/답변
 					<span>필수 입력</span>
 				</label>
-				<div class="login-input__wrap select-container">
+				<div className="login-input__wrap select-container">
 					<select name="dlv_selectbox">
 						<option value="나의 보물 1호는?">나의 보물 1호는?</option>
 						<option value="가장 좋아하는 프로그래밍은?">가장 좋아하는 프로그래밍은?</option>
@@ -26,8 +26,8 @@ const UserFind = () => {
 				</div>
 			</SignupContainer>
 			<SignupContainer>
-				<div class="login-input__wrap">
-					<input placeholder="답변" maxlength="30" type="text" />
+				<div className="login-input__wrap">
+					<input placeholder="답변" maxLength="30" type="text" />
 					<button type="button">
 						<svg
 							width="20"

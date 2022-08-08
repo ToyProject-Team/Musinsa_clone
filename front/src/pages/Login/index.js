@@ -75,15 +75,18 @@ const LogIn = () => {
 				<Header>로그인</Header>
 				<LoginInner>
 					<form onSubmit={onSubmitForm}>
-						<UserEmail props={{ email, onChangeEmail, setEmail }}></UserEmail>
+						<UserEmail props={{ email, onChangeEmail, setEmail }} placeholder="아이디"></UserEmail>
+
 						<UserPassword
-							props={{
-								password,
-								onChangePassword,
-								setPassword,
-							}}
-							look={{ passwordLookButton, setPasswordLookButton }}
-							dom={{ passwordRef }}
+							password={password}
+							setPassword={setPassword}
+							onChnage={onChangePassword}
+							lookBtn={passwordLookButton}
+							setLookBtn={setPasswordLookButton}
+							dom={passwordRef}
+							placeholder="비밀번호"
+							title={false}
+							validation={false}
 						></UserPassword>
 						<LoginButton>
 							<button type="submit" className="login-button__item">

@@ -4,6 +4,24 @@ import styled from '@emotion/styled';
 export const LoginContainer = styled.div`
 	margin-top: 8px;
 
+	& > label {
+		display: inline-block;
+		margin: 16px 0 8px;
+		font-weight: 700;
+
+		& > span {
+			display: inline-block;
+			width: 4px;
+			height: 4px;
+			margin-top: 6px;
+			margin-left: 5px;
+			border-radius: 50%;
+			background-color: red;
+			text-indent: -9999px;
+			vertical-align: top;
+		}
+	}
+
 	& > div {
 		display: flex;
 		box-sizing: border-box;
@@ -36,5 +54,12 @@ export const LoginContainer = styled.div`
 		margin-right: 7px;
 		padding: 5px;
 		flex: 0 0 auto;
+	}
+
+	& p {
+		margin-top: 8px;
+		font-size: 11px;
+		line-height: 16.5px;
+		color: red;
 	}
 `;

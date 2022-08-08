@@ -29,11 +29,11 @@ const UserAddress = () => {
 					<tr>
 						<th scope="row">휴대전화</th>
 						<td>
-							<input className="size-input" name="mobile1" type="text" value="" maxlength="3" />
+							<input className="size-input" name="mobile1" type="text" value="" maxLength="3" />
 							<span>-</span>
-							<input className="size-input" name="mobile2" type="text" value="" maxlength="4" />
+							<input className="size-input" name="mobile2" type="text" value="" maxLength="4" />
 							<span>-</span>
-							<input className="size-input" name="mobile3" type="text" value="" maxlength="4" />
+							<input className="size-input" name="mobile3" type="text" value="" maxLength="4" />
 						</td>
 					</tr>
 					<tr>
@@ -45,11 +45,11 @@ const UserAddress = () => {
 					<tr>
 						<th scope="row">전화번호</th>
 						<td>
-							<input className="size-input" name="phone1" type="text" value="" maxlength="3" />
+							<input className="size-input" name="phone1" type="text" value="" maxLength="3" />
 							<span>-</span>
-							<input className="size-input" name="phone2" type="text" value="" maxlength="4" />
+							<input className="size-input" name="phone2" type="text" value="" maxLength="4" />
 							<span>-</span>
-							<input className="size-input" name="phone3" type="text" value="" maxlength="4" />
+							<input className="size-input" name="phone3" type="text" value="" maxLength="4" />
 							<label className="check-labal">없음</label>
 						</td>
 					</tr>
