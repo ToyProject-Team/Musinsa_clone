@@ -190,4 +190,51 @@
       500:
         $ref: "./openapi.yaml#/serverError"
 
+/api/product/purchase:
+  get:
+    tags:
+      - product
+    summary: 상품 구매하기
+    parameters:
+      - name: Authorization
+        in: header
+        required: true
+      - in: query
+        name: imp_uid
+        schema:
+          type: string
+        required: true
+        description: 상품 번호입니다
+      - in: query
+        name: merchant_uid
+        schema:
+          type: string
+        required: true
+        description: 결제 번호입니다
+    responses:
+      200:
+        description: 성공 - product 배열에 데이터들이 지급됩니다
+        schema:
+          properties:
+            product:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 33
+                  productTitle:
+                    type: string
+                    example: Chips
+      400:
+        description: 상품 조회 결과가 없을 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요        
+      500:
+        $ref: "./openapi.yaml#/serverError"
+
 $ref: "./myPageAPI.yaml"
