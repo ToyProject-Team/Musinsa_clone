@@ -39,23 +39,6 @@ const LogIn = () => {
 		[setAutoLoginCheck, setKeyframesClass],
 	);
 
-	// input clear button
-	const onClickClear = useCallback(
-		event => {
-			if (event === 'email') setEmail('');
-			else if (event === 'password') setPassword('');
-		},
-		[setEmail, setPassword],
-	);
-
-	// password input look
-	const onClickLookPassword = useCallback(() => {
-		setPasswordLookButton(v => !v);
-
-		if (passwordLookButton) passwordRef.current.type = 'password';
-		else passwordRef.current.type = 'text';
-	}, [passwordLookButton]);
-
 	// onClick login button event
 	const onSubmitForm = useCallback(
 		e => {

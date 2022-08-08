@@ -3,7 +3,7 @@ import UserEmail from 'components/UserEmail';
 import UserFind from 'components/UserFind';
 import UserPassword from 'components/UserPassword';
 import useInput from 'hooks/useInput';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as CheckIcon } from 'assets/svg/Check.svg';
 import {
@@ -29,10 +29,71 @@ const Signup = () => {
 	const [passwordConfirmLookButton, setPasswordConfirmLookButton] = useState(false);
 	const passwordConfirmRef = useRef();
 
+	const [checkValue, setCheckValue] = useState({
+		checkAll: false,
+		checkAgree: false,
+		checkTerms: false,
+		checkYouth: false,
+		checkSns: false,
+		count: 0,
+	});
+
 	const onSubmitForm = useCallback(e => {
 		e.preventDefault();
 		console.log(e);
 	}, []);
+
+	const onClickCheck = useCallback(
+		e => {
+			const name = e.target.name;
+
+			setCheckValue(prevState => ({
+				...prevState,
+				[name]: !checkValue[name],
+				count: !checkValue[name] ? checkValue.count + 1 : checkValue.count - 1,
+			}));
+		},
+		[checkValue],
+	);
+
+	const onClickCheckAll = useCallback(
+		e => {
+			if (checkValue.count < 4) {
+				setCheckValue(() => ({
+					checkAll: true,
+					checkAgree: true,
+					checkTerms: true,
+					checkYouth: true,
+					checkSns: true,
+					count: 4,
+				}));
+			} else {
+				setCheckValue(() => ({
+					checkAll: false,
+					checkAgree: false,
+					checkTerms: false,
+					checkYouth: false,
+					checkSns: false,
+					count: 0,
+				}));
+			}
+		},
+		[checkValue],
+	);
+
+	useEffect(() => {
+		if (checkValue.count === 4) {
+			setCheckValue(prevState => ({
+				...prevState,
+				checkAll: true,
+			}));
+		} else {
+			setCheckValue(prevState => ({
+				...prevState,
+				checkAll: false,
+			}));
+		}
+	}, [checkValue.count]);
 
 	return (
 		<Container>
@@ -86,26 +147,26 @@ const Signup = () => {
 
 						<SignupContainer>
 							<div className="all-check">
-								<input
+								{/* <input
 									type="checkbox"
 									id="loginJoinMembershipAllCheckbox"
 									name="loginJoinMembershipAllCheckbox"
-								/>
+								/> */}
 								<label htmlFor="loginJoinMembershipAllCheckbox">이메일</label>
 							</div>
 							<div className="all-check">
-								<input
+								{/* <input
 									type="checkbox"
 									id="loginJoinMembershipAllCheckbox"
 									name="loginJoinMembershipAllCheckbox"
-								/>
+								/> */}
 								<label htmlFor="loginJoinMembershipAllCheckbox">휴대폰</label>
 							</div>
 							<label>
 								<span>필수 입력</span>
 							</label>
 							<div className="email-check">
-								<input type="email" />
+								{/* <input type="email" /> */}
 								<button type="button">
 									<CancelIcon />
 								</button>
@@ -113,7 +174,7 @@ const Signup = () => {
 							</div>
 
 							<div className="phone-check" style={{ display: 'none' }}>
-								<input type="text" />
+								{/* <input type="text" /> */}
 								<button type="button">
 									<CancelIcon />
 								</button>
@@ -128,50 +189,80 @@ const Signup = () => {
 
 						<SignupCheckBox>
 							<div className="all-check">
-								<input
-									type="checkbox"
-									id="loginJoinMembershipAllCheckbox"
-									name="loginJoinMembershipAllCheckbox"
-								/>
-								<label htmlFor="loginJoinMembershipAllCheckbox">약관 전체 동의하기</label>
+								<label htmlFor="checkAll" className={checkValue.checkAll && 'active'}>
+									<input
+										onClick={e => onClickCheckAll(e)}
+										style={{ display: 'none' }}
+										id="checkAll"
+										type="checkbox"
+										name="checkAll"
+										value={checkValue.checkAll}
+									/>
+									약관 전체 동의하기
+								</label>
 							</div>
 							<div className="check">
-								<input type="checkbox" id="privacyAgreeCheckbox" name="privacyAgreeCheckbox" />
-								<label htmlFor="privacyAgreeCheckbox">
-									<CheckIcon />
+								<label htmlFor="checkAgree">
+									<input
+										onClick={e => onClickCheck(e)}
+										style={{ display: 'none' }}
+										id="checkAgree"
+										type="checkbox"
+										name="checkAgree"
+										value={checkValue.checkAgree}
+									/>
+									<CheckIcon stroke={checkValue.checkAgree ? '#0078ff' : '#D1D1D1'} />
 									[필수] 개인정보 수집 및 이용 동의
 								</label>
 								<a href="signup/agreement/privacy-usage" target="_blank">
 									자세히
 								</a>
 							</div>
-
 							<div className="check">
-								<input type="checkbox" id="privacyAgreeCheckbox" name="privacyAgreeCheckbox" />
-								<label htmlFor="privacyAgreeCheckbox">
-									<CheckIcon />
+								<label htmlFor="checkTerms">
+									<input
+										onClick={e => onClickCheck(e)}
+										style={{ display: 'none' }}
+										id="checkTerms"
+										type="checkbox"
+										name="checkTerms"
+										value={checkValue.checkTerms}
+									/>
+									<CheckIcon stroke={checkValue.checkTerms ? '#0078ff' : '#D1D1D1'} />
 									[필수] 무신사, 무신사 스토어 이용 악관
 								</label>
 								<a href="signup/agreement/privacy-usage" target="_blank">
 									자세히
 								</a>
 							</div>
-
 							<div className="check">
-								<input type="checkbox" id="privacyAgreeCheckbox" name="privacyAgreeCheckbox" />
-								<label htmlFor="privacyAgreeCheckbox">
-									<CheckIcon />
+								<label htmlFor="checkYouth">
+									<input
+										onClick={e => onClickCheck(e)}
+										style={{ display: 'none' }}
+										id="checkYouth"
+										type="checkbox"
+										name="checkYouth"
+										value={checkValue.checkYouth}
+									/>
+									<CheckIcon stroke={checkValue.checkYouth ? '#0078ff' : '#D1D1D1'} />
 									[필수] 만 14세 미만 가입 제한
 								</label>
 								<a href="signup/agreement/privacy-usage" target="_blank">
 									자세히
 								</a>
 							</div>
-
 							<div className="check">
-								<input type="checkbox" id="privacyAgreeCheckbox" name="privacyAgreeCheckbox" />
-								<label htmlFor="privacyAgreeCheckbox">
-									<CheckIcon />
+								<label htmlFor="checkSns">
+									<input
+										onClick={e => onClickCheck(e)}
+										style={{ display: 'none' }}
+										id="checkSns"
+										type="checkbox"
+										name="checkSns"
+										value={checkValue.checkSns}
+									/>
+									<CheckIcon stroke={checkValue.checkSns ? '#0078ff' : '#D1D1D1'} />
 									[선택] 마케팅 활용 및 광고성 정보 수신 동의
 								</label>
 								<a href="signup/agreement/privacy-usage" target="_blank">
