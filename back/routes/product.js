@@ -155,6 +155,7 @@ router.post('/purchase', async (req, res) => {
         const paymentData = getPaymentData.data.response; // 조회한 결제 정보
         // 결제 검증하기
         const { amount, status } = paymentData;
+        console.log(amount)
         // if (amount === amountToBePaid) { // 결제금액 일치. 결제 된 금액 === 결제 되어야 하는 금액
         //     switch (status) {
             // case "ready": // 가상계좌 발급
