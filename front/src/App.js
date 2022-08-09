@@ -37,7 +37,7 @@ function App() {
 				<Route path="mypage/*" element={<MyPage />} /> {/* => 마이페이지 */}
 				<Route path="like/*" element={<Like />} /> {/* => 좋아요 */}
 				<Route path="cart/*" element={<Cart />} /> {/* => 장바구니 */}
-				<Route path="signup" element={<SignUp />} /> {/* => 회원가입 페이지 */}
+				<Route path="signup/*" element={<SignUp />} /> {/* => 회원가입 페이지 */}
 			</Routes>
 		</BrowserRouter>
 	);

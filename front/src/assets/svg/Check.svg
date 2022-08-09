@@ -1,0 +1,17 @@
+<svg
+	width="16"
+	height="16"
+	viewBox="0 0 16 16"
+	fill="none"
+	xmlns="http://www.w3.org/2000/svg"
+	className="login-checkbox--version__svg"
+>
+	<title>체크</title>
+	<path
+		d="M2.6665 8L6.39952 11.7333L13.8665 4.26666"
+		stroke="current"
+		stroke-width="1.5"
+		stroke-linecap="square"
+		className="svg-color"
+	></path>
+</svg>
