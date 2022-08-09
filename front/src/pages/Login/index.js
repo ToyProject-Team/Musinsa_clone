@@ -58,7 +58,13 @@ const LogIn = () => {
 				<Header>로그인</Header>
 				<LoginInner>
 					<form onSubmit={onSubmitForm}>
-						<UserEmail props={{ email, onChangeEmail, setEmail }} placeholder="아이디"></UserEmail>
+						<UserEmail
+							eamil={email}
+							setEmail={setEmail}
+							onChangeEmail={onChangeEmail}
+							placeholder="아이디"
+							title={false}
+						></UserEmail>
 
 						<UserPassword
 							password={password}

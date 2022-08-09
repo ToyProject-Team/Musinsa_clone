@@ -29,6 +29,9 @@ const Signup = () => {
 	const [passwordConfirmLookButton, setPasswordConfirmLookButton] = useState(false);
 	const passwordConfirmRef = useRef();
 
+	const [answer, onChangeAnswer, setAnswer] = useInput('');
+	const [question, onChangeQuestion, setQuestion] = useInput('1');
+
 	const [checkValue, setCheckValue] = useState({
 		checkAll: false,
 		checkAgree: false,
@@ -119,8 +122,11 @@ const Signup = () => {
 				<SignupInner>
 					<form onSubmit={onSubmitForm}>
 						<UserEmail
-							props={{ email, onChangeEmail, setEmail }}
+							eamil={email}
+							setEmail={setEmail}
+							onChangeEmail={onChangeEmail}
 							placeholder="영문, 숫자 5-11자"
+							title={true}
 						></UserEmail>
 						<UserPassword
 							password={password}
@@ -166,7 +172,7 @@ const Signup = () => {
 								<span>필수 입력</span>
 							</label>
 							<div className="email-check">
-								{/* <input type="email" /> */}
+								<input type="email" />
 								<button type="button">
 									<CancelIcon />
 								</button>
@@ -174,7 +180,7 @@ const Signup = () => {
 							</div>
 
 							<div className="phone-check" style={{ display: 'none' }}>
-								{/* <input type="text" /> */}
+								<input type="text" />
 								<button type="button">
 									<CancelIcon />
 								</button>
@@ -184,7 +190,9 @@ const Signup = () => {
 							<p className="helper-text">계정 분실 시 본인인증 정보로 활용됩니다.</p>
 						</SignupContainer>
 
-						<UserFind></UserFind>
+						<UserFind
+							props={{ answer, onChangeAnswer, setAnswer, question, onChangeQuestion, setQuestion }}
+						></UserFind>
 						<UserAddress></UserAddress>
 
 						<SignupCheckBox>
