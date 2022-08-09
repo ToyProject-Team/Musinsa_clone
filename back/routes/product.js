@@ -147,7 +147,7 @@ router.post('/purchase', authJWT, async (req, res) => {
           const { access_token } = getToken.data.response; // 인증 토큰
           // imp_uid로 아임포트 서버에서 결제 정보 조회
           const getPaymentData = await axios({
-            url: `https://api.iamport.kr/payments/\${imp_uid}`, // imp_uid 전달
+            url: `https://api.iamport.kr/payments/${imp_uid}`, // imp_uid 전달
             method: "get", // GET method
             headers: { "Authorization": access_token } // 인증 토큰 Authorization header에 추가
           });
@@ -165,7 +165,7 @@ router.post('/purchase', authJWT, async (req, res) => {
                 const { vbank_num, vbank_date, vbank_name } = paymentData;
                 await Users.findByIdAndUpdate("/* 고객 id */", { $set: { vbank_num, vbank_date, vbank_name }});
                 // 가상계좌 발급 안내 문자메시지 발송
-                SMS.send({ text: `가상계좌 발급이 성공되었습니다. 계좌 정보 \${vbank_num} \${vbank_date} \${vbank_name}`});
+                SMS.send({ text: `가상계좌 발급이 성공되었습니다. 계좌 정보 ${vbank_num} ${vbank_date} ${vbank_name}`});
                 res.status(200).send({message: "가상계좌 발급 성공" });
                 break;
               case "paid": // 결제 완료
