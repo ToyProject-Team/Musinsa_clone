@@ -22,6 +22,9 @@ module.exports = {
         address: rand(10000, 300000),
         createdAt: new Date(),
         updatedAt: new Date(),
+        agreement: rand(0, 1),
+        questionType: rand(1,6),
+        questionAnswer: faker.commerce.productName()
       });
     }
 
