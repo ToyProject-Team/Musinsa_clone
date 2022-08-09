@@ -1,8 +1,8 @@
-/api/mypage/favoriteGoods:
+/api/shoppingBasket/shoppingList:
   get:
     tags:
-      - mypage
-    summary: 좋아요한 상품 페이지
+      - shoppingBasket
+    summary: 내 장바구니 리스트
     parameters:
       - name: Authorization
         in: header
@@ -12,26 +12,32 @@
         description: 성공 - likeProduct 배열에 담긴체 좋아요한 상품들을 전달합니다(최대 100개)
         schema:
           properties:
-            likeProduct:
+            exCart:
               type: array
               items:
                 type: object
                 properties:
-                  productPrice:
-                    type: integer
-                    example: 1
-                  likes:
+                  id:
                     type: string
-                    example: 845
+                    example: 4
                   productTitle:
                     type: string
-                    example: Car
-                  ProductImg:
-                    type: object
-                    properties:
-                      src:
-                        type: string
-                        example: Accessory/Accessory2
+                    example: Fish
+                  productPrice:
+                    type: integer
+                    example: 57200
+                  nonMemberPrice:
+                    type: integer
+                    example: 52000
+                  deliveryFrom:
+                    type: boolean
+                    example: true
+                  deliveryWay:
+                    type: boolean
+                    example: false
+                  deliveryCompany:
+                    type: string
+                    example: CJ대한통운
       400:
         description: 유저의 조회 결과가 없습니다 - 토큰에 대한 사용자 정보가 데이터베이스에 존재하지 않습니다
         schema:
@@ -41,11 +47,11 @@
               example: 유저의 조회 결과가 없습니다       
       500:
         $ref: "./openapi.yaml#/serverError"
-/api/mypage/favoriteGoods/del:
+/api/shoppingBasket/delshoppingList:
   delete:
     tags:
-      - mypage
-    summary: 좋아요 취소
+      - shoppingBasket
+    summary: 장바구니 상품 삭제
     parameters:
       - name: Authorization
         in: header
@@ -78,12 +84,11 @@
               type: string
               example: 유저의 조회 결과가 없습니다
       402:
-        description: 좋아요하지 않은 상품을 삭제 시도할 경우
+        description: 내 장바구니에 없는 상품을 삭제할 경우
         schema:
           properties:
             message:
               type: string
-              example: 좋아요하지 않은 상품을 삭제 시도하셨습니다      
+              example: 장바구니에 없는 상품을 삭제 시도하셨습니다      
       500:
         $ref: "./openapi.yaml#/serverError"
-$ref: "./shoppingBasketAPI.yaml"
