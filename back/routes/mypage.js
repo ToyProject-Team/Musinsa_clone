@@ -56,16 +56,20 @@ router.delete('/favoriteGoods/del', authJWT, async (req, res, next) => {
 
         const checkLength = []
         for (let i = 0; i < delProductLength; i++) {
-            checkLength.push(await me.getLiker({
+            let checkList = await me.getLiker({
                 where: {   
                     id: req.body.productId[i]
                 }
-            }))
+            })
+            if (checkList.length == 0) {
+                return res.status(402).send({ message: "좋아요하지 않은 상품을 삭제 시도하셨습니다" })
+            }
+            checkLength.push(checkList)
         }
 
-        if (checkLength.length !== delProductLength) {
-            return res.status(402).send({ message: "좋아요하지 않은 상품을 삭제 시도하셨습니다" })
-        }
+        // if (checkLength.length !== delProductLength) {
+        //     return res.status(402).send({ message: "좋아요하지 않은 상품을 삭제 시도하셨습니다" })
+        // }
 
 
         for (let i = 0; i < delProductLength; i++) {
