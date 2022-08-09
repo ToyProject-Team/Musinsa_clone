@@ -173,7 +173,7 @@ router.post('/purchase', authJWT, async (req, res) => {
                 break;
             }
           } else { // 결제금액 불일치. 위/변조 된 결제
-            throw { status: "forgery", message: "위조된 결제시도" };
+            res.status(403).send({ status: "forgery", message: "위조된 결제시도" });
           }
     } catch(e) {
         console.error(e)
