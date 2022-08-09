@@ -3,7 +3,7 @@ const { User } = require('../models')
 const authJWT = require('../utils/authJWT')
 const router = express.Router()
 
-router.get('/shoppingList', authJWT, async (req, res, next) => {
+router.get('/shoppingList', async (req, res, next) => {
     try {
         const exUser = await User.findOne({
             where: {
