@@ -155,8 +155,8 @@ router.post('/purchase', async (req, res) => {
         const paymentData = getPaymentData.data.response; // 조회한 결제 정보
         // 결제 검증하기
         const { amount, status } = paymentData;
-        if (amount === amountToBePaid) { // 결제금액 일치. 결제 된 금액 === 결제 되어야 하는 금액
-            switch (status) {
+        // if (amount === amountToBePaid) { // 결제금액 일치. 결제 된 금액 === 결제 되어야 하는 금액
+        //     switch (status) {
             // case "ready": // 가상계좌 발급
             //     // DB에 가상계좌 발급 정보 저장
             //     const { vbank_num, vbank_date, vbank_name } = paymentData;
@@ -165,13 +165,13 @@ router.post('/purchase', async (req, res) => {
             //     SMS.send({ text: `가상계좌 발급이 성공되었습니다. 계좌 정보 ${vbank_num} ${vbank_date} ${vbank_name}`});
             //     res.status(200).send({message: "가상계좌 발급 성공" });
             //     break;
-            case "paid": // 결제 완료
+            // case "paid": // 결제 완료
                 res.status(200).send({message: "일반 결제 성공" });
-                break;
-            }
-        } else { // 결제금액 불일치. 위/변조 된 결제
-            res.status(403).send({ status: "forgery", message: "위조된 결제시도" });
-        }
+                // break;
+            // }
+        // } else { // 결제금액 불일치. 위/변조 된 결제
+            // res.status(403).send({ status: "forgery", message: "위조된 결제시도" });
+        // }
     } catch(e) {
         console.error(e)
         next(e)
