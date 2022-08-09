@@ -159,6 +159,8 @@ router.post('/purchase', authJWT, async (req, res) => {
           const { amount, status } = paymentData;
           if (amount === amountToBePaid) { // 결제금액 일치. 결제 된 금액 === 결제 되어야 하는 금액
             await Orders.findByIdAndUpdate(merchant_uid, { $set: paymentData }); // DB에 결제 정보 저장
+            console.log(amount)
+            console.log(status)
             switch (status) {
               case "ready": // 가상계좌 발급
                 // DB에 가상계좌 발급 정보 저장
