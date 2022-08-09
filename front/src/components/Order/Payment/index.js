@@ -26,7 +26,7 @@ const Payment = (effect, deps) => {
 			pay_method: 'card',
 			merchant_uid: `mid_${new Date().getTime()}`,
 			name: '결제 테스트',
-			amount: '100',
+			amount: '1',
 			custom_data: { name: '부가정보', desc: '세부 부가정보' },
 			buyer_name: '무신사 클론',
 			buyer_tel: '01012345678',
@@ -44,7 +44,7 @@ const Payment = (effect, deps) => {
 			console.log(response.imp_uid);
 			console.log(response.merchant_uid);
 			axios({
-				url: ' ', //
+				url: '/api/product/purchase', //
 				method: 'post',
 				headers: { 'Content-Type': 'application/json' },
 				data: {

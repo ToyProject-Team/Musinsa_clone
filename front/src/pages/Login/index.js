@@ -59,7 +59,7 @@ const LogIn = () => {
 				<LoginInner>
 					<form onSubmit={onSubmitForm}>
 						<UserEmail
-							eamil={email}
+							email={email}
 							setEmail={setEmail}
 							onChangeEmail={onChangeEmail}
 							placeholder="아이디"

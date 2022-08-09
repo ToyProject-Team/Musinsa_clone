@@ -254,6 +254,7 @@ export const SignupContainer = styled.div`
 			margin: -1px;
 			clip: rect(0 0 0 0);
 		}
+
 		& label {
 			font-weight: 700;
 			font-size: 15px;
@@ -273,15 +274,38 @@ export const SignupContainer = styled.div`
 				top: 0;
 				bottom: 0;
 				left: 0;
-				display: block;
-				width: 24px;
-				height: 24px;
+				width: 20px;
+				height: 20px;
 				border: 1px solid #ccc;
 				border-radius: 100%;
 				background-color: #f1f1f1;
-				box-sizing: border-box;
 				content: '';
 			}
+
+			&.active {
+				&::before {
+					border-color: #0078ff;
+					background-color: #0078ff;
+				}
+
+				&::after {
+					content: '';
+					position: absolute;
+					top: 12px;
+					left: 9px;
+					width: 4px;
+					height: 8px;
+					border-right: 1px solid #fff;
+					border-bottom: 1px solid #fff;
+					transform: translateY(calc(-50% - 2px)) rotate(45deg);
+					display: block;
+					box-sizing: border-box;
+				}
+			}
+		}
+
+		& label:nth-of-type(2) {
+			margin-left: 10px;
 		}
 	}
 
@@ -304,6 +328,7 @@ export const SignupContainer = styled.div`
 
 		&.success {
 			background-color: #0078ff;
+			pointer-events: none;
 		}
 	}
 
