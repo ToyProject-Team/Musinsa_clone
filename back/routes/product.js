@@ -131,7 +131,7 @@ router.get('/addCart', (req, res) => {
     
 })
 
-router.post('/purchase', authJWT, async (req, res) => {
+router.post('/purchase', async (req, res) => {
     try {
         console.log("??")
         const { imp_uid, merchant_uid } = req.query; // req의 query에서 imp_uid, merchant_uid 추출
