@@ -1,10 +1,13 @@
 import styled from '@emotion/styled';
 
 export const InfoWrapper = styled.div`
-	width: 963;
+	width: 1000px;
 	border-top: 1px solid #cdcdcd;
 	padding-top: 20px;
+	position: relative;
 `;
+
+export const ButtonWrapper = styled.div``;
 
 export const TitleBox = styled.div`
 	display: flex;
@@ -32,10 +35,17 @@ export const TitleBox = styled.div`
 
 export const ImageInfo = styled.div`
 	margin: 20px;
-
-	overflow: hidden;
+	height: ${props => (!props.clicked ? '500px' : '')};
+	overflow: ${props => (!props.clicked ? 'hidden' : '')};
+	postiion: relative;
 	img {
+		width: 100%;
 	}
+`;
+
+export const ImagagaInfo = styled.div`
+	margin: 20px;
+	postiion: relative;
 `;
 
 export const Button = styled.button`
@@ -45,13 +55,15 @@ export const Button = styled.button`
 	padding: 25px 180px 25px 180px;
 	font-size: 20px;
 	font-weight: bold;
-	margin-left: 270px;
+	margin-left: 260px;
 	cursor: pointer;
+	z-index: 1;
 `;
 
 export const MoreInfo = styled.div`
 	position: relative;
-	width: 960px;
+	bottom: 40px;
+	width: 963px;
 	padding: 0 0 40px;
 	text-align: center;
 	display: block;

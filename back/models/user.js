@@ -49,7 +49,7 @@ module.exports = class User extends Model {
     static associate(db) {
         db.User.belongsToMany(db.Product, {
             through: 'Cart',
-            as: 'buyer'
+            as: 'product'
         })
         db.User.belongsToMany(db.Product, {
             through: db.Comment,

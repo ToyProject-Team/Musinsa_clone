@@ -8,15 +8,14 @@ import {
 	ButtonCart,
 	Button,
 	Like,
-	SelectedOption,
 	Selected,
+	SelectedOption,
 	Amount,
-	Price,
 	Decrease,
+	Price,
 } from './styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import SelectForm from '../SelectedForm';
 
 const PurchaseForm = ({ data }) => {
 	const navigate = useNavigate();
@@ -24,6 +23,53 @@ const PurchaseForm = ({ data }) => {
 	const [color, setColor] = useState('옵션 선택');
 	const [selected, setSelected] = useState(false);
 	const [clickedlike, setClickedlike] = useState(true);
+	const [selectedPrice, setSelectedPrice] = useState(0);
+	const [orderAmount, setOrderAmount] = useState(1);
+
+	const SelectForm = ({ price, size, color }) => {
+		const onIncrease = () => {
+			setOrderAmount(orderAmount + 1);
+			setSelectedPrice(selectedPrice + price);
+		};
+		const onDecrease = () => {
+			if (orderAmount === 1) {
+				alert('더이상 수량을 줄일 수 없습니다.');
+			} else {
+				setOrderAmount(orderAmount - 1);
+				setSelectedPrice(selectedPrice - price);
+			}
+		};
+		const onCancel = () => {
+			setSelected(!selected);
+			setSelectedPrice(0);
+			setOrderAmount(1);
+			setSize('옵션 선택');
+			setColor('옵션 선택');
+		};
+
+		return (
+			<div>
+				<SelectedOption>
+					<Selected>
+						{size}/{color}
+					</Selected>
+					<Amount>
+						<ul>
+							<Decrease orderAmount={orderAmount} onClick={onDecrease}>
+								-
+							</Decrease>
+							<li>{orderAmount}</li>
+							<li onClick={onIncrease}>+</li>
+						</ul>
+					</Amount>
+					<Price>
+						<div>{selectedPrice + data.productPrice}원</div>
+						<p onClick={onCancel}>X</p>
+					</Price>
+				</SelectedOption>
+			</div>
+		);
+	};
 
 	const sizeSelected = e => {
 		setSize(e.target.value);
@@ -42,7 +88,6 @@ const PurchaseForm = ({ data }) => {
 	const onLikeClicked = useCallback(() => {
 		// navigate(`/${mypage}`);
 		setClickedlike(prev => !prev);
-		console.log(clickedlike);
 	}, [clickedlike]);
 
 	return (
@@ -62,16 +107,11 @@ const PurchaseForm = ({ data }) => {
 					<option>차콜</option>
 					<option>화이트</option>
 				</BuyOption>
-				{/* color !== '옵션 선택' && size !== '옵션 선택' ? */}
 			</FormWrapper>
-			{selected === true ? (
-				<SelectForm price={data.productPrice} size={size} color={color} />
-			) : (
-				<></>
-			)}
+			{selected ? <SelectForm price={data.productPrice} size={size} color={color} /> : <></>}
 			<TotalPrice>
 				<p>총 상품 금액</p>
-				<div>{data.productPrice}원</div>
+				<div>{!selected ? 0 : selectedPrice + data.productPrice}원</div>
 			</TotalPrice>
 			<ButtonWrapper>
 				<ButtonBuy>바로구매</ButtonBuy>
