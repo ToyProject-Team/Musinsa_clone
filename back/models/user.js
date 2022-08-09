@@ -34,6 +34,18 @@ module.exports = class User extends Model {
                 socialEmail: {
                     type: DataTypes.STRING(100),
                     allowNull: true,
+                },
+                agreement: {
+                    type: DataTypes.BOOLEAN,
+                    allowNull: false, 
+                },
+                questionType: {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false, 
+                },
+                questionAnswer: {
+                    type: DataTypes.STRING(100),
+                    allowNull: false, 
                 }
             },
             {
