@@ -155,6 +155,33 @@ router.post('/addCart', authJWT, async (req, res, next) => {
     }
 })
 
+router.post('/likeProduct', authJWT, async (req, res, next) => {
+    try {
+        const exUser = await User.findOne({
+            where: {
+                id: req.myId
+            }
+        })
+
+        const checkLike = await exUser.getLikeIt({
+            where: {
+                id: req.body.productId
+            }
+        })
+        if (checkLike.length > 0) {
+            return res.status(400).send({ message: "이미 좋아요한 상품입니다" })
+        }
+
+        await exUser.addLikeIt(req.body.productId)
+
+        res.status(200).send({ success: true })
+
+    } catch (e) {
+        console.error(e)
+        next(e)
+    }
+})
+
 router.post('/purchase', async (req, res) => {
     try {
         const { imp_uid, merchant_uid } = req.body; // req의 query에서 imp_uid, merchant_uid 추출
