@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import MyHeader from 'components/Mypage/Header';
 import Main from 'components/Mypage/OrderList';
 import { StyleNav, MypageLayout, MypageMain } from './styles';
-import { Link } from 'react-router-dom';
+import { Link, BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const Mypage = () => {
 	return (
