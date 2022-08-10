@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter, Routes, Redirect, Route } from 'react-router-dom';
 import loadable from '@loadable/component';
-//da
+
 const Main = loadable(() => import('pages/Main'), {
 	fallback: <div>로딩중</div>,
 });

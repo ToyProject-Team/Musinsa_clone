@@ -28,7 +28,7 @@ const Payment = ({ dummyUser }) => {
 			pay_method: 'vbank',
 			merchant_uid: `mid_${new Date().getTime()}`,
 			name: '결제 테스트',
-			amount: '100',
+			amount: '1',
 			custom_data: { name: '부가정보', desc: '세부 부가정보' },
 			buyer_name: '김소희',
 			buyer_tel: '01012345678',
@@ -47,7 +47,7 @@ const Payment = ({ dummyUser }) => {
 			console.log(response.imp_uid);
 			console.log(response.merchant_uid);
 			axios({
-				url: 'http://52.79.252.136/api/product/purchase', //
+				url: ' ', //
 				method: 'post',
 				headers: { 'Content-Type': 'application/json' },
 				data: {
