@@ -128,8 +128,31 @@ router.get('/productDetail', async (req, res) => {
     res.status(200).json({ product })
 })
 
-router.get('/addCart', (req, res) => {
-    
+router.post('/addCart', authJWT, async (req, res, next) => {
+    try {
+        const exUser = await User.findOne({
+            where: {
+                id: req.myId
+            } 
+        })
+        console.log(req.body.productId)
+        const checkProduct = await exUser.getProduct({
+            where: {
+                id: req.body.productId
+            }
+        })
+        if (checkProduct.length > 0) {
+            return res.status(400).send({ message: "이미 장바구니에 있는 상품입니다" })
+        }
+        await exUser.addProduct(
+            req.body.productId
+        )
+        
+        res.status(200).send({ success: true })
+    } catch (e) {
+        console.error(e)
+        next(e)
+    }
 })
 
 router.post('/purchase', async (req, res) => {
