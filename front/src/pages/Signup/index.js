@@ -61,8 +61,8 @@ const Signup = () => {
 		address3: '',
 	});
 
-	const [showAuth, setShowAuth] = useState(false);
-	const [showAuthConfirm, setShowAuthConfirm] = useState(false);
+	const [modalAuth, setModalAuth] = useState(false);
+	const [modalAuthConfirm, setModalAuthConfirm] = useState(false);
 
 	const onClickClear = useCallback(() => {
 		setauthNumber('');
@@ -78,8 +78,8 @@ const Signup = () => {
 
 	const onClickAuth = useCallback(
 		e => {
-			if (authStage === 1) setShowAuth(true);
-			else if (authStage === 2) setShowAuthConfirm(true);
+			if (authStage === 1) setModalAuth(true);
+			else if (authStage === 2) setModalAuthConfirm(true);
 		},
 		[authStage],
 	);
@@ -135,8 +135,8 @@ const Signup = () => {
 	}, []);
 
 	const onCloseModal = useCallback(() => {
-		setShowAuth(false);
-		setShowAuthConfirm(false);
+		setModalAuth(false);
+		setModalAuthConfirm(false);
 
 		if (authStage === 1) setAuthStage(2);
 		else if (authStage === 2) setAuthStage(3);
@@ -365,8 +365,8 @@ const Signup = () => {
 					</form>
 				</SignupInner>
 			</SignupSection>
-			<AuthModal show={showAuth} onCloseModal={onCloseModal}></AuthModal>
-			<AuthConfirmModal show={showAuthConfirm} onCloseModal={onCloseModal}></AuthConfirmModal>
+			<AuthModal show={modalAuth} onCloseModal={onCloseModal}></AuthModal>
+			<AuthConfirmModal show={modalAuthConfirm} onCloseModal={onCloseModal}></AuthConfirmModal>
 		</Container>
 	);
 };
