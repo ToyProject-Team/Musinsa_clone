@@ -69,7 +69,7 @@ module.exports = class User extends Model {
         })
         db.User.belongsToMany(db.Product, {
             through: 'ProductThumbsUp',
-            as: 'liker'
+            as: 'likeIt'
         })
         db.User.belongsToMany(db.Product, {
             through: 'Views',
