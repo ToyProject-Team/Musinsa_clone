@@ -31,7 +31,7 @@ const Signup = () => {
 	const [passwordConfirmLookButton, setPasswordConfirmLookButton] = useState(false);
 	const passwordConfirmRef = useRef();
 
-	const [auth, setAuth] = useState('email');
+	const [auth, setAuth] = useState('emailAuth');
 	const [authNumber, onChangeauthNumber, setauthNumber] = useInput('');
 	const [authStage, setAuthStage] = useState(1);
 
@@ -45,6 +45,20 @@ const Signup = () => {
 		checkYouth: false,
 		checkSns: false,
 		count: 0,
+	});
+
+	const [deliveryInfo, setDeliveryInfo] = useState({
+		name: '',
+		mobile1: '',
+		mobile2: '',
+		mobile3: '',
+		phone: true,
+		phone1: '',
+		phone2: '',
+		phone3: '',
+		address1: '',
+		address2: '',
+		address3: '',
 	});
 
 	const [showAuth, setShowAuth] = useState(false);
@@ -61,6 +75,7 @@ const Signup = () => {
 		},
 		[auth],
 	);
+
 	const onClickAuth = useCallback(
 		e => {
 			if (authStage === 1) setShowAuth(true);
@@ -69,13 +84,15 @@ const Signup = () => {
 		[authStage],
 	);
 
-	const onCloseModal = useCallback(() => {
-		setShowAuth(false);
-		setShowAuthConfirm(false);
+	const onChangeAddress = useCallback(e => {
+		const name = e.target.name;
+		const value = e.target.value;
 
-		if (authStage === 1) setAuthStage(2);
-		else if (authStage === 2) setAuthStage(3);
-	}, [authStage]);
+		setDeliveryInfo(prevState => ({
+			...prevState,
+			[name]: value,
+		}));
+	}, []);
 
 	const onClickCheck = useCallback(
 		e => {
@@ -90,35 +107,40 @@ const Signup = () => {
 		[checkValue],
 	);
 
-	const onClickCheckAll = useCallback(
-		e => {
-			if (checkValue.count < 4) {
-				setCheckValue(() => ({
-					checkAll: true,
-					checkAgree: true,
-					checkTerms: true,
-					checkYouth: true,
-					checkSns: true,
-					count: 4,
-				}));
-			} else {
-				setCheckValue(() => ({
-					checkAll: false,
-					checkAgree: false,
-					checkTerms: false,
-					checkYouth: false,
-					checkSns: false,
-					count: 0,
-				}));
-			}
-		},
-		[checkValue],
-	);
+	const onClickCheckAll = useCallback(() => {
+		if (checkValue.count < 4) {
+			setCheckValue(() => ({
+				checkAll: true,
+				checkAgree: true,
+				checkTerms: true,
+				checkYouth: true,
+				checkSns: true,
+				count: 4,
+			}));
+		} else {
+			setCheckValue(() => ({
+				checkAll: false,
+				checkAgree: false,
+				checkTerms: false,
+				checkYouth: false,
+				checkSns: false,
+				count: 0,
+			}));
+		}
+	}, [checkValue]);
 
 	const onSubmitForm = useCallback(e => {
 		e.preventDefault();
 		console.log(e);
 	}, []);
+
+	const onCloseModal = useCallback(() => {
+		setShowAuth(false);
+		setShowAuthConfirm(false);
+
+		if (authStage === 1) setAuthStage(2);
+		else if (authStage === 2) setAuthStage(3);
+	}, [authStage]);
 
 	useEffect(() => {
 		if (checkValue.count === 4) {
@@ -189,15 +211,27 @@ const Signup = () => {
 
 						<SignupContainer>
 							<div className="all-check">
-								<label for="email" className={auth === 'email' && 'active'}>
+								<label for="emailAuth" className={auth === 'emailAuth' && 'active'}>
 									이메일
 								</label>
-								<input type="radio" value="email" id="email" onChange={onChangeRadio} name="auth" />
+								<input
+									type="radio"
+									value="emailAuth"
+									id="emailAuth"
+									onChange={onChangeRadio}
+									name="auth"
+								/>
 
-								<label for="phone" className={auth === 'phone' && 'active'}>
+								<label for="phoneAuth" className={auth === 'phoneAuth' && 'active'}>
 									휴대폰
 								</label>
-								<input type="radio" value="phone" id="phone" onChange={onChangeRadio} name="auth" />
+								<input
+									type="radio"
+									value="phoneAuth"
+									id="phoneAuth"
+									onChange={onChangeRadio}
+									name="auth"
+								/>
 							</div>
 							<label>
 								<span>필수 입력</span>
@@ -237,7 +271,7 @@ const Signup = () => {
 								setQuestion,
 							}}
 						></UserFind>
-						<UserAddress></UserAddress>
+						<UserAddress props={{ deliveryInfo, setDeliveryInfo, onChangeAddress }}></UserAddress>
 
 						<SignupCheckBox>
 							<div className="all-check">

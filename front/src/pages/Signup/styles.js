@@ -1,42 +1,4 @@
 import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
-
-/* Keyframes */
-const tooltipInSlide = keyframes`
-  100% {
-    transform: translate3d(0,0,0);
-  }
-`;
-
-const tooltipOutSlide = keyframes`
-  0% {
-    transform: translate3d(0,0,0);
-  }
-  99.9% {
-    transform: translate3d(0,0,0);
-  }
-  100% {
-    display: none;
-  }
-`;
-
-const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
-
-const fadeOut = keyframes`
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-`;
 
 /* Styled */
 export const Container = styled.div`
@@ -54,7 +16,6 @@ export const Container = styled.div`
 		background-color: #fff;
 		font-size: 15px;
 		color: #000;
-		box-shadow: 0 0 0 30px #fff inset !important;
 		transition: border 0.2s ease-in-out;
 		padding: 0 12px;
 		box-sizing: border-box;
@@ -82,6 +43,21 @@ export const Container = styled.div`
 		border-radius: 4px;
 		font-weight: 700;
 		color: #000;
+	}
+
+	.readonly-input {
+		background-color: #d1d1d1 !important;
+	}
+	.radius-left {
+		border-radius: 4px 0 0 4px;
+	}
+	.btn-hover {
+		transition: 0.3s;
+
+		&:hover {
+			background-color: #0078ff;
+			border: 1px solid #0078ff;
+		}
 	}
 
 	& label.check-labal {
