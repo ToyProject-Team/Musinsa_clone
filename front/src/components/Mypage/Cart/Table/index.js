@@ -21,20 +21,26 @@ function carttable() {
     <h3>장바구니</h3>
     <OrderTable>
     <colgroup>
-          <col width="*"/>
-          <col width="14.2%" />
-          <col width="14.2%" />
-          <col width="14.2%" />
-          <col width="10.2%" />
-          <col width="11%" />
+          <col width="3.62%"/>
+          <col width="*" />
+          <col width="9.5%" />
+          <col width="12%" />
+          <col width="9.5%" />
+          <col width="17.3%" />
+          <col width="12%" />
       </colgroup>
       <thead>
         <tr>
+          <th scope="col">
+            <input type="checkbox" id="check_all" checked/>
+            <label for="check_all"></label>
+          </th>
           <th scope="col">상품정보</th>
           <th scope="col">상품금액</th>
           <th scope="col">수량</th>
           <th scope="col">주문금액</th>
-          <th scope="col" colSpan="2">배송 형태/배송비</th>
+          <th scope="col">배송 형태/배송비</th>
+          <th>&nbsp;</th>
         </tr>
       </thead>
       <Tr data={dummyData} />

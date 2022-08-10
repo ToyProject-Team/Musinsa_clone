@@ -7,7 +7,6 @@ export const LikeSection = styled.section `
 	header{
 		border-bottom: 3px solid #000000;
 		padding-bottom: 14px;
-		margin-top: 48px;
 		line-height: 1.5;
 		font-size: 14px;
 		position: relative;
