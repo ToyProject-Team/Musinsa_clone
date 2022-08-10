@@ -10,7 +10,17 @@ module.exports = {
     }
 
     var dummyUser = [];
-    
+    dummyUser.push({
+      loginId: "eos0103",
+      email: "sola2014@naver.com",
+      password: await bcrypt.hash("lee2030!", 10),
+      nickname: "이민서",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      agreement: 1,
+      questionType: 1,
+      questionAnswer: "312321",
+    })
     for (var i = 0; i < 50; i++) {
       // console.log(i)
       dummyUser.push({
