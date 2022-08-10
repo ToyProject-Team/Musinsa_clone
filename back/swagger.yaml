@@ -28,6 +28,8 @@ paths:
                 type: string
               email:
                 type: string
+              agreement:
+                type: string
       responses:
         '200':
           $ref: '#/success'
