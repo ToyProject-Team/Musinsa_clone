@@ -1,46 +1,90 @@
 import styled from '@emotion/styled';
 
-export const OrderTable = styled.table`
-	width: 100%;
-	font-size: 14px;
-	border-collapse: collapse;
-	table-layout: fixed;
-	th {
-		height: 52px;
-		border-bottom: 1px solid #000000;
-		font-size: 16px;
-		vertical-align: middle;
-		font-weight: normal;
-	}
-	td {
+export const LikeSection = styled.section `
+	width: calc(100% - 210px);
+    padding: 0;
+    /* float: right; */
+	header{
+		border-bottom: 3px solid #000000;
+		padding-bottom: 14px;
+		margin-top: 48px;
+		line-height: 1.5;
+		font-size: 14px;
 		position: relative;
-		height: 70px;
-		padding: 10px;
-		box-sizing: border-box;
-		border-bottom: 1px solid #f5f5f5;
-		text-align: center;
-		vertical-align: middle;
-		word-break: break-all;
-		&:first-of-type {
-			text-align: left;
+		h1{
+			display: inline-block;
+			font-size: 24px;
 		}
-		input {
-			font-size: 14px;
-			font-weight: 300;
-			line-height: 20px;
-			text-indent: 0;
-			width: 32px;
-			height: 30px;
-			border-top: 1px solid #eee;
-			border-bottom: 1px solid #eee;
-			text-align: center;
-			color: #000000;
-			float: left;
+		h2{
+			padding: 10px 0 6px 0;
+			font-size: 18px;
 		}
 	}
 `;
 
 export const ImgSpan = styled.span`
+	display: table-cell;
+    width: 80px;
+    padding-top: 96px;
+    vertical-align: middle;
+	position: relative;
+    overflow: hidden;
+	img{
+		width: 100%;
+		position: absolute;
+		left: 0;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+`;
+
+export const LikeUl = styled.ul`
+	vertical-align: top;
+`;
+
+export const LikeLi = styled.li`
+	padding: 0 10px;
+	margin-top: 22px;
+	width: 25%;
+	box-sizing: border-box;
 	float: left;
-	margin-right: 10px;
+	display: table;
+	table-layout: fixed;
+	min-height: 96px;
+	line-height: 1.5;
+	font-size: 14px;
+	text-align: left;
+	position: relative;
+	ul{
+		width: 100%;
+		display: table-cell;
+		padding-left: 10px;
+		vertical-align: middle;
+		li{
+			font-size: 14px;
+    		line-height: 22px;
+		}
+		.brand{
+			font-weight: 300;
+			display: block;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+		.name{
+			max-height: 22px;
+			font-weight: bold;
+    		overflow: hidden;
+		}
+		.price{
+			margin-top: 6px;
+    		font-weight: normal;
+		}
+		.like{
+			line-height: 16px;
+    		padding-top: 5px;
+			color: red;
+		}
+		
+	}
 `;

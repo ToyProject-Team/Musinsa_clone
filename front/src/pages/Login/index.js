@@ -1,3 +1,5 @@
+import UserEmail from 'components/UserEmail';
+import UserPassword from 'components/UserPassword';
 import useInput from 'hooks/useInput';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -37,23 +39,6 @@ const LogIn = () => {
 		[setAutoLoginCheck, setKeyframesClass],
 	);
 
-	// input clear button
-	const onClickClear = useCallback(
-		event => {
-			if (event === 'email') setEmail('');
-			else if (event === 'password') setPassword('');
-		},
-		[setEmail, setPassword],
-	);
-
-	// password input look
-	const onClickLookPassword = useCallback(() => {
-		setPasswordLookButton(v => !v);
-
-		if (passwordLookButton) passwordRef.current.type = 'password';
-		else passwordRef.current.type = 'text';
-	}, [passwordLookButton]);
-
 	// onClick login button event
 	const onSubmitForm = useCallback(
 		e => {
@@ -73,70 +58,25 @@ const LogIn = () => {
 				<Header>로그인</Header>
 				<LoginInner>
 					<form onSubmit={onSubmitForm}>
-						<LoginContainer>
-							<div>
-								<input
-									className="email"
-									value={email}
-									onChange={onChangeEmail}
-									placeholder="아이디"
-								/>
-								{email.length > 0 && (
-									<button type="button" onClick={() => onClickClear('email')}>
-										<svg
-											width="20"
-											height="20"
-											viewBox="0 0 20 20"
-											fill="none"
-											xmlns="http://www.w3.org/2000/svg"
-										>
-											<title>입력한 내용 삭제</title>
-											<circle cx="10" cy="10" r="10" fill="#B3B3B3"></circle>
-											<path
-												d="M5.52786 5.52742L14.4722 14.4718M14.4722 5.52734L5.52783 14.4717"
-												stroke="white"
-											></path>
-										</svg>
-									</button>
-								)}
-							</div>
-						</LoginContainer>
-						<LoginContainer>
-							<div>
-								<input
-									className={passwordLookButton ? 'look' : ''}
-									type="password"
-									value={password}
-									onChange={onChangePassword}
-									ref={passwordRef}
-									placeholder="비밀번호"
-								/>
-								{password.length > 0 && (
-									<button type="button" onClick={() => onClickClear('password')}>
-										<svg
-											width="20"
-											height="20"
-											viewBox="0 0 20 20"
-											fill="none"
-											xmlns="http://www.w3.org/2000/svg"
-										>
-											<title>입력한 내용 삭제</title>
-											<circle cx="10" cy="10" r="10" fill="#B3B3B3"></circle>
-											<path
-												d="M5.52786 5.52742L14.4722 14.4718M14.4722 5.52734L5.52783 14.4717"
-												stroke="white"
-											></path>
-										</svg>
-									</button>
-								)}
-								<LookButton
-									className={passwordLookButton ? 'look' : ''}
-									type="button"
-									aria-label="비밀번호 보이기"
-									onClick={onClickLookPassword}
-								></LookButton>
-							</div>
-						</LoginContainer>
+						<UserEmail
+							eamil={email}
+							setEmail={setEmail}
+							onChangeEmail={onChangeEmail}
+							placeholder="아이디"
+							title={false}
+						></UserEmail>
+
+						<UserPassword
+							password={password}
+							setPassword={setPassword}
+							onChnage={onChangePassword}
+							lookBtn={passwordLookButton}
+							setLookBtn={setPasswordLookButton}
+							dom={passwordRef}
+							placeholder="비밀번호"
+							title={false}
+							validation={false}
+						></UserPassword>
 						<LoginButton>
 							<button type="submit" className="login-button__item">
 								로그인

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ImgSpan } from "../styles";
+import { ImgSpan, LikeLi, LikeUl } from "../styles";
 import { FaHeart } from 'react-icons/fa'
 
 function Likelist({data}) {
@@ -8,17 +8,17 @@ function Likelist({data}) {
   const handleChange = ({ target: { value } }) => setValue(value);
 
   return (
-    <ul>
-      <li>
-      <ImgSpan><img src= {data.ProductImg} alt="더미데이터" width="50px" height="50px"/></ImgSpan>
+    <LikeUl>
+      <LikeLi>
+      <ImgSpan><img src= {data.ProductImg} alt="더미데이터" /></ImgSpan>
         <ul>
-        <li>{data.ProductCompany}</li>
-        <li>{data.ProductName}</li>
-        <li>{data.ProductPrice}원</li>
-        <li><FaHeart /> 346</li>
+        <li className="brand">{data.ProductCompany}</li>
+        <li className="name">{data.ProductName}</li>
+        <li className="price">{data.ProductPrice}원</li>
+        <li className="like"><FaHeart /> 346</li>
         </ul>
-      </li>     
-    </ul>
+      </LikeLi>     
+    </LikeUl>
   )
 }
 

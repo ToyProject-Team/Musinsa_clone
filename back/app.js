@@ -16,6 +16,7 @@ const db = require('./models')
 const authRouter = require('./routes/auth')
 const productRouter = require('./routes/product')
 const myPageRouter = require('./routes/mypage')
+const shoppingBasketRouter = require('./routes/shoppingBasket')
 
 //swagger
 const swaggerUi = require("swagger-ui-express");
@@ -37,7 +38,7 @@ db.sequelize
   .catch(console.error);
 
 // if (process.env.NODE.ENV === 'production') {
-//   app.use(morgan('combined'))
+  app.use(morgan('combined'))
 //   app.use(hpp());
 //   app.use(helmet());
 // } else {
@@ -57,6 +58,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use('/api/shoppingBasket', shoppingBasketRouter)
 app.use('/api/mypage', myPageRouter)
 app.use('/api/product', productRouter)
 app.use('/api/auth', authRouter)

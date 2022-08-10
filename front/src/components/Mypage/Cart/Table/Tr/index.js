@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { ImgSpan } from '../styles';
 import { FiMinus, FiPlus } from 'react-icons/fi';
 
-function Tr({ data }) {
-	const [value, setValue] = useState('');
+function Tr({data}) {
+  const [value, setValue] = useState('');
 
-	const handleChange = ({ target: { value } }) => setValue(value);
+  const handleChange = ({ target: { value } }) => setValue(value);
 
 	return (
 		<tbody>
@@ -33,13 +33,7 @@ function Tr({ data }) {
 				<td>{data.ProductPrice}</td>
 				<td colSpan="2">{data.Orderstatus}</td>
 			</tr>
-			{/* {
-            data.map(item => {
-                return (
-                    <Td key={data.id} item={item}  />
-                )
-            })
-        } */}
+			
 		</tbody>
 	);
 }

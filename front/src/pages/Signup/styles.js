@@ -356,21 +356,40 @@ export const SignupCheckBox = styled.div`
 				top: 0;
 				bottom: 0;
 				left: 0;
-				display: block;
-				width: 24px;
-				height: 24px;
+				width: 20px;
+				height: 20px;
 				border: 1px solid #ccc;
 				border-radius: 100%;
 				background-color: #f1f1f1;
-				box-sizing: border-box;
 				content: '';
+			}
+
+			&.active {
+				&::before {
+					border-color: #0078ff;
+					background-color: #0078ff;
+				}
+
+				&::after {
+					content: '';
+					position: absolute;
+					top: 12px;
+					left: 9px;
+					width: 4px;
+					height: 8px;
+					border-right: 1px solid #fff;
+					border-bottom: 1px solid #fff;
+					transform: translateY(calc(-50% - 2px)) rotate(45deg);
+					display: block;
+					box-sizing: border-box;
+				}
 			}
 		}
 	}
 
 	& > .check {
 		display: flex;
-		margin-left: 4px;
+		margin-left: 3px;
 		padding-left: 28px;
 		margin-top: 12px;
 		flex-wrap: wrap;
@@ -393,6 +412,10 @@ export const SignupCheckBox = styled.div`
 			color: #6e6e6e;
 			align-items: center;
 			cursor: pointer;
+
+			& > svg {
+				padding-right: 12px;
+			}
 		}
 
 		& > a {

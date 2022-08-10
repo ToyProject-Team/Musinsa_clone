@@ -16,6 +16,8 @@
               type: string
             email:
               type: string
+            agreement:
+              type: string
     responses:
       200:
         $ref: "./openapi.yaml#/success"

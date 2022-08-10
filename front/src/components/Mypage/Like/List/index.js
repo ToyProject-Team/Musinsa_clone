@@ -1,6 +1,7 @@
 import React from "react";
 import Ul from "components/Mypage/Like/List/Ul";
-import { OrderTable } from "components/Mypage/OrderList/Table/styles";
+import { LikeSection } from "./styles";
+
 
 function liketable() {
   
@@ -18,13 +19,13 @@ function liketable() {
   }
 
 
-  return <section>
+  return <LikeSection>
     <header>
     <h1>좋아요</h1>
     <h2>상품</h2>
     </header> 
     <Ul data={dummyData} />
-  </section>;
+  </LikeSection>;
 }
 
 export default liketable;
