@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ImgSpan } from '../styles';
+import { FiMinus, FiPlus } from 'react-icons/fi';
 
 function Tr({ data }) {
 	const [value, setValue] = useState('');
@@ -23,10 +24,11 @@ function Tr({ data }) {
 				</td>
 				<td>{data.ProductPrice}</td>
 				<td>
+					<div>
+					<button><FiMinus /></button>
 					<input type="text" value={value} onChange={handleChange}></input>
-				</td>
-				<td>
-					<input type="number" min="0" value={value} onChange={handleChange}></input>
+					<button><FiPlus /></button>
+					</div>					
 				</td>
 				<td>{data.ProductPrice}</td>
 				<td colSpan="2">{data.Orderstatus}</td>
