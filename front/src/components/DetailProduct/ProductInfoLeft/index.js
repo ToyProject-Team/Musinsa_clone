@@ -1,40 +1,32 @@
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { ProductImage, MainImage, ImageList, Image } from './styles';
 
-const dummyImage = [
-	'http://via.placeholder.com/502x602/000000/ffffff?text=productThumbnail',
-	'http://via.placeholder.com/60x72/000000/ffffff?text=productImage1',
-	'http://via.placeholder.com/60x72/000000/ffffff?text=productImage2',
-	'http://via.placeholder.com/60x72/000000/ffffff?text=productImage3',
-];
+const dummyImage = {
+	Images: [
+		{ id: 0, src: 'https://www.dummyimage.com/500x600/a9a9a9/000000&text=productImage1' },
+		{ id: 1, src: 'https://www.dummyimage.com/500x600/a9a9a9/000000&text=productImage2' },
+		{ id: 2, src: 'https://www.dummyimage.com/500x600/a9a9a9/000000&text=productImage3' },
+		{ id: 3, src: 'https://www.dummyimage.com/500x600/a9a9a9/000000&text=productImage4' },
+		{ id: 4, src: 'https://www.dummyimage.com/500x600/a9a9a9/000000&text=productImage5' },
+	],
+};
 
 const ProductInfoLeft = ({ data }) => {
-	const [isHovering, setIsHovering] = useState(false);
+	const [thumbNum, setThumbNum] = useState(0);
 
-	const onHover = () => {
-		setIsHovering(true);
-		setIsHovering();
-	};
+	const imageList = dummyImage.Images.map((image, index) => (
+		<div>
+			<img src={image.src} key={index} onMouseOver={() => setThumbNum(image.id)} />
+		</div>
+	));
 
 	return (
-		<div>
-			<ProductImage>
-				<MainImage>
-					<img src={dummyImage[0]} />
-				</MainImage>
-				<ImageList>
-					<Image onMouseOver={onHover}>
-						<img src={dummyImage[1]} />
-					</Image>
-					<Image>
-						<img src={dummyImage[2]} />
-					</Image>
-					<Image>
-						<img src={dummyImage[3]} />
-					</Image>
-				</ImageList>
-			</ProductImage>
-		</div>
+		<ProductImage>
+			<MainImage>
+				<img src={dummyImage.Images[thumbNum].src} />
+			</MainImage>
+			<ImageList>{imageList}</ImageList>
+		</ProductImage>
 	);
 };
 

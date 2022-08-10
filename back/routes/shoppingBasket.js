@@ -1,43 +1,30 @@
 const express = require('express')
-
-const User = require('../models/user')
-const Product = require('../models/product')
-const router = express.Router()
+const { User } = require('../models')
 const authJWT = require('../utils/authJWT')
-const ProductImg = require('../models/productImg')
+const router = express.Router()
 
-router.get('/favoriteGoods', authJWT, async (req, res, next) => {
+router.get('/shoppingList', authJWT, async (req, res, next) => {
     try {
-        const me = await User.findOne({
+        const exUser = await User.findOne({
             where: {
                 id: req.myId
             }
         })
-
-        if (!me) {
+        if (!exUser) {
             return res.status(400).send({ message: "유저의 조회 결과가 없습니다"})
         }
-
-        const likeProduct = await me.getLiker({
+        const exCart = await exUser.getProduct({
             joinTableAttributes: [],
-            attributes: ["productPrice", "likes", "productTitle"],
-            include: [
-                {
-                    model: ProductImg,
-                    attributes: ["src"]
-                }
-            ],
-            limit: 100
+            attributes: ["id", "productTitle", "productPrice", "nonMemberPrice", "deliveryFrom", "deliveryWay","deliveryCompany"]
         })
-        
-        res.status(200).send({ likeProduct })
-    } catch (e) {
+        res.status(200).send({ exCart })
+    } catch(e) {
         console.error(e)
         next(e)
     }
 })
 
-router.delete('/favoriteGoods/del', authJWT, async (req, res, next) => {
+router.delete('/delshoppingList', authJWT, async (req, res, next) => {
     try {
         if (!req.body.productId) {
             return res.status(400).send({ message: "입력값을 다시 확인해주세요"})
@@ -56,31 +43,25 @@ router.delete('/favoriteGoods/del', authJWT, async (req, res, next) => {
 
         const checkLength = []
         for (let i = 0; i < delProductLength; i++) {
-            let checkList = await me.getLiker({
+            let checkList = await me.getProduct({
                 where: {   
                     id: req.body.productId[i]
                 }
             })
             if (checkList.length == 0) {
-                return res.status(402).send({ message: "좋아요하지 않은 상품을 삭제 시도하셨습니다" })
+                return res.status(402).send({ message: "장바구니에 없는 상품을 삭제 시도하셨습니다" })
             }
             checkLength.push(checkList)
         }
 
-        // if (checkLength.length !== delProductLength) {
-        //     return res.status(402).send({ message: "좋아요하지 않은 상품을 삭제 시도하셨습니다" })
-        // }
-
-
         for (let i = 0; i < delProductLength; i++) {
-            temp = await me.removeLiker(checkLength[i])
+            temp = await me.removeProduct(checkLength[i])
         }
         res.status(200).send({ success: true })
     } catch (e) {
         console.error(e)
         next(e)
     }
-    // const 
 })
 
 module.exports = router

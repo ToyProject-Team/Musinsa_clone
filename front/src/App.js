@@ -27,6 +27,10 @@ const SignUp = loadable(() => import('pages/Signup'), {
 	fallback: <div>로딩중</div>,
 });
 
+const Order = loadable(() => import('pages/Order'), {
+	fallback: <div>로딩중</div>,
+});
+
 function App() {
 	return (
 		<BrowserRouter>
@@ -38,6 +42,7 @@ function App() {
 				<Route path="like/*" element={<Like />} /> {/* => 좋아요 */}
 				<Route path="cart/*" element={<Cart />} /> {/* => 장바구니 */}
 				<Route path="signup" element={<SignUp />} /> {/* => 회원가입 페이지 */}
+				<Route path="order" element={<Order />} /> {/* => 결제 페이지 */}
 			</Routes>
 		</BrowserRouter>
 	);

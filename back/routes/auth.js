@@ -40,7 +40,9 @@ router.post('/signup', async (req, res, next) => {
         const newUser = await User.create({
             loginId: req.body.loginId,
             password: hashedPassword,
-            email: req.body.email
+            email: req.body.email,
+            agreement: req.body.agreement== 1 ? 1: 0 
+            
         })
         return res.status(200).send({ success: true })
     }catch (error) {

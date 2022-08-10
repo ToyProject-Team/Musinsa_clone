@@ -34,6 +34,18 @@ module.exports = class User extends Model {
                 socialEmail: {
                     type: DataTypes.STRING(100),
                     allowNull: true,
+                },
+                agreement: {
+                    type: DataTypes.BOOLEAN,
+                    allowNull: false, 
+                },
+                questionType: {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false, 
+                },
+                questionAnswer: {
+                    type: DataTypes.STRING(100),
+                    allowNull: false, 
                 }
             },
             {
@@ -48,12 +60,16 @@ module.exports = class User extends Model {
     }
     static associate(db) {
         db.User.belongsToMany(db.Product, {
+            through: 'Cart',
+            as: 'product'
+        })
+        db.User.belongsToMany(db.Product, {
             through: db.Comment,
             as: "commented"
         })
         db.User.belongsToMany(db.Product, {
             through: 'ProductThumbsUp',
-            as: 'liker'
+            as: 'likeIt'
         })
         db.User.belongsToMany(db.Product, {
             through: 'Views',
