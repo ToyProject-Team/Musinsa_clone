@@ -56,7 +56,7 @@ const LogIn = () => {
 			// 로그인 예시
 			if (email === 'qwe' && password === 'qwe') {
 				const payload = {
-					login: false,
+					login: true,
 					token: '이곳에 로그인시 발급받는 token 값이 들어갑니다.',
 				};
 
