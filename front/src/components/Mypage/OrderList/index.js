@@ -1,13 +1,13 @@
-import React from "react";
-import { MypageMain } from "pages/Mypage/styles.js";
-import Table from 'components/Mypage/OrderList/Table';
+import React from 'react';
+import { MypageMain } from 'pages/Mypage/styles.js';
+import LikeList from 'components/Mypage/Like/List';
 
-function mypageMain() {
-  return <>
-    <MypageMain>
-          <Table/>
-    </MypageMain>
-  </>;
+function mainlike() {
+	return (
+		<>
+			<MypageMain>주문내역조회</MypageMain>
+		</>
+	);
 }
 
-export default mypageMain;
+export default mainlike;
