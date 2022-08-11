@@ -216,7 +216,65 @@ export const OrderTable = styled.table`
 		}
 
 }
-			
+		
+`;
+
+export const CartPayment = styled.ul`
+		padding: 43px 0 23px;
+    	text-align: center;
+		li{
+			display: inline-block;
+			margin: 0 14px;
+			line-height: 30px;
+			p{
+				display: inline-block;
+				margin-right: 12px;
+				font-size: 18px;
+				color: #777;
+				span{
+					font-weight: bold;
+					color: #000;
+				}
+			}
+			svg{
+				display: inline-block;
+				width: 30px !important;
+				height: 30px !important;
+				line-height: 28px;
+				margin-left: -1px;
+				font-size: 18px !important;
+				vertical-align: middle;
+				overflow: hidden;
+				color: #777;
+			}
+		}	
+
+`;
+
+export const OrderBtn = styled.div`
+	padding-top: 30px;
+    padding-bottom: 10px;
+	min-height: 32px;
+    text-align: center;
+    clear: both;
+    position: relative;
+	button{
+		margin: 0 1px;
+		border: 1px solid #000000;
+    	background-color: #000000;
+		min-width: 290px;
+		height: 60px;
+		line-height: 54px;
+		padding-top: 4px;
+		font-size: 20px;
+		display: inline-block;
+		color: #ffffff;
+		box-sizing: border-box;
+		padding: 2px 8px 0 8px;
+		text-align: center;
+		cursor: pointer;
+		vertical-align: middle;
+	}
 `;
 
 export const ImgSpan = styled.span`

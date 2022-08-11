@@ -1,6 +1,8 @@
 import React from "react";
 import Tr from "components/Mypage/Cart/Table/Tr";
-import { OrderTable } from "components/Mypage/Cart/Table/styles";
+import { OrderTable, CartPayment, OrderBtn } from "components/Mypage/Cart/Table/styles";
+import { FaPlus, FaEquals } from 'react-icons/fa';
+
 
 function carttable() {
   
@@ -10,7 +12,7 @@ function carttable() {
     ProductImg:'https://image.msscdn.net/images/goods_img/20191115/1226331/1226331_1_500.jpg?t=20191115100755',
     ProductName: 'Bear heart',
     ProductOption: 'FREE',
-    ProductPrice: '20681',
+    ProductPrice: '20,681',
     ProductNum: '1',
     OrderDay: '2020.03.02',
     OrderNum: '12345',
@@ -45,6 +47,29 @@ function carttable() {
       </thead>
       <Tr data={dummyData} />
     </OrderTable>
+    <CartPayment>
+      <li>
+        <p>상품금액</p>
+        <p><span>{dummyData.ProductPrice}</span>원</p>
+      </li>
+      <li>
+        <FaPlus />
+      </li>
+      <li>
+        <p>배송비</p>
+        <p><span>0</span>원</p>
+      </li>
+      <li>
+        <FaEquals />
+      </li>
+      <li>
+        <p>최종 결제 금액</p>
+        <p><span>{dummyData.ProductPrice}</span>원</p>
+      </li>
+    </CartPayment>
+    <OrderBtn>
+      <button>결제하기</button>
+    </OrderBtn>
   </div>;
 }
 

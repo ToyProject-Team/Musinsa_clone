@@ -50,23 +50,6 @@ export const NickName = styled.dd`
 	line-height: 87px;
 `;
 
-export const Navi = styled.ul`
-	position: absolute;
-	top: 20px;
-	right: 0;
-	color: white;
-	padding: 20px;
-	&::after {
-		display: block;
-		content: '';
-		clear: both;
-	}
-`;
-
-export const NaviList = styled.li`
-	float: left;
-	margin-left: 32px;
-`;
 
 export const StyleLink = styled(Link)`
 	color: #fff;
