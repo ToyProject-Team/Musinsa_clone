@@ -3,7 +3,7 @@ import UserEmail from 'components/UserEmail';
 import UserFind from 'components/UserFind';
 import UserPassword from 'components/UserPassword';
 import useInput from 'hooks/useInput';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as CheckIcon } from 'assets/svg/Check.svg';
 import {
@@ -19,8 +19,17 @@ import {
 } from './styles';
 import AuthModal from 'components/AuthModal';
 import AuthConfirmModal from 'components/AuthConfirmModal';
+import { useUserState, useUserDispatch, LOGIN } from 'context/UserContext';
 
 const Signup = () => {
+	/* 			useContext 예시
+		const user = useUserState();
+		const user2 = useUserDispatch();
+		console.log(123, user);
+		const id = 123;
+		user2({ type: LOGIN, id }); 
+	*/
+
 	const [email, onChangeEmail, setEmail] = useInput('');
 
 	const [password, onChangePassword, setPassword] = useInput('');
@@ -76,13 +85,10 @@ const Signup = () => {
 		[auth],
 	);
 
-	const onClickAuth = useCallback(
-		e => {
-			if (authStage === 1) setModalAuth(true);
-			else if (authStage === 2) setModalAuthConfirm(true);
-		},
-		[authStage],
-	);
+	const onClickAuth = useCallback(e => {
+		if (authStage === 1) setModalAuth(true);
+		else if (authStage === 2) setModalAuthConfirm(true);
+	}, []);
 
 	const onChangeAddress = useCallback(e => {
 		const name = e.target.name;
