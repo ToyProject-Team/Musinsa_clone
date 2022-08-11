@@ -77,7 +77,7 @@ export const StyleNav = styled.nav`
 			a{
 				font-size: 16px;
 				line-height: 40px;
-				color: rgb(110, 110, 110) !important;
+				color: rgb(110, 110, 110);
 				text-decoration: none;
 			}
 		}
