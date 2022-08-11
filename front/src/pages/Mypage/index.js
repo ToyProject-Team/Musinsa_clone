@@ -27,7 +27,7 @@ const Mypage = () => {
 						<NavLink
 							exact
 							to="/mypage/orderlist"
-							style={({ isActive }) => ({ color: isActive ? 'red' : 'gray' })}
+							style={({ isActive }) => ({ color: isActive ? 'black' : 'gray' })}
 						>
 							주문 내역 조회
 						</NavLink>
@@ -35,7 +35,7 @@ const Mypage = () => {
 					<li>
 						<NavLink
 							to="/mypage/like"
-							style={({ isActive }) => ({ color: isActive ? 'red' : 'gray' })}
+							style={({ isActive }) => ({ color: isActive ? 'black' : 'gray' })}
 						>
 							좋아요
 						</NavLink>
@@ -43,7 +43,7 @@ const Mypage = () => {
 					<li>
 						<NavLink
 							to="/mypage/cart"
-							style={({ isActive }) => ({ color: isActive ? 'red' : 'gray' })}
+							style={({ isActive }) => ({ color: isActive ? 'black' : 'gray' })}
 						>
 							장바구니
 						</NavLink>
