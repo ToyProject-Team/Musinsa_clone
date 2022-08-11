@@ -61,9 +61,9 @@ const Payment = ({ dummyUser }) => {
 	};
 
 	return (
-		<>
+		<div>
 			<button onClick={onClickPayment}>결제 테스트</button>
-		</>
+		</div>
 	);
 };
 
