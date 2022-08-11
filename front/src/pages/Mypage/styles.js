@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 export const MypageLayout = styled.div`
+	min-width: 1560px;
 	width: auto;
     padding: 0px 40px;
     margin: 0px auto;
@@ -49,23 +50,6 @@ export const NickName = styled.dd`
 	line-height: 87px;
 `;
 
-export const Navi = styled.ul`
-	position: absolute;
-	top: 20px;
-	right: 0;
-	color: white;
-	padding: 20px;
-	&::after {
-		display: block;
-		content: '';
-		clear: both;
-	}
-`;
-
-export const NaviList = styled.li`
-	float: left;
-	margin-left: 32px;
-`;
 
 export const StyleLink = styled(Link)`
 	color: #fff;
@@ -106,7 +90,12 @@ export const MypageMain = styled.section`
     float: right;
 	margin-top: 80px;
 	h3{
-		display: inline-block;
+		display: block;
     	font-size: 24px;
+		border-bottom: 3px solid #000000;
+		padding-bottom: 17px;
+		font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+		line-height: 1.5;
+		position: relative;
 	}
 `
