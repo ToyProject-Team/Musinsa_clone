@@ -152,4 +152,9 @@ app.use('/temp', (req, res) => {
 })
 
 //포트 설정
-httpServer.listen(80);
+// httpServer.listen(80);
+app.listen({
+  host: '0.0.0.0',
+  port: 80,
+  excclusive: true
+})
