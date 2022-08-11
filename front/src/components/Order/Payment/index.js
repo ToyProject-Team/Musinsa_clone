@@ -1,10 +1,5 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-// import jQuery from 'jquery';
-// window.$ = window.jQuery = jQuery;
-
-const { IMP } = window;
-IMP.init('imp32326070');
 
 const Payment = ({ dummyUser }) => {
 	useEffect(() => {
@@ -24,6 +19,7 @@ const Payment = ({ dummyUser }) => {
 		const { IMP } = window;
 		IMP.init('imp32326070');
 		const data = {
+			// pg : 'kakaopay.TC0ONETIME',
 			pg: 'html5_inicis',
 			pay_method: 'vbank',
 			merchant_uid: `mid_${new Date().getTime()}`,
@@ -32,47 +28,36 @@ const Payment = ({ dummyUser }) => {
 			custom_data: { name: '부가정보', desc: '세부 부가정보' },
 			buyer_name: '김소희',
 			buyer_tel: '01012345678',
-			buyer_email: 'rlathgml07261@gmail.com',
+			buyer_email: 'iamport@gmail.com',
 			buyer_add: '강남구 신사동',
 			buyer_postalcode: '12345',
 		};
-		IMP.request_pay(data, callback);
-	};
-
-	const callback = response => {
-		console.log(response);
-		const { success, error_msg, imp_uid, pay_method, paid_amount, status } = response;
-		if (response.success) {
-			alert('결제(요청?) 성공');
-			console.log(response.imp_uid);
-			console.log(response.merchant_uid);
-			axios({
-				url: 'http://52.79.252.136/api/product/purchase', //
-				method: 'post',
-				headers: { 'Content-Type': 'application/json' },
-				data: {
-					imp_uid: response.imp_uid,
-					merchant_uid: response.merchant_uid,
-				},
-			}).then(data => {
-				IMP.request_pay({}, response => {
-					if (response.success) {
-						axios({}).then(data => {
-							switch (data.status) {
-								case 'vbankIssued':
-									alert('가상계좌 발급이 성공적으로 완료되었습니다.');
-									break;
-								case 'success':
-									alert('결제 성공!');
-									break;
-							}
-						});
+		IMP.request_pay(data, rsp => {
+			if (rsp.success) {
+				alert('결제 성공');
+				axios({
+					url: 'http://52.79.252.136/product/purchase',
+					method: 'post',
+					headers: { 'Content-Type': 'application/json' },
+					data: {
+						imp_uid: rsp.imp_uid,
+						merchant_uid: rsp.merchant_uid,
+						buyer_name: dummyUser.userName,
+					},
+				}).then(data => {
+					// 서버 결제 API 성공시 로직
+					switch (data.status) {
+						case 'vbankIssued':
+							console('가상계좌 발급');
+							break;
+						case 'success':
+							console('결제 완전 성공');
 					}
 				});
-			});
-		} else {
-			alert(`결제 실패 : ${error_msg}`);
-		}
+			} else {
+				alert(`결제 실패 : ${rsp.error_msg}`);
+			}
+		});
 	};
 
 	return (
