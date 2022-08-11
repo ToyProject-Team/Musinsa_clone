@@ -46,6 +46,10 @@ module.exports = class User extends Model {
                 questionAnswer: {
                     type: DataTypes.STRING(100),
                     allowNull: false, 
+                },
+                rank: {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: false
                 }
             },
             {
@@ -59,6 +63,10 @@ module.exports = class User extends Model {
         )
     }
     static associate(db) {
+        db.User.belongsToMany(db.Product, {
+            through: db.Order,
+            as: 'myOrder'
+        })
         db.User.belongsToMany(db.Product, {
             through: 'Cart',
             as: 'product'
