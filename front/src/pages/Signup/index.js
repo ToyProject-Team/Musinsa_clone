@@ -22,14 +22,6 @@ import AuthConfirmModal from 'components/AuthConfirmModal';
 import { useUserState, useUserDispatch, LOGIN } from 'context/UserContext';
 
 const Signup = () => {
-	/* 			useContext 예시
-		const user = useUserState();
-		const user2 = useUserDispatch();
-		console.log(123, user);
-		const id = 123;
-		user2({ type: LOGIN, id }); 
-	*/
-
 	const [email, onChangeEmail, setEmail] = useInput('');
 
 	const [password, onChangePassword, setPassword] = useInput('');
