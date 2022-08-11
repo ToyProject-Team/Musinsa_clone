@@ -13,7 +13,7 @@ function userReducer(state, action) {
 		case LOGIN:
 			return {
 				...state,
-				login: true,
+				login: action.payload.login,
 				token: action.payload.token,
 			};
 
