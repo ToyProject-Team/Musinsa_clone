@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from "react";
 import { ImgSpan } from '../styles';
 import { FiMinus, FiPlus, FiX } from 'react-icons/fi';
 
-function Tr({data}) {
+function CartTable({data}) {
   const [value, setValue] = useState('');
   const handleChange = ({ target: { value } }) => setValue(value);
+
+  const [isChecked, setIsChecked] = useState(false);
+  const onChecked = useCallback((e) => {
+    setIsChecked(!isChecked);
+  },[isChecked]);
 
 	return (
 		<tbody>
@@ -24,7 +29,7 @@ function Tr({data}) {
 							<tr>
 								<td>
 									<input type="checkbox" id='cart_check' checked></input>
-									<label for='cart_check'></label>
+									<label for='cart_check' onClick={e => onChecked(e)} className={isChecked ? 'active' : 'hide'}></label>
 								</td>
 								<td className='top'>
 									<div>
@@ -66,4 +71,4 @@ function Tr({data}) {
 	);
 }
 
-export default Tr;
+export default CartTable;

@@ -31,6 +31,10 @@ export const OrderTable = styled.table`
 			line-height: 1.5;
 			font-size: 14px;
 			position: relative;
+			cursor: pointer;
+
+		}
+		.active{
 			&::before{
 				background-color: #0078ff;
     			border-color: #0078ff;
@@ -39,7 +43,6 @@ export const OrderTable = styled.table`
 				width: 14px;
 				height: 14px;
 				border: 1px solid #0078ff;;
-				border-radius: 100%;
 				position: absolute;
 				left: 3px;
 				top: 2px;
@@ -56,7 +59,36 @@ export const OrderTable = styled.table`
 				display: block;
 				position: absolute;
 			}
+
 		}
+		.hide{
+			
+			&::before{
+				background-color: #eee;
+    			border-color: #eee;
+				content: "";
+				display: block;
+				width: 14px;
+				height: 14px;
+				border: 1px solid #ddd;;
+				position: absolute;
+				left: 3px;
+				top: 2px;
+			}
+			&::after{
+				width: 5px;
+				height: 3px;
+				border-left: 1px solid #ffffff;
+				border-bottom: 1px solid #ffffff;
+				left: 8px;
+				top: 7px;
+				transform: rotate(-45deg);
+				content: "";
+				display: block;
+				position: absolute;
+		}
+	}
+		
 	}
 	.cart_cont {
 		position: relative;
@@ -96,41 +128,72 @@ export const OrderTable = styled.table`
 					clip: rect(0 0 0 0);
 				}
 				label{
-					width: 0;
-					height: 21px;
-					padding-left: 22px;
-					overflow: hidden;
-					display: inline-block;
-					font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-					line-height: 1.5;
-					font-size: 14px;
-					position: relative;
-					&::before{
-						background-color: #0078ff;
-						border-color: #0078ff;
-						content: "";
-						display: block;
-						width: 14px;
-						height: 14px;
-						border: 1px solid #0078ff;;
-						border-radius: 100%;
-						position: absolute;
-						left: 3px;
-						top: 2px;
-					}
-					&::after{
-						width: 5px;
-						height: 3px;
-						border-left: 1px solid #ffffff;
-						border-bottom: 1px solid #ffffff;
-						left: 8px;
-						top: 7px;
-						transform: rotate(-45deg);
-						content: "";
-						display: block;
-						position: absolute;
-					}
-				}
+			width: 0;
+			height: 21px;
+			padding-left: 22px;
+			overflow: hidden;
+			display: inline-block;
+			font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+			line-height: 1.5;
+			font-size: 14px;
+			position: relative;
+			cursor: pointer;
+
+		}
+		.active{
+			&::before{
+				background-color: #0078ff;
+    			border-color: #0078ff;
+				content: "";
+				display: block;
+				width: 14px;
+				height: 14px;
+				border: 1px solid #0078ff;;
+				position: absolute;
+				left: 3px;
+				top: 2px;
+			}
+			&::after{
+				width: 5px;
+				height: 3px;
+				border-left: 1px solid #ffffff;
+				border-bottom: 1px solid #ffffff;
+				left: 8px;
+				top: 7px;
+				transform: rotate(-45deg);
+				content: "";
+				display: block;
+				position: absolute;
+			}
+
+		}
+		.hide{
+			
+			&::before{
+				background-color: #eee;
+    			border-color: #eee;
+				content: "";
+				display: block;
+				width: 14px;
+				height: 14px;
+				border: 1px solid #ddd;;
+				position: absolute;
+				left: 3px;
+				top: 2px;
+			}
+			&::after{
+				width: 5px;
+				height: 3px;
+				border-left: 1px solid #ffffff;
+				border-bottom: 1px solid #ffffff;
+				left: 8px;
+				top: 7px;
+				transform: rotate(-45deg);
+				content: "";
+				display: block;
+				position: absolute;
+		}
+	}
 				
 				.input_amount{
 					display: inline-block;

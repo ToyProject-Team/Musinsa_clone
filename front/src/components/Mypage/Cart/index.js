@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { MypageMain } from "pages/Mypage/styles.js";
 import Tr from "components/Mypage/Cart/Table";
 import { OrderTable, CartPayment, OrderBtn } from "components/Mypage/Cart/styles";
@@ -16,9 +16,15 @@ function Cart() {
     OrderDay: '2020.03.02',
     OrderNum: '12345',
     Orderstatus: '환불완료',
-  }
+  };
 
-  const [ isChecked, setIsChecked ] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const onChecked = useCallback((e) => {
+    setIsChecked(!isChecked);
+  },[isChecked]);
+
+
+
 
   return <>
   <MypageMain>
@@ -37,8 +43,8 @@ function Cart() {
         <thead>
           <tr>
             <th scope="col">
-              <input type="checkbox" id="check_all" checked/>
-              <label for="check_all"></label>
+              <input type="checkbox" id="check_all"  checked/>
+              <label for="check_all" onClick={e => onChecked(e)} className={isChecked ? 'active' : 'hide'}></label>
             </th>
             <th scope="col">상품정보</th>
             <th scope="col">상품금액</th>
