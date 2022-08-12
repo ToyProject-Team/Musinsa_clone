@@ -52,9 +52,10 @@ const Mypage = () => {
 			</StyleNav>
 			<div>
 				<Routes>
-					<Route path="/orderlist" element={<OrderList />} /> {/* => 로그인페이지 */}
-					<Route path="/like" element={<Like />} /> {/* => 로그인페이지 */}
-					<Route path="/cart" element={<Cart />} /> {/* => 상세페이지 */}
+					<Route path="/" element={<OrderList />} /> {/* => 마이페이지 메인 */}
+					<Route path="/orderlist" element={<OrderList />} /> {/* => 주문내역조회 */}
+					<Route path="/like" element={<Like />} /> {/* => 좋아요페이지 */}
+					<Route path="/cart" element={<Cart />} /> {/* => 장바구니페이지 */}
 				</Routes>
 			</div>
 		</MypageLayout>
