@@ -1,8 +1,20 @@
 import Payment from 'components/Order/Payment';
 import Refund from 'components/Order/Refund';
 
-import { ButtonWrapper, Button, OrderContainer, InfoWrapper } from './styles';
+import { BrowserRouter, Routes, Redirect, Route } from 'react-router-dom';
+import loadable from '@loadable/component';
 
+import {
+	ButtonWrapper,
+	OrderContainer,
+	InfoWrapper,
+	Button,
+	OrderButton,
+	RefundHolder,
+	RefundInfo,
+	DefalutInfo,
+} from './styles';
+import { useState, useCallback, useRef } from 'react';
 const dummyUser = {
 	userName: '김소희',
 };
@@ -18,95 +30,159 @@ const dummyPaymentInfo = {
 
 const Order = () => {
 	// return <Refund dummyPaymentInfo={dummyPaymentInfo} />;
-	// return <Payment dummyUser={dummyUser}/>
+	// return <Payment dummyUser={dummyUser} />;
+
+	const paymentWay = ['신용카드', '가상계좌(무통장)', '카카오페이', '네이버페이'];
+
+	const [btnActive, setBtnActive] = useState('');
+	const [checked, setChecked] = useState(false);
+	const [refundAccountChecked, setRefundAccountChecked] = useState(false);
+	const [submit, setSubmit] = useState(false);
+	const refundAccount = useRef();
+
+	const toggleActive = useCallback(
+		e => {
+			setBtnActive(e.target.value);
+		},
+		[btnActive],
+	);
+
+	const onCheck = () => {
+		setChecked(prev => !prev);
+	};
+
+	const AccoutSubmitCheck = () => {
+		if (btnActive == 1) {
+			if (refundAccount.current.value.length < 12) {
+				console.log('땡', refundAccountChecked);
+				alert('올바른 계좌 정보를 입력하세요.');
+				refundAccount.current.focus();
+			} else {
+				console.log('ㅇㅋ', refundAccountChecked);
+				console.log(btnActive);
+				setRefundAccountChecked(prev => !prev);
+			}
+		}
+		{
+			btnActive == 1 ? (
+				<>{checked && refundAccountChecked ? setSubmit(true) : <></>}</>
+			) : (
+				<>{checked ? setSubmit(true) : <></>}</>
+			);
+		}
+		console.log('짠', submit);
+	};
+
 	return (
 		<div>
 			<OrderContainer>
 				<InfoWrapper>
-					<div>결제 수단</div>
-					<div>
-						<label htmlFor="checkAll">
-							<input
-								// onClick={e => onClickCheckAll(e)}
-								style={{ 'background-color': '#0078ff', 'border-color': '#0078ff' }}
-								id="checkButton"
-								type="checkbox"
-								value="General payment"
-							/>
-							일반 결제
-						</label>
-						<label htmlFor="checkAll">
-							<input
-								// onClick={e => onClickCheckAll(e)}
-								style={{ 'background-color': '#0078ff', 'border-color': '#0078ff' }}
-								id="checkButton"
-								type="checkbox"
-								value="General payment"
-							/>
-							무신사 페이
-						</label>
-					</div>
+					<li style={{ paddingBottom: '15px' }}>결제 안내</li>
+					<li>
+						<ButtonWrapper>
+							{paymentWay.map((item, idx) => {
+								return (
+									<>
+										<Button
+											value={idx}
+											onClick={toggleActive}
+											selected={idx == btnActive ? true : false}
+										>
+											{item}
+										</Button>
+									</>
+								);
+							})}
+						</ButtonWrapper>
+						{btnActive == 0 ? (
+							<div>
+								<select>
+									<option>KB국민</option>
+									<option>신한카드</option>
+									<option>롯데카드</option>
+									<option>카카오뱅크</option>
+									<option>NH채움</option>
+									<option>현대카드</option>
+									<option>삼성카드</option>
+								</select>
+								<RefundHolder>김소희</RefundHolder>
+							</div>
+						) : (
+							<></>
+						)}
+						{btnActive == 1 ? (
+							<div>
+								<select>
+									<option>신한은행</option>
+									<option>기업은행</option>
+									<option>국민은행</option>
+									<option>우리은행</option>
+									<option>농협</option>
+									<option>수협</option>
+									<option>우체국</option>
+								</select>
+								<RefundHolder>김소희</RefundHolder>
+								<p>
+									가상 계좌 유효 기간 <span>2022년 08년 13일 23시 29분 59초</span>
+								</p>
+							</div>
+						) : (
+							<></>
+						)}
+					</li>
 				</InfoWrapper>
-				<InfoWrapper>
-					<div>결제 안내</div>
-					<ButtonWrapper>
-						<Button>신용카드</Button>
-						<Button>가상 계좌(무통장)</Button>
-						<Button>카카오페이</Button>
-						<Button>네이버페이</Button>
-					</ButtonWrapper>
-					<select>
-						<option>신한은행</option>
-						<option>기업은행</option>
-						<option>국민은행</option>
-						<option>우리은행</option>
-						<option>농협</option>
-						<option>수협</option>
-						<option>우체국</option>
-					</select>
-					<span>김소희</span>
-					<p>
-						가상 계좌 유효 기간 <span>2022년 08년 13일 23시 29분 59초</span>
-					</p>
-				</InfoWrapper>
-				<InfoWrapper>
-					<div>현금영수증</div>
-					<div>
-						<label htmlFor="checkAll">
-							<input
-								// onClick={e => onClickCheckAll(e)}
-								style={{ 'background-color': '#0078ff', 'border-color': '#0078ff' }}
-								id="checkButton"
-								type="checkbox"
-								value="General payment"
-							/>
-							소득공제
-						</label>
-						<label htmlFor="checkAll">
-							<input
-								// onClick={e => onClickCheckAll(e)}
-								style={{ 'background-color': '#0078ff', 'border-color': '#0078ff' }}
-								id="checkButton"
-								type="checkbox"
-								value="General payment"
-							/>
-							미발행
-						</label>
+				{btnActive == 1 ? (
+					<RefundInfo>
+						<li>품절 시 환불 계좌</li>
+						<li>
+							<div style={{ marginBottom: '15px' }}>
+								<span>예금주</span>
+								<span style={{ marginLeft: '20px', color: '#000' }}>김소희</span>
+							</div>
+							<div>
+								<span>입금 은행</span>
+								<select>
+									<option>신한은행</option>
+									<option>기업은행</option>
+									<option>국민은행</option>
+									<option>우리은행</option>
+									<option>농협중앙회</option>
+									<option>수협</option>
+									<option>우체국</option>
+								</select>
+							</div>
+							<div>
+								<span>계좌 번호</span>
+								<input type="text" ref={refundAccount}></input>
+							</div>
+						</li>
+					</RefundInfo>
+				) : (
+					<DefalutInfo>
+						<div style={{ paddingBottom: '10px' }}>품절 시 환불 안내</div>
 						<div>
-							<select>
-								<option>휴대폰 번호</option>
-								<option>현금영수증 카드</option>
-							</select>
-							<input></input>
+							<span>결제하신 수단으로 취소됩니다.</span>
+							<ul>
+								<li>환불 받으신 날짜 기준으로 3~5일 후 환불 처리됩니다.</li>
+								<li>입점업체 배송은 낮은 확률로 상품이 품절일 가능성이 있습니다. </li>
+								<li>현금 환불의 경우, 예금정보가 일치해야 환불 처리가 가능합니다.</li>
+							</ul>
 						</div>
-					</div>
+					</DefalutInfo>
+				)}
+
+				<InfoWrapper>
+					<li>주문자 동의</li>
+					<label htmlFor="checkAll">
+						<input id="checkAll" type="checkbox" name="checkAll" onClick={onCheck} />
+						회원 본인은 구매 조건, 주문 내용 확인 및 결제에 동의합니다
+					</label>
 				</InfoWrapper>
-				<div>
-					<div>주문자 동의</div>
-					<p>회원 본인은 구매 조건, 주문 내용 확인 및 결제에 동의합니다</p>
-				</div>
 			</OrderContainer>
-			<button>33819원 결제하기</button>
+			<OrderButton agreement={checked} onClick={AccoutSubmitCheck}>
+				38900원 결제하기
+			</OrderButton>
+			{submit ? <Payment /> : <></>}
 		</div>
 	);
 };

@@ -32,6 +32,7 @@ const Payment = ({ dummyUser }) => {
 			buyer_add: '강남구 신사동',
 			buyer_postalcode: '12345',
 		};
+
 		IMP.request_pay(data, rsp => {
 			if (rsp.success) {
 				alert('결제 성공');
