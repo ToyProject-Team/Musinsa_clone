@@ -21,8 +21,10 @@ import AuthModal from 'components/AuthModal';
 import AuthConfirmModal from 'components/AuthConfirmModal';
 import { useUserState, useUserDispatch, LOGIN } from 'context/UserContext';
 import { PostApi } from 'utils/api';
+import { Navigate } from 'react-router';
 
 const Signup = () => {
+	const [data, setData] = useState(false);
 	const [email, onChangeEmail, setEmail] = useInput('');
 
 	const [password, onChangePassword, setPassword] = useInput('');
@@ -37,8 +39,8 @@ const Signup = () => {
 	const [authNumber, onChangeauthNumber, setauthNumber] = useInput('');
 	const [authStage, setAuthStage] = useState(1);
 
-	const [answer, onChangeAnswer, setAnswer] = useInput('');
 	const [question, onChangeQuestion, setQuestion] = useInput('1');
+	const [answer, onChangeAnswer, setAnswer] = useInput('');
 
 	const [checkValue, setCheckValue] = useState({
 		checkAll: false,
@@ -133,40 +135,40 @@ const Signup = () => {
 			e.preventDefault();
 
 			const params = {
-				loginId: 'hello',
-				password: 123,
-				email: 'hello@naver.com',
+				loginId: email,
+				password: password,
+				email: authNumber,
 				agreement: true,
-				questionType: '1',
-				questionAnswer: 'hello',
+				questionType: question,
+				questionAnswer: answer,
 				rank: '브론즈',
 			};
 
-			await PostApi('/api/auth/signup', params).then(result => {
-				switch (result.status) {
-					case 200:
-						console.log('success');
-						break;
+			await PostApi('/api/auth/signup', params)
+				.then(result => {
+					switch (result.status) {
+						case 200:
+							return setData(true);
+					}
+				})
+				.catch(result => {
+					switch (result.response.status) {
+						case 401:
+							return alert('이미 사용중인 아이디 입니다.');
 
-					case 401:
-						alert('이미 사용중인 아이디 입니다.');
-						break;
+						case 402:
+							return alert('이미 사용중인 이메일 입니다.');
 
-					case 402:
-						alert('이미 사용중인 이메일 입니다.');
-						break;
+						case 500:
+							return console.log('서버에러');
 
-					case 500:
-						console.log('서버에러');
-						break;
-
-					default:
-						console.log(result);
-						break;
-				}
-			});
+						default:
+							console.log(result);
+							break;
+					}
+				});
 		},
-		[email, password, auth],
+		[email, password, auth, authNumber, question, answer],
 	);
 
 	const onCloseModal = useCallback(() => {
@@ -190,6 +192,10 @@ const Signup = () => {
 			}));
 		}
 	}, [checkValue.count]);
+
+	if (data) {
+		return <Navigate to="/login" />;
+	}
 
 	return (
 		<Container>
