@@ -30,6 +30,10 @@ paths:
                 type: string
               agreement:
                 type: string
+              questionType:
+                type: string
+              questionAnswer:
+                type: string
       responses:
         '200':
           $ref: '#/success'
