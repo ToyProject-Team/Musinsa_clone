@@ -20,6 +20,7 @@ import {
 import AuthModal from 'components/AuthModal';
 import AuthConfirmModal from 'components/AuthConfirmModal';
 import { useUserState, useUserDispatch, LOGIN } from 'context/UserContext';
+import { PostApi } from 'utils/api';
 
 const Signup = () => {
 	const [email, onChangeEmail, setEmail] = useInput('');
@@ -127,10 +128,46 @@ const Signup = () => {
 		}
 	}, [checkValue]);
 
-	const onSubmitForm = useCallback(e => {
-		e.preventDefault();
-		console.log(e);
-	}, []);
+	const onSubmitForm = useCallback(
+		async e => {
+			e.preventDefault();
+
+			const params = {
+				loginId: 'hello',
+				password: 123,
+				email: 'hello@naver.com',
+				agreement: true,
+				questionType: '1',
+				questionAnswer: 'hello',
+				rank: '브론즈',
+			};
+
+			await PostApi('/api/auth/signup', params).then(result => {
+				switch (result.status) {
+					case 200:
+						console.log('success');
+						break;
+
+					case 401:
+						alert('이미 사용중인 아이디 입니다.');
+						break;
+
+					case 402:
+						alert('이미 사용중인 이메일 입니다.');
+						break;
+
+					case 500:
+						console.log('서버에러');
+						break;
+
+					default:
+						console.log(result);
+						break;
+				}
+			});
+		},
+		[email, password, auth],
+	);
 
 	const onCloseModal = useCallback(() => {
 		setModalAuth(false);
@@ -209,7 +246,7 @@ const Signup = () => {
 
 						<SignupContainer>
 							<div className="all-check">
-								<label for="emailAuth" className={auth === 'emailAuth' && 'active'}>
+								<label htmlFor="emailAuth" className={auth === 'emailAuth' && 'active'}>
 									이메일
 								</label>
 								<input
@@ -220,7 +257,7 @@ const Signup = () => {
 									name="auth"
 								/>
 
-								<label for="phoneAuth" className={auth === 'phoneAuth' && 'active'}>
+								<label htmlFor="phoneAuth" className={auth === 'phoneAuth' && 'active'}>
 									휴대폰
 								</label>
 								<input
@@ -237,7 +274,7 @@ const Signup = () => {
 
 							<div className="email-check">
 								<input
-									type="email"
+									type={auth === 'phoneAuth' ? 'tel' : 'email'}
 									value={authNumber}
 									onChange={onChangeauthNumber}
 									className={auth}
@@ -264,9 +301,7 @@ const Signup = () => {
 								answer,
 								onChangeAnswer,
 								setAnswer,
-								question,
 								onChangeQuestion,
-								setQuestion,
 							}}
 						></UserFind>
 						<UserAddress props={{ deliveryInfo, setDeliveryInfo, onChangeAddress }}></UserAddress>

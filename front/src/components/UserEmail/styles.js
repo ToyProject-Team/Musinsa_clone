@@ -23,6 +23,7 @@ export const LoginContainer = styled.div`
 	}
 
 	& > div {
+		background-color: #fff;
 		display: flex;
 		box-sizing: border-box;
 		height: 50px;
