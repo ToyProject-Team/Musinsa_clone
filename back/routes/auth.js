@@ -17,6 +17,7 @@ dotenv.config();
 router.post('/signup', async (req, res, next) => {
     try {
         console.log(req.body)
+        console.log(req.body.loginId)
         const exUser = await User.findOne({
           where: {
               LoginId: req.body.loginId
