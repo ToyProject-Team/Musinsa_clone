@@ -105,7 +105,6 @@ router.get('/productDetail', async (req, res) => {
         attributes: {exclude: ['productInfo', "createdAt", "updatedAt", "deletedAt", ]},
     })
 
-        
     if (!product) {
         return res.status(400).json({ message: '상품 조회 결과가 없습니다'})
     }
@@ -128,11 +127,61 @@ router.get('/productDetail', async (req, res) => {
     res.status(200).json({ product })
 })
 
-router.get('/addCart', (req, res) => {
-    
+router.post('/addCart', authJWT, async (req, res, next) => {
+    try {
+        const exUser = await User.findOne({
+            where: {
+                id: req.myId
+            } 
+        })
+        console.log(req.body.productId)
+        const checkProduct = await exUser.getProduct({
+            where: {
+                id: req.body.productId
+            }
+        })
+        if (checkProduct.length > 0) {
+            return res.status(400).send({ message: "이미 장바구니에 있는 상품입니다" })
+        }
+        await exUser.addProduct(
+            req.body.productId
+        )
+        
+        res.status(200).send({ success: true })
+    } catch (e) {
+        console.error(e)
+        next(e)
+    }
 })
 
-router.post('/purchase', async (req, res) => {
+router.post('/likeProduct', authJWT, async (req, res, next) => {
+    try {
+        const exUser = await User.findOne({
+            where: {
+                id: req.myId
+            }
+        })
+
+        const checkLike = await exUser.getLikeIt({
+            where: {
+                id: req.body.productId
+            }
+        })
+        if (checkLike.length > 0) {
+            return res.status(400).send({ message: "이미 좋아요한 상품입니다" })
+        }
+
+        await exUser.addLikeIt(req.body.productId)
+
+        res.status(200).send({ success: true })
+
+    } catch (e) {
+        console.error(e)
+        next(e)
+    }
+})
+
+router.post('/purchase', authJWT, async (req, res) => {
     try {
         const { imp_uid, merchant_uid } = req.body; // req의 query에서 imp_uid, merchant_uid 추출
           // 액세스 토큰(access token) 발급 받기
@@ -155,24 +204,24 @@ router.post('/purchase', async (req, res) => {
         const paymentData = getPaymentData.data.response; // 조회한 결제 정보
         // 결제 검증하기
         const { amount, status } = paymentData;
-        console.log(amount)
-        // if (amount === amountToBePaid) { // 결제금액 일치. 결제 된 금액 === 결제 되어야 하는 금액
-        //     switch (status) {
-            // case "ready": // 가상계좌 발급
-            //     // DB에 가상계좌 발급 정보 저장
-            //     const { vbank_num, vbank_date, vbank_name } = paymentData;
-            //     await Users.findByIdAndUpdate("/* 고객 id */", { $set: { vbank_num, vbank_date, vbank_name }});
-            //     // 가상계좌 발급 안내 문자메시지 발송
-            //     SMS.send({ text: `가상계좌 발급이 성공되었습니다. 계좌 정보 ${vbank_num} ${vbank_date} ${vbank_name}`});
-            //     res.status(200).send({message: "가상계좌 발급 성공" });
-            //     break;
-            // case "paid": // 결제 완료
-                res.status(200).send({message: "일반 결제 성공" });
-                // break;
-            // }
-        // } else { // 결제금액 불일치. 위/변조 된 결제
-            // res.status(403).send({ status: "forgery", message: "위조된 결제시도" });
-        // }
+        if (req.body.length < 7) {
+            return res.status(401).send({ message: "가격 정보가 전달되지 않았습니다 입력값을 다시 확인해주세요" })
+        }        
+        if (amount != req.body.productPrice) {
+            return res.status(402).send({ message: "위조된 결제 시도입니다" })
+        }
+        const exUser = await User.findOne({
+            where: {
+                id: req.myId
+            }
+        })
+        
+        exUser.addmyOrder({
+            id: req.ProductId,
+            orderPrice: req.body.price,
+            state: 1
+        })
+        res.status(200).send({message: "일반 결제 성공" });
     } catch(e) {
         console.error(e)
         next(e)

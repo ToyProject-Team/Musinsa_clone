@@ -1,42 +1,4 @@
 import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
-
-/* Keyframes */
-const tooltipInSlide = keyframes`
-  100% {
-    transform: translate3d(0,0,0);
-  }
-`;
-
-const tooltipOutSlide = keyframes`
-  0% {
-    transform: translate3d(0,0,0);
-  }
-  99.9% {
-    transform: translate3d(0,0,0);
-  }
-  100% {
-    display: none;
-  }
-`;
-
-const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
-
-const fadeOut = keyframes`
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-`;
 
 /* Styled */
 export const Container = styled.div`
@@ -54,7 +16,6 @@ export const Container = styled.div`
 		background-color: #fff;
 		font-size: 15px;
 		color: #000;
-		box-shadow: 0 0 0 30px #fff inset !important;
 		transition: border 0.2s ease-in-out;
 		padding: 0 12px;
 		box-sizing: border-box;
@@ -82,6 +43,21 @@ export const Container = styled.div`
 		border-radius: 4px;
 		font-weight: 700;
 		color: #000;
+	}
+
+	.readonly-input {
+		background-color: #d1d1d1 !important;
+	}
+	.radius-left {
+		border-radius: 4px 0 0 4px;
+	}
+	.btn-hover {
+		transition: 0.3s;
+
+		&:hover {
+			background-color: #0078ff;
+			border: 1px solid #0078ff;
+		}
 	}
 
 	& label.check-labal {
@@ -254,6 +230,7 @@ export const SignupContainer = styled.div`
 			margin: -1px;
 			clip: rect(0 0 0 0);
 		}
+
 		& label {
 			font-weight: 700;
 			font-size: 15px;
@@ -273,15 +250,38 @@ export const SignupContainer = styled.div`
 				top: 0;
 				bottom: 0;
 				left: 0;
-				display: block;
-				width: 24px;
-				height: 24px;
+				width: 20px;
+				height: 20px;
 				border: 1px solid #ccc;
 				border-radius: 100%;
 				background-color: #f1f1f1;
-				box-sizing: border-box;
 				content: '';
 			}
+
+			&.active {
+				&::before {
+					border-color: #0078ff;
+					background-color: #0078ff;
+				}
+
+				&::after {
+					content: '';
+					position: absolute;
+					top: 12px;
+					left: 9px;
+					width: 4px;
+					height: 8px;
+					border-right: 1px solid #fff;
+					border-bottom: 1px solid #fff;
+					transform: translateY(calc(-50% - 2px)) rotate(45deg);
+					display: block;
+					box-sizing: border-box;
+				}
+			}
+		}
+
+		& label:nth-of-type(2) {
+			margin-left: 10px;
 		}
 	}
 
@@ -304,6 +304,7 @@ export const SignupContainer = styled.div`
 
 		&.success {
 			background-color: #0078ff;
+			pointer-events: none;
 		}
 	}
 

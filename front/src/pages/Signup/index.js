@@ -3,7 +3,7 @@ import UserEmail from 'components/UserEmail';
 import UserFind from 'components/UserFind';
 import UserPassword from 'components/UserPassword';
 import useInput from 'hooks/useInput';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as CheckIcon } from 'assets/svg/Check.svg';
 import {
@@ -17,6 +17,9 @@ import {
 	SignupCheckBox,
 	SignupButton,
 } from './styles';
+import AuthModal from 'components/AuthModal';
+import AuthConfirmModal from 'components/AuthConfirmModal';
+import { useUserState, useUserDispatch, LOGIN } from 'context/UserContext';
 
 const Signup = () => {
 	const [email, onChangeEmail, setEmail] = useInput('');
@@ -28,6 +31,10 @@ const Signup = () => {
 	const [passwordConfirm, onChangePasswordConfirm, setPasswordConfirm] = useInput('');
 	const [passwordConfirmLookButton, setPasswordConfirmLookButton] = useState(false);
 	const passwordConfirmRef = useRef();
+
+	const [auth, setAuth] = useState('emailAuth');
+	const [authNumber, onChangeauthNumber, setauthNumber] = useInput('');
+	const [authStage, setAuthStage] = useState(1);
 
 	const [answer, onChangeAnswer, setAnswer] = useInput('');
 	const [question, onChangeQuestion, setQuestion] = useInput('1');
@@ -41,9 +48,48 @@ const Signup = () => {
 		count: 0,
 	});
 
-	const onSubmitForm = useCallback(e => {
-		e.preventDefault();
-		console.log(e);
+	const [deliveryInfo, setDeliveryInfo] = useState({
+		name: '',
+		mobile1: '',
+		mobile2: '',
+		mobile3: '',
+		phone: true,
+		phone1: '',
+		phone2: '',
+		phone3: '',
+		address1: '',
+		address2: '',
+		address3: '',
+	});
+
+	const [modalAuth, setModalAuth] = useState(false);
+	const [modalAuthConfirm, setModalAuthConfirm] = useState(false);
+
+	const onClickClear = useCallback(() => {
+		setauthNumber('');
+	}, [authNumber]);
+
+	const onChangeRadio = useCallback(
+		e => {
+			setAuth(e.target.value);
+			setAuthStage(1);
+		},
+		[auth],
+	);
+
+	const onClickAuth = useCallback(e => {
+		if (authStage === 1) setModalAuth(true);
+		else if (authStage === 2) setModalAuthConfirm(true);
+	}, []);
+
+	const onChangeAddress = useCallback(e => {
+		const name = e.target.name;
+		const value = e.target.value;
+
+		setDeliveryInfo(prevState => ({
+			...prevState,
+			[name]: value,
+		}));
 	}, []);
 
 	const onClickCheck = useCallback(
@@ -59,30 +105,40 @@ const Signup = () => {
 		[checkValue],
 	);
 
-	const onClickCheckAll = useCallback(
-		e => {
-			if (checkValue.count < 4) {
-				setCheckValue(() => ({
-					checkAll: true,
-					checkAgree: true,
-					checkTerms: true,
-					checkYouth: true,
-					checkSns: true,
-					count: 4,
-				}));
-			} else {
-				setCheckValue(() => ({
-					checkAll: false,
-					checkAgree: false,
-					checkTerms: false,
-					checkYouth: false,
-					checkSns: false,
-					count: 0,
-				}));
-			}
-		},
-		[checkValue],
-	);
+	const onClickCheckAll = useCallback(() => {
+		if (checkValue.count < 4) {
+			setCheckValue(() => ({
+				checkAll: true,
+				checkAgree: true,
+				checkTerms: true,
+				checkYouth: true,
+				checkSns: true,
+				count: 4,
+			}));
+		} else {
+			setCheckValue(() => ({
+				checkAll: false,
+				checkAgree: false,
+				checkTerms: false,
+				checkYouth: false,
+				checkSns: false,
+				count: 0,
+			}));
+		}
+	}, [checkValue]);
+
+	const onSubmitForm = useCallback(e => {
+		e.preventDefault();
+		console.log(e);
+	}, []);
+
+	const onCloseModal = useCallback(() => {
+		setModalAuth(false);
+		setModalAuthConfirm(false);
+
+		if (authStage === 1) setAuthStage(2);
+		else if (authStage === 2) setAuthStage(3);
+	}, [authStage]);
 
 	useEffect(() => {
 		if (checkValue.count === 4) {
@@ -122,7 +178,7 @@ const Signup = () => {
 				<SignupInner>
 					<form onSubmit={onSubmitForm}>
 						<UserEmail
-							eamil={email}
+							email={email}
 							setEmail={setEmail}
 							onChangeEmail={onChangeEmail}
 							placeholder="영문, 숫자 5-11자"
@@ -153,47 +209,67 @@ const Signup = () => {
 
 						<SignupContainer>
 							<div className="all-check">
-								{/* <input
-									type="checkbox"
-									id="loginJoinMembershipAllCheckbox"
-									name="loginJoinMembershipAllCheckbox"
-								/> */}
-								<label htmlFor="loginJoinMembershipAllCheckbox">이메일</label>
-							</div>
-							<div className="all-check">
-								{/* <input
-									type="checkbox"
-									id="loginJoinMembershipAllCheckbox"
-									name="loginJoinMembershipAllCheckbox"
-								/> */}
-								<label htmlFor="loginJoinMembershipAllCheckbox">휴대폰</label>
+								<label for="emailAuth" className={auth === 'emailAuth' && 'active'}>
+									이메일
+								</label>
+								<input
+									type="radio"
+									value="emailAuth"
+									id="emailAuth"
+									onChange={onChangeRadio}
+									name="auth"
+								/>
+
+								<label for="phoneAuth" className={auth === 'phoneAuth' && 'active'}>
+									휴대폰
+								</label>
+								<input
+									type="radio"
+									value="phoneAuth"
+									id="phoneAuth"
+									onChange={onChangeRadio}
+									name="auth"
+								/>
 							</div>
 							<label>
 								<span>필수 입력</span>
 							</label>
+
 							<div className="email-check">
-								<input type="email" />
-								<button type="button">
-									<CancelIcon />
+								<input
+									type="email"
+									value={authNumber}
+									onChange={onChangeauthNumber}
+									className={auth}
+								/>
+								{authNumber?.length > 0 && (
+									<button type="button" onClick={() => onClickClear()}>
+										<CancelIcon />
+									</button>
+								)}
+								<button
+									className={authStage === 3 ? 'auth-confirm success' : 'auth-confirm'}
+									onClick={() => onClickAuth()}
+								>
+									{authStage === 1 ? '본인인증' : authStage === 2 ? '번호확인' : '인증완료'}
 								</button>
-								<button className="auth-confirm">본인인증</button>
 							</div>
 
-							<div className="phone-check" style={{ display: 'none' }}>
-								<input type="text" />
-								<button type="button">
-									<CancelIcon />
-								</button>
-								<button className="auth-confirm">본인인증</button>
-							</div>
 							<p>이메일 주소가 올바르지 않습니다.</p>
 							<p className="helper-text">계정 분실 시 본인인증 정보로 활용됩니다.</p>
 						</SignupContainer>
 
 						<UserFind
-							props={{ answer, onChangeAnswer, setAnswer, question, onChangeQuestion, setQuestion }}
+							props={{
+								answer,
+								onChangeAnswer,
+								setAnswer,
+								question,
+								onChangeQuestion,
+								setQuestion,
+							}}
 						></UserFind>
-						<UserAddress></UserAddress>
+						<UserAddress props={{ deliveryInfo, setDeliveryInfo, onChangeAddress }}></UserAddress>
 
 						<SignupCheckBox>
 							<div className="all-check">
@@ -287,6 +363,8 @@ const Signup = () => {
 					</form>
 				</SignupInner>
 			</SignupSection>
+			<AuthModal show={modalAuth} onCloseModal={onCloseModal}></AuthModal>
+			<AuthConfirmModal show={modalAuthConfirm} onCloseModal={onCloseModal}></AuthConfirmModal>
 		</Container>
 	);
 };

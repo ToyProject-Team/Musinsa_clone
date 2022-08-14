@@ -37,7 +37,6 @@ export const SignupAddress = styled.div`
 			position: relative;
 
 			& p {
-				margin-top: 8px;
 				font-size: 11px;
 				line-height: 16.5px;
 				color: red;

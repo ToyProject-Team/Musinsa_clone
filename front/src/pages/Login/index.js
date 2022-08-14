@@ -1,8 +1,9 @@
 import UserEmail from 'components/UserEmail';
 import UserPassword from 'components/UserPassword';
+import { LOGIN, useUserDispatch, useUserState } from 'context/UserContext';
 import useInput from 'hooks/useInput';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import {
 	Container,
 	LoginSection,
@@ -19,6 +20,9 @@ import {
 } from './styles';
 
 const LogIn = () => {
+	const user = useUserState();
+	const dispatch = useUserDispatch();
+
 	const [email, onChangeEmail, setEmail] = useInput('');
 	const [password, onChangePassword, setPassword] = useInput('');
 	const [passwordLookButton, setPasswordLookButton] = useState(false);
@@ -48,9 +52,24 @@ const LogIn = () => {
 			if (!password || !password.trim()) return alert('비밀번호를 입력해 주세요.');
 
 			// axios(success => login, failed => alter('아이디 또는 패스워드를 확인하세요.'))
+
+			// 로그인 예시
+			if (email === 'qwe' && password === 'qwe') {
+				const payload = {
+					login: true,
+					token: '이곳에 로그인시 발급받는 token 값이 들어갑니다.',
+				};
+
+				dispatch({ type: LOGIN, payload });
+			}
 		},
-		[email, password],
+		[email, password, user],
 	);
+
+	if (user?.login) {
+		return <Navigate to="/" />;
+	}
+	console.log(process.env.REACT_APP_HOST_URL);
 
 	return (
 		<Container>
@@ -59,7 +78,7 @@ const LogIn = () => {
 				<LoginInner>
 					<form onSubmit={onSubmitForm}>
 						<UserEmail
-							eamil={email}
+							email={email}
 							setEmail={setEmail}
 							onChangeEmail={onChangeEmail}
 							placeholder="아이디"
