@@ -4,7 +4,7 @@ export const MainContainer = styled.div`
 	height: 100vh;
 	font-size: 12px;
 	min-width: 1229px;
-	// overflow: hidden;
+//	overflow: hidden;
 `;
 
 // 카테고리
@@ -342,6 +342,7 @@ export const ItemSection = styled.div`
 	padding-left: 15px;
 	padding-right: 15px;
 	width: 100%;
+	-webkit-box-sizing: border-box;
 
 	&:hover {
 		background-color: #f2f2f2;
@@ -413,6 +414,8 @@ export const SortBox = styled.div`
 `;
 
 export const ListBox = styled.div`
+	width: 100%;
+
 	& ul {
 		display: inline-block;
 		// border-left: 1px solid #ddd;
