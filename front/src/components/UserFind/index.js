@@ -3,12 +3,7 @@ import React, { useCallback } from 'react';
 import { SignupContainer } from './styles';
 
 const UserFind = ({ props }) => {
-	const { answer, onChangeAnswer, setAnswer, question, onChangeQuestion, setQuestion } = props;
-
-	const onSubmitForm = useCallback(e => {
-		e.preventDefault();
-		console.log(e);
-	}, []);
+	const { answer, onChangeAnswer, setAnswer, onChangeQuestion } = props;
 
 	return (
 		<>
