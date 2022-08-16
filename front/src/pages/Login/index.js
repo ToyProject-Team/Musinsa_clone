@@ -60,28 +60,35 @@ const LogIn = () => {
 				password: password,
 				passwordCheck: password,
 			};
-			await PostApi('/api/auth/login', params).then(result => {
-				switch (result.code) {
-					case 200:
-						console.log('success');
-						break;
+			await PostApi('/api/auth/login', params)
+				.then(result => {
+					switch (result.response.status) {
+						case 200:
+							console.log('success');
+							break;
 
-					case 401:
-						alert('존재하지않거나 아이디가 틀렸습니다.');
-						break;
+						default:
+							break;
+					}
+				})
+				.catch(result => {
+					switch (result.response.status) {
+						case 401:
+							alert('존재하지않거나 아이디가 틀렸습니다.');
+							break;
 
-					case 402:
-						alert('패스워드가 일치하지 않습니다');
-						break;
+						case 402:
+							alert('패스워드가 일치하지 않습니다');
+							break;
 
-					case 500:
-						console.log('서버에러');
-						break;
+						case 500:
+							console.log('서버에러');
+							break;
 
-					default:
-						break;
-				}
-			});
+						default:
+							break;
+					}
+				});
 
 			// 로그인 예시
 			if (email === 'qwe' && password === 'qwe') {
