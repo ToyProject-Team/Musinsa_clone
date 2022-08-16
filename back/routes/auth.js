@@ -16,9 +16,11 @@ const { smtpTransport } = require('../utils/email');
 dotenv.config();
 router.post('/signup', async (req, res, next) => {
     try {
+        console.log(req.body)
+        console.log(req.body.loginId)
         const exUser = await User.findOne({
-            where: {
-                LoginId: req.body.loginId
+          where: {
+              LoginId: req.body.loginId
         }
         })
         console.log(exUser)
@@ -38,9 +40,12 @@ router.post('/signup', async (req, res, next) => {
 
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         const newUser = await User.create({
-            loginId: req.body.loginId,
-            password: hashedPassword,
-            email: req.body.email
+          loginId: req.body.loginId,
+          password: hashedPassword,
+          email: req.body.email,
+          agreement: req.body.agreement== 1 ? 1: 0,
+          questionType: req.body.questionType,
+          questionAnswer: req.body.questionAnswer,
         })
         return res.status(200).send({ success: true })
     }catch (error) {

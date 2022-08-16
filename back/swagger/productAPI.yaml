@@ -4,9 +4,6 @@
       - product
     summary: 상품 리스트
     parameters:
-      - name: Authorization
-        in: header
-        required: true
       - in: query
         name: page
         schema:
@@ -83,9 +80,6 @@
       - product
     summary: 상품 상세보기
     parameters:
-      - name: Authorization
-        in: header
-        required: true
       - in: query
         name: productId
         schema:
@@ -190,4 +184,117 @@
       500:
         $ref: "./openapi.yaml#/serverError"
 
+/api/product/purchase:
+  post:
+    tags:
+      - product
+    summary: 상품 구매하기
+    parameters:
+      - name: Authorization
+        in: header
+        required: true
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            imp_uid:
+              type: string
+            merchant_uid:
+              type: string
+            ProductId:
+              type: string
+            price:
+              type: integer
+    responses:
+      200:
+        description: 성공 - product 배열에 데이터들이 지급됩니다
+        schema:
+          properties:
+            product:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 33
+                  productTitle:
+                    type: string
+                    example: Chips
+      400:
+        description: 상품 조회 결과가 없을 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요        
+      500:
+        $ref: "./openapi.yaml#/serverError"
+
+/api/product/addCart:
+  post:
+    tags:
+      - product
+    summary: 상품 내 장바구니에 추가
+    parameters:
+      - name: Authorization
+        in: header
+        required: true
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            productId:
+              type: string
+              example: 1
+    responses:
+      200:
+        $ref: "./openapi.yaml#/success"
+      400:
+        description: 이미 내 장바구니에 추가한 상품일 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 이미 장바구니에 있는 상품입니다        
+      500:
+        $ref: "./openapi.yaml#/serverError"
+
+/api/product/likeProduct:
+  post:
+    tags:
+      - product
+    summary: 상품 좋아요
+    parameters:
+      - name: Authorization
+        in: header
+        required: true
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            productId:
+              type: string
+              example: 1
+    responses:
+      200:
+        $ref: "./openapi.yaml#/success"
+      400:
+        description: 이미 좋아요한 상품일 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 이미 좋아요한 상품입니다     
+      500:
+        $ref: "./openapi.yaml#/serverError"
+
+
 $ref: "./myPageAPI.yaml"
+

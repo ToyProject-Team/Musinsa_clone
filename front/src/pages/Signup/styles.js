@@ -1,45 +1,8 @@
 import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
-
-/* Keyframes */
-const tooltipInSlide = keyframes`
-  100% {
-    transform: translate3d(0,0,0);
-  }
-`;
-
-const tooltipOutSlide = keyframes`
-  0% {
-    transform: translate3d(0,0,0);
-  }
-  99.9% {
-    transform: translate3d(0,0,0);
-  }
-  100% {
-    display: none;
-  }
-`;
-
-const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
-
-const fadeOut = keyframes`
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-`;
 
 /* Styled */
 export const Container = styled.div`
+	min-height: 100vh;
 	background-color: #f1f1f1;
 	overflow: hidden;
 
@@ -53,7 +16,6 @@ export const Container = styled.div`
 		background-color: #fff;
 		font-size: 15px;
 		color: #000;
-		box-shadow: 0 0 0 30px #fff inset !important;
 		transition: border 0.2s ease-in-out;
 		padding: 0 12px;
 		box-sizing: border-box;
@@ -82,9 +44,77 @@ export const Container = styled.div`
 		font-weight: 700;
 		color: #000;
 	}
+
+	.readonly-input {
+		background-color: #d1d1d1 !important;
+	}
+	.radius-left {
+		border-radius: 4px 0 0 4px;
+	}
+	.btn-hover {
+		transition: 0.3s;
+
+		&:hover {
+			background-color: #0078ff;
+			border: 1px solid #0078ff;
+		}
+	}
+
+	& label.check-labal {
+		display: inline-flex;
+		position: absolute;
+		right: 0;
+		top: 50%;
+		transform: translateY(-50%);
+		width: auto;
+		min-height: 20px;
+		padding: 0 0 0 26px;
+		font-size: 14px;
+		color: inherit;
+		text-align: left;
+		white-space: normal;
+		align-items: center;
+		margin-left: auto;
+		cursor: pointer;
+
+		&::before {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			width: 20px;
+			height: 20px;
+			border: 1px solid #ccc;
+			border-radius: 100%;
+			background-color: #f1f1f1;
+			content: '';
+		}
+
+		&.active {
+			&::before {
+				border-color: #0078ff;
+				background-color: #0078ff;
+			}
+
+			&::after {
+				content: '';
+				position: absolute;
+				top: 12px;
+				left: 9px;
+				width: 4px;
+				height: 8px;
+				border-right: 1px solid #fff;
+				border-bottom: 1px solid #fff;
+				transform: translateY(calc(-50% - 2px)) rotate(45deg);
+				display: block;
+				box-sizing: border-box;
+			}
+		}
+	}
 `;
 
 export const SignupSection = styled.section`
+	min-height: calc(100vh - 80px);
 	max-width: 380px;
 	margin: 0 auto;
 	background-color: #fff;
@@ -124,6 +154,7 @@ export const SignupContainer = styled.div`
 	& > label {
 		display: inline-block;
 		margin: 16px 0 8px;
+		font-weight: 700;
 
 		& > span {
 			display: inline-block;
@@ -199,6 +230,7 @@ export const SignupContainer = styled.div`
 			margin: -1px;
 			clip: rect(0 0 0 0);
 		}
+
 		& label {
 			font-weight: 700;
 			font-size: 15px;
@@ -218,15 +250,38 @@ export const SignupContainer = styled.div`
 				top: 0;
 				bottom: 0;
 				left: 0;
-				display: block;
-				width: 24px;
-				height: 24px;
+				width: 20px;
+				height: 20px;
 				border: 1px solid #ccc;
 				border-radius: 100%;
 				background-color: #f1f1f1;
-				box-sizing: border-box;
 				content: '';
 			}
+
+			&.active {
+				&::before {
+					border-color: #0078ff;
+					background-color: #0078ff;
+				}
+
+				&::after {
+					content: '';
+					position: absolute;
+					top: 12px;
+					left: 9px;
+					width: 4px;
+					height: 8px;
+					border-right: 1px solid #fff;
+					border-bottom: 1px solid #fff;
+					transform: translateY(calc(-50% - 2px)) rotate(45deg);
+					display: block;
+					box-sizing: border-box;
+				}
+			}
+		}
+
+		& label:nth-of-type(2) {
+			margin-left: 10px;
 		}
 	}
 
@@ -249,6 +304,19 @@ export const SignupContainer = styled.div`
 
 		&.success {
 			background-color: #0078ff;
+			pointer-events: none;
+		}
+	}
+
+	& .select-container {
+		padding: 10px;
+
+		& select {
+			border: 0;
+			outline: none;
+			height: 100%;
+			border-radius: 5px;
+			width: 100%;
 		}
 	}
 `;
@@ -289,21 +357,40 @@ export const SignupCheckBox = styled.div`
 				top: 0;
 				bottom: 0;
 				left: 0;
-				display: block;
-				width: 24px;
-				height: 24px;
+				width: 20px;
+				height: 20px;
 				border: 1px solid #ccc;
 				border-radius: 100%;
 				background-color: #f1f1f1;
-				box-sizing: border-box;
 				content: '';
+			}
+
+			&.active {
+				&::before {
+					border-color: #0078ff;
+					background-color: #0078ff;
+				}
+
+				&::after {
+					content: '';
+					position: absolute;
+					top: 12px;
+					left: 9px;
+					width: 4px;
+					height: 8px;
+					border-right: 1px solid #fff;
+					border-bottom: 1px solid #fff;
+					transform: translateY(calc(-50% - 2px)) rotate(45deg);
+					display: block;
+					box-sizing: border-box;
+				}
 			}
 		}
 	}
 
 	& > .check {
 		display: flex;
-		margin-left: 4px;
+		margin-left: 3px;
 		padding-left: 28px;
 		margin-top: 12px;
 		flex-wrap: wrap;
@@ -326,6 +413,10 @@ export const SignupCheckBox = styled.div`
 			color: #6e6e6e;
 			align-items: center;
 			cursor: pointer;
+
+			& > svg {
+				padding-right: 12px;
+			}
 		}
 
 		& > a {
@@ -334,6 +425,116 @@ export const SignupCheckBox = styled.div`
 			color: #6e6e6e;
 			text-decoration: underline;
 			cursor: pointer;
+		}
+	}
+`;
+
+export const SignupAddress = styled.div`
+	padding: 20px 0;
+	text-align: left;
+
+	& > label {
+		display: inline-block;
+		margin: 16px 0 8px;
+		font-weight: 700;
+
+		& > span {
+			display: inline-block;
+			width: 4px;
+			height: 4px;
+			margin-top: 6px;
+			margin-left: 5px;
+			border-radius: 50%;
+			background-color: red;
+			text-indent: -9999px;
+			vertical-align: top;
+		}
+	}
+
+	& > table {
+		width: 100%;
+		font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+		line-height: 1.5;
+		font-size: 14px;
+		border-collapse: collapse;
+		table-layout: fixed;
+		border-collapse: separate;
+		border-spacing: 0 10px;
+
+		& td {
+			position: relative;
+
+			& p {
+				margin-top: 8px;
+				font-size: 11px;
+				line-height: 16.5px;
+				color: red;
+			}
+		}
+
+		& .n-input {
+			height: 32px;
+			padding: 5px 6px;
+			border: 1px solid #e5e5e5;
+			background-color: #ffffff;
+			box-sizing: border-box;
+			font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif !important;
+			font-size: 14px;
+			line-height: 20px;
+			-webkit-transition: border 0.2s ease-in-out;
+			-moz-transition: border 0.2s ease-in-out;
+			-o-transition: border 0.2s ease-in-out;
+			transition: border 0.2s ease-in-out;
+		}
+
+		& .size-input {
+			width: 57px;
+			height: 32px;
+			padding: 5px 6px;
+			border: 1px solid #e5e5e5;
+			background-color: #ffffff;
+			box-sizing: border-box;
+			font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif !important;
+			font-size: 14px;
+			line-height: 20px;
+			-webkit-transition: border 0.2s ease-in-out;
+			-moz-transition: border 0.2s ease-in-out;
+			-o-transition: border 0.2s ease-in-out;
+			transition: border 0.2s ease-in-out;
+		}
+
+		& .address-input {
+			& > :not(:last-child) {
+				margin-bottom: 10px;
+			}
+
+			& > div {
+				width: calc(100% - 60px);
+				padding-right: 60px;
+				position: relative;
+
+				& > button {
+					min-width: 60px;
+					height: 32px;
+					position: absolute;
+					right: 0;
+					top: 0;
+					border: 1px solid #000000;
+					background-color: #000000;
+					color: #ffffff;
+					box-sizing: border-box;
+					padding: 2px 8px 0 8px;
+					font-size: 14px;
+					text-align: center;
+					cursor: pointer;
+				}
+			}
+		}
+
+		& input:focus-visible {
+			outline: none;
+			border-color: #aaa !important;
+			transition: border 0.2s ease-in-out;
 		}
 	}
 `;

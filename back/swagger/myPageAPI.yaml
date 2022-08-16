@@ -86,3 +86,4 @@
               example: 좋아요하지 않은 상품을 삭제 시도하셨습니다      
       500:
         $ref: "./openapi.yaml#/serverError"
+$ref: "./shoppingBasketAPI.yaml"
