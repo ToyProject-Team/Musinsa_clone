@@ -16,9 +16,11 @@ const { smtpTransport } = require('../utils/email');
 dotenv.config();
 router.post('/signup', async (req, res, next) => {
     try {
+        console.log(req.body)
+        console.log(req.body.loginId)
         const exUser = await User.findOne({
-            where: {
-                LoginId: req.body.loginId
+          where: {
+              LoginId: req.body.loginId
         }
         })
         console.log(exUser)
@@ -42,7 +44,6 @@ router.post('/signup', async (req, res, next) => {
             password: hashedPassword,
             email: req.body.email,
             agreement: req.body.agreement== 1 ? 1: 0 
-            
         })
         return res.status(200).send({ success: true })
     }catch (error) {

@@ -69,6 +69,7 @@ const LogIn = () => {
 	if (user?.login) {
 		return <Navigate to="/" />;
 	}
+	console.log(process.env.REACT_APP_HOST_URL);
 
 	return (
 		<Container>
