@@ -16,6 +16,29 @@ import {
 } from './styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import Modal from 'react-modal';
+import Order from 'pages/Order';
+
+const ModalStyle = {
+	overlay: {
+		position: 'fixed',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(255, 255, 255, 0.75)',
+	},
+	content: {
+		position: 'absolute',
+		width: '445px',
+		height: '700px',
+		position: 'absolute',
+		top: '90px',
+		left: '30%',
+		right: '40px',
+		bottom: '40px',
+	},
+};
 
 const PurchaseForm = ({ data }) => {
 	const navigate = useNavigate();
@@ -25,6 +48,7 @@ const PurchaseForm = ({ data }) => {
 	const [clickedlike, setClickedlike] = useState(true);
 	const [selectedPrice, setSelectedPrice] = useState(0);
 	const [orderAmount, setOrderAmount] = useState(1);
+	const [showModal, setShowModal] = useState(false);
 
 	const SelectForm = ({ price, size, color }) => {
 		const onIncrease = () => {
@@ -86,9 +110,17 @@ const PurchaseForm = ({ data }) => {
 	}, [size, color]);
 
 	const onLikeClicked = useCallback(() => {
-		// navigate(`/${mypage}`);
 		setClickedlike(prev => !prev);
 	}, [clickedlike]);
+
+	// const openModal = useCallback(() => {
+	// 	setShowModal(prev => !prev);
+	// 	console.log(showModal);
+	// }, [showModal]);
+
+	const openModal = () => {
+		setShowModal(showModal => !showModal);
+	};
 
 	return (
 		<div>
@@ -114,7 +146,14 @@ const PurchaseForm = ({ data }) => {
 				<div>{!selected ? 0 : selectedPrice + data.productPrice}원</div>
 			</TotalPrice>
 			<ButtonWrapper>
-				<ButtonBuy>바로구매</ButtonBuy>
+				<ButtonBuy onClick={openModal}>바로구매</ButtonBuy>
+				{showModal ? (
+					<Modal style={ModalStyle} isOpen={true}>
+						<Order openModal={openModal} price={selectedPrice + data.productPrice} />
+					</Modal>
+				) : (
+					<></>
+				)}
 				<ButtonLike clickedlike={clickedlike}>
 					<Button clickedlike={clickedlike} onClick={onLikeClicked} />
 					<Like clickedlike={clickedlike}>{data.likes}</Like>

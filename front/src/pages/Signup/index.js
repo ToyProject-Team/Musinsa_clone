@@ -20,8 +20,11 @@ import {
 import AuthModal from 'components/AuthModal';
 import AuthConfirmModal from 'components/AuthConfirmModal';
 import { useUserState, useUserDispatch, LOGIN } from 'context/UserContext';
+import { PostApi } from 'utils/api';
+import { Navigate } from 'react-router';
 
 const Signup = () => {
+	const [data, setData] = useState(false);
 	const [email, onChangeEmail, setEmail] = useInput('');
 
 	const [password, onChangePassword, setPassword] = useInput('');
@@ -36,8 +39,8 @@ const Signup = () => {
 	const [authNumber, onChangeauthNumber, setauthNumber] = useInput('');
 	const [authStage, setAuthStage] = useState(1);
 
-	const [answer, onChangeAnswer, setAnswer] = useInput('');
 	const [question, onChangeQuestion, setQuestion] = useInput('1');
+	const [answer, onChangeAnswer, setAnswer] = useInput('');
 
 	const [checkValue, setCheckValue] = useState({
 		checkAll: false,
@@ -127,10 +130,46 @@ const Signup = () => {
 		}
 	}, [checkValue]);
 
-	const onSubmitForm = useCallback(e => {
-		e.preventDefault();
-		console.log(e);
-	}, []);
+	const onSubmitForm = useCallback(
+		async e => {
+			e.preventDefault();
+
+			const params = {
+				loginId: email,
+				password: password,
+				email: authNumber,
+				agreement: true,
+				questionType: question,
+				questionAnswer: answer,
+				rank: '브론즈',
+			};
+
+			await PostApi('/api/auth/signup', params)
+				.then(result => {
+					switch (result.status) {
+						case 200:
+							return setData(true);
+					}
+				})
+				.catch(result => {
+					switch (result.response.status) {
+						case 401:
+							return alert('이미 사용중인 아이디 입니다.');
+
+						case 402:
+							return alert('이미 사용중인 이메일 입니다.');
+
+						case 500:
+							return console.log('서버에러');
+
+						default:
+							console.log(result);
+							break;
+					}
+				});
+		},
+		[email, password, auth, authNumber, question, answer],
+	);
 
 	const onCloseModal = useCallback(() => {
 		setModalAuth(false);
@@ -153,6 +192,10 @@ const Signup = () => {
 			}));
 		}
 	}, [checkValue.count]);
+
+	if (data) {
+		return <Navigate to="/login" />;
+	}
 
 	return (
 		<Container>
@@ -209,7 +252,7 @@ const Signup = () => {
 
 						<SignupContainer>
 							<div className="all-check">
-								<label for="emailAuth" className={auth === 'emailAuth' && 'active'}>
+								<label htmlFor="emailAuth" className={auth === 'emailAuth' && 'active'}>
 									이메일
 								</label>
 								<input
@@ -220,7 +263,7 @@ const Signup = () => {
 									name="auth"
 								/>
 
-								<label for="phoneAuth" className={auth === 'phoneAuth' && 'active'}>
+								<label htmlFor="phoneAuth" className={auth === 'phoneAuth' && 'active'}>
 									휴대폰
 								</label>
 								<input
@@ -237,7 +280,7 @@ const Signup = () => {
 
 							<div className="email-check">
 								<input
-									type="email"
+									type={auth === 'phoneAuth' ? 'tel' : 'email'}
 									value={authNumber}
 									onChange={onChangeauthNumber}
 									className={auth}
@@ -264,9 +307,7 @@ const Signup = () => {
 								answer,
 								onChangeAnswer,
 								setAnswer,
-								question,
 								onChangeQuestion,
-								setQuestion,
 							}}
 						></UserFind>
 						<UserAddress props={{ deliveryInfo, setDeliveryInfo, onChangeAddress }}></UserAddress>
