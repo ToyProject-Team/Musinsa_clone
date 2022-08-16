@@ -18,31 +18,27 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import Modal from 'react-modal';
 import Order from 'pages/Order';
-import styled from '@emotion/styled';
 
-// const ModalStyle = {
-// 	overlay: {
-// 		position: 'fixed',
-// 		top: 0,
-// 		left: 0,
-// 		right: 0,
-// 		bottom: 0,
-// 	},
-// 	content: {
-// 		position: 'absolute',
-// 		top: '60px',
-// 		left: '35%',
-// 		width: '580px',
-// 		height: '80%',
-// 		border: '1px solid #ccc',
-// 		background: '#fff',
-// 		overflow: 'auto',
-// 		WebkitOverflowScrolling: 'touch',
-// 		borderRadius: '4px',
-// 		outline: 'none',
-// 		padding: '20px',
-// 	},
-// };
+const ModalStyle = {
+	overlay: {
+		position: 'fixed',
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+		backgroundColor: 'rgba(255, 255, 255, 0.75)',
+	},
+	content: {
+		position: 'absolute',
+		width: '445px',
+		height: '700px',
+		position: 'absolute',
+		top: '90px',
+		left: '30%',
+		right: '40px',
+		bottom: '40px',
+	},
+};
 
 const PurchaseForm = ({ data }) => {
 	const navigate = useNavigate();
@@ -114,14 +110,17 @@ const PurchaseForm = ({ data }) => {
 	}, [size, color]);
 
 	const onLikeClicked = useCallback(() => {
-		// navigate(`/${mypage}`);
 		setClickedlike(prev => !prev);
 	}, [clickedlike]);
 
-	const openModal = useCallback(() => {
-		setShowModal(true);
-		console.log(showModal);
-	}, []);
+	// const openModal = useCallback(() => {
+	// 	setShowModal(prev => !prev);
+	// 	console.log(showModal);
+	// }, [showModal]);
+
+	const openModal = () => {
+		setShowModal(showModal => !showModal);
+	};
 
 	return (
 		<div>
@@ -148,13 +147,13 @@ const PurchaseForm = ({ data }) => {
 			</TotalPrice>
 			<ButtonWrapper>
 				<ButtonBuy onClick={openModal}>바로구매</ButtonBuy>
-				{/* {showModal ? (
-					<Modal style={{ width: '580px' }} isOpen={true}>
-						<Order />
+				{showModal ? (
+					<Modal style={ModalStyle} isOpen={true}>
+						<Order openModal={openModal} price={selectedPrice + data.productPrice} />
 					</Modal>
 				) : (
 					<></>
-				)} */}
+				)}
 				<ButtonLike clickedlike={clickedlike}>
 					<Button clickedlike={clickedlike} onClick={onLikeClicked} />
 					<Like clickedlike={clickedlike}>{data.likes}</Like>

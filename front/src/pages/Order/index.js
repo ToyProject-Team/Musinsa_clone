@@ -13,8 +13,10 @@ import {
 	RefundHolder,
 	RefundInfo,
 	DefalutInfo,
+	X,
 } from './styles';
 import { useState, useCallback, useRef } from 'react';
+import { useBlockLayout } from 'react-table';
 const dummyUser = {
 	userName: '김소희',
 };
@@ -28,14 +30,14 @@ const dummyPaymentInfo = {
 	refund_account: '56211105948400', // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
 };
 
-const Order = () => {
+const Order = props => {
 	// return <Refund dummyPaymentInfo={dummyPaymentInfo} />;
 	// return <Payment dummyUser={dummyUser} />;
 
-	const paymentWay = ['신용카드', '가상계좌(무통장)', '카카오페이', '네이버페이'];
+	const paymentWay = ['신용카드', '가상계좌(무통장)', '카카오페이', '페이코'];
 
 	const [btnActive, setBtnActive] = useState('');
-	const [checked, setChecked] = useState(false);
+	const [agreementChecked, setAgreementChecked] = useState(false);
 	const [refundAccountChecked, setRefundAccountChecked] = useState(false);
 	const [submit, setSubmit] = useState(false);
 	const refundAccount = useRef();
@@ -47,34 +49,26 @@ const Order = () => {
 		[btnActive],
 	);
 
-	const onCheck = () => {
-		setChecked(prev => !prev);
-	};
-
 	const AccoutSubmitCheck = () => {
 		if (btnActive == 1) {
 			if (refundAccount.current.value.length < 12) {
-				console.log('땡', refundAccountChecked);
 				alert('올바른 계좌 정보를 입력하세요.');
 				refundAccount.current.focus();
 			} else {
-				console.log('ㅇㅋ', refundAccountChecked);
-				console.log(btnActive);
-				setRefundAccountChecked(prev => !prev);
+				if (agreementChecked) {
+					setSubmit(true);
+				}
 			}
 		}
-		{
-			btnActive == 1 ? (
-				<>{checked && refundAccountChecked ? setSubmit(true) : <></>}</>
-			) : (
-				<>{checked ? setSubmit(true) : <></>}</>
-			);
+		if (btnActive == 1) {
+		} else {
+			agreementChecked ? setSubmit(true) : <></>;
 		}
-		console.log('짠', submit);
 	};
 
 	return (
 		<div>
+			<X onClick={() => props.openModal(false)}>X</X>
 			<OrderContainer>
 				<InfoWrapper>
 					<li style={{ paddingBottom: '15px' }}>결제 안내</li>
@@ -174,15 +168,24 @@ const Order = () => {
 				<InfoWrapper>
 					<li>주문자 동의</li>
 					<label htmlFor="checkAll">
-						<input id="checkAll" type="checkbox" name="checkAll" onClick={onCheck} />
+						<input
+							id="checkAll"
+							type="checkbox"
+							name="checkAll"
+							onClick={() => setAgreementChecked(!agreementChecked)}
+						/>
 						회원 본인은 구매 조건, 주문 내용 확인 및 결제에 동의합니다
 					</label>
 				</InfoWrapper>
 			</OrderContainer>
-			<OrderButton agreement={checked} onClick={AccoutSubmitCheck}>
-				38900원 결제하기
+			<OrderButton agreement={agreementChecked} onClick={AccoutSubmitCheck}>
+				{props.price} 결제하기
 			</OrderButton>
-			{submit ? <Payment /> : <></>}
+			{submit == true ? (
+				<Payment submit={submit} price={props.price} pay_method={btnActive} />
+			) : (
+				<></>
+			)}
 		</div>
 	);
 };

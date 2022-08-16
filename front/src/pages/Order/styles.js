@@ -112,3 +112,9 @@ export const DefalutInfo = styled.ul`
 		margin-top: 10px;
 	}
 `;
+
+export const X = styled.div`
+	font-size: 20px;
+	margin-left: 410px;
+	cursor: pointer;
+`;

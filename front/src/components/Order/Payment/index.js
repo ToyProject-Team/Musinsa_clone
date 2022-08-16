@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import jQuery from 'jquery';
+window.$ = window.jQuery = jQuery;
 
-const Payment = ({ dummyUser }) => {
+const Payment = ({ dummyUser, submit, price, pay_method }) => {
+	const [pg, setPg] = useState('');
 	useEffect(() => {
 		const jquery = document.createElement('script');
 		jquery.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
@@ -16,28 +19,40 @@ const Payment = ({ dummyUser }) => {
 	}, []);
 
 	const onClickPayment = () => {
+		if (pay_method == 0) {
+			setPg('html5_inicis');
+			pay_method = 'card';
+		}
+		if (pay_method == 1) {
+			setPg('html5_inicis');
+			pay_method = 'vbank';
+		}
+		if (pay_method == 2) {
+			setPg('kakaopay.TC0ONETIME');
+			pay_method = 'card';
+		}
+		if (pay_method == 3) {
+			setPg('payco');
+			pay_method = 'card';
+		}
 		const { IMP } = window;
 		IMP.init('imp32326070');
 		const data = {
-			// pg : 'kakaopay.TC0ONETIME',
-			pg: 'html5_inicis',
-			pay_method: 'vbank',
+			pg: pg,
+			pay_method: pay_method,
 			merchant_uid: `mid_${new Date().getTime()}`,
 			name: '결제 테스트',
-			amount: '100',
-			custom_data: { name: '부가정보', desc: '세부 부가정보' },
+			amount: price,
 			buyer_name: '김소희',
 			buyer_tel: '01012345678',
 			buyer_email: 'iamport@gmail.com',
-			buyer_add: '강남구 신사동',
-			buyer_postalcode: '12345',
 		};
-
 		IMP.request_pay(data, rsp => {
 			if (rsp.success) {
 				alert('결제 성공');
 				axios({
-					url: 'http://52.79.252.136/product/purchase',
+					// url: 'http://52.79.252.136/product/purchase',
+					url: '',
 					method: 'post',
 					headers: { 'Content-Type': 'application/json' },
 					data: {
@@ -61,11 +76,7 @@ const Payment = ({ dummyUser }) => {
 		});
 	};
 
-	return (
-		<div>
-			<button onClick={onClickPayment}>결제 테스트</button>
-		</div>
-	);
+	return <div>{submit ? onClickPayment() : <></>}</div>;
 };
 
 export default Payment;
