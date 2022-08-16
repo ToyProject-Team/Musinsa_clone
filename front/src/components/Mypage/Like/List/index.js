@@ -1,31 +1,25 @@
-import React from "react";
-import Ul from "components/Mypage/Like/List/Ul";
-import { LikeSection } from "./styles";
+import React, { useState } from "react";
+import { ImgSpan, LikeLi, LikeUl } from "../styles";
+import { FaHeart } from 'react-icons/fa'
 
+function Likelist({data}) {
+  const [value, setValue] = useState('');
 
-function liketable() {
-  
-  const dummyData = {
-    id:'1',
-    ProductCompany:'어프어프',
-    ProductImg:'https://image.msscdn.net/images/goods_img/20191115/1226331/1226331_1_500.jpg?t=20191115100755',
-    ProductName: 'Bear heart',
-    ProductOption: 'FREE',
-    ProductPrice: '20681',
-    ProductNum: '1',
-    OrderDay: '2020.03.02',
-    OrderNum: '12345',
-    Orderstatus: '환불완료',
-  }
+  const handleChange = ({ target: { value } }) => setValue(value);
 
-
-  return <LikeSection>
-    <header>
-    <h1>좋아요</h1>
-    <h2>상품</h2>
-    </header> 
-    <Ul data={dummyData} />
-  </LikeSection>;
+  return (
+    <LikeUl>
+      <LikeLi>
+      <ImgSpan><img src= {data.ProductImg} alt="더미데이터" /></ImgSpan>
+        <ul>
+        <li className="brand">{data.ProductCompany}</li>
+        <li className="name">{data.ProductName}</li>
+        <li className="price">{data.ProductPrice}원</li>
+        <li className="like"><FaHeart /> 346</li>
+        </ul>
+      </LikeLi>     
+    </LikeUl>
+  )
 }
 
-export default liketable;
+export default Likelist;
