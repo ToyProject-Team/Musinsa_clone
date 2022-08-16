@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Tr from 'components/mypage/table/tr';
 import { OrderTable } from 'components/mypage/table/styles';
 
-function useMypage_main() {
+function MyMain() {
 	const [info, setInfo] = useState([]);
 
 	// useEffect(() => {
@@ -40,4 +40,4 @@ function useMypage_main() {
 	);
 }
 
-export default useMypage_main;
+export default MyMain;

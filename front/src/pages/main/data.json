@@ -10,7 +10,7 @@
 {
   "id" : 2,
   "item" : "크로스백",
-  "brandName" : "노스페이스",
+  "brandName" : "잔스포츠",
   "model" : "NM2DN51A_빅샷",
   "price" : "124,000원",
   "url" : "https://cdn-icons-png.flaticon.com/512/3534/3534513.png"
@@ -34,7 +34,7 @@
 {
   "id" : 5,
   "item" : "백팩",
-  "brandName" : "노스페이스",
+  "brandName" : "잔스포츠",
   "model" : "NM2DN51A_빅샷",
   "price" : "124,000원",
   "url" : "https://cdn-icons-png.flaticon.com/512/3534/3534513.png"
@@ -42,7 +42,7 @@
 {
   "id" : 6,
   "item" : "크로스백",
-  "brandName" : "노스페이스",
+  "brandName" : "잔스포츠",
   "model" : "NM2DN51A_빅샷",
   "price" : "124,000원",
   "url" : "https://cdn-icons-png.flaticon.com/512/3534/3534513.png"
@@ -90,7 +90,54 @@
 {
   "id" : 12,
   "item" : "백팩",
+  "brandName" : "잔스포츠",
+  "model" : "NM2DN51A_빅샷",
+  "price" : "124,000원",
+  "url" : "https://cdn-icons-png.flaticon.com/512/3534/3534513.png"
+}, 
+{
+  "id" : 13,
+  "item" : "백팩",
   "brandName" : "노스페이스",
+  "model" : "NM2DN51A_빅샷",
+  "price" : "124,000원",
+  "url" : "https://cdn-icons-png.flaticon.com/512/3534/3534513.png"
+},{
+  "id" : 14,
+  "item" : "백팩",
+  "brandName" : "잔스포츠",
+  "model" : "NM2DN51A_빅샷",
+  "price" : "124,000원",
+  "url" : "https://cdn-icons-png.flaticon.com/512/3534/3534513.png"
+},
+{
+  "id" : 15,
+  "item" : "백팩",
+  "brandName" : "노스페이스",
+  "model" : "NM2DN51A_빅샷",
+  "price" : "124,000원",
+  "url" : "https://cdn-icons-png.flaticon.com/512/3534/3534513.png"
+},
+{
+  "id" : 16,
+  "item" : "백팩",
+  "brandName" : "잔스포츠",
+  "model" : "NM2DN51A_빅샷",
+  "price" : "124,000원",
+  "url" : "https://cdn-icons-png.flaticon.com/512/3534/3534513.png"
+},
+{
+  "id" : 17,
+  "item" : "크로스백",
+  "brandName" : "잔스포츠",
+  "model" : "NM2DN51A_빅샷",
+  "price" : "124,000원",
+  "url" : "https://cdn-icons-png.flaticon.com/512/3534/3534513.png"
+},
+{
+  "id" : 18,
+  "item" : "백팩",
+  "brandName" : "잔스포츠",
   "model" : "NM2DN51A_빅샷",
   "price" : "124,000원",
   "url" : "https://cdn-icons-png.flaticon.com/512/3534/3534513.png"

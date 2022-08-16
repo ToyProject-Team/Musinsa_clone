@@ -8,7 +8,7 @@ const Main = loadable(() => import('pages/Main'), {
 const LogIn = loadable(() => import('pages/login'), {
 	fallback: <div>로딩중</div>,
 });
-const Detail = loadable(() => import('pages/Dtail'), {
+const Dtail = loadable(() => import('pages/Dtail'), {
 	fallback: <div>로딩중</div>,
 });
 const MyPage = loadable(() => import('pages/Mypage'), {
