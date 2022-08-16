@@ -1,8 +1,11 @@
 import UserEmail from 'components/UserEmail';
+import UserFindModal from 'components/UserFindModal';
 import UserPassword from 'components/UserPassword';
+import { LOGIN, useUserDispatch, useUserState } from 'context/UserContext';
 import useInput from 'hooks/useInput';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { GetApi, PostApi } from 'utils/api';
 import {
 	Container,
 	LoginSection,
@@ -19,10 +22,15 @@ import {
 } from './styles';
 
 const LogIn = () => {
+	const user = useUserState();
+	const dispatch = useUserDispatch();
+
 	const [email, onChangeEmail, setEmail] = useInput('');
 	const [password, onChangePassword, setPassword] = useInput('');
 	const [passwordLookButton, setPasswordLookButton] = useState(false);
 	const passwordRef = useRef();
+
+	const [modalFind, setModalFind] = useState(false);
 
 	const [autoLoginCheck, setAutoLoginCheck] = useState(false);
 	const [keyframesClass, setKeyframesClass] = useState('');
@@ -41,16 +49,70 @@ const LogIn = () => {
 
 	// onClick login button event
 	const onSubmitForm = useCallback(
-		e => {
+		async e => {
 			e.preventDefault();
 
 			if (!email || !email.trim()) return alert('아이디를 입력해 주세요.');
 			if (!password || !password.trim()) return alert('비밀번호를 입력해 주세요.');
 
-			// axios(success => login, failed => alter('아이디 또는 패스워드를 확인하세요.'))
+			const params = {
+				loginId: email,
+				password: password,
+				passwordCheck: password,
+			};
+			await PostApi('/api/auth/login', params).then(result => {
+				switch (result.code) {
+					case 200:
+						console.log('success');
+						break;
+
+					case 401:
+						alert('존재하지않거나 아이디가 틀렸습니다.');
+						break;
+
+					case 402:
+						alert('패스워드가 일치하지 않습니다');
+						break;
+
+					case 500:
+						console.log('서버에러');
+						break;
+
+					default:
+						break;
+				}
+			});
+
+			// 로그인 예시
+			if (email === 'qwe' && password === 'qwe') {
+				const payload = {
+					login: true,
+					token: '이곳에 로그인시 발급받는 token 값이 들어갑니다.',
+				};
+
+				dispatch({ type: LOGIN, payload });
+			}
 		},
-		[email, password],
+		[email, password, user],
 	);
+
+	const onClickFind = useCallback(e => {
+		setModalFind(true);
+	}, []);
+
+	const onCloseModal = useCallback(() => {
+		setModalFind(false);
+	}, []);
+
+	const KakaoLogin = useCallback(async () => {
+		const KAKAO_AUTH_URL = await GetApi('/api/auth/kakao');
+
+		window.location.href = KAKAO_AUTH_URL.data.url;
+	}, []);
+
+	if (user?.login) {
+		return <Navigate to="/" />;
+	}
 
 	return (
 		<Container>
@@ -96,16 +158,19 @@ const LogIn = () => {
 							</LoginCheck>
 							<FindLogin>
 								<li>
-									<Link to="id">아이디 찾기</Link>
+									<div onClick={() => onClickFind('email')}>아이디 찾기</div>
 								</li>
 								<li>
-									<Link to="password">비밀번호 찾기</Link>
+									<div onClick={() => onClickFind('password')}>비밀번호 찾기</div>
 								</li>
 							</FindLogin>
 						</LoginMember>
 					</form>
 					<div>
-						<KakaoLogIn className="login-button__item login-button__item--kakao">
+						<KakaoLogIn
+							className="login-button__item login-button__item--kakao"
+							onClick={KakaoLogin}
+						>
 							<svg
 								width="30"
 								height="30"
@@ -130,6 +195,8 @@ const LogIn = () => {
 					<a href="/signup">회원가입</a>
 				</SignupLink>
 			</LoginSection>
+
+			<UserFindModal show={modalFind} onCloseModal={onCloseModal}></UserFindModal>
 		</Container>
 	);
 };

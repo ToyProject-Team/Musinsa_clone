@@ -15,7 +15,7 @@ export const CreateModal = styled.div`
 		top: 50%;
 		transform: translateY(-50%);
 		display: inline-block;
-		width: 250px;
+		min-width: 250px;
 		background: white;
 		--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);
 		box-shadow: 0 0 0 1px var(--saf-0), 0 4px 12px 0 rgba(0, 0, 0, 0.12);

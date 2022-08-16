@@ -19,14 +19,6 @@ function mypage_header() {
 				<PRFL_IMAGE></PRFL_IMAGE>
 				<NickName>HELLOi</NickName>
 			</Profile>
-			<Navi>
-				<NaviList>
-					<StyleLink to="/cart">장바구니</StyleLink>
-				</NaviList>
-				<NaviList>
-					<StyleLink to="">로그아웃</StyleLink>
-				</NaviList>
-			</Navi>
 		</Header>
 	);
 }

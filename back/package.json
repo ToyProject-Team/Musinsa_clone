@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "api-docs": "swagger-cli bundle swagger/openapi.yaml --outfile swagger.yaml --type yaml",
-    "start": "nodemon apps",
+    "start": "cross-env NODE_ENV=production nodemon apps",
+    "db:create": "cross-env NODE_ENV=production npx sequelize db:create",
     "production": "cross-env NODE_ENV=production pm2 start app.js"
   },
   "author": "",
@@ -20,7 +21,6 @@
     "connect-redis": "^6.1.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "cross-env": "^7.0.3",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
@@ -43,5 +43,8 @@
     "swagger-cli": "^4.0.4",
     "swagger-ui-express": "^4.5.0",
     "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

@@ -37,15 +37,19 @@ module.exports = class User extends Model {
                 },
                 agreement: {
                     type: DataTypes.BOOLEAN,
-                    allowNull: false, 
+                    allowNull: true, 
                 },
                 questionType: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false, 
+                    allowNull: true, 
                 },
                 questionAnswer: {
                     type: DataTypes.STRING(100),
-                    allowNull: false, 
+                    allowNull: true, 
+                },
+                rank: {
+                    type: DataTypes.INTEGER(11),
+                    allowNull: true
                 }
             },
             {
@@ -59,6 +63,10 @@ module.exports = class User extends Model {
         )
     }
     static associate(db) {
+        db.User.belongsToMany(db.Product, {
+            through: db.Order,
+            as: 'myOrder'
+        })
         db.User.belongsToMany(db.Product, {
             through: 'Cart',
             as: 'product'
