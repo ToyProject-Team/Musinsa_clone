@@ -18,10 +18,13 @@
               type: string
             agreement:
               type: string
+              example: 1
             questionType:
               type: string
+              example: 6
             questionAnswer:
               type: string
+              example: 프로그래밍
     responses:
       200:
         $ref: "./openapi.yaml#/success"
