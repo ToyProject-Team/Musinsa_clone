@@ -3,7 +3,7 @@ import UserEmail from 'components/UserEmail';
 import UserFind from 'components/UserFind';
 import UserPassword from 'components/UserPassword';
 import useInput from 'hooks/useInput';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as CheckIcon } from 'assets/svg/Check.svg';
 import {
@@ -12,26 +12,27 @@ import {
 	Header,
 	SignupInner,
 	SignupContainer,
-	SignupAddress,
-	LookButton,
 	SignupCheckBox,
 	SignupButton,
 } from './styles';
 import AuthModal from 'components/AuthModal';
 import AuthConfirmModal from 'components/AuthConfirmModal';
-import { useUserState, useUserDispatch, LOGIN } from 'context/UserContext';
 import { PostApi } from 'utils/api';
 import { Navigate } from 'react-router';
 
 const Signup = () => {
 	const [data, setData] = useState(false);
-	const [email, onChangeEmail, setEmail] = useInput('');
 
-	const [password, onChangePassword, setPassword] = useInput('');
+	const [email, setEmail] = useState('');
+	const [emailReg, setEmailReg] = useState(true);
+
+	const [password, setPassword] = useState('');
+	const [passwordReg, setPasswordReg] = useState(true);
 	const [passwordLookButton, setPasswordLookButton] = useState(false);
 	const passwordRef = useRef();
 
-	const [passwordConfirm, onChangePasswordConfirm, setPasswordConfirm] = useInput('');
+	const [passwordConfirm, setPasswordConfirm] = useState('');
+	const [passwordConfirmReg, setPasswordConfirmReg] = useState(true);
 	const [passwordConfirmLookButton, setPasswordConfirmLookButton] = useState(false);
 	const passwordConfirmRef = useRef();
 
@@ -193,9 +194,34 @@ const Signup = () => {
 		}
 	}, [checkValue.count]);
 
-	if (data) {
-		return <Navigate to="/login" />;
-	}
+	// onChange 정규식 검사
+	const onChangeEmail = useCallback(e => {
+		const regExp = /^[a-z]+[a-z0-9]{3,10}$/g;
+		if (regExp.test(e.target.value)) setEmailReg(true);
+		else setEmailReg(false);
+
+		setEmail(e.target.value);
+	}, []);
+
+	const onChangePassword = useCallback(e => {
+		const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,25}$/;
+		if (regExp.test(e.target.value)) setPasswordReg(true);
+		else setPasswordReg(false);
+
+		setPassword(e.target.value);
+	}, []);
+
+	const onChangePasswordConfirm = useCallback(e => {
+		const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,25}$/;
+		if (regExp.test(e.target.value)) setPasswordConfirmReg(true);
+		else setPasswordConfirmReg(false);
+
+		setPasswordConfirm(e.target.value);
+	}, []);
+
+	// if (data) {
+	// 	return <Navigate to="/login" />;
+	// }
 
 	return (
 		<Container>
@@ -224,7 +250,8 @@ const Signup = () => {
 							email={email}
 							setEmail={setEmail}
 							onChangeEmail={onChangeEmail}
-							placeholder="영문, 숫자 5-11자"
+							reg={emailReg}
+							placeholder="영문, 숫자 4-11자"
 							title={true}
 						></UserEmail>
 						<UserPassword
@@ -234,6 +261,7 @@ const Signup = () => {
 							lookBtn={passwordLookButton}
 							setLookBtn={setPasswordLookButton}
 							dom={passwordRef}
+							reg={passwordReg}
 							placeholder="숫자, 영문, 특수문자 조합 최소 8자"
 							title={true}
 							validation={true}
@@ -245,6 +273,7 @@ const Signup = () => {
 							lookBtn={passwordConfirmLookButton}
 							setLookBtn={setPasswordConfirmLookButton}
 							dom={passwordConfirmRef}
+							reg={passwordConfirmReg}
 							placeholder="비밀번호 재입력"
 							title={false}
 							validation={true}
