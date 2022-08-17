@@ -9,6 +9,7 @@ const UserPassword = ({
 	lookBtn,
 	setLookBtn,
 	dom,
+	reg,
 	placeholder,
 	title,
 	validation,
@@ -56,7 +57,9 @@ const UserPassword = ({
 				></LookButton>
 			</div>
 
-			{validation && <p className="login-input__validation">8~30자 이내로 입력해 주십시오.</p>}
+			{!reg && validation && (
+				<p className="login-input__validation">8~30자 이내로 입력해 주십시오.</p>
+			)}
 		</LoginContainer>
 	);
 };

@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { LoginContainer } from './styles';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 
-const UserEmail = ({ email, setEmail, onChangeEmail, placeholder, title }) => {
+const UserEmail = ({ email, setEmail, onChangeEmail, placeholder, title, reg }) => {
 	const [signUpPage, setSignUpPage] = useState(
 		window.location.pathname === '/login' ? false : true,
 	);
@@ -35,7 +35,7 @@ const UserEmail = ({ email, setEmail, onChangeEmail, placeholder, title }) => {
 						</button>
 					)}
 				</div>
-				{signUpPage && <p>아이디는 필수정보 입니다.</p>}
+				{signUpPage && !reg && <p>아이디는 필수정보 입니다.</p>}
 			</LoginContainer>
 		</>
 	);
