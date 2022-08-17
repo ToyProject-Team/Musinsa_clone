@@ -4,9 +4,6 @@
       - product
     summary: 상품 리스트
     parameters:
-      - name: Authorization
-        in: header
-        required: true
       - in: query
         name: page
         schema:
@@ -83,9 +80,6 @@
       - product
     summary: 상품 상세보기
     parameters:
-      - name: Authorization
-        in: header
-        required: true
       - in: query
         name: productId
         schema:
@@ -209,6 +203,10 @@
               type: string
             merchant_uid:
               type: string
+            ProductId:
+              type: string
+            price:
+              type: integer
     responses:
       200:
         description: 성공 - product 배열에 데이터들이 지급됩니다
