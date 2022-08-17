@@ -44,3 +44,19 @@ export function useUserState() {
 export function useUserDispatch() {
 	return useContext(UserDispatchContext);
 }
+
+/* 예시 */
+/* 
+	const user = useUserState();					=> 현재값 불러오기
+	const dispatch = useUserDispatch();				=> 값 수정하기
+
+	// 로그인 예시
+	if (email === 'qwe' && password === 'qwe') {
+		const payload = {
+			login: true,
+			token: '이곳에 로그인시 발급받는 token 값이 들어갑니다.',
+		};
+
+		dispatch({ type: LOGIN, payload });
+	}
+*/

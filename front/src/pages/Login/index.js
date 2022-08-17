@@ -1,18 +1,16 @@
 import UserEmail from 'components/UserEmail';
 import UserFindModal from 'components/UserFindModal';
 import UserPassword from 'components/UserPassword';
-import { LOGIN, useUserDispatch, useUserState } from 'context/UserContext';
 import useInput from 'hooks/useInput';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { GetApi, PostApi } from 'utils/api';
+import { getToken } from 'utils/getToken';
 import {
 	Container,
 	LoginSection,
 	Header,
 	LoginInner,
-	LoginContainer,
-	LookButton,
 	LoginButton,
 	LoginMember,
 	LoginCheck,
@@ -22,8 +20,7 @@ import {
 } from './styles';
 
 const LogIn = () => {
-	const user = useUserState();
-	const dispatch = useUserDispatch();
+	const [login, setLogin] = useState(getToken());
 
 	const [email, onChangeEmail, setEmail] = useInput('');
 	const [password, onChangePassword, setPassword] = useInput('');
@@ -60,12 +57,21 @@ const LogIn = () => {
 				password: password,
 				passwordCheck: password,
 			};
-			await PostApi('/api/auth/login', params)
+			await PostApi('/api/auth/signin', params)
 				.then(result => {
-					switch (result.response.status) {
+					switch (result.status) {
 						case 200:
-							console.log('success');
-							break;
+							if (autoLoginCheck) {
+								localStorage.setItem('token', result.data.accessToken);
+								sessionStorage.removeItem('token');
+							} else {
+								sessionStorage.setItem('token', result.data.accessToken);
+								localStorage.removeItem('token');
+							}
+
+							setLogin(true);
+
+							return <Navigate to="/" />;
 
 						default:
 							break;
@@ -89,18 +95,8 @@ const LogIn = () => {
 							break;
 					}
 				});
-
-			// 로그인 예시
-			if (email === 'qwe' && password === 'qwe') {
-				const payload = {
-					login: true,
-					token: '이곳에 로그인시 발급받는 token 값이 들어갑니다.',
-				};
-
-				dispatch({ type: LOGIN, payload });
-			}
 		},
-		[email, password, user],
+		[email, password, autoLoginCheck],
 	);
 
 	const onClickFind = useCallback(e => {
@@ -117,7 +113,7 @@ const LogIn = () => {
 		window.location.href = KAKAO_AUTH_URL.data.url;
 	}, []);
 
-	if (user?.login) {
+	if (login) {
 		return <Navigate to="/" />;
 	}
 
