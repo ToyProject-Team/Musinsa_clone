@@ -6,7 +6,7 @@ import { UserProvider } from 'context/UserContext';
 const Main = loadable(() => import('pages/Main'), {
 	fallback: <div>로딩중</div>,
 });
-const LogIn = loadable(() => import('pages/login'), {
+const LogIn = loadable(() => import('pages/Login'), {
 	fallback: <div>로딩중</div>,
 });
 const Dtail = loadable(() => import('pages/Dtail'), {
@@ -31,7 +31,7 @@ function App() {
 				<Routes>
 					<Route path="/" element={<Main />} /> {/* => 메인페이지 */}
 					<Route path="login/*" element={<LogIn />} /> {/* => 로그인페이지 */}
-					<Route path="detail/*" element={<Detail />} /> {/* => 상세페이지 */}
+					<Route path="detail/*" element={<Dtail />} /> {/* => 상세페이지 */}
 					<Route path="mypage/*" element={<MyPage />} /> {/* => 마이페이지 */}
 					<Route path="signup" element={<SignUp />} /> {/* => 회원가입 페이지 */}
 					<Route path="order" element={<Order />} /> {/* => 결제 페이지 */}
