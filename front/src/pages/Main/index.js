@@ -19,22 +19,82 @@ import Data from './data.json';
 
 const Main = () => {
 	const [dummyData, setDummyData] = useState(Data);
+	const [sortData, setSortData] = useState([]);
+
 	const [selectBox, setSelectBox] = useState(true);
 	const [searchInput, setSearchInput] = useState('');
-	const [priceArr, setPriceArr] = useState([]);
 
 	const allTypeArr = dummyData.map(data => data.item);
+	const hotItemArr = dummyData.filter(item => {
+		return item.hotItem === true;
+	});
+	const exclusiveArr = dummyData
+		.filter(item => {
+			return item.exclusive === true;
+		})
+		.map(data => data.brandName);
+
+	const brandNameArr = dummyData.map(item => item.brandName);
+
+	const [itemRange, setItemRange] = useState(true);
+	const [hotItemRange, setHotItemRange] = useState(true);
+	const [exclusiveRange, setExclusiveRange] = useState(true);
+	const [allRange, setAllRange] = useState(true);
+	const [colorRange, setColorRange] = useState(true);
 	const [priceRange, setPriceRange] = useState(true);
+
+	//중분류 분류
+	const onSort = val => {
+		setSortData(
+			dummyData.filter(data => {
+				return data.item === val;
+			}),
+		);
+		setItemRange(false);
+	};
+
+	//인기템 분류
+	const onSortHotItem = val => {
+		setSortData(
+			hotItemArr.filter(data => {
+				return data.brandName === val;
+			}),
+		);
+		setHotItemRange(false);
+	};
+
+	//단독 판매 분류
+	const onSortExclusive = val => {
+		setSortData(
+			dummyData.filter(data => {
+				return data.exclusive === true && data.brandName === val;
+			}),
+		);
+		setExclusiveRange(false);
+		console.log(sortData);
+	};
+
+	//전체 브랜드 분류?
+	const onSortAll = val => {
+		setSortData(
+			dummyData.filter(data => {
+				return data.brandName === val;
+			}),
+		);
+		setAllRange(false);
+	};
 
 	// 가격대별 검색
 	const priceSearch = (min, max) => {
-		setPriceArr(
+		setSortData(
 			dummyData.filter(data => {
 				return data.price >= min && data.price < max;
 			}),
 		);
 		setPriceRange(false);
 	};
+
+	// 가격대별 정렬
 
 	return (
 		<MainContainer>
@@ -48,13 +108,21 @@ const Main = () => {
 
 				<MiddleCategory>
 					<CategoryName>중분류</CategoryName>
-					<div className="all_item">전체</div>
+					<div
+						className="all_item"
+						onClick={() => {
+							setSortData(dummyData);
+							setItemRange(true);
+						}}
+					>
+						전체
+					</div>
 					<div className="all_item_list">
 						<ul>
 							{allTypeArr
 								.filter((val, idx) => allTypeArr.indexOf(val) === idx)
 								.map(data => {
-									return <li>{data}</li>;
+									return <li onClick={e => onSort(e.target.textContent)}>{data}</li>;
 								})}
 						</ul>
 					</div>
@@ -89,12 +157,22 @@ const Main = () => {
 							<BrandAttribute>인기</BrandAttribute>
 							<div>
 								<ul>
-									<li>..상품들</li>
-									<li>..상품들</li>
-									<li>..상품들</li>
-									<li>..상품들</li>
-									<li>..상품들</li>
-									<li>..상품들</li>
+									{hotItemArr
+										.map(e => e.brandName)
+										.filter((item, idx) => {
+											return hotItemArr.map(e => e.brandName).indexOf(item) === idx;
+										})
+										.map(data => {
+											return (
+												<li
+													onClick={e => {
+														onSortHotItem(e.target.textContent);
+													}}
+												>
+													{data}
+												</li>
+											);
+										})}
 								</ul>
 							</div>
 						</BrandList>
@@ -112,17 +190,22 @@ const Main = () => {
 							</BrandAttribute>
 							<div>
 								<ul>
-									{dummyData
+									{exclusiveArr
+										.filter((val, idx) => exclusiveArr.indexOf(val) === idx)
 										.filter(val => {
 											if (searchInput === '') return val;
-											else if (val.brandName.includes(searchInput)) {
+											else if (val.includes(searchInput)) {
 												return val;
 											}
 										})
 										.map(data => {
 											return (
-												<li>
-													<span>{data.brandName}</span>
+												<li
+													onClick={e => {
+														onSortExclusive(e.target.textContent);
+													}}
+												>
+													{data}
 												</li>
 											);
 										})}
@@ -143,8 +226,11 @@ const Main = () => {
 							</BrandAttribute>
 							<div>
 								<ul>
-									<li>..상품들</li>
-									<li>..상품들</li>
+									{brandNameArr
+										.filter((val, idx) => brandNameArr.indexOf(val) === idx)
+										.map(data => (
+											<li onClick={e => onSortAll(e.target.textContent)}>{data}</li>
+										))}
 								</ul>
 							</div>
 						</BrandList>
@@ -227,30 +313,34 @@ const Main = () => {
 					</SortBox>
 					<ListBox>
 						<ul className="list_item">
-							{priceRange
-								? dummyData.map(data => (
-										<li className="li_outer">
-											<div className="li_inner">
-												<div className="list_img">
-													<a href="/detail">
-														<img src={data.url}></img>
-													</a>
+							{priceRange && itemRange && hotItemRange && exclusiveRange && colorRange && allRange
+								? dummyData
+										.sort((a, b) => {
+											return b.price - a.price;
+										})
+										.map(data => (
+											<li className="li_outer">
+												<div className="li_inner">
+													<div className="list_img">
+														<a href="/detail">
+															<img src={data.url}></img>
+														</a>
+													</div>
+													<div className="item_info">
+														<p>{data.brandName}</p>
+														<p>{data.model}</p>
+														<p>{data.price.toLocaleString('ko-KR')}원</p>
+														<p>MEMBERSHIP PRICE</p>
+														<p>...</p>
+													</div>
 												</div>
-												<div className="item_info">
-													<p>{data.brandName}</p>
-													<p>{data.model}</p>
-													<p>{data.price.toLocaleString('ko-KR')}원</p>
-													<p>MEMBERSHIP PRICE</p>
-													<p>...</p>
+												<div className="option">
+													<span>M</span>
+													<span className="option_btn">OPTION ▼</span>
 												</div>
-											</div>
-											<div className="option">
-												<span>M</span>
-												<span className="option_btn">OPTION ▼</span>
-											</div>
-										</li>
-								  ))
-								: priceArr.map(data => (
+											</li>
+										))
+								: sortData.map(data => (
 										<li className="li_outer">
 											<div className="li_inner">
 												<div className="list_img">
