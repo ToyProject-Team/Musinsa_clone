@@ -1,30 +1,68 @@
 import React, { useCallback, useState } from "react";
 import { MypageMain } from "pages/Mypage/styles.js";
-import Tr from "components/Mypage/Cart/Table";
+import CartTable from "components/Mypage/Cart/Table";
 import { OrderTable, CartPayment, OrderBtn } from "components/Mypage/Cart/styles";
 import { FaPlus, FaEquals } from 'react-icons/fa';
+import dummy from 'components/Mypage/data.json';
+import Modal from "react-modal";
+import Order from 'pages/Order';
 
 function Cart() {
-  const dummyData = {
-    id:'1',
-    ProductCompany:'어프어프',
-    ProductImg:'https://image.msscdn.net/images/goods_img/20191115/1226331/1226331_1_500.jpg?t=20191115100755',
-    ProductName: 'Bear heart',
-    ProductOption: 'FREE',
-    ProductPrice: '20,681',
-    ProductNum: '1',
-    OrderDay: '2020.03.02',
-    OrderNum: '12345',
-    Orderstatus: '환불완료',
+
+  // 전체 체크박스 
+  const [checkedItems, setCheckedItems] = useState([]);
+  const checkedItemHandler = (code, isChecked) => {
+    if(isChecked){
+      setCheckedItems([...checkedItems, code])
+    }else if(!isChecked && checkedItems.find(one => one === code)){
+      const filter = checkedItems.filter(one => one !== code)
+      setCheckedItems([...filter])
+    }
+  }
+
+  const onCheckedAll = useCallback((checked) => {
+    if(checked){
+      const checkedItemsArray = [];
+      dummy.forEach(data => checkedItemsArray.push(data.id));
+      setCheckedItems(checkedItemsArray)
+    }else{
+      setCheckedItems([]);
+    }
+  },
+  [dummy]
+  );
+
+  // 결제하기 modal 
+  const ModalStyle = {
+    overlay: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(255, 255, 255, 0.75)',
+    },
+    content: {
+      position: 'absolute',
+      width: '445px',
+      height: '700px',
+      position: 'absolute',
+      top: '90px',
+      left: '30%',
+      right: '40px',
+      bottom: '40px',
+    },
   };
+  const [showModal, setShowModal] = useState(false);
+  const openModal = () => {
+		setShowModal(showModal => !showModal);
+	};
 
-  const [isChecked, setIsChecked] = useState(false);
-  const onChecked = useCallback((e) => {
-    setIsChecked(!isChecked);
-  },[isChecked]);
+  // 상품금액 계산 
+  const [selectedPrice, setSelectedPrice] = useState(0);
+  
 
-
-
+  
 
   return <>
   <MypageMain>
@@ -43,8 +81,10 @@ function Cart() {
         <thead>
           <tr>
             <th scope="col">
-              <input type="checkbox" id="check_all"  checked/>
-              <label for="check_all" onClick={e => onChecked(e)} className={isChecked ? 'active' : 'hide'}></label>
+              <label>
+              <input type="checkbox" id="check_all"  onChange={(e) => onCheckedAll(e.target.checked)} 
+              checked = { checkedItems.length === 0 ? false : checkedItems.length === dummy.length ? true : false} />
+              </label>
             </th>
             <th scope="col">상품정보</th>
             <th scope="col">상품금액</th>
@@ -54,12 +94,26 @@ function Cart() {
             <th>&nbsp;</th>
           </tr>
         </thead>
-        <Tr data={dummyData} />
+        {dummy.map((data, index) => (
+          <CartTable 
+          key={data.id}
+          id = {data.id} 
+          img={data.url} 
+          brand={data.brandName} 
+          model={data.model} 
+          price={data.price}
+          state={data.orderstatus}
+          option={data.option}
+          checkedItems={checkedItems}
+          setCheckedItems = {setCheckedItems}
+          checkedItemHandler = {checkedItemHandler}
+           />
+        ))}   
       </OrderTable>
       <CartPayment>
         <li>
           <p>상품금액</p>
-          <p><span>{dummyData.ProductPrice}</span>원</p>
+          <p><span>0</span>원</p>
         </li>
         <li>
           <FaPlus />
@@ -73,11 +127,18 @@ function Cart() {
         </li>
         <li>
           <p>최종 결제 금액</p>
-          <p><span>{dummyData.ProductPrice}</span>원</p>
+          <p><span>0</span>원</p>
         </li>
       </CartPayment>
       <OrderBtn>
-        <button>결제하기</button>
+        <button onClick={openModal}>결제하기</button>
+        {showModal ? (
+					<Modal style={ModalStyle} isOpen={true}>
+						<Order openModal={openModal} price={selectedPrice + dummy.price} />
+					</Modal>
+				) : (
+					<></>
+				)}
       </OrderBtn>
     </div>;
   </MypageMain>

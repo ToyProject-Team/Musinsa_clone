@@ -12,82 +12,7 @@ export const OrderTable = styled.table`
 		border-bottom: 1px solid #000000;
 		font-size: 16px;
 		vertical-align: middle;
-		font-weight: normal;
-		#check_all{
-			display: block;
-			position: absolute;
-			overflow: hidden;
-			width: 1px;
-			height: 1px;
-			clip: rect(0 0 0 0);
-		}
-		label{
-			width: 0;
-			height: 21px;
-			padding-left: 22px;
-			overflow: hidden;
-			display: inline-block;
-			font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-			line-height: 1.5;
-			font-size: 14px;
-			position: relative;
-			cursor: pointer;
-
-		}
-		.active{
-			&::before{
-				background-color: #0078ff;
-    			border-color: #0078ff;
-				content: "";
-				display: block;
-				width: 14px;
-				height: 14px;
-				border: 1px solid #0078ff;;
-				position: absolute;
-				left: 3px;
-				top: 2px;
-			}
-			&::after{
-				width: 5px;
-				height: 3px;
-				border-left: 1px solid #ffffff;
-				border-bottom: 1px solid #ffffff;
-				left: 8px;
-				top: 7px;
-				transform: rotate(-45deg);
-				content: "";
-				display: block;
-				position: absolute;
-			}
-
-		}
-		.hide{
-			
-			&::before{
-				background-color: #eee;
-    			border-color: #eee;
-				content: "";
-				display: block;
-				width: 14px;
-				height: 14px;
-				border: 1px solid #ddd;;
-				position: absolute;
-				left: 3px;
-				top: 2px;
-			}
-			&::after{
-				width: 5px;
-				height: 3px;
-				border-left: 1px solid #ffffff;
-				border-bottom: 1px solid #ffffff;
-				left: 8px;
-				top: 7px;
-				transform: rotate(-45deg);
-				content: "";
-				display: block;
-				position: absolute;
-		}
-	}
+		font-weight: normal;	
 		
 	}
 	.cart_cont {
@@ -114,85 +39,13 @@ export const OrderTable = styled.table`
 				border-bottom: 1px solid #f5f5f5;
 				text-align: center;
 				vertical-align: middle;
-				word-break: break-all;
-
-				#cart_check{
-					margin: 0;
-					box-sizing: border-box;
-    				padding: 0;
-					display: block;
-					position: absolute;
-					overflow: hidden;
-					width: 1px;
-					height: 1px;
-					clip: rect(0 0 0 0);
-				}
-				label{
-			width: 0;
-			height: 21px;
-			padding-left: 22px;
-			overflow: hidden;
-			display: inline-block;
-			font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-			line-height: 1.5;
-			font-size: 14px;
-			position: relative;
-			cursor: pointer;
+				word-break: break-all;			
 
 		}
-		.active{
-			&::before{
-				background-color: #0078ff;
-    			border-color: #0078ff;
-				content: "";
-				display: block;
-				width: 14px;
-				height: 14px;
-				border: 1px solid #0078ff;;
-				position: absolute;
-				left: 3px;
-				top: 2px;
-			}
-			&::after{
-				width: 5px;
-				height: 3px;
-				border-left: 1px solid #ffffff;
-				border-bottom: 1px solid #ffffff;
-				left: 8px;
-				top: 7px;
-				transform: rotate(-45deg);
-				content: "";
-				display: block;
-				position: absolute;
-			}
+		
 
 		}
-		.hide{
-			
-			&::before{
-				background-color: #eee;
-    			border-color: #eee;
-				content: "";
-				display: block;
-				width: 14px;
-				height: 14px;
-				border: 1px solid #ddd;;
-				position: absolute;
-				left: 3px;
-				top: 2px;
-			}
-			&::after{
-				width: 5px;
-				height: 3px;
-				border-left: 1px solid #ffffff;
-				border-bottom: 1px solid #ffffff;
-				left: 8px;
-				top: 7px;
-				transform: rotate(-45deg);
-				content: "";
-				display: block;
-				position: absolute;
-		}
+		
 	}
 				
 				.input_amount{
@@ -254,7 +107,7 @@ export const OrderTable = styled.table`
 					padding: 5px;
 					opacity: 0.2;
 				}
-			}
+
 			.top{
 				vertical-align: top;
 				div{
@@ -276,9 +129,6 @@ export const OrderTable = styled.table`
 					}
 				}
 			}
-		}
-
-}
 		
 `;
 
