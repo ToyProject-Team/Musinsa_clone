@@ -22,7 +22,7 @@ export const CreateModal = styled.div`
 		background-color: rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1);
 		border-radius: 6px;
 		user-select: none;
-		max-width: 440px;
+		max-width: 500px;
 		padding: 30px 40px;
 		z-index: 1012;
 		position: relative;
