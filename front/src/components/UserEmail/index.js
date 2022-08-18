@@ -13,6 +13,7 @@ const UserEmail = ({ email, setEmail, onChangeEmail, placeholder, title, reg }) 
 		setEmail('');
 	}, [setEmail]);
 
+	console.log(title);
 	return (
 		<>
 			<LoginContainer>
@@ -35,7 +36,8 @@ const UserEmail = ({ email, setEmail, onChangeEmail, placeholder, title, reg }) 
 						</button>
 					)}
 				</div>
-				{signUpPage && !reg && <p>아이디는 필수정보 입니다.</p>}
+				{signUpPage && !reg && title && <p>아이디는 필수정보 입니다.</p>}
+				{signUpPage && !reg && !title && <p>답변은 필수정보 입니다.</p>}
 			</LoginContainer>
 		</>
 	);

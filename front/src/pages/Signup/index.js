@@ -37,11 +37,13 @@ const Signup = () => {
 	const passwordConfirmRef = useRef();
 
 	const [auth, setAuth] = useState('emailAuth');
-	const [authNumber, onChangeauthNumber, setauthNumber] = useInput('');
+	const [authNumber, setauthNumber] = useState('');
+	const [authNumberReg, setauthNumberReg] = useState(true);
 	const [authStage, setAuthStage] = useState(1);
 
 	const [question, onChangeQuestion, setQuestion] = useInput('1');
-	const [answer, onChangeAnswer, setAnswer] = useInput('');
+	const [answer, setAnswer] = useState('');
+	const [answerReg, setAnswerReg] = useState(true);
 
 	const [checkValue, setCheckValue] = useState({
 		checkAll: false,
@@ -76,15 +78,22 @@ const Signup = () => {
 	const onChangeRadio = useCallback(
 		e => {
 			setAuth(e.target.value);
+			setauthNumber('');
+			setauthNumberReg(true);
 			setAuthStage(1);
 		},
 		[auth],
 	);
 
-	const onClickAuth = useCallback(e => {
-		if (authStage === 1) setModalAuth(true);
-		else if (authStage === 2) setModalAuthConfirm(true);
-	}, []);
+	const onClickAuth = useCallback(
+		e => {
+			if (authNumberReg) {
+				if (authStage === 1) setModalAuth(true);
+				else if (authStage === 2) setModalAuthConfirm(true);
+			}
+		},
+		[authNumberReg, authStage],
+	);
 
 	const onChangeAddress = useCallback(e => {
 		const name = e.target.name;
@@ -176,8 +185,13 @@ const Signup = () => {
 		setModalAuth(false);
 		setModalAuthConfirm(false);
 
-		if (authStage === 1) setAuthStage(2);
-		else if (authStage === 2) setAuthStage(3);
+		if (authStage === 1) {
+			setAuthStage(2);
+			setauthNumber('');
+		} else if (authStage === 2) {
+			setAuthStage(3);
+			setauthNumber('');
+		}
 	}, [authStage]);
 
 	useEffect(() => {
@@ -219,6 +233,45 @@ const Signup = () => {
 		setPasswordConfirm(e.target.value);
 	}, []);
 
+	const onChangeauthNumber = useCallback(
+		e => {
+			let regExp;
+
+			if (authStage === 1) {
+				if (auth === 'emailAuth')
+					regExp =
+						/^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+				else if (auth === 'phoneAuth') regExp = /^[0-9\b -]{0,13}$/;
+			} else if (authStage === 2) {
+				regExp = /^[+-]?\d*(\.?\d*)?$/;
+			}
+
+			if (regExp.test(e.target.value)) setauthNumberReg(true);
+			else setauthNumberReg(false);
+
+			setauthNumber(e.target.value);
+		},
+		[auth, authStage],
+	);
+
+	const onChangeAnswer = useCallback(e => {
+		if (e.target.value.trim().length > 0) setAnswerReg(true);
+		else setAnswerReg(false);
+
+		setAnswer(e.target.value);
+	}, []);
+
+	// 자동으로 하이픈 넣기
+	useEffect(() => {
+		if (auth === 'phoneAuth') {
+			if (authNumber.length === 10) {
+				setauthNumber(authNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+			}
+			if (authNumber.length === 13) {
+				setauthNumber(authNumber.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+			}
+		}
+	}, [auth, authNumber]);
 	// if (data) {
 	// 	return <Navigate to="/login" />;
 	// }
@@ -250,8 +303,8 @@ const Signup = () => {
 							email={email}
 							setEmail={setEmail}
 							onChangeEmail={onChangeEmail}
-							reg={emailReg}
 							placeholder="영문, 숫자 4-11자"
+							reg={emailReg}
 							title={true}
 						></UserEmail>
 						<UserPassword
@@ -309,6 +362,7 @@ const Signup = () => {
 
 							<div className="email-check">
 								<input
+									maxLength={auth === 'phoneAuth' && 13}
 									type={auth === 'phoneAuth' ? 'tel' : 'email'}
 									value={authNumber}
 									onChange={onChangeauthNumber}
@@ -320,6 +374,7 @@ const Signup = () => {
 									</button>
 								)}
 								<button
+									type="button"
 									className={authStage === 3 ? 'auth-confirm success' : 'auth-confirm'}
 									onClick={() => onClickAuth()}
 								>
@@ -327,7 +382,14 @@ const Signup = () => {
 								</button>
 							</div>
 
-							<p>이메일 주소가 올바르지 않습니다.</p>
+							{authStage === 1 && auth === 'emailAuth' && !authNumberReg && (
+								<p>이메일 주소가 올바르지 않습니다.</p>
+							)}
+							{authStage === 1 && auth === 'phoneAuth' && !authNumberReg && (
+								<p>휴대폰 번호가 올바르지 않습니다.</p>
+							)}
+							{authStage === 2 && !authNumberReg && <p>숫자만 입력해주시길 바랍니다.</p>}
+							{authStage === 2 && !authNumberReg && <p>인증번호가 정확하지 않습니다.</p>}
 							<p className="helper-text">계정 분실 시 본인인증 정보로 활용됩니다.</p>
 						</SignupContainer>
 
@@ -337,6 +399,7 @@ const Signup = () => {
 								onChangeAnswer,
 								setAnswer,
 								onChangeQuestion,
+								answerReg,
 							}}
 						></UserFind>
 						<UserAddress props={{ deliveryInfo, setDeliveryInfo, onChangeAddress }}></UserAddress>
