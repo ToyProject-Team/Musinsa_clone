@@ -79,6 +79,7 @@ function CartTable({img, brand, model, price, state, option, checkedItems, setCh
 			</tr>
 			
 		</tbody>
+	
 	);
 }
 

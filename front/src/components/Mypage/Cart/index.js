@@ -60,7 +60,14 @@ function Cart() {
 
   // 상품금액 계산 
   const [selectedPrice, setSelectedPrice] = useState(0);
-  
+  const [checkPrice, setCheckedPrice] = useState([]);
+  const [sum, setSum] = useState(0);
+  const pricecalc = (price) =>{
+    
+  }
+
+ 
+
 
   
 
