@@ -19,6 +19,7 @@ import AuthModal from 'components/AuthModal';
 import AuthConfirmModal from 'components/AuthConfirmModal';
 import { PostApi } from 'utils/api';
 import { Navigate } from 'react-router';
+import { getData } from 'utils/getData';
 
 const Signup = () => {
 	const [data, setData] = useState(false);
