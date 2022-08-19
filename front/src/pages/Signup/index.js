@@ -18,33 +18,31 @@ import {
 import AuthModal from 'components/AuthModal';
 import AuthConfirmModal from 'components/AuthConfirmModal';
 import { PostApi } from 'utils/api';
-import { Navigate } from 'react-router';
-import { getData } from 'utils/getData';
 
 const Signup = () => {
 	const [data, setData] = useState(false);
 
 	const [email, setEmail] = useState('');
-	const [emailReg, setEmailReg] = useState(true);
+	const [emailReg, setEmailReg] = useState(false);
 
 	const [password, setPassword] = useState('');
-	const [passwordReg, setPasswordReg] = useState(true);
+	const [passwordReg, setPasswordReg] = useState(false);
 	const [passwordLookButton, setPasswordLookButton] = useState(false);
 	const passwordRef = useRef();
 
 	const [passwordConfirm, setPasswordConfirm] = useState('');
-	const [passwordConfirmReg, setPasswordConfirmReg] = useState(true);
+	const [passwordConfirmReg, setPasswordConfirmReg] = useState(false);
 	const [passwordConfirmLookButton, setPasswordConfirmLookButton] = useState(false);
 	const passwordConfirmRef = useRef();
 
 	const [auth, setAuth] = useState('emailAuth');
 	const [authNumber, setauthNumber] = useState('');
-	const [authNumberReg, setauthNumberReg] = useState(true);
+	const [authNumberReg, setauthNumberReg] = useState(false);
 	const [authStage, setAuthStage] = useState(1);
 
 	const [question, onChangeQuestion, setQuestion] = useInput('1');
 	const [answer, setAnswer] = useState('');
-	const [answerReg, setAnswerReg] = useState(true);
+	const [answerReg, setAnswerReg] = useState(false);
 
 	const [checkValue, setCheckValue] = useState({
 		checkAll: false,
@@ -72,6 +70,8 @@ const Signup = () => {
 	const [modalAuth, setModalAuth] = useState(false);
 	const [modalAuthConfirm, setModalAuthConfirm] = useState(false);
 
+	const [signUpBtn, setSignUpBtn] = useState(false);
+
 	const onClickClear = useCallback(() => {
 		setauthNumber('');
 	}, [authNumber]);
@@ -95,16 +95,6 @@ const Signup = () => {
 		},
 		[authNumberReg, authStage],
 	);
-
-	const onChangeAddress = useCallback(e => {
-		const name = e.target.name;
-		const value = e.target.value;
-
-		setDeliveryInfo(prevState => ({
-			...prevState,
-			[name]: value,
-		}));
-	}, []);
 
 	const onClickCheck = useCallback(
 		e => {
@@ -152,7 +142,10 @@ const Signup = () => {
 				agreement: true,
 				questionType: question,
 				questionAnswer: answer,
-				rank: '브론즈',
+				name: 'string',
+				mobile: 'string',
+				phone: 'string',
+				address: 'string',
 			};
 
 			await PostApi('/api/auth/signup', params)
@@ -211,31 +204,35 @@ const Signup = () => {
 
 	// onChange 정규식 검사
 	const onChangeEmail = useCallback(e => {
+		setEmail(e.target.value);
+
 		const regExp = /^[a-z]+[a-z0-9]{3,10}$/g;
 		if (regExp.test(e.target.value)) setEmailReg(true);
 		else setEmailReg(false);
-
-		setEmail(e.target.value);
 	}, []);
 
 	const onChangePassword = useCallback(e => {
+		setPassword(e.target.value);
+
 		const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,25}$/;
 		if (regExp.test(e.target.value)) setPasswordReg(true);
 		else setPasswordReg(false);
-
-		setPassword(e.target.value);
 	}, []);
 
-	const onChangePasswordConfirm = useCallback(e => {
-		const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,25}$/;
-		if (regExp.test(e.target.value)) setPasswordConfirmReg(true);
-		else setPasswordConfirmReg(false);
+	const onChangePasswordConfirm = useCallback(
+		e => {
+			setPasswordConfirm(e.target.value);
 
-		setPasswordConfirm(e.target.value);
-	}, []);
+			if (password === e.target.value) setPasswordConfirmReg(true);
+			else setPasswordConfirmReg(false);
+		},
+		[password],
+	);
 
 	const onChangeauthNumber = useCallback(
 		e => {
+			setauthNumber(e.target.value);
+
 			let regExp;
 
 			if (authStage === 1) {
@@ -249,18 +246,33 @@ const Signup = () => {
 
 			if (regExp.test(e.target.value)) setauthNumberReg(true);
 			else setauthNumberReg(false);
-
-			setauthNumber(e.target.value);
 		},
 		[auth, authStage],
 	);
 
 	const onChangeAnswer = useCallback(e => {
+		setAnswer(e.target.value);
+
 		if (e.target.value.trim().length > 0) setAnswerReg(true);
 		else setAnswerReg(false);
-
-		setAnswer(e.target.value);
 	}, []);
+
+	// 가입하기 버튼 활성화
+	useEffect(() => {
+		console.log(deliveryInfo);
+		if (
+			(emailReg && passwordReg && passwordConfirmReg,
+			answerReg,
+			deliveryInfo.name &&
+				deliveryInfo.mobile1 &&
+				deliveryInfo.mobile2 &&
+				deliveryInfo.mobile3 &&
+				deliveryInfo.address1 &&
+				deliveryInfo.address2)
+		)
+			setSignUpBtn(true);
+		else setSignUpBtn(false);
+	}, [emailReg, passwordReg, passwordConfirmReg, answerReg, deliveryInfo]);
 
 	// 자동으로 하이픈 넣기
 	useEffect(() => {
@@ -306,6 +318,7 @@ const Signup = () => {
 							onChangeEmail={onChangeEmail}
 							placeholder="영문, 숫자 4-11자"
 							reg={emailReg}
+							setReg={setEmailReg}
 							title={true}
 						></UserEmail>
 						<UserPassword
@@ -383,13 +396,17 @@ const Signup = () => {
 								</button>
 							</div>
 
-							{authStage === 1 && auth === 'emailAuth' && !authNumberReg && (
-								<p>이메일 주소가 올바르지 않습니다.</p>
+							{authStage === 1 &&
+								auth === 'emailAuth' &&
+								!authNumberReg &&
+								authNumber?.length > 0 && <p>이메일 주소가 올바르지 않습니다.</p>}
+							{authStage === 1 &&
+								auth === 'phoneAuth' &&
+								!authNumberReg &&
+								authNumber?.length > 0 && <p>휴대폰 번호가 올바르지 않습니다.</p>}
+							{authStage === 2 && !authNumberReg && authNumber?.length > 0 && (
+								<p>숫자만 입력해주시길 바랍니다.</p>
 							)}
-							{authStage === 1 && auth === 'phoneAuth' && !authNumberReg && (
-								<p>휴대폰 번호가 올바르지 않습니다.</p>
-							)}
-							{authStage === 2 && !authNumberReg && <p>숫자만 입력해주시길 바랍니다.</p>}
 							{authStage === 2 && !authNumberReg && <p>인증번호가 정확하지 않습니다.</p>}
 							<p className="helper-text">계정 분실 시 본인인증 정보로 활용됩니다.</p>
 						</SignupContainer>
@@ -401,9 +418,10 @@ const Signup = () => {
 								setAnswer,
 								onChangeQuestion,
 								answerReg,
+								setAnswerReg,
 							}}
 						></UserFind>
-						<UserAddress props={{ deliveryInfo, setDeliveryInfo, onChangeAddress }}></UserAddress>
+						<UserAddress props={{ deliveryInfo, setDeliveryInfo }}></UserAddress>
 
 						<SignupCheckBox>
 							<div className="all-check">
@@ -490,7 +508,11 @@ const Signup = () => {
 						</SignupCheckBox>
 
 						<SignupButton>
-							<button type="submit" className="signup-button__item active">
+							<button
+								type="submit"
+								disabled={!signUpBtn}
+								className={signUpBtn ? 'signup-button__item active' : 'signup-button__item'}
+							>
 								본인인증하고 가입하기
 							</button>
 						</SignupButton>

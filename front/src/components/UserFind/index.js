@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { SignupContainer } from './styles';
 
 const UserFind = ({ props }) => {
-	const { answer, onChangeAnswer, setAnswer, onChangeQuestion, answerReg } = props;
+	const { answer, onChangeAnswer, setAnswer, onChangeQuestion, answerReg, setAnswerReg } = props;
 
 	return (
 		<>
@@ -30,6 +30,7 @@ const UserFind = ({ props }) => {
 				placeholder="답변"
 				title={false}
 				reg={answerReg}
+				setReg={setAnswerReg}
 			></UserEmail>
 		</>
 	);
