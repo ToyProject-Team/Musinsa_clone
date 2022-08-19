@@ -5,7 +5,7 @@ import useInput from 'hooks/useInput';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { GetApi, PostApi } from 'utils/api';
-import { getToken } from 'utils/getToken';
+import { getToken } from 'utils/getData';
 import {
 	Container,
 	LoginSection,
@@ -62,11 +62,11 @@ const LogIn = () => {
 					switch (result.status) {
 						case 200:
 							if (autoLoginCheck) {
-								localStorage.setItem('token', result.data.accessToken);
-								sessionStorage.removeItem('token');
+								localStorage.setItem('data', result.data);
+								sessionStorage.removeItem('data');
 							} else {
-								sessionStorage.setItem('token', result.data.accessToken);
-								localStorage.removeItem('token');
+								sessionStorage.setItem('data', result.data);
+								localStorage.removeItem('data');
 							}
 
 							setLogin(true);
