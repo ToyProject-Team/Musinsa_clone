@@ -106,7 +106,7 @@ router.post("/logout", authJWT, async (req, res, next) => {
 router.post('/kakao', (req,res) => {
   const kakao = {
     clientID: process.env.KAKAO_ID,
-    redirectUri: 'http://localhost/api/auth/kakao/callback'
+    redirectUri: 'http://localhost:80/api/auth/kakao/callback'
   }
   const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.redirectUri}&response_type=code&scope=profile_nickname,account_email`;
   return res.status(200).send({ url :kakaoAuthURL })
@@ -116,7 +116,7 @@ router.get('/kakao/callback', async (req, res, next) => {
   try {
     const kakao = {
       clientID: process.env.KAKAO_ID,
-      redirectUri: 'http://localhost/api/auth/kakao/callback'
+      redirectUri: 'http://localhost:80/api/auth/kakao/callback'
     }
     token = await axios({//token
       method: 'POST',
