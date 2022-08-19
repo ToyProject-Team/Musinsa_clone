@@ -25,10 +25,6 @@ const Order = loadable(() => import('pages/Order'), {
 	fallback: <div>로딩중</div>,
 });
 
-const Post = loadable(() => import('pages/Post'), {
-	fallback: <div>로딩중</div>,
-});
-
 function App() {
 	return (
 		<UserProvider>
@@ -41,7 +37,6 @@ function App() {
 						<Route path="mypage/*" element={<MyPage />} /> {/* => 마이페이지 */}
 						<Route path="signup" element={<SignUp />} /> {/* => 회원가입 페이지 */}
 						<Route path="order" element={<Order />} /> {/* => 결제 페이지 */}
-						<Route path="post" element={<Post />} /> {/* => 주소 입력 페이지 */}
 					</Routes>
 				</BrowserRouter>
 			</ProductProvider>

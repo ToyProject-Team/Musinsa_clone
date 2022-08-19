@@ -15,19 +15,6 @@ import {
 import { useState, useCallback, useRef } from 'react';
 import { useProductState } from 'context/ProductContext';
 
-const dummyUser = {
-	userName: '김소희',
-};
-
-const dummyPaymentInfo = {
-	merchant_uid: '23486501', // 주문번호
-	cancel_request_amount: 2000, // 환불금액
-	reason: '테스트 결제 환불', // 환불사유
-	refund_holder: '홍길동', // [가상계좌 환불시 필수입력] 환불 수령계좌 예금주
-	refund_bank: '88', // [가상계좌 환불시 필수입력] 환불 수령계좌 은행코드(예: KG이니시스의 경우 신한은행은 88번)
-	refund_account: '56211105948400', // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
-};
-
 const Order = props => {
 	const paymentWay = ['신용카드', '가상계좌(무통장)', '카카오페이', '페이코'];
 
@@ -36,17 +23,14 @@ const Order = props => {
 	const [submit, setSubmit] = useState(false);
 	const [selectedAddress, setSelectedAddress] = useState('');
 	const [openPostcode, setOpenPostcode] = useState(false);
-	const [IsAddressSelected, setIsAddressSelected] = useState(false);
+	const [selectedAddressInfo, setSelectedAddressInfo] = useState({
+		zonecode: '',
+		fullAddress: '',
+	});
 
 	const refundAccount = useRef();
 
 	const product = useProductState();
-	// const djfakjdl = useProductState.productReducer();
-
-	const openPostPopup = () => {
-		setOpenPostcode(!openPostcode);
-		window.open('/post', '', 'width=430px,height=500px, scrollbars=no');
-	};
 
 	const toggleActive = useCallback(
 		e => {
@@ -92,47 +76,14 @@ const Order = props => {
 							<span>수령인</span>
 							<div>홍길동</div>
 						</div>
-						<div>
-							<span style={{ marginTop: '10px' }}>배송지 선택</span>
-							<div>
-								<label htmlFor="checkAll">
-									<input
-										type="checkbox"
-										name="address"
-										value="기존 배송지"
-										onClick={e => addressChecked(e.target)}
-									/>
-									기존 배송지
-								</label>
-								<label htmlFor="checkAll">
-									<input
-										type="checkbox"
-										name="address"
-										value="신규 배송지"
-										onClick={e => addressChecked(e.target)}
-									/>
-									신규 배송지
-								</label>
-							</div>
-						</div>
+
 						<div>
 							<span>휴대전화</span>
 							<div>01098765432</div>
 						</div>
 						<div>
 							<span>배송지 주소</span>
-							{selectedAddress == '기존 배송지' ? (
-								<div>경기 성남시 분당구 판교역로 235 (에이치스퀘어 엔동)</div>
-							) : (
-								<>
-									<input type="text" placeholder={!openPostcode ? '우편번호' : 'el'} />
-									<input type="text" placeholder="주소" />
-									<input type="text" placeholder="상세 주소" />
-									<AddressButton onClick={openPostPopup}>
-										<span>주소 찾기</span>
-									</AddressButton>
-								</>
-							)}
+							<div>경기 성남시 분당구 판교역로 235 (에이치스퀘어 엔동)</div>
 						</div>
 						<div>
 							<span>배송 메모</span>
@@ -144,7 +95,6 @@ const Order = props => {
 							<option>부재 시 집 앞에 놔주세요</option>
 							<option>배송 전 연락 바랍니다</option>
 							<option>파손 위험이 있으니 배송 시 주의해주세요</option>
-							<option>직접 입력</option>
 						</select>
 					</li>
 				</RefundInfo>

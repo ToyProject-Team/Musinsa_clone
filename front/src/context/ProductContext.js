@@ -49,14 +49,13 @@ const ProductStateContext = createContext();
 const ProductDispatchContext = createContext();
 
 export function ProductProvider({ children }) {
-	const [state, dispatch] = useReducer(productReducer, initialProduct);
-	// const [productState, productDispatch] = useReducer(productReducer, initialProduct);
-	// const [addressState, addressStateDispatch] = useReducer(addressReducer, initialAddress);
+	const [productState, productDispatch] = useReducer(productReducer, initialProduct);
+	const [addressState, addressStateDispatch] = useReducer(addressReducer, initialAddress);
 	return (
-		// <ProductStateContext.Provider value={[productState, addressState]}>
-		// <ProductDispatchContext.Provider value={[productDispatch, addressStateDispatch]}>
-		<ProductStateContext.Provider value={state}>
-			<ProductDispatchContext.Provider value={dispatch}>{children}</ProductDispatchContext.Provider>
+		<ProductStateContext.Provider value={[productState, addressState]}>
+			<ProductDispatchContext.Provider value={[productDispatch, addressStateDispatch]}>
+				{children}
+			</ProductDispatchContext.Provider>
 		</ProductStateContext.Provider>
 	);
 }
