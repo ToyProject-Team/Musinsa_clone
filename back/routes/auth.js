@@ -46,7 +46,11 @@ router.post('/signup', async (req, res, next) => {
           agreement: req.body.agreement== 1 ? 1: 0,
           questionType: req.body.questionType,
           questionAnswer: req.body.questionAnswer,
+          address: req.body.address,
+          phoneNumber: req.body.phoneNumber
         })
+        console.log(req.body.questionType)
+
         return res.status(200).send({ success: true })
     }catch (error) {
         console.error(error)
@@ -102,7 +106,7 @@ router.post("/logout", authJWT, async (req, res, next) => {
 router.post('/kakao', (req,res) => {
   const kakao = {
     clientID: process.env.KAKAO_ID,
-    redirectUri: 'http://localhost/api/auth/kakao/callback'
+    redirectUri: 'http://141.164.48.244/api/auth/kakao/callback'
   }
   const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.redirectUri}&response_type=code&scope=profile_nickname,account_email`;
   return res.status(200).send({ url :kakaoAuthURL })
@@ -112,7 +116,7 @@ router.get('/kakao/callback', async (req, res, next) => {
   try {
     const kakao = {
       clientID: process.env.KAKAO_ID,
-      redirectUri: 'http://localhost/api/auth/kakao/callback'
+      redirectUri: 'http://141.164.48.244/api/auth/kakao/callback'
     }
     token = await axios({//token
       method: 'POST',

@@ -37,6 +37,12 @@ paths:
               questionAnswer:
                 type: string
                 example: 프로그래밍
+              address:
+                type: string
+                example: 전라남도 서구 금호동 101동 1001호
+              phoneNumber:
+                type: string
+                example: 145168755
       responses:
         '200':
           $ref: '#/success'
@@ -297,6 +303,54 @@ paths:
                 example: 인증 번호가 틀리셨습니다
         '500':
           $ref: '#/serverError'
+  /tokenError:
+    post:
+      tags:
+        - auth
+      summary: 토큰 에러 모음
+      responses:
+        '401':
+          description: 토큰이 지급되지 않을 경우
+          schema:
+            properties:
+              success:
+                type: string
+                example: accessToken이 지급되지 않았습니다
+        '402':
+          description: 토큰이 검증에 실패했거나 만료됐을 경우
+          schema:
+            properties:
+              success:
+                type: string
+                example: jwt expired
+        '403':
+          description: 'refresh 토큰 발급 도중 access token, refresh token이 모두 헤더에 없는 경우'
+          schema:
+            properties:
+              success:
+                type: string
+                example: Access token and refresh token are need for refresh!
+        '405':
+          description: refresh 토큰 발급 도중 토큰에 유저 정보가 없을 경우
+          schema:
+            properties:
+              success:
+                type: string
+                example: No authorized!
+        '406':
+          description: refresh 토큰 발급 도중 토큰이 지급되지 않을 경우
+          schema:
+            properties:
+              success:
+                type: string
+                example: accessToken이 지급되지 않았습니다
+        '407':
+          description: refresh 토큰 발급 도중 access 토큰이 만료되지 않았을경우
+          schema:
+            properties:
+              success:
+                type: string
+                example: Access token is not expired!
   /api/product/productList:
     get:
       tags:
@@ -735,102 +789,6 @@ paths:
       tags:
         - shoppingBasket
       summary: 장바구니 상품 삭제
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-        - name: productId
-          in: body
-          type: object
-          properties:
-            productId:
-              type: array
-              items:
-                type: integer
-                format: int64
-              example:
-                - 1
-                - 2
-                - 3
-      responses:
-        '200':
-          $ref: '#/success'
-        '400':
-          description: productId 에 대한 조회 결과가 없을 경우(입력값이 undefined 인지 확인)
-          schema:
-            properties:
-              message:
-                type: string
-                example: 입력값을 다시 확인해주세요
-        '401':
-          description: 유저의 조회 결과가 없습니다 - 토큰에 대한 사용자 정보가 데이터베이스에 존재하지 않습니다
-          schema:
-            properties:
-              message:
-                type: string
-                example: 유저의 조회 결과가 없습니다
-        '402':
-          description: 내 장바구니에 없는 상품을 삭제할 경우
-          schema:
-            properties:
-              message:
-                type: string
-                example: 장바구니에 없는 상품을 삭제 시도하셨습니다
-        '500':
-          $ref: '#/serverError'
-  /api/temp:
-    delete:
-      tags:
-        - shoppingBasket
-      summary: jenkins 적용 확인
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-        - name: productId
-          in: body
-          type: object
-          properties:
-            productId:
-              type: array
-              items:
-                type: integer
-                format: int64
-              example:
-                - 1
-                - 2
-                - 3
-      responses:
-        '200':
-          $ref: '#/success'
-        '400':
-          description: productId 에 대한 조회 결과가 없을 경우(입력값이 undefined 인지 확인)
-          schema:
-            properties:
-              message:
-                type: string
-                example: 입력값을 다시 확인해주세요
-        '401':
-          description: 유저의 조회 결과가 없습니다 - 토큰에 대한 사용자 정보가 데이터베이스에 존재하지 않습니다
-          schema:
-            properties:
-              message:
-                type: string
-                example: 유저의 조회 결과가 없습니다
-        '402':
-          description: 내 장바구니에 없는 상품을 삭제할 경우
-          schema:
-            properties:
-              message:
-                type: string
-                example: 장바구니에 없는 상품을 삭제 시도하셨습니다
-        '500':
-          $ref: '#/serverError'
-  /api/tempdasdas:
-    delete:
-      tags:
-        - shoppingBasket
-      summary: jenkins 적용 확인dassdsd
       parameters:
         - name: Authorization
           in: header

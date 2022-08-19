@@ -25,6 +25,12 @@
             questionAnswer:
               type: string
               example: 프로그래밍
+            address:
+              type: string
+              example: 전라남도 서구 금호동 101동 1001호
+            phoneNumber:
+              type: string
+              example: 01051614563
     responses:
       200:
         $ref: "./openapi.yaml#/success"
@@ -291,5 +297,53 @@
               example: 인증 번호가 틀리셨습니다
       500:
         $ref: "./openapi.yaml#/serverError"
+/tokenError:
+  post:
+    tags:
+      - auth
+    summary: 토큰 에러 모음
+    responses:
+      401:
+        description: 토큰이 지급되지 않을 경우
+        schema:
+          properties:
+            success:
+              type: string
+              example: accessToken이 지급되지 않았습니다
+      402:
+        description: 토큰이 검증에 실패했거나 만료됐을 경우
+        schema:
+          properties:
+            success:
+              type: string
+              example: jwt expired
+      403:
+        description: refresh 토큰 발급 도중 access token, refresh token이 모두 헤더에 없는 경우
+        schema:
+          properties:
+            success:
+              type: string
+              example: Access token and refresh token are need for refresh!
+      405:
+        description: refresh 토큰 발급 도중 토큰에 유저 정보가 없을 경우
+        schema:
+          properties:
+            success:
+              type: string
+              example: No authorized!
+      406:
+        description: refresh 토큰 발급 도중 토큰이 지급되지 않을 경우
+        schema:
+          properties:
+            success:
+              type: string
+              example: accessToken이 지급되지 않았습니다
+      407:
+        description: refresh 토큰 발급 도중 access 토큰이 만료되지 않았을경우
+        schema:
+          properties:
+            success:
+              type: string
+              example: Access token is not expired!
 $ref: "./productAPI.yaml"
 
