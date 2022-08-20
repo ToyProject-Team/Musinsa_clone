@@ -12,6 +12,9 @@ const { sequelize, User } = require('../models')
 const redisClient = require("../utils/redis");
 const authJWT = require('../utils/authJWT')
 const { smtpTransport } = require('../utils/email');
+const e = require('express');
+
+const { promisify } = require("util");
 
 dotenv.config();
 router.post('/signup', async (req, res, next) => {
@@ -23,18 +26,26 @@ router.post('/signup', async (req, res, next) => {
               LoginId: req.body.loginId
         }
         })
-        console.log(exUser)
+        const client = redisClient
+        const getAsync = promisify(client.get).bind(client);
+        const checkSMS = await getAsync(req.body.phoneCheck? req.body.phoneCheck: -111)
+        const checkEmail = await getAsync(req.body.emailCheck? req.body.emailCheck: -111)
+
+        if (!checkSMS && !checkEmail) {
+          return res.status(400).send({ message: "이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다" })
+        }
+        
         if (exUser) {
             return res.status(401).send({ message: "이미 사용중인 아이디 입니다" })
         }
 
-        const checkEmail = await User.findOne({
+        const overlapEmail = await User.findOne({
             where: {
                 email: req.body.email
             }
         })
 
-        if (checkEmail) {
+        if (overlapEmail) {
             return res.status(402).send({ message: "이미 사용중인 이메일 입니다"})
         }
 
@@ -42,12 +53,12 @@ router.post('/signup', async (req, res, next) => {
         const newUser = await User.create({
           loginId: req.body.loginId,
           password: hashedPassword,
-          email: req.body.email,
+          email: checkEmail ? checkEmail: null ,
           agreement: req.body.agreement== 1 ? 1: 0,
           questionType: req.body.questionType,
           questionAnswer: req.body.questionAnswer,
           address: req.body.address,
-          phoneNumber: req.body.phoneNumber
+          phoneNumber: checkSMS ? checkSMS: null
         })
         console.log(req.body.questionType)
 
@@ -106,17 +117,17 @@ router.post("/logout", authJWT, async (req, res, next) => {
 router.post('/kakao', (req,res) => {
   const kakao = {
     clientID: process.env.KAKAO_ID,
-    redirectUri: 'http://localhost:80/api/auth/kakao/callback'
+    redirectUri: 'http://localhost/api/auth/kakao/callback'
   }
   const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.redirectUri}&response_type=code&scope=profile_nickname,account_email`;
   return res.status(200).send({ url :kakaoAuthURL })
 })
-//dasd
+
 router.get('/kakao/callback', async (req, res, next) => {
   try {
     const kakao = {
       clientID: process.env.KAKAO_ID,
-      redirectUri: 'http://localhost:80/api/auth/kakao/callback'
+      redirectUri: 'http://localhost/api/auth/kakao/callback'
     }
     token = await axios({//token
       method: 'POST',
@@ -181,6 +192,15 @@ router.post('/authEmail', async (req, res) => {
     }
     const number = generateRandom(111111,999999)
 
+    const overlapCheck = await User.findOne({
+      where: {
+        email: req.body.email
+      }
+    })
+    console.log(overlapCheck)
+    if (overlapCheck) {
+      return res.status(401).send({ message: '이미 회원가입된 이메일입니다' })
+    }
     const sendEmail = req.body.email;
 
     const mailOptions = {
@@ -189,13 +209,15 @@ router.post('/authEmail', async (req, res) => {
         subject: "[무신사]인증 관련 이메일 입니다",
         text: "오른쪽 숫자 6자리를 입력해주세요 : " + number
     };
-    await smtpTransport.sendMail(mailOptions, (error, responses) => {
+    await smtpTransport.sendMail(mailOptions, async (error, responses) => {
         if (error) {
             console.error(error)
             return res.status(400).send({ message: "유효하지 않은 이메일입니다" })
         } else {
         /* 클라이언트에게 인증 번호를 보내서 사용자가 맞게 입력하는지 확인! */
-            return res.status(200).send({ number: number })
+          await redisClient.set(req.body.email, number);
+          await redisClient.expire(req.body.email, 180)
+          return res.status(200).send({ number: number })
         }
         smtpTransport.close();
     });
@@ -204,6 +226,30 @@ router.post('/authEmail', async (req, res) => {
     next(e)
   }
 })
+
+router.post('/CheckEmail', async (req, res, next) => {
+  try {
+    console.log("?")
+    const client = redisClient
+    const getAsync = promisify(client.get).bind(client);
+    const checkEmail = await getAsync(req.body.email)
+    if (!checkEmail) {
+      return res.status(400).send({ message: "이메일 인증 시도를 되지 않은 이메일입니다" })
+    }
+    if (checkEmail != req.body.number) {
+      return res.status(401).send({ message: '이메일 인증 번호가 일치하지 않습니다' })
+    }
+    console.log("?")
+    const emailCheck = new Date().valueOf()
+    await redisClient.set(emailCheck, req.body.email);
+    await redisClient.expire(emailCheck, 1200)
+    res.status(200).send({ emailCheck: emailCheck })
+
+  } catch (e) {
+    console.error(e)
+    next(e)
+  }
+}) 
 
 router.post('/sendSMS', async (req, res, next) => {
   try {
@@ -249,9 +295,10 @@ router.post('/sendSMS', async (req, res, next) => {
       },
     },
     );
+    // console.log(user_phone_number)
     await redisClient.set(user_phone_number, code);
     await redisClient.expire(user_phone_number, 180)
-    res.status(200).send({ message: "success" })
+    res.status(200).send({ success: true })
   } catch (e) {
     console.error(e)
     next(e)
@@ -260,11 +307,10 @@ router.post('/sendSMS', async (req, res, next) => {
 
 router.post('/checkSMS', async (req, res, next) => {
   try {
-    const { phoneNum, code } = req.body;
-
+    const { phoneNumber, code } = req.body;
+    console.log(req.body)
     const client = await redisClient;
-    client.get(phoneNum, function (err, clientCheck) {
-      
+    client.get(phoneNumber, async function (err, clientCheck) {
       console.log(clientCheck)
       console.log(req.body.code)
       if (!clientCheck) {
@@ -273,8 +319,12 @@ router.post('/checkSMS', async (req, res, next) => {
       }
       if (code != clientCheck) {
       return res.status(401).send({ message: "인증 번호가 틀리셨습니다" })
-    }
-      return res.status(200).send({ success: true });
+      }
+      const PhoneCheck = new Date().valueOf()
+      console.log(PhoneCheck)
+      await redisClient.set(PhoneCheck, req.body.phoneNumber);
+      await redisClient.expire(PhoneCheck, 1200)
+      return res.status(200).send({ PhoneCheck });
     });
     // console.log(phoneNum);
     // console.log(code, typeof(code))
