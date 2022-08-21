@@ -251,16 +251,9 @@ paths:
               message:
                 type: string
                 example: 유효하지 않은 이메일입니다
-        '401':
-          description: 입력된 이메일로 가입된 아이디가 이미 존재하는 경우
-          schema:
-            properties:
-              message:
-                type: string
-                example: 이미 회원가입된 이메일입니다
         '500':
           $ref: '#/serverError'
-  /api/auth/CheckEmail:
+  /api/auth/checkEmail:
     post:
       tags:
         - auth
@@ -291,7 +284,7 @@ paths:
             properties:
               message:
                 type: string
-                example: 이메일 인증 시도를 되지 않은 이메일입니다
+                example: 이메일 인증 번호를 요청해야합니다
         '401':
           description: 사용자가 입력한 인증 번호와 서버에서 전송한 인증번호가 일치하지 않을 경우
           schema:
@@ -360,6 +353,151 @@ paths:
               success:
                 type: string
                 example: 인증 번호가 틀리셨습니다
+        '500':
+          $ref: '#/serverError'
+  /api/auth/findId:
+    post:
+      tags:
+        - auth
+      summary: 아이디 찾기
+      parameters:
+        - name: emailCheck
+          in: header
+          required: true
+          description: emailCheck와 phoneCheck 중 선택한 인증 방식으로 한 개만 전달<br>`이메일 인증을 했을 경우 emailCheck만 전달`
+        - name: phoneCheck
+          in: header
+          required: true
+          description: emailCheck와 phoneCheck 중 선택한 인증 방식으로 한 개만 전달<br>`휴대폰 인증을 했을 경우 phoneCheck만 전달`
+      responses:
+        '200':
+          schema:
+            properties:
+              loginId:
+                type: string
+                example: eos0103
+        '400':
+          description: 인증번호를 입력하지 않거나 인증 번호가 만료된 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 인증번호를 입력하지 않거나 인증 번호가 만료되었습니다
+        '401':
+          description: 해당 휴대폰 번호를 가진 유저가 없을 경우
+          schema:
+            properties:
+              success:
+                type: string
+                example: 해당 휴대폰 번호를 가진 유저의 조회 결과가 없습니다
+        '402':
+          description: 해당 이메일을 가진 유저가 없을 경우
+          schema:
+            properties:
+              success:
+                type: string
+                example: 해당 이메일을 가진 유저의 조회 결과가 없습니다
+        '500':
+          $ref: '#/serverError'
+  /api/auth/findPassword:
+    post:
+      tags:
+        - auth
+      summary: 비밀번호 찾기
+      parameters:
+        - name: phoneCheck
+          in: header
+          required: true
+          description: /api/auth/checkSMS 에서 발급받는 토큰
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              loginId:
+                type: string
+                example: eos01033
+              phoneNumber:
+                type: number
+                example: 147970131
+      responses:
+        '200':
+          schema:
+            properties:
+              changePasswordToken:
+                type: string
+                example: 1661055228577
+        '400':
+          description: loginId가 전달되지 않았을 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 로그인 아이디가 전달되지 않았습니다
+        '401':
+          description: loginId 에 대한 유저 조회 결과가 없는 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 해당 로그인 아이디에 대한 유저 조회 결과가 없습니다
+        '402':
+          description: SMS 인증을 하지않고 비밀번호 찾기를 시도할 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: SMS 인증 시도하셔야합니다. 시도하셨다면 세션 스토리지의 phoneCheck가 headers로 전달됐는지 확인해주세요
+        '403':
+          description: loginId의 주인의 핸드폰 번호가 아닌 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 로그인 아이디로 조회된 유저에 대한 전화번호가 아닙니다
+        '500':
+          $ref: '#/serverError'
+  /api/auth/changePassword:
+    post:
+      tags:
+        - auth
+      summary: 비밀번호 변경
+      parameters:
+        - name: changepasswordtoken
+          in: header
+          required: true
+          description: /api/auth/findPassword API 에서 발급받는 토큰
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              password:
+                type: string
+                example: weqqwe12412
+      responses:
+        '200':
+          schema:
+            properties:
+              changePasswordToken:
+                type: string
+                example: 1661055228577
+        '400':
+          description: 토큰을 입력하지 않거나 인증 번호가 만료되었을 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 토큰을 입력하지 않거나 인증 번호가 만료되었습니다
+        '401':
+          description: password 가 전달되지 않았을 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 암호가 전달되지 않았습니다
         '500':
           $ref: '#/serverError'
   /tokenError:
