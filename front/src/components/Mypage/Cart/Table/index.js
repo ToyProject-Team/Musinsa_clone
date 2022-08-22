@@ -1,35 +1,47 @@
-import React, { createContext, useCallback, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { ImgSpan } from '../styles';
 import { FiMinus, FiPlus, FiX } from 'react-icons/fi';
 
-
-function CartTable({img, brand, model, price, state, option, checkedItems, setCheckedItems, id, test, }) {
-
-	// input 입력 
+function CartTable({
+	img,
+	brand,
+	model,
+	price,
+	state,
+	option,
+	checkedItems,
+	setCheckedItems,
+	setSelectedPrice,
+	id,
+	test,
+}) {
+	// input 입력
 	const [value, setValue] = useState('1');
 	const handleChange = ({ target: { value } }) => setValue(value);
 
 	// 개별 체크박스
 	const onChecked = useCallback(
-		(checked, id) =>{
-		  if(checked) {
-			setCheckedItems([...checkedItems, id]);
-		  } else {
-			setCheckedItems(checkedItems.filter((el) => el !== id));
-		  }
-		checked === true && test()
+		(checked, id) => {
+			console.log(123, price);
+			if (checked) {
+				setCheckedItems([...checkedItems, id]);
+				setSelectedPrice(prev => [...prev, price]);
+			} else {
+				setCheckedItems(checkedItems.filter(el => el !== id));
+				setSelectedPrice(prev => prev.filter(el => el !== price));
+			}
+			// checked === true && test()
 		},
 		[checkedItems],
-	  );
-
+	);
 
 	return (
 		<tbody>
 			<tr>
-				<td colSpan="7" className='cart_cont'>
+				<td colSpan="7" className="cart_cont">
 					<table>
 						<colgroup>
-							<col width="3.62%"/>
+							<col width="3.62%" />
 							<col width="*" />
 							<col width="9.5%" />
 							<col width="12%" />
@@ -41,38 +53,50 @@ function CartTable({img, brand, model, price, state, option, checkedItems, setCh
 							<tr>
 								<td>
 									<label key={id}>
-									<input name="oncheck" type="checkbox" checked={checkedItems.includes(id) ? true : false} 
-									onChange={ e => onChecked(e.target.checked, id, price)} />
+										<input
+											name="oncheck"
+											type="checkbox"
+											checked={checkedItems.includes(id) ? true : false}
+											onChange={e => onChecked(e.target.checked, id, price)}
+										/>
 									</label>
 								</td>
-								<td className='top'>
+								<td className="top">
 									<div>
-									<ImgSpan>
-										<img src={img} alt="더미데이터" />
-									</ImgSpan>
-									<ul>
-										<li>{brand}</li>
-										<li>
-											<strong>{model}</strong>
-										</li>
-										<li>{option}</li>
-									</ul>
+										<ImgSpan>
+											<img src={img} alt="더미데이터" />
+										</ImgSpan>
+										<ul>
+											<li>{brand}</li>
+											<li>
+												<strong>{model}</strong>
+											</li>
+											<li>{option}</li>
+										</ul>
 									</div>
 								</td>
 								<td> {price}원</td>
 								<td>
-									<div className='input_amount'>
-									<button><FiMinus /></button>
-									<input type="text" value={value} onChange={handleChange}></input>
-									<button><FiPlus /></button>
-									</div>					
+									<div className="input_amount">
+										<button>
+											<FiMinus />
+										</button>
+										<input type="text" value={value} onChange={handleChange}></input>
+										<button>
+											<FiPlus />
+										</button>
+									</div>
 								</td>
 								<td>{price}원</td>
 								<td>{state}</td>
 								<td>
 									<div>
-										<a href='' className='btn'>결제하기</a>
-										<a href='' className='del_btn'><FiX /></a>
+										<a href="" className="btn">
+											결제하기
+										</a>
+										<a href="" className="del_btn">
+											<FiX />
+										</a>
 									</div>
 								</td>
 							</tr>
@@ -80,9 +104,7 @@ function CartTable({img, brand, model, price, state, option, checkedItems, setCh
 					</table>
 				</td>
 			</tr>
-			
 		</tbody>
-	
 	);
 }
 
