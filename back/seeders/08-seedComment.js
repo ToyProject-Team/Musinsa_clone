@@ -41,7 +41,7 @@ module.exports = {
         })
     }
     
-    await queryInterface.bulkInsert("comments", dummyComment);
+    await queryInterface.bulkInsert("Comments", dummyComment);
   },
 
   async down (queryInterface, Sequelize) {

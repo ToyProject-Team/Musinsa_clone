@@ -225,7 +225,7 @@ module.exports = {
       idxCount+=1
     }
 
-     await queryInterface.bulkInsert("productImgs", dummyProductImg);
+     await queryInterface.bulkInsert("ProductImgs", dummyProductImg);
   },
 
   async down (queryInterface, Sequelize) {

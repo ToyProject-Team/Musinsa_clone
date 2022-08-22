@@ -17,7 +17,7 @@ module.exports = {
       }
     }
     
-    await queryInterface.bulkInsert("smallCategories", dummySmallCategory);
+    await queryInterface.bulkInsert("SmallCategories", dummySmallCategory);
   },
 
   async down (queryInterface, Sequelize) {

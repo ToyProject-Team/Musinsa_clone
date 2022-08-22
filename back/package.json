@@ -7,6 +7,7 @@
     "api-docs": "swagger-cli bundle swagger/openapi.yaml --outfile swagger.yaml --type yaml",
     "start": "cross-env NODE_ENV=production nodemon apps",
     "db:create": "cross-env NODE_ENV=production npx sequelize db:create",
+    "db:seed:all": "cross-env NODE_ENV=production npx sequelize db:seed:all",
     "production": "cross-env NODE_ENV=production pm2 start app.js"
   },
   "author": "",
