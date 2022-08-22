@@ -17,7 +17,14 @@ import {
 import AuthModal from 'components/AuthModal';
 import AuthConfirmModal from 'components/AuthConfirmModal';
 import { PostApi } from 'utils/api';
-import { EMAIL, PHONENUMBER, useUserDispatch, useUserState } from 'context/UserContext';
+import {
+	EMAIL,
+	EMAILCHECK,
+	PHONECHECK,
+	PHONENUMBER,
+	useUserDispatch,
+	useUserState,
+} from 'context/UserContext';
 import axios from 'axios';
 
 const Signup = () => {
@@ -119,8 +126,13 @@ const Signup = () => {
 					};
 
 					PostApi('/api/auth/checkEmail', params)
-						.then(() => {
+						.then(res => {
 							setModalAuthConfirm(true);
+
+							const payload = {
+								emailCheck: res.data.emailCheck,
+							};
+							dispatch({ type: EMAILCHECK, payload });
 						})
 						.catch(err => {
 							setauthNumberBtnReg(true);
@@ -158,8 +170,13 @@ const Signup = () => {
 					};
 
 					PostApi('/api/auth/checkSMS', params)
-						.then(() => {
+						.then(res => {
 							setModalAuthConfirm(true);
+
+							const payload = {
+								phoneCheck: res.data.phoneCheck,
+							};
+							dispatch({ type: PHONECHECK, payload });
 						})
 						.catch(err => {
 							setauthNumberBtnReg(false);
@@ -210,19 +227,31 @@ const Signup = () => {
 		async e => {
 			e.preventDefault();
 
+			const { emailCheck } = user;
+
+			// const params = {
+			// 	loginId: email,
+			// 	password: password,
+			// 	agreement: checkValue.checkSns ? '1' : '0',
+			// 	questionType: '1',
+			// 	questionAnswer: 'hello',
+			// 	address: `(${deliveryInfo.address1})${deliveryInfo.address2}${deliveryInfo.address3}`,
+			// };
+
 			const params = {
-				loginId: email,
-				password: password,
+				loginId: 'hello@naver.com',
+				password: 'test123123',
 				agreement: '1',
-				questionType: '1',
-				questionAnswer: 'hello',
+				questionType: '6',
+				questionAnswer: '프로그래밍',
 				address: '전라남도 서구 금호동 101동 1001호',
 			};
 
 			axios
 				.post('http://141.164.48.244/api/auth/signup', params, {
 					headers: {
-						emailCheck: 'emailCheck ',
+						'Content-Type': 'application/json',
+						emailCheck: emailCheck,
 					},
 				})
 				.then(res => {
@@ -254,7 +283,7 @@ const Signup = () => {
 			// 		}
 			// 	});
 		},
-		[email, password, auth, authNumber],
+		[email, password, auth, authNumber, checkValue, deliveryInfo],
 	);
 
 	const onCloseModal = useCallback(() => {
@@ -334,7 +363,6 @@ const Signup = () => {
 
 	// 가입하기 버튼 활성화
 	useEffect(() => {
-		console.log(authStage);
 		if (
 			emailReg &&
 			passwordReg &&
@@ -368,6 +396,36 @@ const Signup = () => {
 			}
 		}
 	}, [auth, authNumber]);
+
+	// 약관 모달 이벤트
+	let win;
+	function openPop(open) {
+		if (win != null) {
+			win.close();
+		}
+
+		if (open === 'agree')
+			win = window.open(
+				'/signup/agreement/agree',
+				'개인정보 수집 및 이용 동의 팝업',
+				'width=500px,height=800px,scrollbars=yes',
+			);
+		else if (open === 'terms') {
+			win = window.open(
+				'/signup/agreement/terms',
+				'무신사, 무신사 스토어 이용 악관',
+				'width=500px,height=800px,scrollbars=yes',
+			);
+		} else if (open === 'sns') {
+			win = window.open(
+				'/signup/agreement/sns',
+				'마케팅 활용 및 광고성 정보 수신 동의',
+				'width=500px,height=800px,scrollbars=yes',
+			);
+		}
+
+		win.focus();
+	}
 
 	return (
 		<Container>
@@ -504,9 +562,11 @@ const Signup = () => {
 									<CheckIcon stroke={checkValue.checkAgree ? '#0078ff' : '#D1D1D1'} />
 									[필수] 개인정보 수집 및 이용 동의
 								</label>
-								<a href="signup/agreement/privacy-usage" target="_blank">
+								<a target="_blank" onClick={() => openPop('agree')}>
 									자세히
 								</a>
+
+								{/* <a href="signup/agreement/privacy-usage" target="_blank"></a> */}
 							</div>
 							<div className="check">
 								<label htmlFor="checkTerms">
@@ -521,7 +581,7 @@ const Signup = () => {
 									<CheckIcon stroke={checkValue.checkTerms ? '#0078ff' : '#D1D1D1'} />
 									[필수] 무신사, 무신사 스토어 이용 악관
 								</label>
-								<a href="signup/agreement/privacy-usage" target="_blank">
+								<a target="_blank" onClick={() => openPop('terms')}>
 									자세히
 								</a>
 							</div>
@@ -538,9 +598,6 @@ const Signup = () => {
 									<CheckIcon stroke={checkValue.checkYouth ? '#0078ff' : '#D1D1D1'} />
 									[필수] 만 14세 미만 가입 제한
 								</label>
-								<a href="signup/agreement/privacy-usage" target="_blank">
-									자세히
-								</a>
 							</div>
 							<div className="check">
 								<label htmlFor="checkSns">
@@ -555,7 +612,7 @@ const Signup = () => {
 									<CheckIcon stroke={checkValue.checkSns ? '#0078ff' : '#D1D1D1'} />
 									[선택] 마케팅 활용 및 광고성 정보 수신 동의
 								</label>
-								<a href="signup/agreement/privacy-usage" target="_blank">
+								<a target="_blank" onClick={() => openPop('sns')}>
 									자세히
 								</a>
 							</div>
@@ -564,8 +621,8 @@ const Signup = () => {
 						<SignupButton>
 							<button
 								type="submit"
-								// disabled={!signUpBtn}
-								// className={signUpBtn ? 'signup-button__item active' : 'signup-button__item'}
+								disabled={!signUpBtn}
+								className={signUpBtn ? 'signup-button__item active' : 'signup-button__item'}
 							>
 								본인인증하고 가입하기
 							</button>

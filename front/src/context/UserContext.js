@@ -3,13 +3,17 @@ import React, { useReducer, createContext, useContext } from 'react';
 const initialUser = {
 	login: false,
 	token: '',
-	phoneNumber: '',
 	email: '',
+	emailCheck: '',
+	phoneNumber: '',
+	phoneCheck: '',
 };
 
 export const LOGIN = 'LOGIN';
 export const PHONENUMBER = 'PHONENUMBER';
+export const PHONECHECK = 'PHONECHECK';
 export const EMAIL = 'EMAIL';
+export const EMAILCHECK = 'EMAILCHECK';
 
 function userReducer(state, action) {
 	switch (action.type) {
@@ -26,10 +30,22 @@ function userReducer(state, action) {
 				phoneNumber: action.payload.phoneNumber,
 			};
 
+		case PHONECHECK:
+			return {
+				...state,
+				phoneCheck: action.payload.phoneCheck,
+			};
+
 		case EMAIL:
 			return {
 				...state,
 				email: action.payload.email,
+			};
+
+		case EMAILCHECK:
+			return {
+				...state,
+				emailCheck: action.payload.emailCheck,
 			};
 
 		default:
