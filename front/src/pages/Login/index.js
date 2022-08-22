@@ -5,7 +5,7 @@ import useInput from 'hooks/useInput';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { GetApi, PostApi } from 'utils/api';
-import { getToken } from 'utils/getToken';
+import { getData } from 'utils/getData';
 import {
 	Container,
 	LoginSection,
@@ -20,7 +20,7 @@ import {
 } from './styles';
 
 const LogIn = () => {
-	const [login, setLogin] = useState(getToken());
+	const [login, setLogin] = useState(getData());
 
 	const [email, onChangeEmail, setEmail] = useInput('');
 	const [password, onChangePassword, setPassword] = useInput('');
@@ -62,11 +62,11 @@ const LogIn = () => {
 					switch (result.status) {
 						case 200:
 							if (autoLoginCheck) {
-								localStorage.setItem('token', result.data.accessToken);
-								sessionStorage.removeItem('token');
+								localStorage.setItem('data', JSON.stringify(result.data));
+								sessionStorage.removeItem('data');
 							} else {
-								sessionStorage.setItem('token', result.data.accessToken);
-								localStorage.removeItem('token');
+								sessionStorage.setItem('data', JSON.stringify(result.data));
+								localStorage.removeItem('data');
 							}
 
 							setLogin(true);

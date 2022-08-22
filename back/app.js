@@ -10,9 +10,12 @@ const path = require("path");
 const { createServer } = require('http')
 const morgan = require('morgan')
 const multer = require('multer');
+const nunjucks = require('nunjucks');
 
 //내부모듈
+const webSocket = require('./socket')
 const db = require('./models')
+const alertRouter = require('./routes/alert')
 const authRouter = require('./routes/auth')
 const productRouter = require('./routes/product')
 const myPageRouter = require('./routes/mypage')
@@ -26,7 +29,7 @@ const swaggerSpec = YAML.load(path.join(__dirname, "swagger.yaml"));
 //서버 가동
 dotenv.config();
 const app = express();
-const httpServer = createServer(app)
+// const httpServer = createServer(app)
 db.sequelize
   // .sync()
   .sync(
@@ -38,12 +41,18 @@ db.sequelize
   .catch(console.error);
 
 // if (process.env.NODE.ENV === 'production') {
-  app.use(morgan('combined'))
+  // app.use(morgan('combined'))
 //   app.use(hpp());
 //   app.use(helmet());
 // } else {
 //   app.use(morgan('dev'))
 // }
+app.set('view engine', 'html');
+nunjucks.configure('views', {
+  express: app,
+  watch: true,
+});
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   cors({
     origin: true,
@@ -58,6 +67,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use('/api/alert', alertRouter)
 app.use('/api/shoppingBasket', shoppingBasketRouter)
 app.use('/api/mypage', myPageRouter)
 app.use('/api/product', productRouter)
@@ -68,7 +78,8 @@ app.use(
     swaggerUi.setup(swaggerSpec, { explorer: true }) //검색 허용가능
 );
 app.use((err, req, res, next) => {
-  res.send({ message: err})
+  console.log(err)
+  res.send({ errMessage: err})
 });
 
 var AWS = require('aws-sdk');
@@ -152,4 +163,6 @@ app.use('/temp', (req, res) => {
 })
 
 //포트 설정
-httpServer.listen(80);
+// const server = httpServer.listen(80);
+const server = app.listen(80);
+webSocket(server)

@@ -3,10 +3,13 @@ import React, { useReducer, createContext, useContext } from 'react';
 const initialUser = {
 	login: false,
 	token: '',
+	phoneNumber: '',
+	email: '',
 };
 
 export const LOGIN = 'LOGIN';
-export const LOGOUT = 'LOGOUT';
+export const PHONENUMBER = 'PHONENUMBER';
+export const EMAIL = 'EMAIL';
 
 function userReducer(state, action) {
 	switch (action.type) {
@@ -17,8 +20,17 @@ function userReducer(state, action) {
 				token: action.payload.token,
 			};
 
-		case LOGOUT:
-			return;
+		case PHONENUMBER:
+			return {
+				...state,
+				phoneNumber: action.payload.phoneNumber,
+			};
+
+		case EMAIL:
+			return {
+				...state,
+				email: action.payload.email,
+			};
 
 		default:
 			throw new Error(`Unhandled action type: ${action.type}`);
