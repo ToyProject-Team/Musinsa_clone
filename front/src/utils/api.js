@@ -12,7 +12,7 @@ export const GetApi = async PATH => {
 
 export const PostApi = async (PATH, params) => {
 	const result = await axios.post(baseUrl + PATH, params, {
-		headers: { 'Content-Type': 'application/json' },
+		headers: { 'Content-Type': 'application/json', },
 	});
 
 	return result;
