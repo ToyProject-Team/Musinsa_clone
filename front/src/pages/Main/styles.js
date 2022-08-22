@@ -3,16 +3,17 @@ import styled from '@emotion/styled';
 export const MainContainer = styled.div`
 	height: 100vh;
 	font-size: 12px;
-	min-width: 100%;
-	// overflow: hidden;
+	min-width: 1229px;
+//	overflow: hidden;
 `;
 
+// 카테고리
 export const Category = styled.div`
 	display: block;
 `;
 
 // 선택된 페이지
-export const PageTitle = styled.div`
+export const CategoryTitle = styled.div`
 	display: flex;
 	flex-shrink: 0;
 	border-bottom: solid 1px;
@@ -46,17 +47,8 @@ export const PageTitle = styled.div`
 	}
 `;
 
-export const Name = styled.div`
-	display: block;
-	padding-top: 15px;
-	padding-bottom: 10px;
-	min-width: 100px;
-	max-width: 100px;
-	font-weight: bold;
-`;
-
 // 중분류
-export const Category2nd = styled.div`
+export const MiddleCategory = styled.div`
 	display: flex;
 	flex-shrink: 0;
 	border-bottom: solid 1px;
@@ -98,15 +90,30 @@ export const Category2nd = styled.div`
 			}
 		}
 
-		& li:hover {
-			text-decoration: underline;
-			color: black;
-			cursor: pointer;
-		}
-	}
+    & ul {
+      display: inline-block;
+      min-width: 600px;
+      max-width: 800px;
+      & li {
+        float: left;
+        width: 100px;
+        padding: 0 0 15px;
+        margin: 0;
+        color: #b2b2b2;
+        
+    } 
+  }
+
+  & li:hover {
+    text-decoration: underline;
+    color: black;
+    cursor: pointer;
+  }
+}
 `;
 
-export const CategoryBrand = styled.div`
+// 브랜드 카테고리
+export const BrandCategory = styled.div`
 	display: flex;
 	border-bottom: solid 1px;
 	border-color: rgb(212, 212, 212);
@@ -126,7 +133,8 @@ export const CategoryBrand = styled.div`
 	}
 `;
 
-export const CategoryEtc = styled.div`
+// 그외 카테고리(색상,가격, 검색)
+export const OtherCategory = styled.div`
 	display: flex;
 	flex-shrink: 0;
 	border-bottom: solid 1px;
@@ -141,18 +149,50 @@ export const CategoryEtc = styled.div`
 	.color,
 	.price {
 		padding-top: 15px;
-		// padding-bottom: 15px;
+		padding-bottom: 15px;
 
 		& ul {
-			display: inline-block;
-			max-width: 800px;
+      display: inline-block;
+      min-width: 1200px;
+
 
 			& li {
 				float: left;
-				width: 100px;
-				padding: 0 0 15px;
+				line-height: 20px;
+				vertical-align: center;
+				padding-right: 17px;
 				margin: 0;
 				color: #b2b2b2;
+
+				input {
+					padding: 5px 7px 4px 4px;
+				}
+			}
+
+			& li:last-child {
+				text-decoration: none;
+
+				input {
+					width: 57px;
+					border: 1px solid #ddd;
+					background: #fff;
+				}
+
+				span {
+					vertical-align: middle;
+					padding: 0 4px;
+				}
+
+				.search_btn {
+					display: inline-block;
+					font-weight: bold;
+					line-height: 15px;
+					padding: 3px 4px 2px 4px;
+					margin: -3px 0 0 4px;
+					border: 1px solid #ddd;
+					background: #fff;
+					cursor: pointer;
+				}
 			}
 		}
 
@@ -191,7 +231,7 @@ export const CategoryEtc = styled.div`
 	}
 `;
 
-export const BrandCategory = styled.div`
+export const BrandList = styled.div`
 	display: flex;
 	flex-shrink: 0;
 	padding-top: 15px;
@@ -199,10 +239,11 @@ export const BrandCategory = styled.div`
 	// padding-bottom: 10px;
 	border-bottom: 1px solid #ddd;
 
-	& div {
-		& ul {
-			display: inline-block;
-			max-width: 800px;
+  & div {
+    & ul {
+      display: inline-block;
+      min-width: 600px;
+      max-width: 800px;
 
 			& li {
 				float: left;
@@ -221,15 +262,20 @@ export const BrandCategory = styled.div`
 	}
 `;
 
-export const BrandGroup = styled.div`
+export const BrandAttribute = styled.div`
 	max-width: 100px;
 	min-width: 100px;
 	padding-right: 16px;
 	font-weight: bold;
 
-	div:first-of-type {
-		margin-bottom: 15px;
-	}
+  & span {
+    padding-left: 5px;
+    color: #f33;
+  }
+
+  div:first-of-type {
+    margin-bottom: 15px;
+  }
 
 	div:last-child {
 		& p:hover {
@@ -262,12 +308,41 @@ export const BrandGroup = styled.div`
 	}
 `;
 
+
+export const CategoryName = styled.div`
+	display: block;
+	padding-top: 15px;
+	padding-bottom: 10px;
+	min-width: 100px;
+	max-width: 100px;
+	font-weight: bold;
+
+	& div:last-child {
+		width: 80px;
+		position: relative;
+
+		input {
+			width: 70px;
+			padding: 2px 2px 2px 2px;
+			background: #fff;
+			border: 1px solid #ddd;
+		}
+
+		img {
+			position: absolute;
+			top:20px;
+			right:10px;
+		}
+	}
+`;
+
 // Item List
 export const ItemSection = styled.div`
 	padding-top: 15px;
 	padding-left: 15px;
 	padding-right: 15px;
 	width: 100%;
+	-webkit-box-sizing: border-box;
 
 	&:hover {
 		background-color: #f2f2f2;
@@ -297,7 +372,7 @@ export const SelectBox = styled.div`
 `;
 
 export const Items = styled.div`
-	min-width: 912px;
+	min-width: 924px;
 	background-color: #fff;
 	height: auto;
 	// border-right: 1px solid #ddd;
@@ -309,7 +384,9 @@ export const SortBox = styled.div`
 	width: 100%;
 	height: 42px;
 	line-height: 42px;
-	border: 1px solid #ddd;
+	border-top: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
 	box-sizing: border-box;
 	background-color: white;
 	// -moz-box-sizing: border-box;
@@ -337,9 +414,11 @@ export const SortBox = styled.div`
 `;
 
 export const ListBox = styled.div`
+	width: 100%;
+
 	& ul {
-		// overflow: hidden;
-		border-left: 1px solid #ddd;
+		display: inline-block;
+		// border-left: 1px solid #ddd;
 	}
 
 	& li {
@@ -348,7 +427,7 @@ export const ListBox = styled.div`
 		width: 100px;
 		margin: 0;
 		background-color: white;
-		border-right: 1px solid #ddd;
+		border-left: 1px solid #ddd;
 		border-bottom: 1px solid #ddd;
 	}
 

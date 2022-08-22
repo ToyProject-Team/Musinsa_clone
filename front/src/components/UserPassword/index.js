@@ -57,8 +57,11 @@ const UserPassword = ({
 				></LookButton>
 			</div>
 
-			{!reg && validation && (
+			{password.length > 0 && !reg && validation && title && (
 				<p className="login-input__validation">8~30자 이내로 입력해 주십시오.</p>
+			)}
+			{password.length > 0 && !reg && validation && !title && (
+				<p className="login-input__validation">비밀번호가 다릅니다.</p>
 			)}
 		</LoginContainer>
 	);
