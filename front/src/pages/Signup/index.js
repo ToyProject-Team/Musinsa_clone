@@ -1,46 +1,47 @@
 import UserAddress from 'components/UserAddress';
 import UserEmail from 'components/UserEmail';
-import UserFind from 'components/UserFind';
 import UserPassword from 'components/UserPassword';
-import useInput from 'hooks/useInput';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as CheckIcon } from 'assets/svg/Check.svg';
+import { ReactComponent as LogoIcon } from 'assets/svg/Logo.svg';
 import {
 	Container,
 	SignupSection,
 	Header,
 	SignupInner,
 	SignupContainer,
-	SignupAddress,
-	LookButton,
 	SignupCheckBox,
 	SignupButton,
 } from './styles';
 import AuthModal from 'components/AuthModal';
 import AuthConfirmModal from 'components/AuthConfirmModal';
-import { useUserState, useUserDispatch, LOGIN } from 'context/UserContext';
 import { PostApi } from 'utils/api';
-import { Navigate } from 'react-router';
+import { EMAIL, PHONENUMBER, useUserDispatch, useUserState } from 'context/UserContext';
+import axios from 'axios';
 
 const Signup = () => {
-	const [data, setData] = useState(false);
-	const [email, onChangeEmail, setEmail] = useInput('');
+	const user = useUserState();
+	const dispatch = useUserDispatch();
 
-	const [password, onChangePassword, setPassword] = useInput('');
+	const [email, setEmail] = useState('');
+	const [emailReg, setEmailReg] = useState(false);
+
+	const [password, setPassword] = useState('');
+	const [passwordReg, setPasswordReg] = useState(false);
 	const [passwordLookButton, setPasswordLookButton] = useState(false);
 	const passwordRef = useRef();
 
-	const [passwordConfirm, onChangePasswordConfirm, setPasswordConfirm] = useInput('');
+	const [passwordConfirm, setPasswordConfirm] = useState('');
+	const [passwordConfirmReg, setPasswordConfirmReg] = useState(false);
 	const [passwordConfirmLookButton, setPasswordConfirmLookButton] = useState(false);
 	const passwordConfirmRef = useRef();
 
 	const [auth, setAuth] = useState('emailAuth');
-	const [authNumber, onChangeauthNumber, setauthNumber] = useInput('');
+	const [authNumber, setauthNumber] = useState('');
+	const [authNumberReg, setauthNumberReg] = useState(false);
+	const [authNumberBtnReg, setauthNumberBtnReg] = useState(false);
 	const [authStage, setAuthStage] = useState(1);
-
-	const [question, onChangeQuestion, setQuestion] = useInput('1');
-	const [answer, onChangeAnswer, setAnswer] = useInput('');
 
 	const [checkValue, setCheckValue] = useState({
 		checkAll: false,
@@ -68,6 +69,8 @@ const Signup = () => {
 	const [modalAuth, setModalAuth] = useState(false);
 	const [modalAuthConfirm, setModalAuthConfirm] = useState(false);
 
+	const [signUpBtn, setSignUpBtn] = useState(false);
+
 	const onClickClear = useCallback(() => {
 		setauthNumber('');
 	}, [authNumber]);
@@ -75,25 +78,98 @@ const Signup = () => {
 	const onChangeRadio = useCallback(
 		e => {
 			setAuth(e.target.value);
+			setauthNumber('');
+			setauthNumberReg(true);
 			setAuthStage(1);
 		},
 		[auth],
 	);
 
-	const onClickAuth = useCallback(e => {
-		if (authStage === 1) setModalAuth(true);
-		else if (authStage === 2) setModalAuthConfirm(true);
-	}, []);
+	// 본인인증
+	const onClickAuth = useCallback(
+		e => {
+			if (authNumberReg) {
+				// 이메일 1차인증
+				if (auth === 'emailAuth' && authStage === 1) {
+					const params = {
+						email: authNumber,
+					};
 
-	const onChangeAddress = useCallback(e => {
-		const name = e.target.name;
-		const value = e.target.value;
+					PostApi('/api/auth/authEmail', params)
+						.then(() => {
+							const payload = {
+								email: authNumber,
+							};
 
-		setDeliveryInfo(prevState => ({
-			...prevState,
-			[name]: value,
-		}));
-	}, []);
+							dispatch({ type: EMAIL, payload });
+							setModalAuth(true);
+						})
+						.catch(err => {
+							console.error('error', err);
+						});
+				}
+
+				// 이메일 2차인증
+				else if (auth === 'emailAuth' && authStage === 2) {
+					const { email } = user;
+
+					const params = {
+						email,
+						number: authNumber,
+					};
+
+					PostApi('/api/auth/checkEmail', params)
+						.then(() => {
+							setModalAuthConfirm(true);
+						})
+						.catch(err => {
+							setauthNumberBtnReg(true);
+							console.error('error', err);
+						});
+				}
+
+				// 휴대폰 1차인증
+				else if (auth === 'phoneAuth' && authStage === 1) {
+					const params = {
+						phoneNumber: authNumber.replaceAll('-', ''),
+					};
+
+					PostApi('/api/auth/sendSMS', params)
+						.then(() => {
+							const payload = {
+								phoneNumber: authNumber.replaceAll('-', ''),
+							};
+
+							dispatch({ type: PHONENUMBER, payload });
+							setModalAuth(true);
+						})
+						.catch(err => {
+							console.error('error', err);
+						});
+				}
+
+				// 휴대폰 2차인증
+				else if (auth === 'phoneAuth' && authStage === 2) {
+					const { phoneNumber } = user;
+
+					const params = {
+						phoneNumber,
+						code: authNumber,
+					};
+
+					PostApi('/api/auth/checkSMS', params)
+						.then(() => {
+							setModalAuthConfirm(true);
+						})
+						.catch(err => {
+							setauthNumberBtnReg(false);
+							console.error('error', err);
+						});
+				}
+			}
+		},
+		[authNumberReg, authStage, auth, authNumber],
+	);
 
 	const onClickCheck = useCallback(
 		e => {
@@ -137,46 +213,61 @@ const Signup = () => {
 			const params = {
 				loginId: email,
 				password: password,
-				email: authNumber,
-				agreement: true,
-				questionType: question,
-				questionAnswer: answer,
-				rank: '브론즈',
+				agreement: '1',
+				questionType: '1',
+				questionAnswer: 'hello',
+				address: '전라남도 서구 금호동 101동 1001호',
 			};
 
-			await PostApi('/api/auth/signup', params)
-				.then(result => {
-					switch (result.status) {
-						case 200:
-							return setData(true);
-					}
+			axios
+				.post('http://141.164.48.244/api/auth/signup', params, {
+					headers: {
+						emailCheck: 'emailCheck ',
+					},
 				})
-				.catch(result => {
-					switch (result.response.status) {
-						case 401:
-							return alert('이미 사용중인 아이디 입니다.');
+				.then(res => {
+					console.log(res);
+				})
+				.catch(err => console.log(err));
 
-						case 402:
-							return alert('이미 사용중인 이메일 입니다.');
+			// await PostApi('/api/auth/signup', params)
+			// 	.then(result => {
+			// 		switch (result.status) {
+			// 			case 200:
+			// 				return console.log('success');
+			// 		}
+			// 	})
+			// 	.catch(result => {
+			// 		switch (result.response.status) {
+			// 			case 401:
+			// 				return alert('이미 사용중인 아이디 입니다.');
 
-						case 500:
-							return console.log('서버에러');
+			// 			case 402:
+			// 				return alert('이미 사용중인 이메일 입니다.');
 
-						default:
-							console.log(result);
-							break;
-					}
-				});
+			// 			case 500:
+			// 				return console.log('서버에러');
+
+			// 			default:
+			// 				console.log(result);
+			// 				break;
+			// 		}
+			// 	});
 		},
-		[email, password, auth, authNumber, question, answer],
+		[email, password, auth, authNumber],
 	);
 
 	const onCloseModal = useCallback(() => {
 		setModalAuth(false);
 		setModalAuthConfirm(false);
 
-		if (authStage === 1) setAuthStage(2);
-		else if (authStage === 2) setAuthStage(3);
+		if (authStage === 1) {
+			setAuthStage(2);
+			setauthNumber('');
+		} else if (authStage === 2) {
+			setAuthStage(3);
+			setauthNumber('');
+		}
 	}, [authStage]);
 
 	useEffect(() => {
@@ -193,30 +284,96 @@ const Signup = () => {
 		}
 	}, [checkValue.count]);
 
-	if (data) {
-		return <Navigate to="/login" />;
-	}
+	// onChange 정규식 검사
+	const onChangeEmail = useCallback(e => {
+		setEmail(e.target.value);
+
+		const regExp = /^[a-z]+[a-z0-9]{3,10}$/g;
+		if (regExp.test(e.target.value)) setEmailReg(true);
+		else setEmailReg(false);
+	}, []);
+
+	const onChangePassword = useCallback(e => {
+		setPassword(e.target.value);
+
+		const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,25}$/;
+		if (regExp.test(e.target.value)) setPasswordReg(true);
+		else setPasswordReg(false);
+	}, []);
+
+	const onChangePasswordConfirm = useCallback(
+		e => {
+			setPasswordConfirm(e.target.value);
+
+			if (password === e.target.value) setPasswordConfirmReg(true);
+			else setPasswordConfirmReg(false);
+		},
+		[password],
+	);
+
+	const onChangeauthNumber = useCallback(
+		e => {
+			setauthNumber(e.target.value);
+
+			let regExp;
+
+			if (authStage === 1) {
+				if (auth === 'emailAuth')
+					regExp =
+						/^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+				else if (auth === 'phoneAuth') regExp = /^[0-9\b -]{0,13}$/;
+			} else if (authStage === 2) {
+				regExp = /\d{6}/g;
+			}
+
+			if (regExp.test(e.target.value)) setauthNumberReg(true);
+			else setauthNumberReg(false);
+		},
+		[auth, authStage],
+	);
+
+	// 가입하기 버튼 활성화
+	useEffect(() => {
+		console.log(authStage);
+		if (
+			emailReg &&
+			passwordReg &&
+			passwordConfirmReg &&
+			authStage == 3 &&
+			deliveryInfo.name &&
+			deliveryInfo.mobile1 &&
+			deliveryInfo.mobile2 &&
+			deliveryInfo.mobile3 &&
+			deliveryInfo.address1 &&
+			deliveryInfo.address2 &&
+			checkValue.checkAgree &&
+			checkValue.checkTerms &&
+			checkValue.checkYouth
+		) {
+			if (!deliveryInfo.phone) setSignUpBtn(true);
+			else if (deliveryInfo.phone1 && deliveryInfo.phone2 && deliveryInfo.phone3)
+				setSignUpBtn(true);
+			else setSignUpBtn(false);
+		} else setSignUpBtn(false);
+	}, [emailReg, passwordReg, passwordConfirmReg, deliveryInfo, authStage, checkValue]);
+
+	// 자동으로 하이픈 넣기
+	useEffect(() => {
+		if (auth === 'phoneAuth') {
+			if (authNumber.length === 10) {
+				setauthNumber(authNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+			}
+			if (authNumber.length === 13) {
+				setauthNumber(authNumber.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+			}
+		}
+	}, [auth, authNumber]);
 
 	return (
 		<Container>
 			<SignupSection>
 				<Header>
-					<svg
-						width="95"
-						height="16"
-						viewBox="0 0 95 16"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-						role="img"
-					>
-						<title>MUSINSA</title>
-						<path
-							fillRule="evenodd"
-							clipRule="evenodd"
-							d="M39.7649 8.92841C41.4239 9.54022 42.38 9.89279 42.38 11.4667C42.38 12.911 41.3584 13.8445 39.7376 13.8445C38.1163 13.8445 36.9616 12.8665 36.9616 11.2445V11.022H34.608C34.608 14.1776 36.8508 16 39.7376 16C42.6686 16 44.7337 13.8445 44.7337 11.3777C44.7337 10.1111 44.3339 9.311 43.668 8.59989C43.0019 7.88901 42.18 7.44459 40.8033 6.93334L39.9149 6.60025C37.9608 5.86657 37.3391 5.31127 37.3391 4.20002C37.3391 2.93318 38.2717 2.15545 39.7152 2.15545C41.1364 2.15545 42.1358 2.93318 42.1358 4.35561V4.64443H44.4894C44.4894 1.79979 42.6909 0 39.7152 0C36.4731 0 34.9853 2.24442 34.9853 4.2445C34.9853 5.35532 35.3407 6.15562 35.9182 6.86672C36.4952 7.57805 37.2947 8.00011 38.4717 8.44452L39.5376 8.84445L39.7649 8.92841ZM13.812 0.222249L8.21601 9.26678L2.64239 0.222249H0V15.7778H2.22042V3.51087L7.19448 11.5778H9.23753L14.2339 3.51087V15.7778H16.4543V0.222249H13.812ZM29.7098 9.26664V0.222332H31.9527V9.24407C31.9527 13.489 29.5322 15.9999 25.8904 15.9999C22.2488 15.9999 19.8284 13.489 19.8284 9.24407V0.222332H22.071V9.26664C22.071 12.0889 23.5366 13.8221 25.8904 13.8221C28.2444 13.8221 29.7098 12.0889 29.7098 9.26664ZM47.5609 15.7777H49.826V0.222332H47.5609V15.7777ZM55.4884 15.7777V3.73338L63.5713 15.7777H66.0584V0.222332H63.8378V12.3331L55.7326 0.222332H53.2678V15.7777H55.4884ZM76.4865 11.4667C76.4865 9.8929 75.5304 9.54027 73.8718 8.92854L73.6442 8.84445L72.5785 8.44452C71.4015 8.00011 70.602 7.57805 70.0247 6.86672C69.4473 6.15562 69.0919 5.35532 69.0919 4.2445C69.0919 2.24442 70.5799 0 73.822 0C76.7975 0 78.5962 1.79979 78.5962 4.64443H76.2424V4.35561C76.2424 2.93318 75.243 2.15545 73.822 2.15545C72.3785 2.15545 71.4459 2.93318 71.4459 4.20002C71.4459 5.31127 72.0676 5.86657 74.0217 6.60025L74.9099 6.93334C76.2866 7.44459 77.1084 7.88901 77.7746 8.59989C78.4407 9.311 78.8403 10.1111 78.8403 11.3777C78.8403 13.8445 76.7751 16 73.8444 16C70.9574 16 68.7146 14.1776 68.7146 11.022H71.0684V11.2445C71.0684 12.8665 72.2231 13.8445 73.8444 13.8445C75.465 13.8445 76.4865 12.911 76.4865 11.4667ZM90.8477 11.4442H83.9195L82.1652 15.7774H79.8778L86.1622 0.221854H88.6049L94.8889 15.7774H92.6017L90.8477 11.4442ZM87.3835 2.88884L84.8077 9.24431H89.9593L87.3835 2.88884Z"
-							fill="black"
-						></path>
-					</svg>
+					<LogoIcon />
 				</Header>
 				<SignupInner>
 					<form onSubmit={onSubmitForm}>
@@ -224,7 +381,9 @@ const Signup = () => {
 							email={email}
 							setEmail={setEmail}
 							onChangeEmail={onChangeEmail}
-							placeholder="영문, 숫자 5-11자"
+							placeholder="영문, 숫자 4-11자"
+							reg={emailReg}
+							setReg={setEmailReg}
 							title={true}
 						></UserEmail>
 						<UserPassword
@@ -234,6 +393,7 @@ const Signup = () => {
 							lookBtn={passwordLookButton}
 							setLookBtn={setPasswordLookButton}
 							dom={passwordRef}
+							reg={passwordReg}
 							placeholder="숫자, 영문, 특수문자 조합 최소 8자"
 							title={true}
 							validation={true}
@@ -245,6 +405,7 @@ const Signup = () => {
 							lookBtn={passwordConfirmLookButton}
 							setLookBtn={setPasswordConfirmLookButton}
 							dom={passwordConfirmRef}
+							reg={passwordConfirmReg}
 							placeholder="비밀번호 재입력"
 							title={false}
 							validation={true}
@@ -280,10 +441,12 @@ const Signup = () => {
 
 							<div className="email-check">
 								<input
+									className={auth}
 									type={auth === 'phoneAuth' ? 'tel' : 'email'}
 									value={authNumber}
 									onChange={onChangeauthNumber}
-									className={auth}
+									maxLength={authStage === 2 ? 6 : auth === 'phoneAuth' && 13}
+									disabled={authStage === 3 ? true : false}
 								/>
 								{authNumber?.length > 0 && (
 									<button type="button" onClick={() => onClickClear()}>
@@ -291,6 +454,8 @@ const Signup = () => {
 									</button>
 								)}
 								<button
+									type="button"
+									disabled={authStage === 3 ? true : false}
 									className={authStage === 3 ? 'auth-confirm success' : 'auth-confirm'}
 									onClick={() => onClickAuth()}
 								>
@@ -298,19 +463,19 @@ const Signup = () => {
 								</button>
 							</div>
 
-							<p>이메일 주소가 올바르지 않습니다.</p>
+							{authStage === 1 &&
+								auth === 'emailAuth' &&
+								!authNumberReg &&
+								authNumber?.length > 0 && <p>이메일 주소가 올바르지 않습니다.</p>}
+							{authStage === 1 &&
+								auth === 'phoneAuth' &&
+								!authNumberReg &&
+								authNumber?.length > 0 && <p>휴대폰 번호가 올바르지 않습니다.</p>}
+							{authStage === 2 && authNumberBtnReg && <p>인증번호가 정확하지 않습니다.</p>}
 							<p className="helper-text">계정 분실 시 본인인증 정보로 활용됩니다.</p>
 						</SignupContainer>
 
-						<UserFind
-							props={{
-								answer,
-								onChangeAnswer,
-								setAnswer,
-								onChangeQuestion,
-							}}
-						></UserFind>
-						<UserAddress props={{ deliveryInfo, setDeliveryInfo, onChangeAddress }}></UserAddress>
+						<UserAddress props={{ deliveryInfo, setDeliveryInfo }}></UserAddress>
 
 						<SignupCheckBox>
 							<div className="all-check">
@@ -397,7 +562,11 @@ const Signup = () => {
 						</SignupCheckBox>
 
 						<SignupButton>
-							<button type="submit" className="signup-button__item active">
+							<button
+								type="submit"
+								// disabled={!signUpBtn}
+								// className={signUpBtn ? 'signup-button__item active' : 'signup-button__item'}
+							>
 								본인인증하고 가입하기
 							</button>
 						</SignupButton>

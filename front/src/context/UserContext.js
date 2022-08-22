@@ -3,10 +3,13 @@ import React, { useReducer, createContext, useContext } from 'react';
 const initialUser = {
 	login: false,
 	token: '',
+	phoneNumber: '',
+	email: '',
 };
 
 export const LOGIN = 'LOGIN';
-export const LOGOUT = 'LOGOUT';
+export const PHONENUMBER = 'PHONENUMBER';
+export const EMAIL = 'EMAIL';
 
 function userReducer(state, action) {
 	switch (action.type) {
@@ -17,8 +20,17 @@ function userReducer(state, action) {
 				token: action.payload.token,
 			};
 
-		case LOGOUT:
-			return;
+		case PHONENUMBER:
+			return {
+				...state,
+				phoneNumber: action.payload.phoneNumber,
+			};
+
+		case EMAIL:
+			return {
+				...state,
+				email: action.payload.email,
+			};
 
 		default:
 			throw new Error(`Unhandled action type: ${action.type}`);
@@ -44,3 +56,19 @@ export function useUserState() {
 export function useUserDispatch() {
 	return useContext(UserDispatchContext);
 }
+
+/* 예시 */
+/* 
+	const user = useUserState();					=> 현재값 불러오기
+	const dispatch = useUserDispatch();				=> 값 수정하기
+
+	// 로그인 예시
+	if (email === 'qwe' && password === 'qwe') {
+		const payload = {
+			login: true,
+			token: '이곳에 로그인시 발급받는 token 값이 들어갑니다.',
+		};
+
+		dispatch({ type: LOGIN, payload });
+	}
+*/

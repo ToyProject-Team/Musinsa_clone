@@ -3,8 +3,11 @@ import React, { useCallback, useState } from 'react';
 import { SignupAddress } from './styles';
 
 const UserAddress = ({ props }) => {
-	const { deliveryInfo, setDeliveryInfo, onChangeAddress } = props;
+	const { deliveryInfo, setDeliveryInfo } = props;
 	const [modalAddress, setModalAddress] = useState(false);
+	const [nameReg, setNameReg] = useState(false);
+	const [mobileReg, setMobileReg] = useState(false);
+	const [phoneReg, setPhoneReg] = useState(false);
 
 	const onClickPhoneHave = useCallback(
 		e => {
@@ -27,6 +30,50 @@ const UserAddress = ({ props }) => {
 
 	const onClickSearch = useCallback(() => {
 		setModalAddress(true);
+	}, []);
+
+	const onChangeAddress = useCallback(e => {
+		const name = e.target.name;
+		const value = e.target.value;
+
+		if (name === 'name' && value.trim().length > 0) {
+			setNameReg(true);
+		} else if (name === 'name' && value.trim().length === 0) {
+			setNameReg(false);
+		}
+
+		if (
+			(name === 'mobile1' && value.trim().length > 0) ||
+			(name === 'mobile2' && value.trim().length > 0) ||
+			(name === 'mobile3' && value.trim().length > 0)
+		) {
+			setMobileReg(true);
+		} else if (
+			(name === 'mobile1' && value.trim().length === 0) ||
+			(name === 'mobile2' && value.trim().length === 0) ||
+			(name === 'mobile3' && value.trim().length === 0)
+		) {
+			setMobileReg(false);
+		}
+
+		if (
+			(name === 'phone1' && value.trim().length > 0) ||
+			(name === 'phone2' && value.trim().length > 0) ||
+			(name === 'phone3' && value.trim().length > 0)
+		) {
+			setPhoneReg(true);
+		} else if (
+			(name === 'phone1' && value.trim().length === 0) ||
+			(name === 'phone2' && value.trim().length === 0) ||
+			(name === 'phone3' && value.trim().length === 0)
+		) {
+			setPhoneReg(false);
+		}
+
+		setDeliveryInfo(prevState => ({
+			...prevState,
+			[name]: value,
+		}));
 	}, []);
 
 	return (
@@ -56,9 +103,7 @@ const UserAddress = ({ props }) => {
 						</tr>
 						<tr>
 							<td></td>
-							<td>
-								<p>수령인이 올바르지 않습니다.</p>
-							</td>
+							<td>{!nameReg && <p>수령인은 필수값입니다.</p>}</td>
 						</tr>
 						<tr>
 							<th scope="row">휴대전화</th>
@@ -93,9 +138,7 @@ const UserAddress = ({ props }) => {
 						</tr>
 						<tr>
 							<td></td>
-							<td>
-								<p>휴대전화가 올바르지 않습니다.</p>
-							</td>
+							<td>{!mobileReg && <p>휴대전화는 필수값입니다.</p>}</td>
 						</tr>
 						<tr>
 							<th scope="row">전화번호</th>
@@ -147,9 +190,7 @@ const UserAddress = ({ props }) => {
 						</tr>
 						<tr>
 							<td></td>
-							<td>
-								<p>전화번호가 올바르지 않습니다.</p>
-							</td>
+							<td>{deliveryInfo.phone && !phoneReg && <p>전화번호는 필수값입니다.</p>}</td>
 						</tr>
 						<tr>
 							<th scope="row">배송지 주소</th>
@@ -182,12 +223,6 @@ const UserAddress = ({ props }) => {
 									value={deliveryInfo.address3}
 									onChange={onChangeAddress}
 								/>
-							</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td>
-								<p>배송지 주소가 올바르지 않습니다.</p>
 							</td>
 						</tr>
 					</tbody>
