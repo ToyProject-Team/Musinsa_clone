@@ -15,6 +15,7 @@ import {
 	SortBox,
 	ListBox,
 } from './styles';
+import ShowList from './showList';
 import Data from './data.json';
 
 const Main = () => {
@@ -313,7 +314,8 @@ const Main = () => {
 					</SortBox>
 					<ListBox>
 						<ul className="list_item">
-							{priceRange && itemRange && hotItemRange && exclusiveRange && colorRange && allRange
+							<ShowList dummyData={dummyData} sortData={sortData} />
+							{/* {priceRange && itemRange && hotItemRange && exclusiveRange && colorRange && allRange
 								? dummyData
 										.sort((a, b) => {
 											return b.price - a.price;
@@ -361,7 +363,7 @@ const Main = () => {
 												<span className="option_btn">OPTION ▼</span>
 											</div>
 										</li>
-								  ))}
+								  ))} */}
 						</ul>
 					</ListBox>
 				</Items>
