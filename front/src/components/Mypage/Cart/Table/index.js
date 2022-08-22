@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import { ImgSpan } from '../styles';
 import { FiMinus, FiPlus, FiX } from 'react-icons/fi';
 
-function CartTable({img, brand, model, price, state, option, checkedItems, setCheckedItems, id }) {
+
+function CartTable({img, brand, model, price, state, option, checkedItems, setCheckedItems, id, test, }) {
 
 	// input 입력 
 	const [value, setValue] = useState('1');
@@ -16,8 +17,9 @@ function CartTable({img, brand, model, price, state, option, checkedItems, setCh
 		  } else {
 			setCheckedItems(checkedItems.filter((el) => el !== id));
 		  }
+		checked === true && test()
 		},
-		[checkedItems]
+		[checkedItems],
 	  );
 
 
@@ -39,7 +41,8 @@ function CartTable({img, brand, model, price, state, option, checkedItems, setCh
 							<tr>
 								<td>
 									<label key={id}>
-									<input type="checkbox" checked={checkedItems.includes(id) ? true : false} onChange={e => onChecked(e.target.checked, id)} />
+									<input name="oncheck" type="checkbox" checked={checkedItems.includes(id) ? true : false} 
+									onChange={ e => onChecked(e.target.checked, id, price)} />
 									</label>
 								</td>
 								<td className='top'>
@@ -56,7 +59,7 @@ function CartTable({img, brand, model, price, state, option, checkedItems, setCh
 									</ul>
 									</div>
 								</td>
-								<td>{price}원</td>
+								<td> {price}원</td>
 								<td>
 									<div className='input_amount'>
 									<button><FiMinus /></button>

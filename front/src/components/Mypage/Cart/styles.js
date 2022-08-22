@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Modal from 'components/Modal';
 
 export const OrderTable = styled.table`
 	width: 100%;
@@ -204,4 +205,26 @@ export const ImgSpan = styled.span`
 		top: 50%;
 		transform: translateY(-50%);
 	}
+`;
+
+  // 결제하기 modal 
+  export const ModalStyle = styled(Modal) `
+    overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-Color: rgba(255, 255, 255, 0.75);
+    }
+    content{
+      position: absolute ;
+      width: 445px;
+      height: 700px;
+      position: absolute;
+      top: 90px;
+      left: 30%;
+      right: 40px;
+      bottom: 40px;
+    }
 `;

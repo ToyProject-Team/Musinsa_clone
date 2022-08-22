@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { MypageMain } from "pages/Mypage/styles.js";
-import CartTable from "components/Mypage/Cart/Table";
-import { OrderTable, CartPayment, OrderBtn } from "components/Mypage/Cart/styles";
+import CartTable, { CartContext } from "components/Mypage/Cart/Table";
+import { OrderTable, CartPayment, OrderBtn, ModalStyle } from "components/Mypage/Cart/styles";
 import { FaPlus, FaEquals } from 'react-icons/fa';
 import dummy from 'components/Mypage/data.json';
 import Modal from "react-modal";
@@ -11,15 +11,6 @@ function Cart() {
 
   // 전체 체크박스 
   const [checkedItems, setCheckedItems] = useState([]);
-  const checkedItemHandler = (code, isChecked) => {
-    if(isChecked){
-      setCheckedItems([...checkedItems, code])
-    }else if(!isChecked && checkedItems.find(one => one === code)){
-      const filter = checkedItems.filter(one => one !== code)
-      setCheckedItems([...filter])
-    }
-  }
-
   const onCheckedAll = useCallback((checked) => {
     if(checked){
       const checkedItemsArray = [];
@@ -32,44 +23,45 @@ function Cart() {
   [dummy]
   );
 
-  // 결제하기 modal 
-  const ModalStyle = {
-    overlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(255, 255, 255, 0.75)',
-    },
-    content: {
-      position: 'absolute',
-      width: '445px',
-      height: '700px',
-      position: 'absolute',
-      top: '90px',
-      left: '30%',
-      right: '40px',
-      bottom: '40px',
-    },
-  };
   const [showModal, setShowModal] = useState(false);
   const openModal = () => {
 		setShowModal(showModal => !showModal);
 	};
 
   // 상품금액 계산 
-  const [selectedPrice, setSelectedPrice] = useState(0);
-  const [checkPrice, setCheckedPrice] = useState([]);
+  const [selectedPrice, setSelectedPrice] = useState([]);
   const [sum, setSum] = useState(0);
-  const pricecalc = (price) =>{
+  const test = () => {
+    if( dummy[0].id = checkedItems[0]){
+      setSelectedPrice([dummy[checkedItems[0]-1].price]);
+      setCheckedItems((checkedItems.filter((el) => el !== undefined)));
+      addcalc();
+    } else {
+      setSelectedPrice([]);
+      minuscalc();
+    } 
     
   }
 
- 
+  const addcalc = () =>{
+    for(let i = 0; i < selectedPrice.length; i ++) {
+      let a = sum;
+      a = a + selectedPrice[i];
+      setSum(a);
+    }
+  }
 
+  const minuscalc = () => {
+    for(let i = 0; i < selectedPrice.length; i ++) {
+      let b = sum;
+      b = b - selectedPrice[i];
+      setSum(b);
+    }
+  }
 
-  
+  console.log(selectedPrice);  
+  console.log(checkedItems);
+  console.log(sum);
 
   return <>
   <MypageMain>
@@ -113,14 +105,14 @@ function Cart() {
           option={data.option}
           checkedItems={checkedItems}
           setCheckedItems = {setCheckedItems}
-          checkedItemHandler = {checkedItemHandler}
+          test={test}
            />
         ))}   
       </OrderTable>
       <CartPayment>
         <li>
           <p>상품금액</p>
-          <p><span>0</span>원</p>
+          <p><span>{sum}</span>원</p>
         </li>
         <li>
           <FaPlus />
