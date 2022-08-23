@@ -224,7 +224,7 @@ router.post('/authEmail', async (req, res) => {
         /* 클라이언트에게 인증 번호를 보내서 사용자가 맞게 입력하는지 확인! */
           await redisClient.set(req.body.email, number);
           await redisClient.expire(req.body.email, 180)
-          return res.status(200).send({ number: number })
+          return res.status(200).send({ success: true })
         }
         smtpTransport.close();
     });
@@ -247,7 +247,9 @@ router.post('/checkEmail', async (req, res, next) => {
       return res.status(401).send({ message: '이메일 인증 번호가 일치하지 않습니다' })
     }
     console.log("?")
-    const emailCheck = CryptoJS.AES.encrypt(JSON.stringify(req.body.email), 'secret key 123').toString();
+    let emailCheck = CryptoJS.AES.encrypt(JSON.stringify(req.body.email), 'secret key 123').toString();
+    emailcheck = emailcheck.substr(1)
+    emailcheck = emailcheck.slice(0, -1);
     await redisClient.set(emailCheck, req.body.email);
     await redisClient.expire(emailCheck, 300)
     res.status(200).send({ emailCheck: emailCheck })
@@ -328,6 +330,8 @@ router.post('/checkSMS', async (req, res, next) => {
       return res.status(401).send({ message: "인증 번호가 틀리셨습니다" })
       }
       const phoneCheck = CryptoJS.AES.encrypt(JSON.stringify(req.body.phoneNumber), 'secret key 123').toString();
+      phoneCheck = phoneCheck.substr(1)
+      phoneCheck = phoneCheck.slice(0, -1);
       await redisClient.set(phoneCheck, req.body.phoneNumber);
       await redisClient.expire(phoneCheck, 1200)
       return res.status(200).send({ phoneCheck });

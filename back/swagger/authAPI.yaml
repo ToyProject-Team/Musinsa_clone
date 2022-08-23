@@ -64,7 +64,7 @@
           properties:
             message:
               type: string
-              example: 이미 사용중인 이메일 입니다이메일 인증이 완료된 이메일을 보내야합니다
+              example: 이메일 인증이 완료된 이메일을 보내야합니다
       405:
         description: 인증한 휴대폰으로 회원가입을 하지 않은경우
         schema:
@@ -245,11 +245,7 @@
               example: sola2014@naver.com
     responses:
       200:
-        schema:
-          properties:
-            number:
-              type: string
-              example: 984439
+        $ref: "./openapi.yaml#/success"
       400:
         description: 네이버 이메일이 조회되지 않음
         schema:
