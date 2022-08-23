@@ -17,15 +17,10 @@ import {
 } from './styles';
 import ShowList from './showList';
 import Data from './data.json';
-import axios from 'axios';
+// import axios from 'axios';
+// import { GetApi } from 'utils/api';
 
 const Main = () => {
-	useEffect(() => {
-		axios.get('http://141.164.48.244/api/product/productList').then(res => {
-			console.log(res.data);
-		});
-	});
-
 	const [dummyData, setDummyData] = useState(Data);
 	const [sortData, setSortData] = useState([]);
 
