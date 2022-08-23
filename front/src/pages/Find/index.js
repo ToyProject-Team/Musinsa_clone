@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Header, Inner, Section, Menubar } from './styles';
 import { ReactComponent as BackArrow } from 'assets/svg/BackArrow.svg';
-import { NavLink, Route, Routes, useParams } from 'react-router-dom';
+import { Link, NavLink, Route, Routes, useParams } from 'react-router-dom';
 import loadable from '@loadable/component';
 
 const FindId = loadable(() => import('components/UserFindId'), {
@@ -23,10 +23,12 @@ const Find = () => {
 					<div>
 						<h2>{pageURL === 'id' ? titleArray[0] : titleArray[1]}</h2>
 						<div>
-							<button class="back">
-								<span>이전 페이지로 이동</span>
-								<BackArrow></BackArrow>
-							</button>
+							<Link to="/login">
+								<button class="back">
+									<span>이전 페이지로 이동</span>
+									<BackArrow></BackArrow>
+								</button>
+							</Link>
 						</div>
 					</div>
 				</Header>

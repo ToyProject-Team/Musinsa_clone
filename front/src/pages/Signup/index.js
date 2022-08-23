@@ -340,7 +340,7 @@ const Signup = () => {
 				if (auth === 'emailAuth')
 					regExp =
 						/^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
-				else if (auth === 'phoneAuth') regExp = /^[0-9\b -]{0,13}$/;
+				else if (auth === 'phoneAuth') regExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
 			} else if (authStage === 2) {
 				regExp = /\d{6}/g;
 			}
