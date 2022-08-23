@@ -1,8 +1,8 @@
 import React from 'react';
 import { Container } from './styles';
 
-const OpenForm = ({ children }) => {
-	return <Container>{children}</Container>;
+const UserFindPassword = () => {
+	return <Container>password</Container>;
 };
 
-export default OpenForm;
+export default UserFindPassword;
