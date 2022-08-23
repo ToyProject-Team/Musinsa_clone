@@ -1,25 +1,35 @@
-import React from 'react';
-import { Container } from './styles';
+import React, { useCallback, useState } from 'react';
+import { Container, RadioItem, RadioButton } from './styles';
 import { ReactComponent as Cancel } from 'assets/svg/Cancel.svg';
 import { ReactComponent as Loading } from 'assets/svg/Loading.svg';
 
 const UserFindId = () => {
+	const [auth, setAuth] = useState('emailAuth');
+
+	const onChangeRadio = useCallback(
+		e => {
+			setAuth(e.target.value);
+		},
+		[auth],
+	);
+
 	return (
 		<>
-			<div id="tab-panel1" role="tabpanel" aria-labelledby="tab-button1">
-				<div class="login-find-radio">
-					<div class="login-find-radio__item">
-						<div class="login-radio">
+			<Container>
+				<div>
+					<RadioItem>
+						<RadioButton>
+							<label htmlFor="phoneAuth" className={auth === 'phoneAuth' && 'active'}>
+								휴대폰
+							</label>
 							<input
 								type="radio"
-								id="radioMobileNumber"
-								class="blind login-radio__radio"
-								name="findType"
+								value="phoneAuth"
+								id="phoneAuth"
+								onChange={onChangeRadio}
+								name="auth"
 							/>
-							<label for="radioMobileNumber" class="login-radio__label">
-								휴대전화
-							</label>
-						</div>
+						</RadioButton>
 						<div>
 							<div>
 								<div>
@@ -89,19 +99,20 @@ const UserFindId = () => {
 								<p class="login-input__validation" id="textValidInputAuthCodeByMobileNumber"></p>
 							</div>
 						</div>
-					</div>
+					</RadioItem>
 
-					<div class="login-find-radio__item">
+					<RadioItem>
 						<div class="login-radio">
-							<input
-								type="radio"
-								id="radioEmail"
-								class="blind login-radio__radio"
-								name="findType"
-							/>
-							<label for="radioEmail" class="login-radio__label">
+							<label htmlFor="emailAuth" className={auth === 'emailAuth' && 'active'}>
 								이메일
 							</label>
+							<input
+								type="radio"
+								value="emailAuth"
+								id="emailAuth"
+								onChange={onChangeRadio}
+								name="auth"
+							/>
 						</div>
 						<div class="login-find-radio__details" id="findMemberIdEmailLayer">
 							<div class="login-input">
@@ -154,10 +165,10 @@ const UserFindId = () => {
 								<p class="login-input__validation" id="textValidInputAuthCodeByEmail"></p>
 							</div>
 						</div>
-					</div>
+					</RadioItem>
 				</div>
 
-				<div class="login-button login-button--static">
+				<div>
 					<button
 						type="button"
 						class="login-button__item login-button__item--blue"
@@ -168,7 +179,7 @@ const UserFindId = () => {
 						<Loading></Loading>
 					</button>
 				</div>
-			</div>
+			</Container>
 		</>
 	);
 };
