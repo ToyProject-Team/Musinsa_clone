@@ -26,12 +26,15 @@ router.post('/signup', async (req, res, next) => {
         })
         console.log(req.headers, "??")
         console.log(req.headers.phonecheck)
+        
         const client = redisClient
         const getAsync = promisify(client.get).bind(client);
         const checkSMS = await getAsync(req.headers.phonecheck? req.headers.phonecheck: -111)
         const checkEmail = await getAsync(req.headers.emailcheck? req.headers.emailcheck: -111)
-        console.log(checkSMS)
+        
+        console.log(checkSMS, "????")
         console.log(checkEmail)
+        console.log()
         if (!checkSMS && !checkEmail) {
           return res.status(400).send({ message: "이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다" })
         }
@@ -49,15 +52,21 @@ router.post('/signup', async (req, res, next) => {
         if (overlapEmail) {
             return res.status(402).send({ message: "이미 사용중인 이메일 입니다"})
         }
-
+        if (checkSMS) {    
+          if (req.body.phoneNumber !== checkSMS) {
+            return res.status(403).send({ message: "휴대폰 인증이 완료된 번호를 보내야합니다" })
+          }
+        } else {
+          if (req.body.email !== checkEmail) {
+            return res.status(405).send({ message: "이메일 인증이 완료된 이메일을 보내야합니다" })
+          }
+        }
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         const newUser = await User.create({
           loginId: req.body.loginId,
           password: hashedPassword,
           email: checkEmail ? checkEmail: null ,
           agreement: req.body.agreement== 1 ? 1: 0,
-          questionType: req.body.questionType,
-          questionAnswer: req.body.questionAnswer,
           address: req.body.address,
           phoneNumber: checkSMS ? checkSMS: null
         })
@@ -238,7 +247,7 @@ router.post('/checkEmail', async (req, res, next) => {
       return res.status(401).send({ message: '이메일 인증 번호가 일치하지 않습니다' })
     }
     console.log("?")
-    const emailCheck = new Date().valueOf()
+    const emailCheck = CryptoJS.AES.encrypt(JSON.stringify(req.body.email), 'secret key 123').toString();
     await redisClient.set(emailCheck, req.body.email);
     await redisClient.expire(emailCheck, 300)
     res.status(200).send({ emailCheck: emailCheck })
@@ -318,8 +327,7 @@ router.post('/checkSMS', async (req, res, next) => {
       if (code != clientCheck) {
       return res.status(401).send({ message: "인증 번호가 틀리셨습니다" })
       }
-      const phoneCheck = new Date().valueOf()
-      console.log(phoneCheck)
+      const phoneCheck = CryptoJS.AES.encrypt(JSON.stringify(req.body.phoneNumber), 'secret key 123').toString();
       await redisClient.set(phoneCheck, req.body.phoneNumber);
       await redisClient.expire(phoneCheck, 1200)
       return res.status(200).send({ phoneCheck });
