@@ -16,7 +16,7 @@ import {
 } from './styles';
 import AuthModal from 'components/AuthModal';
 import AuthConfirmModal from 'components/AuthConfirmModal';
-import { PostApi } from 'utils/api';
+import { baseUrl, PostApi } from 'utils/api';
 import {
 	EMAIL,
 	EMAILCHECK,
@@ -227,61 +227,51 @@ const Signup = () => {
 		async e => {
 			e.preventDefault();
 
-			const { emailCheck } = user;
-
-			// const params = {
-			// 	loginId: email,
-			// 	password: password,
-			// 	agreement: checkValue.checkSns ? '1' : '0',
-			// 	questionType: '1',
-			// 	questionAnswer: 'hello',
-			// 	address: `(${deliveryInfo.address1})${deliveryInfo.address2}${deliveryInfo.address3}`,
-			// };
+			const { email, emailCheck, phoneNumber } = user;
 
 			const params = {
-				loginId: 'hello@naver.com',
-				password: 'test123123',
-				agreement: '1',
-				questionType: '6',
-				questionAnswer: '프로그래밍',
-				address: '전라남도 서구 금호동 101동 1001호',
+				loginId: email,
+				password: password,
+				agreement: checkValue.checkSns ? '1' : '0',
+				questionType: '1',
+				questionAnswer: 'none',
+				address: `(${deliveryInfo.address1})${deliveryInfo.address2}${deliveryInfo.address3}`,
+				email: email,
+				phoneNumber: phoneNumber,
 			};
 
 			axios
-				.post('http://141.164.48.244/api/auth/signup', params, {
+				.post(`${baseUrl}/api/auth/signup`, params, {
 					headers: {
 						'Content-Type': 'application/json',
-						emailCheck: emailCheck,
+						emailCheck,
 					},
 				})
 				.then(res => {
-					console.log(res);
+					switch (res.status) {
+						case 200:
+							return console.log('success');
+
+						default:
+							console.log(res);
+							break;
+					}
 				})
-				.catch(err => console.log(err));
-
-			// await PostApi('/api/auth/signup', params)
-			// 	.then(result => {
-			// 		switch (result.status) {
-			// 			case 200:
-			// 				return console.log('success');
-			// 		}
-			// 	})
-			// 	.catch(result => {
-			// 		switch (result.response.status) {
-			// 			case 401:
-			// 				return alert('이미 사용중인 아이디 입니다.');
-
-			// 			case 402:
-			// 				return alert('이미 사용중인 이메일 입니다.');
-
-			// 			case 500:
-			// 				return console.log('서버에러');
-
-			// 			default:
-			// 				console.log(result);
-			// 				break;
-			// 		}
-			// 	});
+				.catch(err => {
+					switch (err.response.status) {
+						case 400:
+							return alert('이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다');
+						case 401:
+							return alert('이미 사용중인 아이디 입니다');
+						case 402:
+							return alert('이미 사용중인 이메일 입니다.');
+						case 500:
+							return console.log('서버에러');
+						default:
+							console.log(err);
+							break;
+					}
+				});
 		},
 		[email, password, auth, authNumber, checkValue, deliveryInfo],
 	);
