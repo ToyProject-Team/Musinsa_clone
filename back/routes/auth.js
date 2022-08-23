@@ -18,9 +18,10 @@ const { promisify } = require("util");
 dotenv.config();
 router.post('/signup', async (req, res, next) => {
     try {
+        console.log(req.body)
         const exUser = await User.findOne({
           where: {
-              LoginId: req.body.loginId
+              loginId: req.body.loginId
           }
         })
         console.log(req.headers, "??")
