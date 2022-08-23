@@ -355,8 +355,6 @@ router.post('/findPassword', async (req, res, next) => {
   if (!checkSMS) {
     return res.status(402).send({ message: "SMS 인증 시도하셔야합니다. 시도하셨다면 세션 스토리지의 phoneCheck가 headers로 전달됐는지 확인해주세요" })
   }
-  console.log("여기")
-  // console.log(exUser.phoneNumber, req.body.number)
   if (exUser.phoneNumber != req.body.phoneNumber) {
     return res.status(403).send({ message: "로그인 아이디로 조회된 유저에 대한 전화번호가 아닙니다" })
   }

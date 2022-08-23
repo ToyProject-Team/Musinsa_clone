@@ -24,6 +24,18 @@ const Order = loadable(() => import('pages/Order'), {
 	fallback: <div>로딩중</div>,
 });
 
+const Agree = loadable(() => import('contract/Agree'), {
+	fallback: <div>로딩중</div>,
+});
+
+const Terms = loadable(() => import('contract/Terms'), {
+	fallback: <div>로딩중</div>,
+});
+
+const Sns = loadable(() => import('contract/Sns'), {
+	fallback: <div>로딩중</div>,
+});
+
 function App() {
 	return (
 		<UserProvider>
@@ -35,6 +47,10 @@ function App() {
 					<Route path="mypage/*" element={<MyPage />} /> {/* => 마이페이지 */}
 					<Route path="signup" element={<SignUp />} /> {/* => 회원가입 페이지 */}
 					<Route path="order" element={<Order />} /> {/* => 결제 페이지 */}
+					{/* 이용 약관 페이지 */}
+					<Route path="signup/agreement/agree" element={<Agree />} />
+					<Route path="signup/agreement/terms" element={<Terms />} />
+					<Route path="signup/agreement/sns" element={<Sns />} />
 				</Routes>
 			</BrowserRouter>
 		</UserProvider>

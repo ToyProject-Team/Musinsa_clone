@@ -99,7 +99,7 @@ module.exports = {
       });
     }
 
-    await queryInterface.bulkInsert("products", dummyProduct);
+    await queryInterface.bulkInsert("Products", dummyProduct);
   },
 
   async down (queryInterface, Sequelize) {
