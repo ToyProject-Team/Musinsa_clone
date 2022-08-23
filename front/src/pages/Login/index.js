@@ -1,5 +1,4 @@
 import UserEmail from 'components/UserEmail';
-import UserFindModal from 'components/UserFindModal';
 import UserPassword from 'components/UserPassword';
 import useInput from 'hooks/useInput';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -26,8 +25,6 @@ const LogIn = () => {
 	const [password, onChangePassword, setPassword] = useInput('');
 	const [passwordLookButton, setPasswordLookButton] = useState(false);
 	const passwordRef = useRef();
-
-	const [modalFind, setModalFind] = useState(false);
 
 	const [autoLoginCheck, setAutoLoginCheck] = useState(false);
 	const [keyframesClass, setKeyframesClass] = useState('');
@@ -98,14 +95,6 @@ const LogIn = () => {
 		},
 		[email, password, autoLoginCheck],
 	);
-
-	const onClickFind = useCallback(e => {
-		setModalFind(true);
-	}, []);
-
-	const onCloseModal = useCallback(() => {
-		setModalFind(false);
-	}, []);
 
 	const KakaoLogin = useCallback(async () => {
 		const KAKAO_AUTH_URL = await GetApi('/api/auth/kakao');
@@ -198,8 +187,6 @@ const LogIn = () => {
 					<Link to="/signup">회원가입</Link>
 				</SignupLink>
 			</LoginSection>
-
-			<UserFindModal show={modalFind} onCloseModal={onCloseModal}></UserFindModal>
 		</Container>
 	);
 };

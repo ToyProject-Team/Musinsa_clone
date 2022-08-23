@@ -1,8 +1,8 @@
 import React from 'react';
 import { Container } from './styles';
 
-const Kakao = ({ children }) => {
+const UserFindPassword = ({ children }) => {
 	return <Container>{children}</Container>;
 };
 
-export default Kakao;
+export default UserFindPassword;
