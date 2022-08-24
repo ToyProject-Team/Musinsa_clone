@@ -25,15 +25,15 @@
             agreement:
               type: string
               example: 1
-            questionType:
-              type: string
-              example: 6
-            questionAnswer:
-              type: string
-              example: 프로그래밍
             address:
               type: string
               example: 전라남도 서구 금호동 101동 1001호
+            email:
+              type: string
+              example: sola1321@naver.com
+            phoneNumber:
+              type: string
+              example: 01054325612
     responses:
       200:
         $ref: "./openapi.yaml#/success"
@@ -58,6 +58,20 @@
             message:
               type: string
               example: 이미 사용중인 이메일 입니다
+      403:
+        description: 인증한 이메일로 회원가입을 하지 않은경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 이메일 인증이 완료된 이메일을 보내야합니다
+      405:
+        description: 인증한 휴대폰으로 회원가입을 하지 않은경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 휴대폰 인증이 완료된 번호를 보내야합니다
       500:
         $ref: "./openapi.yaml#/serverError"
 
@@ -231,11 +245,7 @@
               example: sola2014@naver.com
     responses:
       200:
-        schema:
-          properties:
-            number:
-              type: string
-              example: 984439
+        $ref: "./openapi.yaml#/success"
       400:
         description: 네이버 이메일이 조회되지 않음
         schema:
