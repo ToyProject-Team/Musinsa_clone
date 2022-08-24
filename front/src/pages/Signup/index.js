@@ -88,6 +88,7 @@ const Signup = () => {
 			setauthNumber('');
 			setauthNumberReg(true);
 			setAuthStage(1);
+			setauthNumberBtnReg(false);
 		},
 		[auth],
 	);
@@ -179,7 +180,7 @@ const Signup = () => {
 							dispatch({ type: PHONECHECK, payload });
 						})
 						.catch(err => {
-							setauthNumberBtnReg(false);
+							setauthNumberBtnReg(true);
 							console.error('error', err);
 						});
 				}
