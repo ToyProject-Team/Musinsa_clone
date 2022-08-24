@@ -3,7 +3,7 @@ import UserFindModal from 'components/UserFindModal';
 import UserPassword from 'components/UserPassword';
 import useInput from 'hooks/useInput';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { GetApi, PostApi } from 'utils/api';
 import { getData } from 'utils/getData';
 import {
@@ -161,10 +161,10 @@ const LogIn = () => {
 							</LoginCheck>
 							<FindLogin>
 								<li>
-									<div onClick={() => onClickFind('email')}>아이디 찾기</div>
+									<Link to="/find/id">아이디 찾기</Link>
 								</li>
 								<li>
-									<div onClick={() => onClickFind('password')}>비밀번호 찾기</div>
+									<Link to="/find/password">비밀번호 찾기</Link>
 								</li>
 							</FindLogin>
 						</LoginMember>
@@ -195,7 +195,7 @@ const LogIn = () => {
 					</div>
 				</LoginInner>
 				<SignupLink>
-					<a href="/signup">회원가입</a>
+					<Link to="/signup">회원가입</Link>
 				</SignupLink>
 			</LoginSection>
 
