@@ -41,7 +41,7 @@ db.sequelize
   .catch(console.error);
 
 // if (process.env.NODE.ENV === 'production') {
-  // app.use(morgan('combined'))
+  app.use(morgan('combined'))
 //   app.use(hpp());
 //   app.use(helmet());
 // } else {
