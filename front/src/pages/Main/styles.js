@@ -4,7 +4,7 @@ export const MainContainer = styled.div`
 	height: 100vh;
 	font-size: 12px;
 	min-width: 1229px;
-//	overflow: hidden;
+	//	overflow: hidden;
 `;
 
 // 카테고리
@@ -50,10 +50,17 @@ export const CategoryTitle = styled.div`
 // 중분류
 export const MiddleCategory = styled.div`
 	display: flex;
-	flex-shrink: 0;
 	border-bottom: solid 1px;
 	border-color: rgb(212, 212, 212);
 	padding-left: 15px;
+
+	& div {
+		width: 100%;
+	}
+
+	& input {
+		margin-top: 10px;
+	}
 
 	&:hover {
 		background-color: #f2f2f2;
@@ -62,8 +69,9 @@ export const MiddleCategory = styled.div`
 
 	.all_item {
 		min-width: 100px;
+		max-width: 100px;
 		padding-top: 15px;
-		padding-right: 16px;
+		padding-right: 12px;
 		font-weight: bold;
 		color: #b2b2b2;
 	}
@@ -90,48 +98,47 @@ export const MiddleCategory = styled.div`
 			}
 		}
 
-    & ul {
-      display: inline-block;
-      min-width: 600px;
-      max-width: 800px;
-      & li {
-        float: left;
-        width: 100px;
-        padding: 0 0 15px;
-        margin: 0;
-        color: #b2b2b2;
-        
-    } 
-  }
+		& ul {
+			display: inline-block;
+			min-width: 600px;
+			max-width: 800px;
+			& li {
+				float: left;
+				width: 100px;
+				padding: 0 0 15px;
+				margin: 0;
+				color: #b2b2b2;
+			}
+		}
 
-  & li:hover {
-    text-decoration: underline;
-    color: black;
-    cursor: pointer;
-  }
-}
-`;
-
-// 브랜드 카테고리
-export const BrandCategory = styled.div`
-	display: flex;
-	border-bottom: solid 1px;
-	border-color: rgb(212, 212, 212);
-	padding-left: 15px;
-
-	&:hover {
-		background-color: #f2f2f2;
-		z-index: 1;
-	}
-
-	& div {
-		width: 100%;
-	}
-
-	& input {
-		margin-top: 17px;
+		& li:hover {
+			text-decoration: underline;
+			color: black;
+			cursor: pointer;
+		}
 	}
 `;
+
+// // 브랜드 카테고리
+// export const BrandCategory = styled.div`
+// 	display: flex;
+// 	border-bottom: solid 1px;
+// 	border-color: rgb(212, 212, 212);
+// 	padding-left: 15px;
+
+// 	&:hover {
+// 		background-color: #f2f2f2;
+// 		z-index: 1;
+// 	}
+
+// 	& div {
+// 		width: 100%;
+// 	}
+
+// 	& input {
+// 		margin-top: 17px;
+// 	}
+// `;
 
 // 그외 카테고리(색상,가격, 검색)
 export const OtherCategory = styled.div`
@@ -152,9 +159,8 @@ export const OtherCategory = styled.div`
 		padding-bottom: 15px;
 
 		& ul {
-      display: inline-block;
-      min-width: 1200px;
-
+			display: inline-block;
+			min-width: 1200px;
 
 			& li {
 				float: left;
@@ -239,11 +245,11 @@ export const BrandList = styled.div`
 	// padding-bottom: 10px;
 	border-bottom: 1px solid #ddd;
 
-  & div {
-    & ul {
-      display: inline-block;
-      min-width: 600px;
-      max-width: 800px;
+	& div {
+		& ul {
+			display: inline-block;
+			min-width: 600px;
+			max-width: 800px;
 
 			& li {
 				float: left;
@@ -268,14 +274,14 @@ export const BrandAttribute = styled.div`
 	padding-right: 16px;
 	font-weight: bold;
 
-  & span {
-    padding-left: 5px;
-    color: #f33;
-  }
+	& span {
+		padding-left: 5px;
+		color: #f33;
+	}
 
-  div:first-of-type {
-    margin-bottom: 15px;
-  }
+	div:first-of-type {
+		margin-bottom: 15px;
+	}
 
 	div:last-child {
 		& p:hover {
@@ -308,7 +314,6 @@ export const BrandAttribute = styled.div`
 	}
 `;
 
-
 export const CategoryName = styled.div`
 	display: block;
 	padding-top: 15px;
@@ -330,8 +335,8 @@ export const CategoryName = styled.div`
 
 		img {
 			position: absolute;
-			top:20px;
-			right:10px;
+			top: 14px;
+			right: 10px;
 		}
 	}
 `;
