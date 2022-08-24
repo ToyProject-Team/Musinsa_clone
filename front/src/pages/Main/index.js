@@ -20,10 +20,31 @@ const Main = () => {
 	const [page, price, priceMin, priceMax, bigCategoryId, smallCategoryId] = useState('');
 	const [product, setProduct] = useState();
 
+	// useEffect(() => {
+	// const fetchData = async () => {
+	// 	// 무한스크롤 사용시 page 필요?
+	// 	//params 어떻게 사용, 적용..?
+	const params = {
+		page: page,
+		price: price,
+		priceMin: priceMin,
+		priceMax: priceMax,
+		bigCategoryId: bigCategoryId,
+		smallCategoryId: smallCategoryId,
+	};
+
+	// 	await axios
+	// 		.get('http://141.164.48.244/api/product/productList')
+	// 		.then(res => setProduct(res.data.productData));
+	// };
+	// fetchData();
+
+	// }, []);
+
 	useEffect(() => {
 		const fetchData = async () => {
 			const params = {
-				page: page,
+				page: 1,
 				price: price,
 				priceMin: priceMin,
 				priceMax: priceMax,
@@ -32,7 +53,7 @@ const Main = () => {
 			};
 
 			await axios
-				.get('http://141.164.48.244/api/product/productList', { params })
+				.get('http://141.164.48.244/api/product/productList?page={params.page}', { params })
 				.then(res => setProduct(res.data.productData));
 		};
 		fetchData();
@@ -43,7 +64,8 @@ const Main = () => {
 	const [colorRange, setColorRange] = useState(true);
 	const [priceRange, setPriceRange] = useState(true);
 
-	const [selectBox, setSelectBox] = useState(true);
+	const [selectBox, setSelectBox] = useState(false);
+
 	const [searchInput, setSearchInput] = useState('');
 
 	//item(품목명) array
@@ -56,7 +78,8 @@ const Main = () => {
 				return data.productTitle === val;
 			}),
 		);
-		setTitleRange(!titleRange);
+		setTitleRange(false);
+		setSelectBox(true);
 	};
 
 	//가격순 정렬
@@ -202,7 +225,7 @@ const Main = () => {
 							setSelectBox(false);
 						}}
 					>
-						<span className="select-medium">중분류: 백팩</span>
+						<span className="select-medium">중분류: {}</span>
 						<span className="select-medium-button">&#160;X</span>
 					</SelectBox>
 				) : null}
@@ -243,7 +266,7 @@ const Main = () => {
 												</div>
 											</div>
 											<div className="option">
-												<span>M</span>
+												<span>성별</span>
 												<span className="option_btn">OPTION ▼</span>
 											</div>
 										</li>
