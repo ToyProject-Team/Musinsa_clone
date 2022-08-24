@@ -345,7 +345,7 @@ const Signup = () => {
 				regExp = /\d{6}/g;
 			}
 
-			if (regExp.test(e.target.value)) setauthNumberReg(true);
+			if (regExp.test(e.target.value.replaceAll('-', ''))) setauthNumberReg(true);
 			else setauthNumberReg(false);
 		},
 		[auth, authStage],
@@ -416,6 +416,10 @@ const Signup = () => {
 
 		win.focus();
 	}
+
+	useEffect(() => {
+		console.log(authNumberBtnReg);
+	}, [authNumberBtnReg]);
 
 	return (
 		<Container>
@@ -620,8 +624,18 @@ const Signup = () => {
 					</form>
 				</SignupInner>
 			</SignupSection>
+
 			<AuthModal show={modalAuth} onCloseModal={onCloseModal}></AuthModal>
-			<AuthConfirmModal show={modalAuthConfirm} onCloseModal={onCloseModal}></AuthConfirmModal>
+			<AuthModal
+				show={modalAuth}
+				onCloseModal={onCloseModal}
+				content="인증번호가 발송되었습니다."
+			></AuthModal>
+			<AuthModal
+				show={modalAuthConfirm}
+				onCloseModal={onCloseModal}
+				content="인증번호가 확인되었습니다."
+			></AuthModal>
 		</Container>
 	);
 };

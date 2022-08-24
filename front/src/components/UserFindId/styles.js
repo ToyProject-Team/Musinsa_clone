@@ -204,5 +204,12 @@ export const FindIdButton = styled.div`
 			margin-top: 3px;
 			vertical-align: top;
 		}
+
+		&.active {
+			border-color: #0078ff;
+			background-color: #0078ff;
+			color: #fff;
+			cursor: pointer;
+		}
 	}
 `;
