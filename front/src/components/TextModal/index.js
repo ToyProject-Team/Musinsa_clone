@@ -2,7 +2,7 @@ import Modal from 'components/Modal';
 import { Button, Label } from 'components/Modal/style';
 import React from 'react';
 
-const AuthModal = ({ show, onCloseModal, content }) => {
+const TextModal = ({ show, onCloseModal, content }) => {
 	return (
 		<Modal show={show} onCloseModal={onCloseModal}>
 			<Label className="label">
@@ -15,4 +15,4 @@ const AuthModal = ({ show, onCloseModal, content }) => {
 	);
 };
 
-export default AuthModal;
+export default TextModal;

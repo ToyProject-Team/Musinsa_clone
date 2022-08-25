@@ -3,7 +3,7 @@ import { Container, RadioItem, RadioButton, RadioDetail, AuthInput, FindIdButton
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
 import useInput from 'hooks/useInput';
-import { PostApi } from 'utils/api';
+import { baseUrl, PostApi } from 'utils/api';
 import {
 	EMAIL,
 	EMAILCHECK,
@@ -12,8 +12,8 @@ import {
 	useUserDispatch,
 	useUserState,
 } from 'context/UserContext';
-import AuthModal from 'components/AuthModal';
-import AuthConfirmModal from 'components/AuthConfirmModal';
+import AuthModal from 'components/TextModal';
+import axios from 'axios';
 
 const UserFindId = () => {
 	const user = useUserState();
@@ -140,7 +140,7 @@ const UserFindId = () => {
 		[phoneNumber, emailNumber],
 	);
 
-	const onClickFindId = useCallback(() => {
+	const onClickFindId = useCallback(async () => {
 		if (!findIdButton) return;
 
 		if (auth === 'phoneAuth') {
@@ -152,7 +152,7 @@ const UserFindId = () => {
 				code: phoneCode,
 			};
 
-			PostApi('/api/auth/checkSMS', params)
+			await PostApi('/api/auth/checkSMS', params)
 				.then(res => {
 					setModalAuthConfirm(true);
 
@@ -174,20 +174,59 @@ const UserFindId = () => {
 				number: emailCode,
 			};
 
-			PostApi('/api/auth/checkEmail', params)
+			await PostApi('/api/auth/checkEmail', params)
 				.then(res => {
-					setModalAuthConfirm(true);
-
-					const payload = {
-						emailCheck: res.data.emailCheck,
-					};
-					dispatch({ type: EMAILCHECK, payload });
+					console.log(res);
+					// const payload = {
+					// 	emailCheck: res.data.emailCheck,
+					// };
+					// dispatch({ type: EMAILCHECK, payload });
 				})
 				.catch(err => {
 					setEmailCodeReg(false);
 					console.error('error', err);
 				});
 		}
+
+		const { emailCheck, phoneCheck } = user;
+		const params = {};
+
+		console.log(user);
+		// await axios
+		// 	.post(`${baseUrl}/api/auth/findId`, params, {
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 			emailCheck,
+		// 			phoneCheck,
+		// 		},
+		// 	})
+		// 	.then(res => {
+		// 		switch (res.status) {
+		// 			case 200:
+		// 				console.log(res.data);
+		// 				setModalAuthConfirm(true);
+		// 				return console.log('success');
+
+		// 			default:
+		// 				console.log(res);
+		// 				break;
+		// 		}
+		// 	})
+		// 	.catch(err => {
+		// 		switch (err.response.status) {
+		// 			case 400:
+		// 				return alert('이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다');
+		// 			case 401:
+		// 				return alert('이미 사용중인 아이디 입니다');
+		// 			case 402:
+		// 				return alert('이미 사용중인 이메일 입니다.');
+		// 			case 500:
+		// 				return console.log('서버에러');
+		// 			default:
+		// 				console.log(err);
+		// 				break;
+		// 		}
+		// 	});
 	}, [findIdButton, auth, phoneCode, emailCode]);
 
 	const onCloseModal = useCallback(() => {
