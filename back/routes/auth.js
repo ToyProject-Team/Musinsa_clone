@@ -192,7 +192,7 @@ router.get('/kakao/callback', async (req, res, next) => {
   }
 })
 
-router.post('/authEmail', async (req, res) => {
+router.post('/authEmail', async (req, res, next) => {
     
   /* min ~ max까지 랜덤으로 숫자를 생성하는 함수 */ 
   try {
@@ -251,6 +251,7 @@ router.post('/checkEmail', async (req, res, next) => {
     console.log(emailCheck)
     emailcheck = emailCheck.substr(1)
     emailcheck = emailcheck.slice(0, -1);
+    console.log(emailCheck)
     await redisClient.set(emailCheck, req.body.email);
     await redisClient.expire(emailCheck, 300)
     res.status(200).send({ emailCheck: emailCheck })
@@ -411,6 +412,7 @@ router.post('/changePassword', async (req, res, next) => {
 router.post('/findId', async (req, res, next) => {
   try {
     console.log(req.headers)
+    console.log(req.headers.emailCheck)
     const client = redisClient
     const getAsync = promisify(client.get).bind(client);
     const checkSMS = await getAsync(req.headers.phoneCheck? req.headers.phoneCheck: -111)
