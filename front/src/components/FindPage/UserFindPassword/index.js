@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
-import { Container, AuthInput, FindIdButton } from 'components/UserFindId/styles';
+import { Container, AuthInput, FindIdButton } from 'components/FindPage/UserFindId/styles';
 import useInput from 'hooks/useInput';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 
 const UserFindPassword = () => {
+	let navigate = useNavigate();
+
 	const [userId, onChangeUserId, setUserId] = useInput('');
 
 	const onClickClear = useCallback(() => {
@@ -14,7 +17,10 @@ const UserFindPassword = () => {
 	const onClickCheckPassword = useCallback(() => {
 		if (userId.length === 0) return;
 
-		console.log(1);
+		try {
+			let token = 'ff693e722616e8b0c8c959c6e3ce02f8e47df71f';
+			navigate(`choice?token=${token}`);
+		} catch (error) {}
 	}, [userId]);
 
 	return (

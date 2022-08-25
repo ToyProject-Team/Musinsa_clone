@@ -1,4 +1,4 @@
-import Modal from 'components/Modal';
+import Modal from 'components/Modals/Modal';
 import React, { useCallback } from 'react';
 import DaumPostcode from 'react-daum-postcode';
 

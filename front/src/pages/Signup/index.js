@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as CheckIcon } from 'assets/svg/Check.svg';
 import { ReactComponent as LogoIcon } from 'assets/svg/Logo.svg';
-import TextModal from 'components/TextModal';
+import TextModal from 'components/Modals/TextModal';
 import {
 	Container,
 	SignupSection,

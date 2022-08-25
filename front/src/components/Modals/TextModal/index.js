@@ -1,5 +1,5 @@
-import Modal from 'components/Modal';
-import { Button, Label } from 'components/Modal/style';
+import Modal from 'components/Modals/Modal';
+import { Button, Label } from 'components/Modals/Modal/style';
 import React from 'react';
 
 const TextModal = ({ show, onCloseModal, content }) => {

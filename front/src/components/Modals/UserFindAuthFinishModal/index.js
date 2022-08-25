@@ -1,5 +1,5 @@
-import Modal from 'components/Modal';
-import { Button, Content, List, Title, RestText } from 'components/Modal/style';
+import Modal from 'components/Modals/Modal';
+import { Button, Content, List, Title, RestText } from 'components/Modals/Modal/style';
 import React from 'react';
 import { Link } from 'react-router-dom';
 

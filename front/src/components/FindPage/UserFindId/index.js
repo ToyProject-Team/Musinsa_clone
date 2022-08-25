@@ -13,9 +13,9 @@ import {
 	useUserDispatch,
 	useUserState,
 } from 'context/UserContext';
-import TextModal from 'components/TextModal';
+import TextModal from 'components/Modals/TextModal';
 import axios from 'axios';
-import UserFindAuthFinishModal from 'components/UserFindAuthFinishModal';
+import UserFindAuthFinishModal from 'components/Modals/UserFindAuthFinishModal';
 
 const UserFindId = () => {
 	const user = useUserState();
@@ -154,7 +154,7 @@ const UserFindId = () => {
 
 	const onClickCheckId = useCallback(async () => {
 		if (!findIdButton) return;
-		let findIdFlag = false;
+
 		setFindIdButtonLoading(true);
 
 		if (auth === 'phoneAuth') {
