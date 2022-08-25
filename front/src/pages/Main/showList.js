@@ -1,20 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import './styles';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 const ShowList = props => {
-	const itemCard = props.dummyData.map(data => (
+	const itemCard = props.product?.map(data => (
 		<li className="li_outer">
 			<div className="li_inner">
 				<div className="list_img">
-					<a href="/detail">
-						<img src={data.url}></img>
-					</a>
+					<a href="/detail">{/* <img src={data.ProductImg.src}></img> */}</a>
 				</div>
 				<div className="item_info">
-					<p>{data.brandName}</p>
-					<p>{data.model}</p>
-					<p>{data.price.toLocaleString('ko-KR')}원</p>
+					<p></p>
+					<p>{data.productTitle}</p>
+					<p>{data.productPrice.toLocaleString('ko-KR')}원</p>
 					<p>MEMBERSHIP PRICE</p>
 					<p>...</p>
 				</div>
@@ -25,6 +23,7 @@ const ShowList = props => {
 			</div>
 		</li>
 	));
+
 	// 무한스크롤
 	const [list, setList] = useState(
 		Array.from({ length: 1 }, () => {
@@ -39,7 +38,7 @@ const ShowList = props => {
 					return itemCard;
 				}),
 			]);
-		}, 1500);
+		}, 1000);
 	};
 
 	return (
