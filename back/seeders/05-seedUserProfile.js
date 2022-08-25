@@ -17,7 +17,7 @@ module.exports = {
 
     for (var i = 1; i <= 180; i++) {
       dummyProductImg.push({
-        src: categoryName[1] + '/' + [1] + String(i),
+        src: categoryName[1] + '/' + categoryName[1] + String(i),
         createdAt: new Date(),
         updatedAt: new Date(),
         ProductId: idxCount
