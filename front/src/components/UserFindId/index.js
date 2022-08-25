@@ -13,8 +13,9 @@ import {
 	useUserDispatch,
 	useUserState,
 } from 'context/UserContext';
-import AuthModal from 'components/TextModal';
+import TextModal from 'components/TextModal';
 import axios from 'axios';
+import UserFindAuthFinishModal from 'components/UserFindAuthFinishModal';
 
 const UserFindId = () => {
 	const user = useUserState();
@@ -466,16 +467,18 @@ const UserFindId = () => {
 						{findIdButtonLoading && <LoadingIcon className="loading"></LoadingIcon>}
 					</button>
 				</FindIdButton>
-				<AuthModal
+				<TextModal
 					show={modalAuth}
 					onCloseModal={onCloseModal}
 					content="인증번호가 발송되었습니다."
-				></AuthModal>
-				<AuthModal
+				></TextModal>
+				<UserFindAuthFinishModal
 					show={modalAuthConfirm}
 					onCloseModal={onCloseModal}
-					content={`아이디는 ${user.userFindId} 입니다.`}
-				></AuthModal>
+					title="아이디 찾기 결과"
+					content={`${user.userFindId}`}
+					rest={'비밀번호'}
+				></UserFindAuthFinishModal>
 			</Container>
 		</>
 	);
