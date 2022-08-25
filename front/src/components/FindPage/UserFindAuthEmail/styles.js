@@ -155,6 +155,10 @@ export const AuthInput = styled.div`
 		box-sizing: border-box;
 		width: 100%;
 	}
+	&:focus-within {
+		border-color: #aaa;
+		transition: border 0.2s ease-in-out;
+	}
 
 	.clearBtn {
 		display: flex;

@@ -13,8 +13,9 @@ import {
 	useUserDispatch,
 	useUserState,
 } from 'context/UserContext';
-import AuthModal from 'components/TextModal';
+import TextModal from 'components/Modals/TextModal';
 import axios from 'axios';
+import UserFindAuthFinishModal from 'components/Modals/UserFindAuthFinishModal';
 
 const UserFindId = () => {
 	const user = useUserState();
@@ -151,8 +152,9 @@ const UserFindId = () => {
 		[phoneNumber, emailNumber],
 	);
 
-	const onClickFindId = useCallback(async () => {
+	const onClickCheckId = useCallback(async () => {
 		if (!findIdButton) return;
+
 		setFindIdButtonLoading(true);
 
 		if (auth === 'phoneAuth') {
@@ -164,20 +166,22 @@ const UserFindId = () => {
 				code: phoneCode,
 			};
 
-			await PostApi('/api/auth/checkSMS', params)
-				.then(res => {
-					setModalAuthConfirm(true);
+			try {
+				const result = await PostApi('/api/auth/checkSMS', params)
+					.then(res => {
+						setFindIdButtonLoading(false);
 
-					const payload = {
-						phoneCheck: res.data.phoneCheck,
-					};
-					dispatch({ type: PHONECHECK, payload });
-					setFindIdButtonLoading(false);
-				})
-				.catch(err => {
-					setPhoneCodeReg(false);
-					console.error('error', err);
-				});
+						return res;
+					})
+					.catch(err => {
+						setEmailCodeReg(false);
+						console.error('error', err);
+					});
+
+				await userFindId(result.data.phoneCheck);
+			} catch (error) {
+				console.log(error);
+			}
 		} else {
 			// 이메일 2차인증
 			const { email } = user;
@@ -187,112 +191,73 @@ const UserFindId = () => {
 				number: emailCode,
 			};
 
-			await PostApi('/api/auth/checkEmail', params)
-				.then(res => {
-					console.log(res);
-					// const payload = {
-					// 	emailCheck: res.data.emailCheck,
-					// };
-					// dispatch({ type: EMAILCHECK, payload });
-					setFindIdButtonLoading(false);
+			try {
+				const result = await PostApi('/api/auth/checkEmail', params)
+					.then(res => {
+						setFindIdButtonLoading(false);
 
-					let emailCheck = res.data.emailCheck;
-					console.log(123);
-					console.log(123, JSON.stringify(res.data.emailCheck));
+						return res;
+					})
+					.catch(err => {
+						setEmailCodeReg(false);
+						console.error('error', err);
+					});
 
-					axios({
-						method: 'post', //you can set what request you want to be
-						url: `${baseUrl}/api/auth/findId`,
+				await userFindId(undefined, result.data.emailCheck);
+			} catch (error) {
+				console.log(error);
+			}
+		}
+	}, [findIdButton, auth, phoneCode, emailCode, user]);
+
+	const userFindId = useCallback(
+		(phoneCheck = '', emailCheck = '') => {
+			axios
+				.post(
+					`${baseUrl}/api/auth/findId`,
+					{},
+					{
 						headers: {
 							'Content-Type': 'application/json',
-							emailcheck: res.data.emailCheck,
+							emailCheck,
+							phoneCheck,
 						},
-					})
-						.then(res => {
-							switch (res.status) {
-								case 200:
-									console.log(res);
-									// const payload = {
-									// 	userFindId: res.data.userFindId,
-									// };
-									// dispatch({ type: USERFINDID, payload });
+					},
+				)
+				.then(res => {
+					switch (res.status) {
+						case 200:
+							const payload = {
+								userFindId: res.data.loginId,
+							};
+							dispatch({ type: USERFINDID, payload });
 
-									setModalAuthConfirm(true);
-									break;
+							setModalAuthConfirm(true);
+							break;
 
-								default:
-									console.log(res);
-									break;
-							}
-						})
-						.catch(err => {
-							switch (err.response.status) {
-								case 400:
-									return alert('이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다');
-								case 401:
-									return alert('이미 사용중인 아이디 입니다');
-								case 402:
-									return alert('이미 사용중인 이메일 입니다.');
-								case 500:
-									return console.log('서버에러');
-								default:
-									console.log(err);
-									break;
-							}
-						});
-					// axios
-					// 	.post(
-					// 		`${baseUrl}/api/auth/findId`,
-					// 		{},
-					// 		{
-					// 			headers: {
-					// 				'Content-Type': 'application/json',
-					// 				emailcheck: res.data.emailCheck,
-					// 				phoneCheck: res.data.phoneCheck,
-					// 			},
-					// 		},
-					// 	)
-					// 	.then(res => {
-					// 		switch (res.status) {
-					// 			case 200:
-					// 				console.log(res);
-					// 				// const payload = {
-					// 				// 	userFindId: res.data.userFindId,
-					// 				// };
-					// 				// dispatch({ type: USERFINDID, payload });
-
-					// 				setModalAuthConfirm(true);
-					// 				break;
-
-					// 			default:
-					// 				console.log(res);
-					// 				break;
-					// 		}
-					// 	})
-					// 	.catch(err => {
-					// 		switch (err.response.status) {
-					// 			case 400:
-					// 				return alert('이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다');
-					// 			case 401:
-					// 				return alert('이미 사용중인 아이디 입니다');
-					// 			case 402:
-					// 				return alert('이미 사용중인 이메일 입니다.');
-					// 			case 500:
-					// 				return console.log('서버에러');
-					// 			default:
-					// 				console.log(err);
-					// 				break;
-					// 		}
-					// 	});
+						default:
+							console.log(res);
+							break;
+					}
 				})
 				.catch(err => {
-					setEmailCodeReg(false);
-					console.error('error', err);
+					switch (err.response.status) {
+						case 400:
+							return alert('이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다');
+						case 401:
+							return alert('이미 사용중인 아이디 입니다');
+						case 402:
+							return alert('이미 사용중인 이메일 입니다.');
+						case 500:
+							return console.log('서버에러');
+						default:
+							console.log(err);
+							break;
+					}
 				});
-		}
-
-		const { emailCheck, phoneCheck } = user;
-	}, [findIdButton, auth, phoneCode, emailCode]);
+		},
+		[user],
+	);
 
 	const onCloseModal = useCallback(() => {
 		setModalAuth(false);
@@ -497,21 +462,23 @@ const UserFindId = () => {
 				</div>
 
 				<FindIdButton>
-					<button type="button" onClick={onClickFindId} className={findIdButton && 'active'}>
+					<button type="button" onClick={onClickCheckId} className={findIdButton && 'active'}>
 						아이디 찾기
 						{findIdButtonLoading && <LoadingIcon className="loading"></LoadingIcon>}
 					</button>
 				</FindIdButton>
-				<AuthModal
+				<TextModal
 					show={modalAuth}
 					onCloseModal={onCloseModal}
 					content="인증번호가 발송되었습니다."
-				></AuthModal>
-				<AuthModal
+				></TextModal>
+				<UserFindAuthFinishModal
 					show={modalAuthConfirm}
 					onCloseModal={onCloseModal}
-					content="아이디는 홍길동 입니다."
-				></AuthModal>
+					title="아이디 찾기 결과"
+					content={`${user.userFindId}`}
+					rest={'비밀번호'}
+				></UserFindAuthFinishModal>
 			</Container>
 		</>
 	);
