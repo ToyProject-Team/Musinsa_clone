@@ -192,7 +192,7 @@ router.get('/kakao/callback', async (req, res, next) => {
   }
 })
 
-router.post('/authEmail', async (req, res) => {
+router.post('/authEmail', async (req, res, next) => {
     
   /* min ~ max까지 랜덤으로 숫자를 생성하는 함수 */ 
   try {
@@ -248,8 +248,10 @@ router.post('/checkEmail', async (req, res, next) => {
     }
     console.log("?")
     let emailCheck = CryptoJS.AES.encrypt(JSON.stringify(req.body.email), 'secret key 123').toString();
-    emailcheck = emailcheck.substr(1)
+    console.log(emailCheck)
+    emailcheck = emailCheck.substr(1)
     emailcheck = emailcheck.slice(0, -1);
+    console.log(emailCheck)
     await redisClient.set(emailCheck, req.body.email);
     await redisClient.expire(emailCheck, 300)
     res.status(200).send({ emailCheck: emailCheck })
@@ -409,10 +411,13 @@ router.post('/changePassword', async (req, res, next) => {
 
 router.post('/findId', async (req, res, next) => {
   try {
+    console.log(req.headers)
+    console.log(req.headers.emailcheck)
     const client = redisClient
     const getAsync = promisify(client.get).bind(client);
-    const checkSMS = await getAsync(req.headers.phoneCheck? req.headers.phoneCheck: -111)
-    const checkEmail = await getAsync(req.headers.emailCheck? req.headers.emailCheck: -111)
+    const checkSMS = await getAsync(req.headers.phonecheck? req.headers.phonecheck: -111)
+    const checkEmail = await getAsync(req.headers.emailcheck? req.headers.emailcheck: -111)
+    console.log(checkEmail)
     if (!checkSMS && !checkEmail) {
       return res.status(400).send({ message: '인증번호를 입력하지 않거나 인증 번호가 만료되었습니다' })
     }
