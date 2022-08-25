@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import Modal from 'components/Modal';
+import Modal from 'components/Modals/Modal';
 
 export const OrderTable = styled.table`
 	width: 100%;
