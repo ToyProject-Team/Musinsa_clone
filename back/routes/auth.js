@@ -248,7 +248,7 @@ router.post('/checkEmail', async (req, res, next) => {
     }
     console.log("?")
     let emailCheck = CryptoJS.AES.encrypt(JSON.stringify(req.body.email), 'secret key 123').toString();
-    emailcheck = emailcheck.substr(1)
+    emailcheck = emailCheck.substr(1)
     emailcheck = emailcheck.slice(0, -1);
     await redisClient.set(emailCheck, req.body.email);
     await redisClient.expire(emailCheck, 300)
