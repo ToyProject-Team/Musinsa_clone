@@ -410,10 +410,12 @@ router.post('/changePassword', async (req, res, next) => {
 
 router.post('/findId', async (req, res, next) => {
   try {
+    console.log(req.headers)
     const client = redisClient
     const getAsync = promisify(client.get).bind(client);
     const checkSMS = await getAsync(req.headers.phoneCheck? req.headers.phoneCheck: -111)
     const checkEmail = await getAsync(req.headers.emailCheck? req.headers.emailCheck: -111)
+    console.log(checkEmail)
     if (!checkSMS && !checkEmail) {
       return res.status(400).send({ message: '인증번호를 입력하지 않거나 인증 번호가 만료되었습니다' })
     }
