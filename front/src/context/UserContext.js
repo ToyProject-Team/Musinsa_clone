@@ -7,6 +7,7 @@ const initialUser = {
 	emailCheck: '',
 	phoneNumber: '',
 	phoneCheck: '',
+	userFindId: '',
 };
 
 export const LOGIN = 'LOGIN';
@@ -14,6 +15,7 @@ export const PHONENUMBER = 'PHONENUMBER';
 export const PHONECHECK = 'PHONECHECK';
 export const EMAIL = 'EMAIL';
 export const EMAILCHECK = 'EMAILCHECK';
+export const USERFINDID = 'USERFINDID';
 
 function userReducer(state, action) {
 	switch (action.type) {
@@ -46,6 +48,12 @@ function userReducer(state, action) {
 			return {
 				...state,
 				emailCheck: action.payload.emailCheck,
+			};
+
+		case USERFINDID:
+			return {
+				...state,
+				userFindId: action.payload.userFindId,
 			};
 
 		default:

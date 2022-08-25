@@ -9,6 +9,7 @@ import {
 	EMAILCHECK,
 	PHONECHECK,
 	PHONENUMBER,
+	USERFINDID,
 	useUserDispatch,
 	useUserState,
 } from 'context/UserContext';
@@ -37,6 +38,10 @@ const UserFindId = () => {
 
 	const [modalAuth, setModalAuth] = useState(false);
 	const [modalAuthConfirm, setModalAuthConfirm] = useState(false);
+
+	const [phoneNumberLoading, setPhoneNumberLoading] = useState(false);
+	const [emailNumberLoading, setEmailNumberLoading] = useState(false);
+	const [findIdButtonLoading, setFindIdButtonLoading] = useState(false);
 
 	const onChangeRadio = useCallback(
 		e => {
@@ -101,6 +106,8 @@ const UserFindId = () => {
 					phoneNumber: phoneNumber.replaceAll('-', ''),
 				};
 
+				setPhoneNumberLoading(true);
+
 				PostApi('/api/auth/sendSMS', params)
 					.then(() => {
 						setPhoneCodeToggle(true);
@@ -111,6 +118,7 @@ const UserFindId = () => {
 
 						dispatch({ type: PHONENUMBER, payload });
 						setModalAuth(true);
+						setPhoneNumberLoading(false);
 					})
 					.catch(err => {
 						console.error('error', err);
@@ -120,6 +128,8 @@ const UserFindId = () => {
 				const params = {
 					email: emailNumber,
 				};
+
+				setEmailNumberLoading(true);
 
 				PostApi('/api/auth/authEmail', params)
 					.then(() => {
@@ -131,6 +141,7 @@ const UserFindId = () => {
 
 						dispatch({ type: EMAIL, payload });
 						setModalAuth(true);
+						setEmailNumberLoading(false);
 					})
 					.catch(err => {
 						console.error('error', err);
@@ -142,6 +153,7 @@ const UserFindId = () => {
 
 	const onClickFindId = useCallback(async () => {
 		if (!findIdButton) return;
+		setFindIdButtonLoading(true);
 
 		if (auth === 'phoneAuth') {
 			// 휴대폰 2차인증
@@ -160,6 +172,7 @@ const UserFindId = () => {
 						phoneCheck: res.data.phoneCheck,
 					};
 					dispatch({ type: PHONECHECK, payload });
+					setFindIdButtonLoading(false);
 				})
 				.catch(err => {
 					setPhoneCodeReg(false);
@@ -181,6 +194,96 @@ const UserFindId = () => {
 					// 	emailCheck: res.data.emailCheck,
 					// };
 					// dispatch({ type: EMAILCHECK, payload });
+					setFindIdButtonLoading(false);
+
+					let emailCheck = res.data.emailCheck;
+					console.log(123);
+					console.log(123, JSON.stringify(res.data.emailCheck));
+
+					axios({
+						method: 'post', //you can set what request you want to be
+						url: `${baseUrl}/api/auth/findId`,
+						headers: {
+							'Content-Type': 'application/json',
+							emailcheck: res.data.emailCheck,
+						},
+					})
+						.then(res => {
+							switch (res.status) {
+								case 200:
+									console.log(res);
+									// const payload = {
+									// 	userFindId: res.data.userFindId,
+									// };
+									// dispatch({ type: USERFINDID, payload });
+
+									setModalAuthConfirm(true);
+									break;
+
+								default:
+									console.log(res);
+									break;
+							}
+						})
+						.catch(err => {
+							switch (err.response.status) {
+								case 400:
+									return alert('이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다');
+								case 401:
+									return alert('이미 사용중인 아이디 입니다');
+								case 402:
+									return alert('이미 사용중인 이메일 입니다.');
+								case 500:
+									return console.log('서버에러');
+								default:
+									console.log(err);
+									break;
+							}
+						});
+					// axios
+					// 	.post(
+					// 		`${baseUrl}/api/auth/findId`,
+					// 		{},
+					// 		{
+					// 			headers: {
+					// 				'Content-Type': 'application/json',
+					// 				emailcheck: res.data.emailCheck,
+					// 				phoneCheck: res.data.phoneCheck,
+					// 			},
+					// 		},
+					// 	)
+					// 	.then(res => {
+					// 		switch (res.status) {
+					// 			case 200:
+					// 				console.log(res);
+					// 				// const payload = {
+					// 				// 	userFindId: res.data.userFindId,
+					// 				// };
+					// 				// dispatch({ type: USERFINDID, payload });
+
+					// 				setModalAuthConfirm(true);
+					// 				break;
+
+					// 			default:
+					// 				console.log(res);
+					// 				break;
+					// 		}
+					// 	})
+					// 	.catch(err => {
+					// 		switch (err.response.status) {
+					// 			case 400:
+					// 				return alert('이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다');
+					// 			case 401:
+					// 				return alert('이미 사용중인 아이디 입니다');
+					// 			case 402:
+					// 				return alert('이미 사용중인 이메일 입니다.');
+					// 			case 500:
+					// 				return console.log('서버에러');
+					// 			default:
+					// 				console.log(err);
+					// 				break;
+					// 		}
+					// 	});
 				})
 				.catch(err => {
 					setEmailCodeReg(false);
@@ -189,44 +292,6 @@ const UserFindId = () => {
 		}
 
 		const { emailCheck, phoneCheck } = user;
-		const params = {};
-
-		console.log(user);
-		// await axios
-		// 	.post(`${baseUrl}/api/auth/findId`, params, {
-		// 		headers: {
-		// 			'Content-Type': 'application/json',
-		// 			emailCheck,
-		// 			phoneCheck,
-		// 		},
-		// 	})
-		// 	.then(res => {
-		// 		switch (res.status) {
-		// 			case 200:
-		// 				console.log(res.data);
-		// 				setModalAuthConfirm(true);
-		// 				return console.log('success');
-
-		// 			default:
-		// 				console.log(res);
-		// 				break;
-		// 		}
-		// 	})
-		// 	.catch(err => {
-		// 		switch (err.response.status) {
-		// 			case 400:
-		// 				return alert('이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다');
-		// 			case 401:
-		// 				return alert('이미 사용중인 아이디 입니다');
-		// 			case 402:
-		// 				return alert('이미 사용중인 이메일 입니다.');
-		// 			case 500:
-		// 				return console.log('서버에러');
-		// 			default:
-		// 				console.log(err);
-		// 				break;
-		// 		}
-		// 	});
 	}, [findIdButton, auth, phoneCode, emailCode]);
 
 	const onCloseModal = useCallback(() => {
@@ -312,7 +377,7 @@ const UserFindId = () => {
 											onClick={() => onClickAuth('phoneNumber')}
 										>
 											인증 요청
-											<LoadingIcon className="loading"></LoadingIcon>
+											{phoneNumberLoading && <LoadingIcon className="loading"></LoadingIcon>}
 										</button>
 									</AuthInput>
 									{!phoneNumberReg && <p>휴대전화 번호를 입력해 주세요.</p>}
@@ -394,7 +459,7 @@ const UserFindId = () => {
 											onClick={() => onClickAuth('emailNumber')}
 										>
 											인증 요청
-											<LoadingIcon className="loading"></LoadingIcon>
+											{emailNumberLoading && <LoadingIcon className="loading"></LoadingIcon>}
 										</button>
 									</AuthInput>
 									{!emailNumberReg && <p>이메일을 입력해 주세요.</p>}
@@ -434,7 +499,7 @@ const UserFindId = () => {
 				<FindIdButton>
 					<button type="button" onClick={onClickFindId} className={findIdButton && 'active'}>
 						아이디 찾기
-						<LoadingIcon className="loading"></LoadingIcon>
+						{findIdButtonLoading && <LoadingIcon className="loading"></LoadingIcon>}
 					</button>
 				</FindIdButton>
 				<AuthModal
