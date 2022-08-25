@@ -409,6 +409,8 @@ router.post('/changePassword', async (req, res, next) => {
 
 router.post('/findId', async (req, res, next) => {
   try {
+    console.log(req.body)
+    console.log(req.headers)
     const client = redisClient
     const getAsync = promisify(client.get).bind(client);
     const checkSMS = await getAsync(req.headers.phoneCheck? req.headers.phoneCheck: -111)
