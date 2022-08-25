@@ -12,115 +12,124 @@ import {
 	SortBox,
 	ListBox,
 } from './styles';
-// import ShowList from './showList';
-import axios from 'axios';
-// import { GetApi } from 'utils/api';
+import { PostQueryApi } from 'utils/api';
 
 const Main = () => {
-	const [page, price, priceMin, priceMax, bigCategoryId, smallCategoryId] = useState('');
 	const [product, setProduct] = useState();
-
-	// useEffect(() => {
-	// const fetchData = async () => {
-	// 	// 무한스크롤 사용시 page 필요?
-	// 	//params 어떻게 사용, 적용..?
-	const params = {
-		page: page,
-		price: price,
-		priceMin: priceMin,
-		priceMax: priceMax,
-		bigCategoryId: bigCategoryId,
-		smallCategoryId: smallCategoryId,
-	};
-
-	// 	await axios
-	// 		.get('http://141.164.48.244/api/product/productList')
-	// 		.then(res => setProduct(res.data.productData));
-	// };
-	// fetchData();
-
-	// }, []);
+	const [page, setPage] = useState(0);
+	// const [price, setPrice] = useState(0);
+	// const [priceMin, setPriceMin] = useState(1);
+	// const [priceMax, setPriceMax] = useState(100000000);
+	// const [bigCategoryId, setBigCategoryId] = useState(1);
+	// const [smallCategoryId, setSmallCategoryId] = useState(1);
 
 	useEffect(() => {
-		const fetchData = async () => {
-			const params = {
-				page: 1,
-				price: price,
-				priceMin: priceMin,
-				priceMax: priceMax,
-				bigCategoryId: bigCategoryId,
-				smallCategoryId: smallCategoryId,
-			};
-
-			await axios
-				.get('http://141.164.48.244/api/product/productList?page={params.page}', { params })
-				.then(res => setProduct(res.data.productData));
+		const params = {
+			page: page,
+			// price: 1,
+			// priceMin: priceMin,
+			// priceMax: priceMax,
+			// bigCategoryId: bigCategoryId,
+			// smallCategoryId: smallCategoryId,
 		};
-		fetchData();
-	}, []);
 
-	const [sortData, setSortData] = useState([]);
-	const [titleRange, setTitleRange] = useState(true);
-	const [colorRange, setColorRange] = useState(true);
-	const [priceRange, setPriceRange] = useState(true);
+		PostQueryApi('/api/product/productList', params).then(res => setProduct(res.data.productData));
+	}, [page]);
 
 	const [selectBox, setSelectBox] = useState(false);
 
 	const [searchInput, setSearchInput] = useState('');
-
-	//item(품목명) array
-	const allTypeArr = product?.map(data => data.productTitle);
+	const [minPriceInput, setMinPriceInput] = useState(0);
+	const [maxPriceInput, setMaxPriceInput] = useState(0);
+	const [searchTerm, setSearchTerm] = useState('');
 
 	//중분류 분류
 	const onSort = val => {
-		setSortData(
-			product.filter(data => {
-				return data.productTitle === val;
-			}),
+		PostQueryApi('/api/product/productList', { page }).then(res =>
+			setProduct(
+				res.data.productData.filter(data => {
+					return data.productTitle === val;
+				}),
+			),
 		);
-		setTitleRange(false);
 		setSelectBox(true);
 	};
 
 	//가격순 정렬
 	//내림차순
 	const onSortPriceDown = () => {
-		setSortData(
-			product.sort((a, b) => {
-				return b.productPrice - a.productPrice;
-			}),
+		const params = {
+			page: page,
+		};
+		PostQueryApi('/api/product/productList', params).then(res =>
+			setProduct(
+				res.data.productData.sort((a, b) => {
+					return b.productPrice - a.productPrice;
+				}),
+			),
 		);
-		setPriceRange(false);
 	};
 
 	//오름차순
 	const onSortPriceUp = () => {
-		setSortData(
-			product.sort((a, b) => {
-				return a.productPrice - b.productPrice;
-			}),
+		const params = {
+			page: page,
+		};
+		PostQueryApi('/api/product/productList', params).then(res =>
+			setProduct(
+				res.data.productData.sort((a, b) => {
+					return a.productPrice - b.productPrice;
+				}),
+			),
 		);
-		setPriceRange(false);
 	};
 
-	// 가격대별 검색
-	const priceSearch = (min, max) => {
-		setSortData(
-			product.filter(data => {
-				return data.productPrice >= min && data.productPrice < max;
-			}),
-		);
-		setPriceRange(false);
+	//페이지 이동
+	const onPage = () => {
+		setPage(page + 1);
 	};
 
-	// 가격대별 정렬
+	//가격별로 filter
+	const onFilterPrice = val => {
+		const params = {
+			page: page,
+			price: val,
+		};
+
+		PostQueryApi('/api/product/productList', params).then(res => setProduct(res.data.productData));
+	};
+
+	const onFilterPriceRange = (val1, val2) => {
+		const params = {
+			page: page,
+			priceMin: val1,
+			priceMax: val2,
+		};
+		PostQueryApi('/api/product/productList', params).then(res => setProduct(res.data.productData));
+	};
+
+	//검색창
+	const onSearch = () => {
+		const params = {
+			page: page,
+		};
+		PostQueryApi('/api/product/productList', params).then(res =>
+			setProduct(
+				res.data.productData.filter(data =>
+					data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
+				),
+			),
+		);
+	};
 
 	return (
 		<MainContainer>
 			{/* 카테고리 */}
 			<Category>
 				<CategoryTitle>
-					<div className="page_title">Bag</div>
+					<div className="page_title" onClick={() => onPage()}>
+						Bag
+					</div>
 					<div className="hash_tag">#노트북</div>
 					<div className="hash_tag">#캐주얼</div>
 				</CategoryTitle>
@@ -144,8 +153,9 @@ const Main = () => {
 					<div
 						className="all_item"
 						onClick={() => {
-							setSortData(product);
-							setTitleRange(true);
+							PostQueryApi('/api/product/productList', { page }).then(res =>
+								setProduct(res.data.productData),
+							);
 						}}
 					>
 						전체
@@ -183,22 +193,38 @@ const Main = () => {
 							<li
 								style={{ fontWeight: 'bold', color: 'black' }}
 								onClick={() => {
-									setPriceRange(true);
+									PostQueryApi('/api/product/productList', { page }).then(res =>
+										setProduct(res.data.productData),
+									);
 								}}
 							>
 								전체보기
 							</li>
-							<li onClick={() => priceSearch(0, 50000)}>~ 50,000원</li>
-							<li onClick={() => priceSearch(50000, 80000)}>50,000원 ~ 80,000원</li>
-							<li onClick={() => priceSearch(80000, 110000)}>80,000원 ~ 110,000원</li>
-							<li onClick={() => priceSearch(110000, 130000)}>110,000원 ~ 130,000원</li>
-							<li onClick={() => priceSearch(130000, 10000000000)}>130,000원 ~</li>
+							<li onClick={() => onFilterPrice(1)}>~ 50,000원</li>
+							<li onClick={() => onFilterPrice(2)}>50,000원 ~ 100,000원</li>
+							<li onClick={() => onFilterPrice(3)}>100,000원 ~ 200,000원</li>
+							<li onClick={() => onFilterPrice(4)}>200,000원 ~ 300,000원</li>
+							<li onClick={() => onFilterPrice(5)}>300,000원 ~</li>
 							<li style={{ width: '248px' }}>
-								<input className="minPrice" type="text"></input>
+								<input
+									className="minPrice"
+									type="text"
+									onChange={e => setMinPriceInput(e.target.value)}
+								></input>
 								<span>원 ~</span>
-								<input className="maxPrice" type="text"></input>
+								<input
+									className="maxPrice"
+									type="text"
+									onChange={e => setMaxPriceInput(e.target.value)}
+								></input>
 								<span>원</span>
-								<span type="submit" className="search_btn">
+								<span
+									type="submit"
+									className="search_btn"
+									onClick={() => {
+										onFilterPriceRange(minPriceInput, maxPriceInput);
+									}}
+								>
 									검색
 								</span>
 							</li>
@@ -209,8 +235,8 @@ const Main = () => {
 				<OtherCategory>
 					<CategoryName>검색</CategoryName>
 					<div className="search_items">
-						<input type="text" id="search_items" />
-						<span type="submit" className="search_btn">
+						<input type="text" id="search_items" onChange={e => setSearchTerm(e.target.value)} />
+						<span type="submit" className="search_btn" onClick={() => onSearch()}>
 							검색
 						</span>
 					</div>
@@ -246,53 +272,30 @@ const Main = () => {
 					</SortBox>
 					<ListBox>
 						<ul className="list_item" id="list_item">
-							{titleRange && priceRange && colorRange
-								? product?.map(data => (
-										<li className="li_outer">
-											<div className="li_inner">
-												<div className="list_img">
-													<a href="/detail">
-														<img
-															src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.ProductImg.src}`}
-														></img>
-													</a>
-												</div>
-												<div className="item_info">
-													<p></p>
-													<p>{data.productTitle}</p>
-													<p>{data.productPrice.toLocaleString('ko-KR')}원</p>
-													<p>MEMBERSHIP PRICE</p>
-													<p>...</p>
-												</div>
-											</div>
-											<div className="option">
-												<span>성별</span>
-												<span className="option_btn">OPTION ▼</span>
-											</div>
-										</li>
-								  ))
-								: sortData.map(data => (
-										<li className="li_outer">
-											<div className="li_inner">
-												<div className="list_img">
-													<a href="/detail">
-														<img src={data.ProductImg.src}></img>
-													</a>
-												</div>
-												<div className="item_info">
-													<p></p>
-													<p>{data.productTitle}</p>
-													<p>{data.productPrice.toLocaleString('ko-KR')}원</p>
-													<p>MEMBERSHIP PRICE</p>
-													<p>...</p>
-												</div>
-											</div>
-											<div className="option">
-												<span>M</span>
-												<span className="option_btn">OPTION ▼</span>
-											</div>
-										</li>
-								  ))}
+							{product?.map(data => (
+								<li className="li_outer">
+									<div className="li_inner">
+										<div className="list_img">
+											<a href="/detail">
+												<img
+													src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.ProductImg.src}`}
+												></img>
+											</a>
+										</div>
+										<div className="item_info">
+											<p></p>
+											<p>{data.productTitle}</p>
+											<p>{data.productPrice.toLocaleString('ko-KR')}원</p>
+											<p>MEMBERSHIP PRICE</p>
+											<p>...</p>
+										</div>
+									</div>
+									<div className="option">
+										<span>성별</span>
+										<span className="option_btn">OPTION ▼</span>
+									</div>
+								</li>
+							))}
 							{/* <ShowList product={product} /> */}
 						</ul>
 					</ListBox>
