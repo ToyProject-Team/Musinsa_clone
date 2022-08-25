@@ -95,9 +95,9 @@ const s3 = new AWS.S3({
 
 
 app.use('/S3upload', (req, res) => {
-  const category = 'Womanbag'
+  const category = 'Bag'
   defaultStart = 1
-  defaultI = 172
+  defaultI = 180
   for (i = defaultStart; i<= defaultI; i ++) {
     function isJpg(i) {
       try {
