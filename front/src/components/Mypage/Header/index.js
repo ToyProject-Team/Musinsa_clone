@@ -2,6 +2,7 @@ import React from 'react';
 import { Header, MypageTitle, PRFL_IMAGE, NickName, Profile } from 'pages/Mypage/styles';
 
 function mypage_header() {
+	
 	return (
 		<Header>
 			<MypageTitle>My Page</MypageTitle>
