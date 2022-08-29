@@ -19,7 +19,6 @@ export const CreateModal = styled.div`
 		background: white;
 		--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);
 		box-shadow: 0 0 0 1px var(--saf-0), 0 4px 12px 0 rgba(0, 0, 0, 0.12);
-		background-color: rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1);
 		border-radius: 6px;
 		user-select: none;
 		max-width: 440px;
@@ -70,5 +69,67 @@ export const Button = styled.button`
 		cursor: pointer;
 		border-radius: 4px;
 		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+	}
+`;
+
+export const Title = styled.h2`
+	display: flex;
+	-webkit-box-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	justify-content: center;
+	height: 50px;
+	position: relative;
+	font-size: 16px;
+	margin-bottom: 40px;
+`;
+
+export const Content = styled.p`
+	font-size: 20px;
+	font-weight: 900;
+	line-height: 30.8px;
+	text-align: center;
+`;
+
+export const List = styled.ul`
+	overflow-y: auto;
+	max-height: 255px;
+	margin: 20px 8px 60px;
+	padding: 5px 0;
+	background-color: #f5f5f5;
+
+	& > li {
+		display: flex;
+		padding: 13px 15px;
+
+		& > .list-id {
+			font-weight: 900;
+			box-sizing: border-box;
+			width: 100%;
+			padding-right: 10px;
+			word-break: break-all;
+			text-align: left;
+		}
+
+		& > .list-auth {
+			position: relative;
+			font-size: 12px;
+			line-height: 18px;
+			color: #777;
+			white-space: nowrap;
+		}
+	}
+`;
+
+export const RestText = styled.p`
+	margin-bottom: 20px;
+	font-size: 15px;
+	line-height: 22.5px;
+
+	a {
+		display: inline-block;
+		margin-left: 2px;
+		color: #0078ff;
+		text-decoration: none;
 	}
 `;

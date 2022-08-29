@@ -366,6 +366,10 @@ export const SelectBox = styled.div`
 	color: #b2b2b2;
 	padding: 10px 10px 10px 10px;
 
+	#hidden {
+		diplay: none;
+	}
+
 	:hover {
 		cursor: pointer;
 	}
