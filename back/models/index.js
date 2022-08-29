@@ -8,7 +8,7 @@ const SmallCategory = require("./smallCategory");
 const CustomCategory = require('./customCategory')
 const Comment = require('./comment')
 const Order = require('./order')
-
+const ProductSize = require('./productSize')
 
 const db = {};
 db.User = user;
@@ -19,6 +19,7 @@ db.SmallCategory = SmallCategory;
 db.CustomCategory = CustomCategory;
 db.Comment = Comment
 db.Order = Order
+db.ProductSize = ProductSize
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
