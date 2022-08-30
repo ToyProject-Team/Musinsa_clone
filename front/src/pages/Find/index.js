@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Container, Header, Inner, Section, Menubar } from './styles';
 import { ReactComponent as BackArrow } from 'assets/svg/BackArrow.svg';
 import { Link, Navigate, NavLink, Route, Routes, useParams } from 'react-router-dom';
@@ -36,7 +36,7 @@ const Find = () => {
 							</h2>
 							<div>
 								<Link to="/login">
-									<button class="back">
+									<button className="back">
 										<span>이전 페이지로 이동</span>
 										<BackArrow></BackArrow>
 									</button>

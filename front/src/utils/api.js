@@ -28,6 +28,7 @@ export const PostApi = async (PATH, params) => {
 	const result = await axios.post(baseUrl + PATH, params, {
 		headers: { 'Content-Type': 'application/json' },
 	});
+	console.log(result);
 
 	return result;
 };
