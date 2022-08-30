@@ -25,7 +25,7 @@ const UserFindPasswordChange = loadable(
 );
 
 const Find = () => {
-	const titleArray = ['아이디 찾기', '비밀번호 찾기'];
+	const titleArray = ['아이디 찾기', '비밀번호 찾기', '비밀번호 재설정'];
 	const pageURL = Object.values(useParams())[0];
 
 	if (pageURL === '') {
@@ -39,7 +39,11 @@ const Find = () => {
 					<Header>
 						<div>
 							<h2 style={{ fontWeight: '700' }}>
-								{pageURL === 'id' ? titleArray[0] : titleArray[1]}
+								{pageURL === 'id'
+									? titleArray[0]
+									: pageURL === 'password/change'
+									? titleArray[2]
+									: titleArray[1]}
 							</h2>
 							<div>
 								<Link to="/login">

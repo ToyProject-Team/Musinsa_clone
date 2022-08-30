@@ -19,6 +19,7 @@ const UserFindPassword = () => {
 	const navigate = useNavigate();
 
 	const [userId, onChangeUserId, setUserId] = useInput('');
+	const [passwordButtonLoading, setPasswordButtonLoading] = useState(false);
 
 	const onClickClear = useCallback(() => {
 		setUserId('');
@@ -33,6 +34,14 @@ const UserFindPassword = () => {
 		} catch (error) {}
 	}, [userId]);
 
+	// key 이벤트
+	const onKeyUp = useCallback(
+		e => {
+			if (e.keyCode === 13) onClickCheckPassword();
+		},
+		[userId],
+	);
+
 	return (
 		<Container>
 			<div>
@@ -41,7 +50,13 @@ const UserFindPassword = () => {
 						비밀번호를 찾으려는 아이디
 					</label>
 					<AuthInput>
-						<input type="text" value={userId} onChange={onChangeUserId} maxlength="20" />
+						<input
+							type="text"
+							value={userId}
+							onChange={onChangeUserId}
+							maxlength="20"
+							onKeyUp={onKeyUp}
+						/>
 						<button type="button" className="clearBtn" onClick={onClickClear}>
 							<CancelIcon></CancelIcon>
 						</button>
@@ -54,7 +69,7 @@ const UserFindPassword = () => {
 						className={userId.length > 0 && 'active'}
 					>
 						다음
-						<LoadingIcon className="loading"></LoadingIcon>
+						{passwordButtonLoading && <LoadingIcon className="loading"></LoadingIcon>}
 					</button>
 				</FindIdButton>
 			</div>

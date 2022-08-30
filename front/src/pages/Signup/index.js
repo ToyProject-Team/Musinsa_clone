@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as CheckIcon } from 'assets/svg/Check.svg';
 import { ReactComponent as LogoIcon } from 'assets/svg/Logo.svg';
+import { ReactComponent as BackArrow } from 'assets/svg/BackArrow.svg';
 import TextModal from 'components/Modals/TextModal';
 import {
 	Container,
@@ -26,6 +27,7 @@ import {
 } from 'context/UserContext';
 import axios from 'axios';
 import { Navigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
 	const user = useUserState();
@@ -432,7 +434,17 @@ const Signup = () => {
 		<Container>
 			<SignupSection>
 				<Header>
-					<LogoIcon />
+					<div>
+						<LogoIcon />
+						<div>
+							<Link to="/login">
+								<button className="back">
+									<span>이전 페이지로 이동</span>
+									<BackArrow></BackArrow>
+								</button>
+							</Link>
+						</div>
+					</div>
 				</Header>
 				<SignupInner>
 					<form onSubmit={onSubmitForm}>
