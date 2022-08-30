@@ -1,37 +1,54 @@
-import React from 'react';
-import { MypageMain } from "pages/Mypage/styles.js";
-import Ul from "components/Mypage/Like/List";
-import { LikeSection } from "./styles";
+import React, { useState } from 'react';
+import { MypageMain } from 'pages/Mypage/styles.js';
+import Ul from 'components/Mypage/Like/List';
+import { LikeSection, PagenationBox } from './styles';
+import dummy from 'components/Mypage/data.json';
+import Pagination from 'react-js-pagination';
 
+function Mainlike() {
+	const [page, setPage] = useState(1);
+	const [items, setItems] = useState(4);
+	const handlePageChange = page => {
+		setPage(page);
+	};
 
-
-
-function mainlike() {
-
-  const dummyData = {
-    id:'1',
-    ProductCompany:'어프어프',
-    ProductImg:'https://image.msscdn.net/images/goods_img/20191115/1226331/1226331_1_500.jpg?t=20191115100755',
-    ProductName: 'Bear heart',
-    ProductOption: 'FREE',
-    ProductPrice: '20681',
-    ProductNum: '1',
-    OrderDay: '2020.03.02',
-    OrderNum: '12345',
-    Orderstatus: '환불완료',
-  }
-
-	return <>
-    <MypageMain>
-          <LikeSection>
-            <header>
-            <h1>좋아요</h1>
-            <h2>상품</h2>
-            </header> 
-            <Ul data={dummyData} />
-          </LikeSection>
-    </MypageMain>
-  </>
+	return (
+		<>
+			<MypageMain>
+				<LikeSection>
+					<header>
+						<h1>좋아요</h1>
+						<h2>상품</h2>
+					</header>
+					{dummy.slice(items * (page - 1), items * (page - 1) + items).map((data, index) => (
+						<Ul
+							key={data.id}
+							id={data.id}
+							img={data.url}
+							brand={data.brandName}
+							model={data.model}
+							price={data.price}
+							state={data.orderstatus}
+							option={data.option}
+						/>
+					))}
+          <PagenationBox>
+          <Pagination
+						activePage={1}
+						itemsCountPerPage={4}
+						totalItemsCount={dummy.length - 1}
+						pageRangeDisplayed={5}
+						onChange={handlePageChange}
+            firstPageText={""}
+            lastPageText={""}
+            prevPageText={""}
+            nextPageText={""}
+					/>
+          </PagenationBox>	
+				</LikeSection>
+			</MypageMain>
+		</>
+	);
 }
 
-export default mainlike;
+export default Mainlike;

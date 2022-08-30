@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { MypageMain } from 'pages/Mypage/styles.js';
 import CartTable, { CartContext } from 'components/Mypage/Cart/Table';
+=======
+import React, { useCallback, useEffect, useState } from 'react';
+import { MypageMain } from 'pages/Mypage/styles.js';
+import CartTable from 'components/Mypage/Cart/Table';
+>>>>>>> d7ac4747f030397fef26ac245a7a34b0df484ec0
 import { OrderTable, CartPayment, OrderBtn, ModalStyle } from 'components/Mypage/Cart/styles';
 import { FaPlus, FaEquals } from 'react-icons/fa';
 import dummy from 'components/Mypage/data.json';
@@ -15,9 +21,17 @@ function Cart() {
 			if (checked) {
 				const checkedItemsArray = [];
 				dummy.forEach(data => checkedItemsArray.push(data.id));
+<<<<<<< HEAD
 				setCheckedItems(checkedItemsArray);
 			} else {
 				setCheckedItems([]);
+=======
+				dummy.forEach(data => setSelectedPrice(prev => [...prev, data.price]));
+				setCheckedItems(checkedItemsArray);
+			} else {
+				setCheckedItems([]);
+				setSelectedPrice([]);
+>>>>>>> d7ac4747f030397fef26ac245a7a34b0df484ec0
 			}
 		},
 		[dummy],
@@ -36,6 +50,7 @@ function Cart() {
 		if (selectedPrice.length > 0) {
 			let total = [...selectedPrice].reduce((a, b) => a + b);
 			setSum(total);
+<<<<<<< HEAD
 		}
 	}, [selectedPrice]);
 
@@ -72,6 +87,19 @@ function Cart() {
 	console.log('checkedItems', checkedItems);
 	console.log('sum', sum);
 
+=======
+		} else {
+			setSum(0);
+		}
+	}, [selectedPrice]);
+	
+	console.log(selectedPrice);
+	console.log(checkedItems);
+	console.log(sum);
+
+	
+
+>>>>>>> d7ac4747f030397fef26ac245a7a34b0df484ec0
 	return (
 		<>
 			<MypageMain>
@@ -125,8 +153,13 @@ function Cart() {
 								option={data.option}
 								checkedItems={checkedItems}
 								setCheckedItems={setCheckedItems}
+<<<<<<< HEAD
 								test={test}
 								setSelectedPrice={setSelectedPrice}
+=======
+								setSelectedPrice={setSelectedPrice}
+								selectedPrice={selectedPrice}
+>>>>>>> d7ac4747f030397fef26ac245a7a34b0df484ec0
 							/>
 						))}
 					</OrderTable>
