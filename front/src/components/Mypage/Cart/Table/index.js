@@ -12,13 +12,6 @@ function CartTable({
 	checkedItems,
 	setCheckedItems,
 	setSelectedPrice,
-<<<<<<< HEAD
-	id,
-	test,
-}) {
-	// input 입력
-	const [value, setValue] = useState('1');
-=======
 	selectedPrice,
 	id,
 }) {
@@ -26,7 +19,6 @@ function CartTable({
 	// input 입력
 	const [amount, setAmount] = useState(price);
 	const [value, setValue] = useState(1);
->>>>>>> d7ac4747f030397fef26ac245a7a34b0df484ec0
 	const handleChange = ({ target: { value } }) => setValue(value);
 
 	let priceidx = checkedItems.findIndex(el => el === id);
@@ -50,10 +42,6 @@ function CartTable({
 	// 개별 체크박스
 	const onChecked = useCallback(
 		(checked, id) => {
-<<<<<<< HEAD
-			console.log(123, price);
-=======
->>>>>>> d7ac4747f030397fef26ac245a7a34b0df484ec0
 			if (checked) {
 				setCheckedItems([...checkedItems, id]);
 				setSelectedPrice(prev => [...prev, price]);
@@ -61,10 +49,6 @@ function CartTable({
 				setCheckedItems(checkedItems.filter(el => el !== id));
 				setSelectedPrice(prev => prev.filter(el => el !== price));
 			}
-<<<<<<< HEAD
-			// checked === true && test()
-=======
->>>>>>> d7ac4747f030397fef26ac245a7a34b0df484ec0
 		},
 		[checkedItems],
 	);
@@ -112,19 +96,11 @@ function CartTable({
 								<td> {price}원</td>
 								<td>
 									<div className="input_amount">
-<<<<<<< HEAD
-										<button>
-											<FiMinus />
-										</button>
-										<input type="text" value={value} onChange={handleChange}></input>
-										<button>
-=======
 										<button value={value} onClick={minusCount}>
 											<FiMinus />
 										</button>
 										<input type="text" value={value} onChange={handleChange}></input>
 										<button value={value} onClick={plusCount}>
->>>>>>> d7ac4747f030397fef26ac245a7a34b0df484ec0
 											<FiPlus />
 										</button>
 									</div>

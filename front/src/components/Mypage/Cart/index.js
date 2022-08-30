@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { MypageMain } from 'pages/Mypage/styles.js';
-import CartTable, { CartContext } from 'components/Mypage/Cart/Table';
-=======
 import React, { useCallback, useEffect, useState } from 'react';
 import { MypageMain } from 'pages/Mypage/styles.js';
 import CartTable from 'components/Mypage/Cart/Table';
->>>>>>> d7ac4747f030397fef26ac245a7a34b0df484ec0
 import { OrderTable, CartPayment, OrderBtn, ModalStyle } from 'components/Mypage/Cart/styles';
 import { FaPlus, FaEquals } from 'react-icons/fa';
 import dummy from 'components/Mypage/data.json';
@@ -21,17 +15,11 @@ function Cart() {
 			if (checked) {
 				const checkedItemsArray = [];
 				dummy.forEach(data => checkedItemsArray.push(data.id));
-<<<<<<< HEAD
-				setCheckedItems(checkedItemsArray);
-			} else {
-				setCheckedItems([]);
-=======
 				dummy.forEach(data => setSelectedPrice(prev => [...prev, data.price]));
 				setCheckedItems(checkedItemsArray);
 			} else {
 				setCheckedItems([]);
 				setSelectedPrice([]);
->>>>>>> d7ac4747f030397fef26ac245a7a34b0df484ec0
 			}
 		},
 		[dummy],
@@ -50,44 +38,6 @@ function Cart() {
 		if (selectedPrice.length > 0) {
 			let total = [...selectedPrice].reduce((a, b) => a + b);
 			setSum(total);
-<<<<<<< HEAD
-		}
-	}, [selectedPrice]);
-
-	const test = () => {
-		console.log(dummy[0].id, checkedItems[0]);
-		if ((dummy[0].id = checkedItems[0])) {
-			console.log('helklo');
-			setSelectedPrice([dummy[checkedItems[0] - 1].price]);
-			setCheckedItems(checkedItems.filter(el => el !== undefined));
-			addcalc();
-		} else {
-			setSelectedPrice([]);
-			minuscalc();
-		}
-	};
-
-	const addcalc = () => {
-		for (let i = 0; i < selectedPrice.length; i++) {
-			let a = sum;
-			a = a + selectedPrice[i];
-			setSum(a);
-		}
-	};
-
-	const minuscalc = () => {
-		for (let i = 0; i < selectedPrice.length; i++) {
-			let b = sum;
-			b = b - selectedPrice[i];
-			setSum(b);
-		}
-	};
-
-	console.log('selectedPrice', selectedPrice);
-	console.log('checkedItems', checkedItems);
-	console.log('sum', sum);
-
-=======
 		} else {
 			setSum(0);
 		}
@@ -99,7 +49,6 @@ function Cart() {
 
 	
 
->>>>>>> d7ac4747f030397fef26ac245a7a34b0df484ec0
 	return (
 		<>
 			<MypageMain>
@@ -153,13 +102,8 @@ function Cart() {
 								option={data.option}
 								checkedItems={checkedItems}
 								setCheckedItems={setCheckedItems}
-<<<<<<< HEAD
-								test={test}
-								setSelectedPrice={setSelectedPrice}
-=======
 								setSelectedPrice={setSelectedPrice}
 								selectedPrice={selectedPrice}
->>>>>>> d7ac4747f030397fef26ac245a7a34b0df484ec0
 							/>
 						))}
 					</OrderTable>
