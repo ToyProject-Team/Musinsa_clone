@@ -13,6 +13,8 @@ import {
 	EMAILCODE,
 	FINDBUTTONLOADING,
 	EMAILCODEFLAG,
+	AUTHSUCCESS,
+	EMAILCHECK,
 } from 'context/UserFindContext';
 import { authError } from 'utils/error';
 
@@ -57,6 +59,7 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 
 		changeDispatch(EMAILCODE, { emailCode: value });
 	}, []);
+	console.log(userFind);
 
 	const onClickAuth = useCallback(() => {
 		// 이메일 1차인증
@@ -68,7 +71,6 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 
 		PostApi('/api/auth/authEmail', params)
 			.then(() => {
-				changeDispatch(EMAIL, { email });
 				changeDispatch(EMAILCODEFLAG, { emailCodeFlag: true });
 				changeDispatch(MODALAUTH, { modalAuth: true });
 
@@ -91,8 +93,10 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 			};
 
 			try {
-				const result = await PostApi('/api/auth/checkEmail', params)
+				await PostApi('/api/auth/checkEmail', params)
 					.then(res => {
+						changeDispatch(AUTHSUCCESS, { authSuccess: true });
+						changeDispatch(EMAILCHECK, { emailCheck: res.data.emailCheck });
 						setEmailCodeReg(true);
 						return res;
 					})
@@ -101,39 +105,12 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 						authError(err);
 						console.error('error', err);
 					});
-
-				await userFindId(result.data.emailCheck);
 			} catch (error) {
 				changeDispatch(FINDBUTTONLOADING, { findButtonLoading: false });
 				console.error('error', error);
 			}
 		},
 	}));
-
-	const userFindId = useCallback(
-		emailCheck => {
-			// 아이디 찾기
-			PostHeaderApi('/api/auth/findId', 'emailCheck', emailCheck)
-				.then(res => {
-					switch (res.status) {
-						case 200:
-							changeDispatch(FINDUSERID, { findUserId: res.data.loginId });
-							changeDispatch(MODALAUTHCONFIRM, { modalAuthConfirm: true });
-							changeDispatch(FINDBUTTONLOADING, { findButtonLoading: false });
-							break;
-
-						default:
-							console.log(res);
-							break;
-					}
-				})
-				.catch(err => {
-					console.log(err);
-					authError(err);
-				});
-		},
-		[userFind],
-	);
 
 	return (
 		<>

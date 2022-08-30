@@ -23,7 +23,7 @@ import useInput from 'hooks/useInput';
 import UserFindAuth from '../UserFindAuth';
 import { useUserFindDispatch, useUserFindState } from 'context/UserFindContext';
 
-const UserFindPasswordAuth = () => {
+const UserFindPasswordChange = () => {
 	const userFind = useUserFindState();
 	const dispatch = useUserFindDispatch();
 	const { auth, emailCheck, phoneCheck, findUserId, modalAuthConfirm, authSuccess } = userFind;
@@ -41,11 +41,7 @@ const UserFindPasswordAuth = () => {
 		}
 	}, [authSuccess]);
 
-	return (
-		<>
-			<UserFindAuth></UserFindAuth>
-		</>
-	);
+	return <>안녕하세요</>;
 };
 
-export default UserFindPasswordAuth;
+export default UserFindPasswordChange;

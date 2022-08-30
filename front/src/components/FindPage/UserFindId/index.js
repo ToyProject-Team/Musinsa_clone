@@ -1,146 +1,110 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Container, RadioItem, RadioButton, FindIdButton } from './styles';
-import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
+	AuthInput,
+	Container,
+	FindIdButton,
+	RadioButton,
+	RadioDetail,
+	RadioItem,
+} from 'components/FindPage/UserFindAuth/styles';
+import { useParams, useLocation, Routes, Route, Link } from 'react-router-dom';
+import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
+import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
+import qs from 'qs';
+import useInput from 'hooks/useInput';
+import UserFindAuth from '../UserFindAuth';
+import UserFindAuthFinishModal from 'components/Modals/UserFindAuthFinishModal';
+import {
+	AUTHSUCCESS,
+	FINDBUTTONLOADING,
+	FINDUSERID,
+	INIT,
+	MODALAUTHCONFIRM,
 	useUserFindDispatch,
 	useUserFindState,
-	FINDBUTTONFLAG,
-	MODALAUTH,
-	MODALAUTHCONFIRM,
-	FINDBUTTONLOADING,
-	INIT,
 } from 'context/UserFindContext';
-import TextModal from 'components/Modals/TextModal';
-import UserFindAuthFinishModal from 'components/Modals/UserFindAuthFinishModal';
-import UserFindAuthEmail from '../UserFindAuthEmail';
-import UserFindAuthPhone from '../UserFindAuthPhone';
+import { authError } from 'utils/error';
+import { PostHeaderApi } from 'utils/api';
 
 const UserFindId = () => {
+	const userFind = useUserFindState();
+	const dispatch = useUserFindDispatch();
+	const { auth, emailCheck, phoneCheck, findUserId, modalAuthConfirm, authSuccess } = userFind;
+
 	// useContext 초기화
 	useEffect(() => {
+		console.log(123);
 		dispatch({ type: INIT });
 	}, []);
 
-	const userFind = useUserFindState();
-	const dispatch = useUserFindDispatch();
-	const { emailCode, phoneCode, findUserId, findButtonLoading, modalAuth, modalAuthConfirm } =
-		userFind;
+	const location = useLocation();
+	const query = qs.parse(location.search, {
+		ignoreQueryPrefix: true,
+	});
+	console.log(query);
 
-	const [auth, setAuth] = useState('phoneAuth');
-
-	const [findIdButton, setFindIdButton] = useState(false);
-	const emailFindRef = useRef();
-	const phoneFindRef = useRef();
-
-	const onChangeRadio = useCallback(e => {
-		const { value } = e.target;
-		setAuth(value);
+	const changeDispatch = useCallback((type, payload) => {
+		return dispatch({ type, payload });
 	}, []);
-
-	// 아이디 찾기 클릭 이벤트
-	const onClickCheckId = useCallback(async () => {
-		if (!findIdButton) return;
-
-		if (auth === 'phoneAuth') {
-			phoneFindRef.current.secondAuth();
-		} else if (auth === 'emailAuth') {
-			emailFindRef.current.secondAuth();
-		}
-	}, [findIdButton, auth, emailCode, userFind]);
 
 	// 모달창 Close
 	const onCloseModal = useCallback(() => {
-		const payload = {
-			modalAuth: false,
-			modalAuthConfirm: false,
-		};
+		changeDispatch(MODALAUTHCONFIRM, { modalAuthConfirm: false });
+	}, []);
 
-		dispatch({ type: MODALAUTH, payload });
-		dispatch({ type: MODALAUTHCONFIRM, payload });
-	}, [findIdButton]);
-
-	// 버튼 활성화
+	// 아이디 찾기
 	useEffect(() => {
-		if (auth === 'emailAuth' && emailCode.length === 6) {
-			setFindIdButton(true);
-		} else if (auth === 'emailAuth' && emailCode.length < 6) {
-			setFindIdButton(false);
-		} else if (auth === 'phoneAuth' && phoneCode.length === 6) {
-			setFindIdButton(true);
-		} else if (auth === 'phoneAuth' && !phoneCode.length < 6) {
-			const payload = {
-				findButtonFlag: false,
-			};
-			dispatch({ type: FINDBUTTONFLAG, payload });
+		if (auth === 'emailAuth' && authSuccess && emailCheck !== '') {
+			// 이메일로 아이디 찾기
+			PostHeaderApi('/api/auth/findId', 'emailCheck', emailCheck)
+				.then(res => {
+					switch (res.status) {
+						case 200:
+							changeDispatch(FINDUSERID, { findUserId: res.data.loginId });
+							changeDispatch(MODALAUTHCONFIRM, { modalAuthConfirm: true });
+							changeDispatch(FINDBUTTONLOADING, { findButtonLoading: false });
+							break;
+						default:
+							console.log(res);
+							break;
+					}
+				})
+				.catch(err => {
+					console.log(err);
+					authError(err);
+				});
+		} else if (auth === 'phoneAuth' && authSuccess && phoneCheck !== '') {
+			// 휴대전화로 아이디 찾기
+			PostHeaderApi('/api/auth/findId', 'phoneCheck', phoneCheck)
+				.then(res => {
+					switch (res.status) {
+						case 200:
+							changeDispatch(FINDUSERID, { findUserId: res.data.loginId });
+							changeDispatch(MODALAUTHCONFIRM, { modalAuthConfirm: true });
+							changeDispatch(FINDBUTTONLOADING, { findButtonLoading: false });
+							break;
 
-			setFindIdButton(false);
+						default:
+							console.log(res);
+							break;
+					}
+				})
+				.catch(err => {
+					authError(err);
+				});
 		}
-	}, [auth, phoneCode, emailCode]);
+	}, [authSuccess, emailCheck, phoneCheck]);
 
 	return (
 		<>
-			<Container>
-				<div>
-					<RadioItem>
-						<RadioButton>
-							<label
-								htmlFor="phoneAuth"
-								className={auth === 'phoneAuth' ? 'radio-label active' : 'radio-label'}
-							>
-								휴대전화
-							</label>
-							<input
-								type="radio"
-								value="phoneAuth"
-								id="phoneAuth"
-								onChange={onChangeRadio}
-								name="auth"
-							/>
-						</RadioButton>
-
-						{auth === 'phoneAuth' && <UserFindAuthPhone ref={phoneFindRef}></UserFindAuthPhone>}
-					</RadioItem>
-
-					<RadioItem>
-						<RadioButton>
-							<label
-								htmlFor="emailAuth"
-								className={auth === 'emailAuth' ? 'radio-label active' : 'radio-label'}
-							>
-								이메일
-							</label>
-							<input
-								type="radio"
-								value="emailAuth"
-								id="emailAuth"
-								onChange={onChangeRadio}
-								name="auth"
-							/>
-						</RadioButton>
-
-						{auth === 'emailAuth' && <UserFindAuthEmail ref={emailFindRef}></UserFindAuthEmail>}
-					</RadioItem>
-				</div>
-
-				<FindIdButton>
-					<button type="button" onClick={onClickCheckId} className={findIdButton && 'active'}>
-						아이디 찾기
-						{findButtonLoading && <LoadingIcon className="loading"></LoadingIcon>}
-					</button>
-				</FindIdButton>
-				<TextModal
-					show={modalAuth}
-					onCloseModal={onCloseModal}
-					content="인증번호가 발송되었습니다."
-				></TextModal>
-				<UserFindAuthFinishModal
-					show={modalAuthConfirm}
-					onCloseModal={onCloseModal}
-					title="아이디 찾기 결과"
-					content={`${findUserId}`}
-					rest={'비밀번호'}
-				></UserFindAuthFinishModal>
-			</Container>
+			<UserFindAuth></UserFindAuth>
+			<UserFindAuthFinishModal
+				show={modalAuthConfirm}
+				onCloseModal={onCloseModal}
+				title="아이디 찾기 결과"
+				content={`${findUserId}`}
+				rest={'비밀번호'}
+			></UserFindAuthFinishModal>
 		</>
 	);
 };

@@ -1,24 +1,29 @@
 import React, { useReducer, createContext, useContext } from 'react';
 
 const initialFind = {
-	email: '',
-	emailCode: '',
-	emailCodeFlag: false,
-	emailCheck: '',
+	auth: 'phoneAuth',
 
 	phoneNumber: '',
 	phoneCode: '',
 	phoneCodeFlag: false,
 	phoneCheck: '',
 
+	email: '',
+	emailCode: '',
+	emailCodeFlag: false,
+	emailCheck: '',
+
 	findUserId: '',
 	findButtonLoading: false,
 
 	modalAuth: false,
 	modalAuthConfirm: false,
+
+	authSuccess: false,
 };
 
 export const INIT = 'INIT';
+export const AUTH = 'AUTH';
 
 export const PHONENUMBER = 'PHONENUMBER';
 export const PHONECODE = 'PHONECODE';
@@ -37,10 +42,18 @@ export const FINDBUTTONLOADING = 'FINDBUTTONLOADING';
 export const MODALAUTH = 'MODALAUTH';
 export const MODALAUTHCONFIRM = 'MODALAUTHCONFIRM';
 
+export const AUTHSUCCESS = 'AUTHSUCCESS';
+
 function userReducer(state, action) {
 	switch (action.type) {
 		case INIT:
 			return initialFind;
+
+		case AUTH:
+			return {
+				...state,
+				auth: action.payload.auth,
+			};
 
 		case PHONENUMBER:
 			return {
@@ -118,6 +131,12 @@ function userReducer(state, action) {
 			return {
 				...state,
 				modalAuthConfirm: action.payload.modalAuthConfirm,
+			};
+
+		case AUTHSUCCESS:
+			return {
+				...state,
+				authSuccess: action.payload.authSuccess,
 			};
 
 		default:

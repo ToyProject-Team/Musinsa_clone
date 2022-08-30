@@ -13,6 +13,8 @@ import {
 	FINDBUTTONLOADING,
 	MODALAUTHCONFIRM,
 	PHONECODEFLAG,
+	AUTHSUCCESS,
+	PHONECHECK,
 } from 'context/UserFindContext';
 import { authError } from 'utils/error';
 
@@ -70,7 +72,6 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 
 			PostApi('/api/auth/sendSMS', params)
 				.then(() => {
-					changeDispatch(PHONENUMBER, { phoneNumber: phoneNumber.replaceAll('-', '') });
 					changeDispatch(PHONECODEFLAG, { phoneCodeFlag: true });
 					changeDispatch(MODALAUTH, { modalAuth: true });
 
@@ -97,6 +98,8 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 			try {
 				const result = await PostApi('/api/auth/checkSMS', params)
 					.then(res => {
+						changeDispatch(AUTHSUCCESS, { authSuccess: true });
+						changeDispatch(PHONECHECK, { emailCheck: res.data.emailCheck });
 						setPhoneCodeReg(true);
 						return res;
 					})
@@ -105,37 +108,12 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 						authError(err);
 						console.error('error', err);
 					});
-
-				await userFindId(result.data.phoneCheck);
 			} catch (error) {
+				changeDispatch(FINDBUTTONLOADING, { findButtonLoading: false });
 				console.log(error);
 			}
 		},
 	}));
-
-	const userFindId = useCallback(
-		phoneCheck => {
-			// 아이디 찾기
-			PostHeaderApi('/api/auth/findId', 'phoneCheck', phoneCheck)
-				.then(res => {
-					switch (res.status) {
-						case 200:
-							changeDispatch(FINDUSERID, { findUserId: res.data.loginId });
-							changeDispatch(MODALAUTHCONFIRM, { modalAuthConfirm: true });
-							changeDispatch(FINDBUTTONLOADING, { findButtonLoading: false });
-							break;
-
-						default:
-							console.log(res);
-							break;
-					}
-				})
-				.catch(err => {
-					authError(err);
-				});
-		},
-		[userFind],
-	);
 
 	// 자동으로 하이픈 넣기
 	useEffect(() => {

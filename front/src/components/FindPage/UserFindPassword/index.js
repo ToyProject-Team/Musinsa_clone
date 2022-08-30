@@ -1,12 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
-import { Container, AuthInput, FindIdButton } from 'components/FindPage/UserFindId/styles';
+import { Container, AuthInput, FindIdButton } from 'components/FindPage/UserFindAuth/styles';
 import useInput from 'hooks/useInput';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { INIT, useUserFindDispatch, useUserFindState } from 'context/UserFindContext';
 
 const UserFindPassword = () => {
-	let navigate = useNavigate();
+	const userFind = useUserFindState();
+	const dispatch = useUserFindDispatch();
+
+	// useContext 초기화
+	useEffect(() => {
+		console.log(123);
+		dispatch({ type: INIT });
+	}, []);
+
+	const navigate = useNavigate();
 
 	const [userId, onChangeUserId, setUserId] = useInput('');
 

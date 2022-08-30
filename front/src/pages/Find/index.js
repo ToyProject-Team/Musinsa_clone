@@ -17,6 +17,13 @@ const FindPasswordAuth = loadable(() => import('components/FindPage/UserFindPass
 	fallback: <div>로딩중</div>,
 });
 
+const UserFindPasswordChange = loadable(
+	() => import('components/FindPage/UserFindPasswordChange'),
+	{
+		fallback: <div>로딩중</div>,
+	},
+);
+
 const Find = () => {
 	const titleArray = ['아이디 찾기', '비밀번호 찾기'];
 	const pageURL = Object.values(useParams())[0];
@@ -54,7 +61,8 @@ const Find = () => {
 							<Route path="/id" element={<FindId />} /> {/* id 찾기 */}
 							<Route exact path="/password" element={<FindPassword />} /> {/* 패스워드 찾기 */}
 							<Route path="/password/choice" element={<FindPasswordAuth />} /> {/* 패스워드 찾기 */}
-							<Route path="/password/change" element={<FindPasswordAuth />} /> {/* 패스워드 변경 */}
+							<Route path="/password/change" element={<UserFindPasswordChange />} />{' '}
+							{/* 패스워드 변경 */}
 						</Routes>
 					</Section>
 				</Inner>
