@@ -28,8 +28,8 @@ const s3 = new AWS.S3({
 
 router.get('/productList', async (req, res, next) => {
     try {
-        const startIndx = Number(req.query.page)*100
-        console.log(req.query.dsadas)
+        const startIndx = req.query.page==undefined?0 : Number(req.query.page)*100
+        console.log(req.query.page)
         const productData = await Product.findAll({
             
             where: {
@@ -81,8 +81,10 @@ router.get('/productList', async (req, res, next) => {
             ],
             
             order: [
-                ['id', 'ASC'],
-                [ProductSize, 'size', 'ASC']
+                req.query.mainSort==1? ['productPrice', 'ASC']:
+                req.query.mainSort==2? ['productPrice', 'DESC']:
+                req.query.mainSort==3? ['comments', 'DESC']: 
+                ['id', 'ASC'], [ProductSize, 'size', 'ASC']
             ],
             limit: 100,
             offset: startIndx,
