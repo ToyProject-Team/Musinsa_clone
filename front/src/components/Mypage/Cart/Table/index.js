@@ -12,17 +12,36 @@ function CartTable({
 	checkedItems,
 	setCheckedItems,
 	setSelectedPrice,
+	selectedPrice,
 	id,
-	test,
 }) {
+	// 수량변경
 	// input 입력
-	const [value, setValue] = useState('1');
+	const [amount, setAmount] = useState(price);
+	const [value, setValue] = useState(1);
 	const handleChange = ({ target: { value } }) => setValue(value);
+
+	let priceidx = checkedItems.findIndex(el => el === id);
+
+	const plusCount = () => {
+		setValue(value + 1);
+		setSelectedPrice([selectedPrice[priceidx] + price]);
+		setAmount(amount + price);
+	};
+
+	const minusCount = () => {
+		if (value === 1) {
+			alert('수량을 줄일 수 없습니다.');
+		} else {
+			setValue(value - 1);
+			setSelectedPrice([selectedPrice[priceidx] - price]);
+			setAmount(amount - price);
+		}
+	};
 
 	// 개별 체크박스
 	const onChecked = useCallback(
 		(checked, id) => {
-			console.log(123, price);
 			if (checked) {
 				setCheckedItems([...checkedItems, id]);
 				setSelectedPrice(prev => [...prev, price]);
@@ -30,7 +49,6 @@ function CartTable({
 				setCheckedItems(checkedItems.filter(el => el !== id));
 				setSelectedPrice(prev => prev.filter(el => el !== price));
 			}
-			// checked === true && test()
 		},
 		[checkedItems],
 	);
@@ -78,16 +96,16 @@ function CartTable({
 								<td> {price}원</td>
 								<td>
 									<div className="input_amount">
-										<button>
+										<button value={value} onClick={minusCount}>
 											<FiMinus />
 										</button>
 										<input type="text" value={value} onChange={handleChange}></input>
-										<button>
+										<button value={value} onClick={plusCount}>
 											<FiPlus />
 										</button>
 									</div>
 								</td>
-								<td>{price}원</td>
+								<td>{amount}원</td>
 								<td>{state}</td>
 								<td>
 									<div>

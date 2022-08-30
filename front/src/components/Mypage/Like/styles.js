@@ -1,20 +1,20 @@
 import styled from '@emotion/styled';
 
-export const LikeSection = styled.section `
+export const LikeSection = styled.section`
 	width: calc(100% - 210px);
-    padding: 0;
-    /* float: right; */
-	header{
+	padding: 0;
+	/* float: right; */
+	header {
 		border-bottom: 3px solid #000000;
 		padding-bottom: 14px;
 		line-height: 1.5;
 		font-size: 14px;
 		position: relative;
-		h1{
+		h1 {
 			display: inline-block;
 			font-size: 24px;
 		}
-		h2{
+		h2 {
 			padding: 10px 0 6px 0;
 			font-size: 18px;
 		}
@@ -23,12 +23,12 @@ export const LikeSection = styled.section `
 
 export const ImgSpan = styled.span`
 	display: table-cell;
-    width: 80px;
-    padding-top: 96px;
-    vertical-align: middle;
+	width: 80px;
+	padding-top: 96px;
+	vertical-align: middle;
 	position: relative;
-    overflow: hidden;
-	img{
+	overflow: hidden;
+	img {
 		width: 100%;
 		position: absolute;
 		left: 0;
@@ -54,36 +54,71 @@ export const LikeLi = styled.li`
 	font-size: 14px;
 	text-align: left;
 	position: relative;
-	ul{
+	ul {
 		width: 100%;
 		display: table-cell;
 		padding-left: 10px;
 		vertical-align: middle;
-		li{
+		li {
 			font-size: 14px;
-    		line-height: 22px;
+			line-height: 22px;
 		}
-		.brand{
+		.brand {
 			font-weight: 300;
 			display: block;
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: ellipsis;
 		}
-		.name{
+		.name {
 			max-height: 22px;
 			font-weight: bold;
-    		overflow: hidden;
+			overflow: hidden;
 		}
-		.price{
+		.price {
 			margin-top: 6px;
-    		font-weight: normal;
+			font-weight: normal;
 		}
-		.like{
+		.like {
 			line-height: 16px;
-    		padding-top: 5px;
+			padding-top: 5px;
 			color: red;
 		}
-		
+	}
+`;
+
+export const PagenationBox = styled.div`
+	position: relative;
+	text-align: center;
+	padding-top: 20px;
+	clear: both;
+
+	.pagination {
+		position: absolute;
+		left: 50%;
+		display: inline-block;
+		justify-content: center;
+		margin-top: 15px;
+		list-style: none;
+		transform: translateX(-50%);
+
+		li {
+			display: inline-block;
+			width: 30px;
+			height: 30px;
+			justify-content: center;
+			align-items: center;
+			font-size: 1rem;
+			a {
+				text-decoration: none;
+				color: gray;
+				font-size: 1rem;
+				font-weight: bold;
+				&:active{
+					color: black;
+				}
+			}
+			
+		}
 	}
 `;

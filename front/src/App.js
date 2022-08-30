@@ -47,7 +47,7 @@ function App() {
 		<UserProvider>
 			<BrowserRouter>
 				<Routes>
-					<Route exact path="/" element={<Main />} /> {/* => 메인페이지 */}
+					<Route exact path="/*" element={<Main />} /> {/* => 메인페이지 */}
 					<Route path="login/*" element={<LogIn />} /> {/* => 로그인페이지 */}
 					<Route path="signup" element={<SignUp />} /> {/* => 회원가입 페이지 */}
 					<Route path="find/*" element={<Find />} /> {/* => 아이디 패스워드 찾기 페이지 */}

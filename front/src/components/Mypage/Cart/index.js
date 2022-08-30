@@ -1,6 +1,6 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { MypageMain } from 'pages/Mypage/styles.js';
-import CartTable, { CartContext } from 'components/Mypage/Cart/Table';
+import CartTable from 'components/Mypage/Cart/Table';
 import { OrderTable, CartPayment, OrderBtn, ModalStyle } from 'components/Mypage/Cart/styles';
 import { FaPlus, FaEquals } from 'react-icons/fa';
 import dummy from 'components/Mypage/data.json';
@@ -15,9 +15,11 @@ function Cart() {
 			if (checked) {
 				const checkedItemsArray = [];
 				dummy.forEach(data => checkedItemsArray.push(data.id));
+				dummy.forEach(data => setSelectedPrice(prev => [...prev, data.price]));
 				setCheckedItems(checkedItemsArray);
 			} else {
 				setCheckedItems([]);
+				setSelectedPrice([]);
 			}
 		},
 		[dummy],
@@ -36,41 +38,16 @@ function Cart() {
 		if (selectedPrice.length > 0) {
 			let total = [...selectedPrice].reduce((a, b) => a + b);
 			setSum(total);
+		} else {
+			setSum(0);
 		}
 	}, [selectedPrice]);
+	
+	console.log(selectedPrice);
+	console.log(checkedItems);
+	console.log(sum);
 
-	const test = () => {
-		console.log(dummy[0].id, checkedItems[0]);
-		if ((dummy[0].id = checkedItems[0])) {
-			console.log('helklo');
-			setSelectedPrice([dummy[checkedItems[0] - 1].price]);
-			setCheckedItems(checkedItems.filter(el => el !== undefined));
-			addcalc();
-		} else {
-			setSelectedPrice([]);
-			minuscalc();
-		}
-	};
-
-	const addcalc = () => {
-		for (let i = 0; i < selectedPrice.length; i++) {
-			let a = sum;
-			a = a + selectedPrice[i];
-			setSum(a);
-		}
-	};
-
-	const minuscalc = () => {
-		for (let i = 0; i < selectedPrice.length; i++) {
-			let b = sum;
-			b = b - selectedPrice[i];
-			setSum(b);
-		}
-	};
-
-	console.log('selectedPrice', selectedPrice);
-	console.log('checkedItems', checkedItems);
-	console.log('sum', sum);
+	
 
 	return (
 		<>
@@ -125,8 +102,8 @@ function Cart() {
 								option={data.option}
 								checkedItems={checkedItems}
 								setCheckedItems={setCheckedItems}
-								test={test}
 								setSelectedPrice={setSelectedPrice}
+								selectedPrice={selectedPrice}
 							/>
 						))}
 					</OrderTable>

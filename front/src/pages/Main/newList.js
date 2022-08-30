@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import './styles';
-// import InfiniteScroll from 'react-infinite-scroll-component';
 
-const ShowList = props => {
-	return props.product?.map(data => (
+const NewList = props => {
+	return props.newProduct?.map(data => (
 		<li className="li_outer">
 			<div className="li_inner">
 				<div className="list_img">
@@ -28,4 +27,4 @@ const ShowList = props => {
 	));
 };
 
-export default ShowList;
+export default NewList;
