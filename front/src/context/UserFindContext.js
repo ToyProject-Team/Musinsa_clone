@@ -61,24 +61,26 @@ function userReducer(state, action) {
 	}
 }
 
-const UserStateContext = createContext();
-const UserDispatchContext = createContext();
+const UserFindStateContext = createContext();
+const UserFindDispatchContext = createContext();
 
-export function UserProvider({ children }) {
+export function UserFindProvider({ children }) {
 	const [state, dispatch] = useReducer(userReducer, initialUser);
 	return (
-		<UserStateContext.Provider value={state}>
-			<UserDispatchContext.Provider value={dispatch}>{children}</UserDispatchContext.Provider>
-		</UserStateContext.Provider>
+		<UserFindStateContext.Provider value={state}>
+			<UserFindDispatchContext.Provider value={dispatch}>
+				{children}
+			</UserFindDispatchContext.Provider>
+		</UserFindStateContext.Provider>
 	);
 }
 
-export function useUserState() {
-	return useContext(UserStateContext);
+export function useUserFindState() {
+	return useContext(UserFindStateContext);
 }
 
-export function useUserDispatch() {
-	return useContext(UserDispatchContext);
+export function useUserFindDispatch() {
+	return useContext(UserFindDispatchContext);
 }
 
 /* 예시 */

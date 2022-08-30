@@ -4,6 +4,7 @@ const User = require('../models/user')
 const ProductImg = require('../models/productImg')
 const CustomCategory = require('../models/customCategory')
 const Comment = require('../models/comment')
+const ProductSize = require('../models/productSize')
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const {sequelize, Op} = require('sequelize')
@@ -71,7 +72,17 @@ router.get('/productList', async (req, res, next) => {
                 {
                     model: ProductImg,
                     attributes: ["src"]
-                }
+                },
+                { 
+                    model: ProductSize,
+                    attributes: ["size", "amount"],
+                },
+                
+            ],
+            
+            order: [
+                ['id', 'ASC'],
+                [ProductSize, 'size', 'ASC']
             ],
             limit: 100,
             offset: startIndx,

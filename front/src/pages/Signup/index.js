@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as CheckIcon } from 'assets/svg/Check.svg';
 import { ReactComponent as LogoIcon } from 'assets/svg/Logo.svg';
+import TextModal from 'components/Modals/TextModal';
 import {
 	Container,
 	SignupSection,
@@ -14,8 +15,6 @@ import {
 	SignupCheckBox,
 	SignupButton,
 } from './styles';
-import AuthModal from 'components/AuthModal';
-import AuthConfirmModal from 'components/AuthConfirmModal';
 import { baseUrl, PostApi } from 'utils/api';
 import {
 	EMAIL,
@@ -26,6 +25,7 @@ import {
 	useUserState,
 } from 'context/UserContext';
 import axios from 'axios';
+import { Navigate } from 'react-router';
 
 const Signup = () => {
 	const user = useUserState();
@@ -75,6 +75,7 @@ const Signup = () => {
 
 	const [modalAuth, setModalAuth] = useState(false);
 	const [modalAuthConfirm, setModalAuthConfirm] = useState(false);
+	const [modalSignUp, setModalSignUp] = useState(false);
 
 	const [signUpBtn, setSignUpBtn] = useState(false);
 
@@ -88,6 +89,7 @@ const Signup = () => {
 			setauthNumber('');
 			setauthNumberReg(true);
 			setAuthStage(1);
+			setauthNumberBtnReg(false);
 		},
 		[auth],
 	);
@@ -127,6 +129,7 @@ const Signup = () => {
 
 					PostApi('/api/auth/checkEmail', params)
 						.then(res => {
+							console.log(res);
 							setModalAuthConfirm(true);
 
 							const payload = {
@@ -179,7 +182,7 @@ const Signup = () => {
 							dispatch({ type: PHONECHECK, payload });
 						})
 						.catch(err => {
-							setauthNumberBtnReg(false);
+							setauthNumberBtnReg(true);
 							console.error('error', err);
 						});
 				}
@@ -227,7 +230,7 @@ const Signup = () => {
 		async e => {
 			e.preventDefault();
 
-			const { email, emailCheck, phoneNumber } = user;
+			const { email, emailCheck, phoneNumber, phoneCheck } = user;
 
 			const params = {
 				loginId: email,
@@ -245,11 +248,13 @@ const Signup = () => {
 					headers: {
 						'Content-Type': 'application/json',
 						emailCheck,
+						phoneCheck,
 					},
 				})
 				.then(res => {
 					switch (res.status) {
 						case 200:
+							setModalSignUp(true);
 							return console.log('success');
 
 						default:
@@ -277,8 +282,7 @@ const Signup = () => {
 	);
 
 	const onCloseModal = useCallback(() => {
-		setModalAuth(false);
-		setModalAuthConfirm(false);
+		setModalSignUp(false);
 
 		if (authStage === 1) {
 			setAuthStage(2);
@@ -288,6 +292,12 @@ const Signup = () => {
 			setauthNumber('');
 		}
 	}, [authStage]);
+
+	const onCloseLinkModal = useCallback(() => {
+		setModalSignUp(false);
+
+		return <Navigate to="/login" />;
+	}, []);
 
 	useEffect(() => {
 		if (checkValue.count === 4) {
@@ -307,7 +317,8 @@ const Signup = () => {
 	const onChangeEmail = useCallback(e => {
 		setEmail(e.target.value);
 
-		const regExp = /^[a-z]+[a-z0-9]{3,10}$/g;
+		const regExp =
+			/^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
 		if (regExp.test(e.target.value)) setEmailReg(true);
 		else setEmailReg(false);
 	}, []);
@@ -345,7 +356,7 @@ const Signup = () => {
 				regExp = /\d{6}/g;
 			}
 
-			if (regExp.test(e.target.value)) setauthNumberReg(true);
+			if (regExp.test(e.target.value.replaceAll('-', ''))) setauthNumberReg(true);
 			else setauthNumberReg(false);
 		},
 		[auth, authStage],
@@ -620,8 +631,22 @@ const Signup = () => {
 					</form>
 				</SignupInner>
 			</SignupSection>
-			<AuthModal show={modalAuth} onCloseModal={onCloseModal}></AuthModal>
-			<AuthConfirmModal show={modalAuthConfirm} onCloseModal={onCloseModal}></AuthConfirmModal>
+
+			<TextModal
+				show={modalAuth}
+				onCloseModal={onCloseModal}
+				content="인증번호가 발송되었습니다."
+			></TextModal>
+			<TextModal
+				show={modalAuthConfirm}
+				onCloseModal={onCloseModal}
+				content="인증번호가 확인되었습니다."
+			></TextModal>
+			<TextModal
+				show={modalSignUp}
+				onCloseModal={onCloseLinkModal}
+				content="회원가입에 성공했습니다."
+			></TextModal>
 		</Container>
 	);
 };

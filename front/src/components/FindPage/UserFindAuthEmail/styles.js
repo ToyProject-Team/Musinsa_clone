@@ -155,6 +155,10 @@ export const AuthInput = styled.div`
 		box-sizing: border-box;
 		width: 100%;
 	}
+	&:focus-within {
+		border-color: #aaa;
+		transition: border 0.2s ease-in-out;
+	}
 
 	.clearBtn {
 		display: flex;
@@ -203,6 +207,13 @@ export const FindIdButton = styled.div`
 			display: inline-block;
 			margin-top: 3px;
 			vertical-align: top;
+		}
+
+		&.active {
+			border-color: #0078ff;
+			background-color: #0078ff;
+			color: #fff;
+			cursor: pointer;
 		}
 	}
 `;

@@ -1,12 +1,12 @@
-import Modal from 'components/Modal';
-import { Button, Label } from 'components/Modal/style';
+import Modal from 'components/Modals/Modal';
+import { Button, Label } from 'components/Modals/Modal/style';
 import React from 'react';
 
-const AuthModal = ({ show, onCloseModal }) => {
+const TextModal = ({ show, onCloseModal, content }) => {
 	return (
 		<Modal show={show} onCloseModal={onCloseModal}>
 			<Label className="label">
-				<span>인증번호가 발송되었습니다.</span>
+				<span>{content}</span>
 			</Label>
 			<Button className="button" onClick={onCloseModal}>
 				확인
@@ -15,4 +15,4 @@ const AuthModal = ({ show, onCloseModal }) => {
 	);
 };
 
-export default AuthModal;
+export default TextModal;
