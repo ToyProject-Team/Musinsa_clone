@@ -13,11 +13,25 @@ import {
 	ListBox,
 } from './styles';
 import { PostQueryApi } from 'utils/api';
-import { useInView } from 'react-intersection-observer';
+// import { useInView } from 'react-intersection-observer';
+import { Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
+import loadable from '@loadable/component';
 
 const Main = () => {
+	const ShowList = loadable(() => import('./showList'), {
+		fallback: <div>로딩중</div>,
+	});
+
+	const NewList = loadable(() => import('./newList'), {
+		fallback: <div>로딩중</div>,
+	});
+
 	const [product, setProduct] = useState();
-	const [page, setPage] = useState(0);
+	const [page, setPage] = useState(1);
+	const [price, setPrice] = useState(1);
+	const [bigCategoryId, setBigCategoryId] = useState(1);
+	const [smallCategoryId, setSmallCategoryId] = useState(1);
+
 	const [loading, setLoaing] = useState(false);
 
 	// useEffect(() => {
@@ -33,18 +47,17 @@ const Main = () => {
 
 	useEffect(() => {
 		const params = {
-			page: page,
-			// price: price,
-			// priceMin: priceMin,
-			// priceMax: priceMax,
-			// bigCategoryId: bigCategoryId,
-			// smallCategoryId: smallCategoryId,
+			page,
+			price,
+			bigCategoryId,
+			smallCategoryId,
 		};
 
 		PostQueryApi('/api/product/productList', params).then(res => setProduct(res.data.productData));
-	}, [page]);
+	}, [page, price, bigCategoryId, smallCategoryId]);
 
 	//데이터 복사본
+
 	const [newProduct, setNewProduct] = useState([]);
 
 	const [selectBox, setSelectBox] = useState(false);
@@ -64,20 +77,62 @@ const Main = () => {
 				}),
 			),
 		);
-		// setNewProduct(
-		// 	newProduct.filter(data => {
-		// 		return data.productTitle === val;
-		// 	}),
-		// );
 		setToggle(false);
 		setSelectBox(true);
+	};
+
+	//페이지 이동
+	const onPage = () => {
+		setPage(page + 1);
+	};
+
+	//가격별로 filter
+	const onFilterPrice = val => {
+		const params = {
+			page,
+			price: val,
+		};
+		PostQueryApi('/api/product/productList', params).then(res =>
+			setNewProduct(res.data.productData),
+		);
+	};
+
+	const onFilterPriceRange = (val1, val2) => {
+		const params = {
+			page,
+			priceMin: val1,
+			priceMax: val2,
+		};
+		PostQueryApi('/api/product/productList', params).then(res =>
+			setNewProduct(res.data.productData),
+		);
+		setToggle(false);
+	};
+
+	//검색창
+	const onSearch = () => {
+		const params = {
+			page,
+			price,
+			bigCategoryId,
+			smallCategoryId,
+		};
+		PostQueryApi('/api/product/productList', params).then(res =>
+			setNewProduct(
+				res.data.productData.filter(data =>
+					data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
+				),
+			),
+		);
+		setToggle(false);
 	};
 
 	//가격순 정렬
 	//내림차순
 	const onSortPriceDown = () => {
 		const params = {
-			page: page,
+			page,
+			price,
 		};
 		PostQueryApi('/api/product/productList', params).then(res =>
 			setNewProduct(
@@ -93,7 +148,8 @@ const Main = () => {
 	//오름차순
 	const onSortPriceUp = () => {
 		const params = {
-			page: page,
+			page,
+			price,
 		};
 		PostQueryApi('/api/product/productList', params).then(res =>
 			setNewProduct(
@@ -105,58 +161,12 @@ const Main = () => {
 		setToggle(false);
 	};
 
-	//페이지 이동
-	const onPage = () => {
-		setPage(page + 1);
-	};
-
-	//가격별로 filter
-	const onFilterPrice = val => {
-		const params = {
-			page: page,
-			price: val,
-		};
-		PostQueryApi('/api/product/productList', params).then(res =>
-			setNewProduct(res.data.productData),
-		);
-		setToggle(false);
-	};
-
-	const onFilterPriceRange = (val1, val2) => {
-		const params = {
-			page: page,
-			priceMin: val1,
-			priceMax: val2,
-		};
-		PostQueryApi('/api/product/productList', params).then(res =>
-			setNewProduct(res.data.productData),
-		);
-		setToggle(false);
-	};
-
-	//검색창
-	const onSearch = () => {
-		const params = {
-			page: page,
-		};
-		PostQueryApi('/api/product/productList', params).then(res =>
-			setNewProduct(
-				res.data.productData.filter(data =>
-					data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
-				),
-			),
-		);
-		setToggle(false);
-	};
-
 	return (
 		<MainContainer>
 			{/* 카테고리 */}
 			<Category>
 				<CategoryTitle>
-					<div className="page_title" onClick={() => onPage()}>
-						Bag
-					</div>
+					<div className="page_title">Bag</div>
 					<div className="hash_tag">#노트북</div>
 					<div className="hash_tag">#캐주얼</div>
 				</CategoryTitle>
@@ -179,14 +189,16 @@ const Main = () => {
 					</CategoryName>
 					<div
 						className="all_item"
-						onClick={() => {
-							// PostQueryApi('/api/product/productList', { page }).then(res =>
-							// 	setProduct(res.data.productData),
-							// );
-							setToggle(true);
-						}}
+						// onClick={() => {
+						// 	setToggle(true);
+						// }}
 					>
-						전체
+						<Link
+							to="/"
+							style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
+						>
+							전체
+						</Link>
 					</div>
 					<div className="all_item_list">
 						<ul>
@@ -198,7 +210,20 @@ const Main = () => {
 									else if (val.toLowerCase().includes(searchInput)) return val;
 								})
 								.map(data => {
-									return <li onClick={e => onSort(e.target.textContent)}>{data}</li>;
+									return (
+										<li onClick={e => onSort(e.target.textContent)}>
+											<Link
+												to="/category"
+												style={{
+													'text-decoration': 'none',
+													color: '#b2b2b2',
+													'font-weight': 'bold',
+												}}
+											>
+												{data}
+											</Link>
+										</li>
+									);
 								})}
 						</ul>
 					</div>
@@ -218,22 +243,58 @@ const Main = () => {
 					<CategoryName>가격</CategoryName>
 					<div className="price">
 						<ul>
-							<li
-								style={{ fontWeight: 'bold', color: 'black' }}
-								onClick={() => {
-									// PostQueryApi('/api/product/productList', { page }).then(res =>
-									// 	setNewProduct(res.data.productData),
-									// );
-									setToggle(true);
-								}}
-							>
-								전체보기
+							<li>
+								<Link
+									to="/color"
+									style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
+								>
+									전체보기
+								</Link>
 							</li>
-							<li onClick={() => onFilterPrice(1)}>~ 50,000원</li>
-							<li onClick={() => onFilterPrice(2)}>50,000원 ~ 100,000원</li>
+							<li onClick={() => onFilterPrice(1)}>
+								<Link
+									to="/color"
+									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+								>
+									~ 50,000원
+								</Link>
+							</li>
+							<li onClick={() => onFilterPrice(2)}>
+								<Link
+									to="/color"
+									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+								>
+									50,000원 ~ 100,000원
+								</Link>
+							</li>
+							<li onClick={() => onFilterPrice(3)}>
+								<Link
+									to="/color"
+									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+								>
+									100,000원 ~ 200,000원
+								</Link>
+							</li>
+							<li onClick={() => onFilterPrice(4)}>
+								<Link
+									to="/color"
+									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+								>
+									200,000원 ~ 300,000원
+								</Link>
+							</li>
+							<li onClick={() => onFilterPrice(5)}>
+								<Link
+									to="/color"
+									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+								>
+									300,000원 ~
+								</Link>
+							</li>
+							{/* <li onClick={() => onFilterPrice(2)}>50,000원 ~ 100,000원</li>
 							<li onClick={() => onFilterPrice(3)}>100,000원 ~ 200,000원</li>
 							<li onClick={() => onFilterPrice(4)}>200,000원 ~ 300,000원</li>
-							<li onClick={() => onFilterPrice(5)}>300,000원 ~</li>
+							<li onClick={() => onFilterPrice(5)}>300,000원 ~</li> */}
 							<li style={{ width: '248px' }}>
 								<input
 									className="minPrice"
@@ -254,7 +315,9 @@ const Main = () => {
 										onFilterPriceRange(minPriceInput, maxPriceInput);
 									}}
 								>
-									검색
+									<Link to="/color" style={{ 'text-decoration': 'none', color: 'black' }}>
+										검색
+									</Link>
 								</span>
 							</li>
 						</ul>
@@ -266,7 +329,9 @@ const Main = () => {
 					<div className="search_items">
 						<input type="text" id="search_items" onChange={e => setSearchTerm(e.target.value)} />
 						<span type="submit" className="search_btn" onClick={() => onSearch()}>
-							검색
+							<Link to="/search" style={{ 'text-decoration': 'none', color: 'black' }}>
+								검색
+							</Link>
 						</span>
 					</div>
 				</OtherCategory>
@@ -290,10 +355,14 @@ const Main = () => {
 						<span className="sort">무신사 추천순</span>
 						<span className="sort">신상품(재입고)순</span>
 						<span className="sort" onClick={() => onSortPriceUp()}>
-							낮은 가격순
+							<Link to="/sort" style={{ 'text-decoration': 'none', color: 'black' }}>
+								낮은 가격순
+							</Link>
 						</span>
 						<span className="sort" onClick={() => onSortPriceDown()}>
-							높은 가격순
+							<Link to="/sort" style={{ 'text-decoration': 'none', color: 'black' }}>
+								높은 가격순
+							</Link>
 						</span>
 						<span className="sort">할인율순</span>
 						<span className="sort">후기순</span>
@@ -301,56 +370,13 @@ const Main = () => {
 					</SortBox>
 					<ListBox>
 						<ul className="list_item">
-							{toggle
-								? product?.map(data => (
-										<li className="li_outer">
-											<div className="li_inner">
-												<div className="list_img">
-													<a href="/detail">
-														<img
-															src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.ProductImg.src}`}
-														></img>
-													</a>
-												</div>
-												<div className="item_info">
-													<p></p>
-													<p>{data.productTitle}</p>
-													<p>{data.productPrice.toLocaleString('ko-KR')}원</p>
-													<p>MEMBERSHIP PRICE</p>
-													<p>...</p>
-												</div>
-											</div>
-											<div className="option">
-												<span>성별</span>
-												<span className="option_btn">OPTION ▼</span>
-											</div>
-										</li>
-								  ))
-								: newProduct.map(data => (
-										<li className="li_outer">
-											<div className="li_inner">
-												<div className="list_img">
-													<a href="/detail">
-														<img
-															src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.ProductImg.src}`}
-														></img>
-													</a>
-												</div>
-												<div className="item_info">
-													<p></p>
-													<p>{data.productTitle}</p>
-													<p>{data.productPrice.toLocaleString('ko-KR')}원</p>
-													<p>MEMBERSHIP PRICE</p>
-													<p>...</p>
-												</div>
-											</div>
-											<div className="option">
-												<span>성별</span>
-												<span className="option_btn">OPTION ▼</span>
-											</div>
-										</li>
-								  ))}
-							{/* <ShowList product={product} /> */}
+							<Routes>
+								<Route exact path="/" element={<ShowList product={product} />}></Route>
+								<Route path="/category" element={<NewList newProduct={newProduct} />}></Route>
+								<Route path="/color" element={<NewList newProduct={newProduct} />}></Route>
+								<Route path="/sort" element={<NewList newProduct={newProduct} />}></Route>
+								<Route path="/search" element={<NewList newProduct={newProduct} />}></Route>
+							</Routes>
 						</ul>
 					</ListBox>
 				</Items>

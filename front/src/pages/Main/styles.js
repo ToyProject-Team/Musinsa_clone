@@ -89,6 +89,7 @@ export const MiddleCategory = styled.div`
 		& ul {
 			display: inline-block;
 			max-width: 800px;
+
 			& li {
 				float: left;
 				width: 100px;
@@ -102,6 +103,7 @@ export const MiddleCategory = styled.div`
 			display: inline-block;
 			min-width: 600px;
 			max-width: 800px;
+
 			& li {
 				float: left;
 				width: 100px;
@@ -495,7 +497,7 @@ export const ListBox = styled.div`
 
 	.option {
 		display: flex;
-		justify-content: space-between;
+		justify-content: flex-end;
 		// margin: 0 10px 0 10px;
 		padding-left: 7px;
 
