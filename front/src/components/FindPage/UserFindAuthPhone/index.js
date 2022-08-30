@@ -2,7 +2,7 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useStat
 import { RadioDetail, AuthInput } from './styles';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
-import { baseUrl, PostApi } from 'utils/api';
+import { PostApi, PostHeaderApi } from 'utils/api';
 import {
 	MODALAUTH,
 	PHONECODE,
@@ -10,26 +10,30 @@ import {
 	FINDUSERID,
 	useUserFindDispatch,
 	useUserFindState,
+	FINDBUTTONLOADING,
+	MODALAUTHCONFIRM,
+	PHONECODEFLAG,
 } from 'context/UserFindContext';
-import axios from 'axios';
+import { authError } from 'utils/error';
 
 const UserFindAuthPhone = forwardRef((props, ref) => {
 	const userFind = useUserFindState();
 	const dispatch = useUserFindDispatch();
-	const { findButtonFlag } = userFind;
+	const { phoneNumber, phoneCode, phoneCodeFlag } = userFind;
 
-	const [phoneNumber, setPhoneNumber] = useState('');
 	const [phoneNumberReg, setPhoneNumberReg] = useState(true);
-	const [phoneCode, setPhoneCode] = useState('');
-	const [phoneCodeToggle, setPhoneCodeToggle] = useState(false);
 	const [phoneCodeReg, setPhoneCodeReg] = useState(true);
 	const [phoneNumberLoading, setPhoneNumberLoading] = useState(false);
 
+	const changeDispatch = useCallback((type, payload) => {
+		return dispatch({ type, payload });
+	}, []);
+
 	const onClickClear = useCallback(e => {
 		if (e === 'phoneNumber') {
-			setPhoneNumber('');
+			changeDispatch(PHONENUMBER, { phoneNumber: '' });
 		} else if (e === 'phoneCode') {
-			setPhoneCode('');
+			changeDispatch(PHONECODE, { phoneCode: '' });
 		}
 	}, []);
 
@@ -38,7 +42,7 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 		e => {
 			const { value } = e.target;
 			const onlyNumber = value.replace(/[^0-9]/g, '');
-			setPhoneNumber(onlyNumber);
+			changeDispatch(PHONENUMBER, { phoneNumber: value });
 
 			const regExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
 			if (regExp.test(onlyNumber)) setPhoneNumberReg(true);
@@ -52,12 +56,7 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 
 		if (value.length === 7) return;
 
-		const payload = {
-			phoneCode: value,
-		};
-
-		dispatch({ type: PHONECODE, payload });
-		setPhoneCode(value);
+		changeDispatch(PHONECODE, { phoneCode: value });
 	}, []);
 
 	const onClickAuth = useCallback(
@@ -71,15 +70,10 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 
 			PostApi('/api/auth/sendSMS', params)
 				.then(() => {
-					setPhoneCodeToggle(true);
+					changeDispatch(PHONENUMBER, { phoneNumber: phoneNumber.replaceAll('-', '') });
+					changeDispatch(PHONECODEFLAG, { phoneCodeFlag: true });
+					changeDispatch(MODALAUTH, { modalAuth: true });
 
-					const payload = {
-						phoneNumber: phoneNumber.replaceAll('-', ''),
-						modalAuth: true,
-					};
-
-					dispatch({ type: PHONENUMBER, payload });
-					dispatch({ type: MODALAUTH, payload });
 					setPhoneNumberLoading(false);
 				})
 				.catch(err => {
@@ -90,10 +84,11 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 	);
 
 	useImperativeHandle(ref, () => ({
+		// 휴대폰 2차인증
 		async secondAuth() {
-			// 휴대폰 2차인증
-			const { phoneNumber } = userFind;
+			changeDispatch(FINDBUTTONLOADING, { findButtonLoading: true });
 
+			const { phoneNumber } = userFind;
 			const params = {
 				phoneNumber,
 				code: phoneCode,
@@ -102,15 +97,15 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 			try {
 				const result = await PostApi('/api/auth/checkSMS', params)
 					.then(res => {
-						console.log(123123, res);
+						setPhoneCodeReg(true);
 						return res;
 					})
 					.catch(err => {
 						setPhoneCodeReg(false);
+						authError(err);
 						console.error('error', err);
 					});
 
-				console.log(result);
 				await userFindId(result.data.phoneCheck);
 			} catch (error) {
 				console.log(error);
@@ -120,44 +115,23 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 
 	const userFindId = useCallback(
 		phoneCheck => {
-			axios
-				.post(
-					`${baseUrl}/api/auth/findId`,
-					{},
-					{
-						headers: {
-							'Content-Type': 'application/json',
-							phoneCheck,
-						},
-					},
-				)
+			// 아이디 찾기
+			PostHeaderApi('/api/auth/findId', 'phoneCheck', phoneCheck)
 				.then(res => {
 					switch (res.status) {
 						case 200:
-							const payload = {
-								userFindId: res.data.loginId,
-							};
-							dispatch({ type: FINDUSERID, payload });
+							changeDispatch(FINDUSERID, { findUserId: res.data.loginId });
+							changeDispatch(MODALAUTHCONFIRM, { modalAuthConfirm: true });
+							changeDispatch(FINDBUTTONLOADING, { findButtonLoading: false });
 							break;
+
 						default:
 							console.log(res);
 							break;
 					}
 				})
 				.catch(err => {
-					switch (err.response.status) {
-						case 400:
-							return alert('이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다');
-						case 401:
-							return alert('이미 사용중인 아이디 입니다');
-						case 402:
-							return alert('이미 사용중인 이메일 입니다.');
-						case 500:
-							return console.log('서버에러');
-						default:
-							console.log(err);
-							break;
-					}
+					authError(err);
 				});
 		},
 		[userFind],
@@ -166,10 +140,14 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 	// 자동으로 하이픈 넣기
 	useEffect(() => {
 		if (phoneNumber.length === 10) {
-			setPhoneNumber(phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+			changeDispatch(PHONENUMBER, {
+				phoneNumber: phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'),
+			});
 		}
-		if (phoneNumber.length === 11) {
-			setPhoneNumber(phoneNumber.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+		if (phoneNumber.length === 13) {
+			changeDispatch(PHONENUMBER, {
+				phoneNumber: phoneNumber.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'),
+			});
 		}
 	}, [phoneNumber]);
 
@@ -215,7 +193,7 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 					</AuthInput>
 					{!phoneNumberReg && <p>휴대전화 번호를 입력해 주세요.</p>}
 				</div>
-				{phoneCodeToggle && (
+				{phoneCodeFlag && (
 					<div>
 						<AuthInput className={phoneCodeReg ? '' : 'danger'}>
 							<input

@@ -37,6 +37,7 @@ const UserFindId = () => {
 		setAuth(value);
 	}, []);
 
+	// 아이디 찾기 클릭 이벤트
 	const onClickCheckId = useCallback(async () => {
 		if (!findIdButton) return;
 
@@ -47,6 +48,7 @@ const UserFindId = () => {
 		}
 	}, [findIdButton, auth, emailCode, userFind]);
 
+	// 모달창 Close
 	const onCloseModal = useCallback(() => {
 		const payload = {
 			modalAuth: false,

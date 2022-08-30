@@ -3,12 +3,17 @@ import React, { useReducer, createContext, useContext } from 'react';
 const initialFind = {
 	email: '',
 	emailCode: '',
+	emailCodeFlag: false,
 	emailCheck: '',
+
 	phoneNumber: '',
 	phoneCode: '',
+	phoneCodeFlag: false,
 	phoneCheck: '',
+
 	findUserId: '',
 	findButtonLoading: false,
+
 	modalAuth: false,
 	modalAuthConfirm: false,
 };
@@ -17,10 +22,12 @@ export const INIT = 'INIT';
 
 export const PHONENUMBER = 'PHONENUMBER';
 export const PHONECODE = 'PHONECODE';
+export const PHONECODEFLAG = 'PHONECODEFLAG';
 export const PHONECHECK = 'PHONECHECK';
 
 export const EMAIL = 'EMAIL';
 export const EMAILCODE = 'EMAILCODE';
+export const EMAILCODEFLAG = 'EMAILCODEFLAG';
 export const EMAILCHECK = 'EMAILCHECK';
 
 export const FINDBUTTONFLAG = 'FINDBUTTONFLAG';
@@ -33,18 +40,7 @@ export const MODALAUTHCONFIRM = 'MODALAUTHCONFIRM';
 function userReducer(state, action) {
 	switch (action.type) {
 		case INIT:
-			return {
-				email: '',
-				emailCode: '',
-				emailCheck: '',
-				phoneNumber: '',
-				phoneCode: '',
-				phoneCheck: '',
-				findUserId: '',
-				findButtonLoading: false,
-				modalAuth: false,
-				modalAuthConfirm: false,
-			};
+			return initialFind;
 
 		case PHONENUMBER:
 			return {
@@ -56,6 +52,12 @@ function userReducer(state, action) {
 			return {
 				...state,
 				phoneCode: action.payload.phoneCode,
+			};
+
+		case PHONECODEFLAG:
+			return {
+				...state,
+				phoneCodeFlag: action.payload.phoneCodeFlag,
 			};
 
 		case PHONECHECK:
@@ -74,6 +76,12 @@ function userReducer(state, action) {
 			return {
 				...state,
 				emailCode: action.payload.emailCode,
+			};
+
+		case EMAILCODEFLAG:
+			return {
+				...state,
+				emailCodeFlag: action.payload.emailCodeFlag,
 			};
 
 		case EMAILCHECK:

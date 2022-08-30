@@ -1,8 +1,8 @@
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, useCallback, useImperativeHandle, useState } from 'react';
 import { RadioDetail, AuthInput } from './styles';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
-import { baseUrl, PostApi } from 'utils/api';
+import { PostApi, PostHeaderApi } from 'utils/api';
 import {
 	EMAIL,
 	FINDUSERID,
@@ -12,88 +12,79 @@ import {
 	MODALAUTHCONFIRM,
 	EMAILCODE,
 	FINDBUTTONLOADING,
+	EMAILCODEFLAG,
 } from 'context/UserFindContext';
-import axios from 'axios';
+import { authError } from 'utils/error';
 
 const UserFindAuthEmail = forwardRef((props, ref) => {
 	const userFind = useUserFindState();
 	const dispatch = useUserFindDispatch();
+	const { email, emailCode, emailCodeFlag } = userFind;
 
-	const [emailNumber, setEmailNumber] = useState('');
 	const [emailNumberReg, setEmailNumberReg] = useState(true);
-	const [emailCode, setEmailCode] = useState('');
-	const [emailCodeToggle, setEmailCodeToggle] = useState(false);
 	const [emailCodeReg, setEmailCodeReg] = useState(true);
 	const [emailNumberLoading, setEmailNumberLoading] = useState(false);
 
+	const changeDispatch = useCallback((type, payload) => {
+		return dispatch({ type, payload });
+	}, []);
+
 	const onClickClear = useCallback(e => {
 		if (e === 'emailNumber') {
-			setEmailNumber('');
+			changeDispatch(EMAIL, { email: '' });
 		} else if (e === 'emailCode') {
-			setEmailCode('');
+			changeDispatch(EMAILCODE, { emailCode: '' });
 		}
 	}, []);
 
 	// onChange 정규식 검사
-	const onChangeEmailNumber = useCallback(e => {
-		setEmailNumber(e.target.value);
+	const onChangeEmailNumber = useCallback(
+		e => {
+			const { value } = e.target;
+			changeDispatch(EMAIL, { email: value });
 
-		const regExp =
-			/^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
-		if (regExp.test(e.target.value)) setEmailNumberReg(true);
-		else setEmailNumberReg(false);
-	}, []);
+			const regExp =
+				/^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+			if (regExp.test(value)) setEmailNumberReg(true);
+			else setEmailNumberReg(false);
+		},
+		[email],
+	);
 
 	const onChangeCode = useCallback(e => {
 		const { value } = e.target;
-
 		if (value.length === 7) return;
 
-		const payload = {
-			emailCode: value,
-		};
-
-		dispatch({ type: EMAILCODE, payload });
-
-		setEmailCode(value);
+		changeDispatch(EMAILCODE, { emailCode: value });
 	}, []);
 
 	const onClickAuth = useCallback(() => {
 		// 이메일 1차인증
 		const params = {
-			email: emailNumber,
+			email,
 		};
 
 		setEmailNumberLoading(true);
 
 		PostApi('/api/auth/authEmail', params)
 			.then(() => {
-				setEmailCodeToggle(true);
+				changeDispatch(EMAIL, { email });
+				changeDispatch(EMAILCODEFLAG, { emailCodeFlag: true });
+				changeDispatch(MODALAUTH, { modalAuth: true });
 
-				const payload = {
-					email: emailNumber,
-					modalAuth: true,
-				};
-
-				dispatch({ type: EMAIL, payload });
-				dispatch({ type: MODALAUTH, payload });
 				setEmailNumberLoading(false);
 			})
 			.catch(err => {
 				console.error('error', err);
 			});
-	}, [emailNumber]);
+	}, [email]);
 
 	useImperativeHandle(ref, () => ({
+		// 이메일 2차인증
 		async secondAuth() {
-			const payload = {
-				findButtonLoading: true,
-			};
-			dispatch({ type: FINDBUTTONLOADING, payload });
+			changeDispatch(FINDBUTTONLOADING, { findButtonLoading: true });
 
-			// 이메일 2차인증
 			const { email } = userFind;
-
 			const params = {
 				email,
 				number: emailCode,
@@ -107,41 +98,28 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 					})
 					.catch(err => {
 						setEmailCodeReg(false);
+						authError(err);
 						console.error('error', err);
 					});
 
 				await userFindId(result.data.emailCheck);
 			} catch (error) {
-				console.log(error);
+				changeDispatch(FINDBUTTONLOADING, { findButtonLoading: false });
+				console.error('error', error);
 			}
 		},
 	}));
 
 	const userFindId = useCallback(
 		emailCheck => {
-			axios
-				.post(
-					`${baseUrl}/api/auth/findId`,
-					{},
-					{
-						headers: {
-							'Content-Type': 'application/json',
-							emailCheck,
-						},
-					},
-				)
+			// 아이디 찾기
+			PostHeaderApi('/api/auth/findId', 'emailCheck', emailCheck)
 				.then(res => {
 					switch (res.status) {
 						case 200:
-							const payload = {
-								findUserId: res.data.loginId,
-								modalAuthConfirm: true,
-								findButtonLoading: false,
-							};
-							dispatch({ type: FINDUSERID, payload });
-							dispatch({ type: MODALAUTHCONFIRM, payload });
-							dispatch({ type: FINDBUTTONLOADING, payload });
-
+							changeDispatch(FINDUSERID, { findUserId: res.data.loginId });
+							changeDispatch(MODALAUTHCONFIRM, { modalAuthConfirm: true });
+							changeDispatch(FINDBUTTONLOADING, { findButtonLoading: false });
 							break;
 
 						default:
@@ -150,19 +128,8 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 					}
 				})
 				.catch(err => {
-					switch (err.response.status) {
-						case 400:
-							return alert('이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다');
-						case 401:
-							return alert('이미 사용중인 아이디 입니다');
-						case 402:
-							return alert('이미 사용중인 이메일 입니다.');
-						case 500:
-							return console.log('서버에러');
-						default:
-							console.log(err);
-							break;
-					}
+					console.log(err);
+					authError(err);
 				});
 		},
 		[userFind],
@@ -175,13 +142,13 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 					<AuthInput className={emailNumberReg ? '' : 'danger'}>
 						<input
 							type="email"
-							value={emailNumber}
+							value={email}
 							onChange={onChangeEmailNumber}
 							onFocus={onChangeEmailNumber}
 							title="이메일 인증"
 							placeholder="이메일"
 						/>
-						{emailNumber?.length > 0 && (
+						{email?.length > 0 && (
 							<button
 								type="button"
 								className="clearBtn"
@@ -193,11 +160,9 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 						<button
 							type="button"
 							className="authBtn"
-							disabled={emailNumber.length > 0 && emailNumberReg ? false : true}
+							disabled={email.length > 0 && emailNumberReg ? false : true}
 							style={
-								emailNumber.length > 0 && emailNumberReg
-									? { cursor: 'pointer' }
-									: { cursor: 'default' }
+								email.length > 0 && emailNumberReg ? { cursor: 'pointer' } : { cursor: 'default' }
 							}
 							onClick={() => onClickAuth('emailNumber')}
 						>
@@ -207,7 +172,7 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 					</AuthInput>
 					{!emailNumberReg && <p>이메일을 입력해 주세요.</p>}
 				</div>
-				{emailCodeToggle && (
+				{emailCodeFlag && (
 					<div>
 						<AuthInput className={emailCodeReg ? '' : 'danger'}>
 							<input

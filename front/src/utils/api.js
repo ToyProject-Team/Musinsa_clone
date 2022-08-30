@@ -48,3 +48,22 @@ export const PostQueryApi = async (PATH, params) => {
 
 	return result;
 };
+
+/**
+ *
+ * @param URL주소 PATH
+ * @param header이름 header
+ * @param header값 params
+ * @returns result 데이터
+ */
+export const PostHeaderApi = async (PATH, header, params) => {
+	const result = await axios.post(
+		baseUrl + PATH,
+		{},
+		{
+			headers: { 'Content-Type': 'application/json', [header]: params },
+		},
+	);
+
+	return result;
+};
