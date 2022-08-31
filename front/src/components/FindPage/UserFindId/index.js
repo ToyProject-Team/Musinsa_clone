@@ -41,7 +41,7 @@ const UserFindId = () => {
 	const query = qs.parse(location.search, {
 		ignoreQueryPrefix: true,
 	});
-	console.log(query);
+	// console.log(query);
 
 	const changeDispatch = useCallback((type, payload) => {
 		return dispatch({ type, payload });
@@ -54,7 +54,8 @@ const UserFindId = () => {
 
 	// 아이디 찾기
 	useEffect(() => {
-		if (auth === 'emailAuth' && authSuccess && emailCheck !== '') {
+		console.log(userFind);
+		if (auth === 'emailAuth' && authSuccess && emailCheck) {
 			// 이메일로 아이디 찾기
 			PostHeaderApi('/api/auth/findId', 'emailCheck', emailCheck)
 				.then(res => {
@@ -73,7 +74,7 @@ const UserFindId = () => {
 					console.log(err);
 					authError(err);
 				});
-		} else if (auth === 'phoneAuth' && authSuccess && phoneCheck !== '') {
+		} else if (auth === 'phoneAuth' && authSuccess && phoneCheck) {
 			// 휴대전화로 아이디 찾기
 			PostHeaderApi('/api/auth/findId', 'phoneCheck', phoneCheck)
 				.then(res => {
