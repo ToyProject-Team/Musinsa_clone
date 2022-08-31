@@ -17,6 +17,7 @@ import {
 	KakaoLogIn,
 	SignupLink,
 } from './styles';
+import { ReactComponent as KakaoIcon } from 'assets/svg/Kakao.svg';
 
 const LogIn = () => {
 	const [login, setLogin] = useState(getData());
@@ -99,7 +100,8 @@ const LogIn = () => {
 	const KakaoLogin = useCallback(async () => {
 		const KAKAO_AUTH_URL = await GetApi('/api/auth/kakao');
 
-		window.location.href = KAKAO_AUTH_URL.data.url;
+		console.log(KAKAO_AUTH_URL);
+		// window.location.href = KAKAO_AUTH_URL.data.url;
 	}, []);
 
 	if (login) {
@@ -163,22 +165,7 @@ const LogIn = () => {
 							className="login-button__item login-button__item--kakao"
 							onClick={KakaoLogin}
 						>
-							<svg
-								width="30"
-								height="30"
-								viewBox="0 0 30 30"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-								className="login-button__item__logo"
-							>
-								<title>kakao 로고</title>
-								<path
-									fillRule="evenodd"
-									clipRule="evenodd"
-									d="M15 7C10.029 7 6 10.129 6 13.989C6 16.389 7.559 18.505 9.932 19.764L8.933 23.431C8.845 23.754 9.213 24.013 9.497 23.826L13.874 20.921C14.243 20.958 14.618 20.978 15 20.978C19.971 20.978 24 17.849 24 13.989C24 10.129 19.971 7 15 7Z"
-									fill="black"
-								></path>
-							</svg>
+							<KakaoIcon />
 							카카오 로그인
 						</KakaoLogIn>
 					</div>
