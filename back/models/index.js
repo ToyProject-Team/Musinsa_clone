@@ -9,6 +9,7 @@ const CustomCategory = require('./customCategory')
 const Comment = require('./comment')
 const Order = require('./order')
 const ProductSize = require('./productSize')
+const CategoryColor = require('./categoryColor')
 
 const db = {};
 db.User = user;
@@ -20,6 +21,7 @@ db.CustomCategory = CustomCategory;
 db.Comment = Comment
 db.Order = Order
 db.ProductSize = ProductSize
+db.CategoryColor = CategoryColor
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];

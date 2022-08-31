@@ -331,7 +331,7 @@ router.post('/checkSMS', async (req, res, next) => {
       if (code != clientCheck) {
       return res.status(401).send({ message: "인증 번호가 틀리셨습니다" })
       }
-      const phoneCheck = CryptoJS.AES.encrypt(JSON.stringify(req.body.phoneNumber), 'secret key 123').toString();
+      phoneCheck = CryptoJS.AES.encrypt(JSON.stringify(req.body.phoneNumber), 'secret key 123').toString();
       phoneCheck = phoneCheck.substr(1)
       phoneCheck = phoneCheck.slice(0, -1);
       await redisClient.set(phoneCheck, req.body.phoneNumber);
