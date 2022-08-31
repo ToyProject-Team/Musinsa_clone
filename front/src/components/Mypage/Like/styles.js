@@ -114,11 +114,14 @@ export const PagenationBox = styled.div`
 				color: gray;
 				font-size: 1rem;
 				font-weight: bold;
-				&:active{
-					color: black;
-				}
 			}
+
 			
+		}
+		.active{
+			a{
+				color: black;
+			}
 		}
 	}
 `;

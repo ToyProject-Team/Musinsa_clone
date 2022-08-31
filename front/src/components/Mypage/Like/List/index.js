@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { ImgSpan, LikeLi, LikeUl } from '../styles';
 import { FaHeart } from 'react-icons/fa';
 
-function Likelist({ img, brand, model, price, state, option, id }) {
+function Likelist({ img, brand, model, price, state, option, id, like }) {
 	const [value, setValue] = useState('');
-
 	const handleChange = ({ target: { value } }) => setValue(value);
+
+	const [productLike, setProductLike] = useState(0);
 
 	return (
 		<LikeUl>
@@ -18,7 +19,7 @@ function Likelist({ img, brand, model, price, state, option, id }) {
 					<li className="name">{model}</li>
 					<li className="price">{price}원</li>
 					<li className="like">
-						<FaHeart /> 346
+						<FaHeart /> {like}
 					</li>
 				</ul>
 			</LikeLi>

@@ -30,21 +30,22 @@ function Mainlike() {
 							price={data.price}
 							state={data.orderstatus}
 							option={data.option}
+							like={data.like}
 						/>
 					))}
-          <PagenationBox>
-          <Pagination
-						activePage={1}
-						itemsCountPerPage={4}
-						totalItemsCount={dummy.length - 1}
-						pageRangeDisplayed={5}
-						onChange={handlePageChange}
-            firstPageText={""}
-            lastPageText={""}
-            prevPageText={""}
-            nextPageText={""}
-					/>
-          </PagenationBox>	
+					<PagenationBox>
+						<Pagination
+							activePage={page}
+							itemsCountPerPage={4}
+							totalItemsCount={dummy.length - 1}
+							pageRangeDisplayed={5}
+							onChange={handlePageChange}
+							firstPageText={''}
+							lastPageText={''}
+							prevPageText={''}
+							nextPageText={''}
+						/>
+					</PagenationBox>
 				</LikeSection>
 			</MypageMain>
 		</>
