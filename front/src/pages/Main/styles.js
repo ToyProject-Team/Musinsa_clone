@@ -499,7 +499,6 @@ export const ListBox = styled.div`
 		display: flex;
 		justify-content: flex-end;
 		// margin: 0 10px 0 10px;
-		padding-left: 7px;
 
 		.option_btn {
 			border-top: 1px solid #ddd;

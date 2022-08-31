@@ -23,6 +23,11 @@ const ShowList = props => {
 			</div>
 			<div className="option">
 				<span className="option_btn">OPTION ▼</span>
+				{/* <div className="option_size">
+					<ul>
+						<li>{data.productSizes.size}</li>
+					</ul>
+				</div> */}
 			</div>
 		</li>
 	));
