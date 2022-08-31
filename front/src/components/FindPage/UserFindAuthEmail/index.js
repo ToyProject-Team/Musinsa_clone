@@ -1,238 +1,184 @@
-import React, { useCallback, useState } from 'react';
+import React, { forwardRef, useCallback, useImperativeHandle, useState } from 'react';
 import { RadioDetail, AuthInput } from './styles';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
-import { baseUrl, PostApi } from 'utils/api';
-import { EMAIL, PHONENUMBER, USERFINDID, useUserDispatch, useUserState } from 'context/UserContext';
-import TextModal from 'components/Modals/TextModal';
-import axios from 'axios';
+import { PostApi, PostHeaderApi } from 'utils/api';
+import {
+	EMAIL,
+	FINDUSERID,
+	useUserFindState,
+	useUserFindDispatch,
+	MODALAUTH,
+	MODALAUTHCONFIRM,
+	EMAILCODE,
+	FINDBUTTONLOADING,
+	EMAILCODEFLAG,
+	AUTHSUCCESS,
+	EMAILCHECK,
+} from 'context/UserFindContext';
+import { authError } from 'utils/error';
 
-const UserFindAuth = () => {
-	const user = useUserState();
-	const dispatch = useUserDispatch();
+const UserFindAuthEmail = forwardRef((props, ref) => {
+	const userFind = useUserFindState();
+	const dispatch = useUserFindDispatch();
+	const { email, emailCode, emailCodeFlag } = userFind;
 
-	const [auth, setAuth] = useState('phoneAuth');
-
-	const [emailNumber, setEmailNumber] = useState('');
 	const [emailNumberReg, setEmailNumberReg] = useState(true);
-	const [emailCode, setEmailCode] = useState('');
-	const [emailCodeToggle, setEmailCodeToggle] = useState(false);
 	const [emailCodeReg, setEmailCodeReg] = useState(true);
-
-	const [modalAuth, setModalAuth] = useState(false);
-
 	const [emailNumberLoading, setEmailNumberLoading] = useState(false);
+
+	const changeDispatch = useCallback((type, payload) => {
+		return dispatch({ type, payload });
+	}, []);
 
 	const onClickClear = useCallback(e => {
 		if (e === 'emailNumber') {
-			setEmailNumber('');
+			changeDispatch(EMAIL, { email: '' });
 		} else if (e === 'emailCode') {
-			setEmailCode('');
+			changeDispatch(EMAILCODE, { emailCode: '' });
 		}
 	}, []);
 
 	// onChange 정규식 검사
-	const onChangeEmailNumber = useCallback(e => {
-		setEmailNumber(e.target.value);
+	const onChangeEmailNumber = useCallback(
+		e => {
+			const { value } = e.target;
+			changeDispatch(EMAIL, { email: value });
 
-		const regExp =
-			/^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
-		if (regExp.test(e.target.value)) setEmailNumberReg(true);
-		else setEmailNumberReg(false);
-	}, []);
+			const regExp =
+				/^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+			if (regExp.test(value)) setEmailNumberReg(true);
+			else setEmailNumberReg(false);
+		},
+		[email],
+	);
 
 	const onChangeCode = useCallback(e => {
 		const { value } = e.target;
-
 		if (value.length === 7) return;
 
-		setEmailCode(value);
+		changeDispatch(EMAILCODE, { emailCode: value });
 	}, []);
+	console.log(userFind);
 
 	const onClickAuth = useCallback(() => {
 		// 이메일 1차인증
 		const params = {
-			email: emailNumber,
+			email,
 		};
 
 		setEmailNumberLoading(true);
 
 		PostApi('/api/auth/authEmail', params)
 			.then(() => {
-				setEmailCodeToggle(true);
+				changeDispatch(EMAILCODEFLAG, { emailCodeFlag: true });
+				changeDispatch(MODALAUTH, { modalAuth: true });
 
-				const payload = {
-					email: emailNumber,
-				};
-
-				dispatch({ type: EMAIL, payload });
-				setModalAuth(true);
 				setEmailNumberLoading(false);
 			})
 			.catch(err => {
 				console.error('error', err);
 			});
-	}, [emailNumber]);
+	}, [email]);
 
-	// const onClickCheckId = useCallback(async () => {
-	// 	setFindIdButtonLoading(true);
+	useImperativeHandle(ref, () => ({
+		// 이메일 2차인증
+		async secondAuth() {
+			changeDispatch(FINDBUTTONLOADING, { findButtonLoading: true });
 
-	// 	// 이메일 2차인증
-	// 	const { email } = user;
+			const { email } = userFind;
+			const params = {
+				email,
+				number: emailCode,
+			};
 
-	// 	const params = {
-	// 		email,
-	// 		number: emailCode,
-	// 	};
-
-	// 	try {
-	// 		const result = await PostApi('/api/auth/checkEmail', params)
-	// 			.then(res => {
-	// 				setFindIdButtonLoading(false);
-
-	// 				return res;
-	// 			})
-	// 			.catch(err => {
-	// 				setEmailCodeReg(false);
-	// 				console.error('error', err);
-	// 			});
-
-	// 		await userFindId(undefined, result.data.emailCheck);
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 	}
-	// }, [auth, emailCode, user]);
-
-	// const userFindId = useCallback(
-	// 	(phoneCheck = '', emailCheck = '') => {
-	// 		axios
-	// 			.post(
-	// 				`${baseUrl}/api/auth/findId`,
-	// 				{},
-	// 				{
-	// 					headers: {
-	// 						'Content-Type': 'application/json',
-	// 						emailCheck,
-	// 						phoneCheck,
-	// 					},
-	// 				},
-	// 			)
-	// 			.then(res => {
-	// 				switch (res.status) {
-	// 					case 200:
-	// 						const payload = {
-	// 							userFindId: res.data.loginId,
-	// 						};
-	// 						dispatch({ type: USERFINDID, payload });
-
-	// 						setModalAuthConfirm(true);
-	// 						break;
-
-	// 					default:
-	// 						console.log(res);
-	// 						break;
-	// 				}
-	// 			})
-	// 			.catch(err => {
-	// 				switch (err.response.status) {
-	// 					case 400:
-	// 						return alert('이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다');
-	// 					case 401:
-	// 						return alert('이미 사용중인 아이디 입니다');
-	// 					case 402:
-	// 						return alert('이미 사용중인 이메일 입니다.');
-	// 					case 500:
-	// 						return console.log('서버에러');
-	// 					default:
-	// 						console.log(err);
-	// 						break;
-	// 				}
-	// 			});
-	// 	},
-	// 	[user],
-	// );
-
-	const onCloseModal = useCallback(() => {
-		setModalAuth(false);
-	}, []);
+			try {
+				await PostApi('/api/auth/checkEmail', params)
+					.then(res => {
+						changeDispatch(AUTHSUCCESS, { authSuccess: true });
+						changeDispatch(EMAILCHECK, { emailCheck: res.data.emailCheck });
+						setEmailCodeReg(true);
+						return res;
+					})
+					.catch(err => {
+						setEmailCodeReg(false);
+						authError(err);
+						console.error('error', err);
+					});
+			} catch (error) {
+				changeDispatch(FINDBUTTONLOADING, { findButtonLoading: false });
+				console.error('error', error);
+			}
+		},
+	}));
 
 	return (
 		<>
-			{auth === 'emailAuth' && (
-				<RadioDetail>
+			<RadioDetail>
+				<div>
+					<AuthInput className={emailNumberReg ? '' : 'danger'}>
+						<input
+							type="email"
+							value={email}
+							onChange={onChangeEmailNumber}
+							onFocus={onChangeEmailNumber}
+							title="이메일 인증"
+							placeholder="이메일"
+						/>
+						{email?.length > 0 && (
+							<button
+								type="button"
+								className="clearBtn"
+								onClick={() => onClickClear('emailNumber')}
+							>
+								<CancelIcon></CancelIcon>
+							</button>
+						)}
+						<button
+							type="button"
+							className="authBtn"
+							disabled={email.length > 0 && emailNumberReg ? false : true}
+							style={
+								email.length > 0 && emailNumberReg ? { cursor: 'pointer' } : { cursor: 'default' }
+							}
+							onClick={() => onClickAuth('emailNumber')}
+						>
+							인증 요청
+							{emailNumberLoading && <LoadingIcon className="loading"></LoadingIcon>}
+						</button>
+					</AuthInput>
+					{!emailNumberReg && <p>이메일을 입력해 주세요.</p>}
+				</div>
+				{emailCodeFlag && (
 					<div>
-						<AuthInput className={emailNumberReg ? '' : 'danger'}>
+						<AuthInput className={emailCodeReg ? '' : 'danger'}>
 							<input
-								type="email"
-								value={emailNumber}
-								onChange={onChangeEmailNumber}
-								onFocus={onChangeEmailNumber}
-								title="이메일 인증"
-								placeholder="이메일"
+								type="number"
+								value={emailCode}
+								onChange={onChangeCode}
+								pattern="[0-9]*"
+								inputMode="numberic"
+								title="인증번호 입력"
+								placeholder="인증번호"
+								maxLength="6"
+								name="emailCode"
 							/>
-							{emailNumber?.length > 0 && (
+							{emailCode?.length > 0 && (
 								<button
 									type="button"
 									className="clearBtn"
-									onClick={() => onClickClear('emailNumber')}
+									onClick={() => onClickClear('emailCode')}
 								>
 									<CancelIcon></CancelIcon>
 								</button>
 							)}
-							<button
-								type="button"
-								className="authBtn"
-								disabled={emailNumber.length > 0 && emailNumberReg ? false : true}
-								style={
-									emailNumber.length > 0 && emailNumberReg
-										? { cursor: 'pointer' }
-										: { cursor: 'default' }
-								}
-								onClick={() => onClickAuth('emailNumber')}
-							>
-								인증 요청
-								{emailNumberLoading && <LoadingIcon className="loading"></LoadingIcon>}
-							</button>
 						</AuthInput>
-						{!emailNumberReg && <p>이메일을 입력해 주세요.</p>}
+						{!emailCodeReg && <p>인증번호가 일치하지 않습니다.</p>}
 					</div>
-					{emailCodeToggle && (
-						<div>
-							<AuthInput className={emailCodeReg ? '' : 'danger'}>
-								<input
-									type="number"
-									value={emailCode}
-									onChange={onChangeCode}
-									pattern="[0-9]*"
-									inputmode="numberic"
-									title="인증번호 입력"
-									placeholder="인증번호"
-									maxLength="6"
-									name="emailCode"
-								/>
-								{emailCode?.length > 0 && (
-									<button
-										type="button"
-										className="clearBtn"
-										onClick={() => onClickClear('emailCode')}
-									>
-										<CancelIcon></CancelIcon>
-									</button>
-								)}
-							</AuthInput>
-							{!emailCodeReg && <p>인증번호가 일치하지 않습니다.</p>}
-						</div>
-					)}
-				</RadioDetail>
-			)}
-
-			<TextModal
-				show={modalAuth}
-				onCloseModal={onCloseModal}
-				content="인증번호가 발송되었습니다."
-			></TextModal>
+				)}
+			</RadioDetail>
 		</>
 	);
-};
+});
 
-export default UserFindAuth;
+export default UserFindAuthEmail;

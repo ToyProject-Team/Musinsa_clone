@@ -56,7 +56,7 @@ export const RadioItem = styled.div`
 		clip: rect(0 0 0 0);
 	}
 
-	label {
+	.radio-label {
 		padding-left: 28px;
 		display: inline-flex;
 		position: relative;

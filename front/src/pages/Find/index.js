@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Container, Header, Inner, Section, Menubar } from './styles';
 import { ReactComponent as BackArrow } from 'assets/svg/BackArrow.svg';
 import { Link, Navigate, NavLink, Route, Routes, useParams } from 'react-router-dom';
@@ -17,8 +17,15 @@ const FindPasswordAuth = loadable(() => import('components/FindPage/UserFindPass
 	fallback: <div>로딩중</div>,
 });
 
+const UserFindPasswordChange = loadable(
+	() => import('components/FindPage/UserFindPasswordChange'),
+	{
+		fallback: <div>로딩중</div>,
+	},
+);
+
 const Find = () => {
-	const titleArray = ['아이디 찾기', '비밀번호 찾기'];
+	const titleArray = ['아이디 찾기', '비밀번호 찾기', '비밀번호 재설정'];
 	const pageURL = Object.values(useParams())[0];
 
 	if (pageURL === '') {
@@ -32,11 +39,15 @@ const Find = () => {
 					<Header>
 						<div>
 							<h2 style={{ fontWeight: '700' }}>
-								{pageURL === 'id' ? titleArray[0] : titleArray[1]}
+								{pageURL === 'id'
+									? titleArray[0]
+									: pageURL === 'password/change'
+									? titleArray[2]
+									: titleArray[1]}
 							</h2>
 							<div>
 								<Link to="/login">
-									<button class="back">
+									<button className="back">
 										<span>이전 페이지로 이동</span>
 										<BackArrow></BackArrow>
 									</button>
@@ -54,7 +65,8 @@ const Find = () => {
 							<Route path="/id" element={<FindId />} /> {/* id 찾기 */}
 							<Route exact path="/password" element={<FindPassword />} /> {/* 패스워드 찾기 */}
 							<Route path="/password/choice" element={<FindPasswordAuth />} /> {/* 패스워드 찾기 */}
-							<Route path="/password/change" element={<FindPasswordAuth />} /> {/* 패스워드 변경 */}
+							<Route path="/password/change" element={<UserFindPasswordChange />} />{' '}
+							{/* 패스워드 변경 */}
 						</Routes>
 					</Section>
 				</Inner>
