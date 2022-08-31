@@ -27,7 +27,6 @@ export const Container = styled.div`
 
 	button {
 		border: 0;
-		background: 0 0;
 		font-size: inherit;
 		font-family: inherit;
 		line-height: 1.5;

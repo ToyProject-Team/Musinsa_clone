@@ -91,17 +91,16 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 
 			const { phoneNumber } = userFind;
 			const params = {
-				phoneNumber,
+				phoneNumber: phoneNumber.replaceAll('-', ''),
 				code: phoneCode,
 			};
 
 			try {
-				const result = await PostApi('/api/auth/checkSMS', params)
+				await PostApi('/api/auth/checkSMS', params)
 					.then(res => {
 						changeDispatch(AUTHSUCCESS, { authSuccess: true });
-						changeDispatch(PHONECHECK, { emailCheck: res.data.emailCheck });
+						changeDispatch(PHONECHECK, { phoneCheck: res.data.phoneCheck });
 						setPhoneCodeReg(true);
-						return res;
 					})
 					.catch(err => {
 						setPhoneCodeReg(false);
