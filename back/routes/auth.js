@@ -357,7 +357,7 @@ router.post('/findPassword', async (req, res, next) => {
       loginId: req.body.loginId
     }
   })
-  console.log(exUser)
+  // console.log(exUser)
   if (!exUser) {
     return res.status(401).send({ message: "해당 로그인 아이디에 대한 유저 조회 결과가 없습니다"})
   }
@@ -373,11 +373,11 @@ router.post('/findPassword', async (req, res, next) => {
   if (exUser.phoneNumber != req.body.phoneNumber) {
     return res.status(403).send({ message: "로그인 아이디로 조회된 유저에 대한 전화번호가 아닙니다" })
   }
-
+  const userId = exUser.loginId
   const changePasswordToken = new Date().valueOf() 
   await redisClient.set(changePasswordToken, req.body.loginId);
   await redisClient.expire(changePasswordToken, 300)
-  res.status(200).send({ changePasswordToken })
+  res.status(200).send({ changePasswordToken, userId })
 })
 
 router.post('/changePassword', async (req, res, next) => {
@@ -440,6 +440,29 @@ router.post('/findId', async (req, res, next) => {
     }
 
     res.status(200).send({ loginId: exUser.loginId })
+  } catch (e) {
+    console.error(e)
+    next(e)
+  }
+})
+
+router.post('/isExistedLoginId', async (req, res, next) => {
+  try {
+    if (!req.body.loginId) {
+      return res.status(400).send({ message: "로그인 아이디가 지급되지 않았습니다" })
+    }
+    const exUser = await User.findOne({
+      where: {
+        loginId: req.body.loginId
+      }
+    })
+    
+    if (!exUser) {
+      return res.status(401).send({ message: "해당 아이디에 대한 유저 조회 결과가 없습니다" })
+    } 
+    
+    const userData = exUser.email ? exUser.email : exUser.phoneNumber
+    res.status(200).send({ userData })
   } catch (e) {
     console.error(e)
     next(e)

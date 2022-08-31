@@ -434,6 +434,9 @@
             changePasswordToken: 
               type: string
               example: 1661055228577
+            userId:
+              type: string
+              example: eos0103
       400:
         description: loginId가 전달되지 않았을 경우
         schema:
@@ -508,6 +511,45 @@
       500:
         $ref: "./openapi.yaml#/serverError"
 
+/api/auth/isExistedLoginId:
+  post:
+    tags:
+      - auth
+    summary: 아이디 존재 여부 확인(비밀번호 찾기 절차)
+    parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          type: object
+          properties:
+            loginId:
+              type: string
+              example: eos0103
+    responses:
+      200:
+        schema:
+          properties:
+            userData: 
+              type: string
+              example: sola2014@naver.com
+      400:
+        description: 로그인 아이디가 지급되지 않았을 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 로그인 아이디가 지급되지 않았습니다
+      401:
+        description: 전달한 로그인 아이디에 대한 유저 조회 결과가 없을 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 해당 아이디에 대한 유저 조회 결과가 없습니다
+      500:
+        $ref: "./openapi.yaml#/serverError"
+
 /tokenError:
   post:
     tags:
@@ -556,5 +598,6 @@
             success:
               type: string
               example: Access token is not expired!
+          
 $ref: "./productAPI.yaml"
 
