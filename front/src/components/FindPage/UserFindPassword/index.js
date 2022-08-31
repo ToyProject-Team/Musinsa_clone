@@ -1,14 +1,25 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
-import { Container, AuthInput, FindIdButton } from 'components/FindPage/UserFindId/styles';
+import { Container, AuthInput, FindIdButton } from 'components/FindPage/UserFindAuth/styles';
 import useInput from 'hooks/useInput';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { INIT, useUserFindDispatch, useUserFindState } from 'context/UserFindContext';
 
 const UserFindPassword = () => {
-	let navigate = useNavigate();
+	const userFind = useUserFindState();
+	const dispatch = useUserFindDispatch();
+
+	// useContext 초기화
+	useEffect(() => {
+		console.log(123);
+		dispatch({ type: INIT });
+	}, []);
+
+	const navigate = useNavigate();
 
 	const [userId, onChangeUserId, setUserId] = useInput('');
+	const [passwordButtonLoading, setPasswordButtonLoading] = useState(false);
 
 	const onClickClear = useCallback(() => {
 		setUserId('');
@@ -23,6 +34,14 @@ const UserFindPassword = () => {
 		} catch (error) {}
 	}, [userId]);
 
+	// key 이벤트
+	const onKeyUp = useCallback(
+		e => {
+			if (e.keyCode === 13) onClickCheckPassword();
+		},
+		[userId],
+	);
+
 	return (
 		<Container>
 			<div>
@@ -31,7 +50,13 @@ const UserFindPassword = () => {
 						비밀번호를 찾으려는 아이디
 					</label>
 					<AuthInput>
-						<input type="text" value={userId} onChange={onChangeUserId} maxlength="20" />
+						<input
+							type="text"
+							value={userId}
+							onChange={onChangeUserId}
+							maxlength="20"
+							onKeyUp={onKeyUp}
+						/>
 						<button type="button" className="clearBtn" onClick={onClickClear}>
 							<CancelIcon></CancelIcon>
 						</button>
@@ -44,7 +69,7 @@ const UserFindPassword = () => {
 						className={userId.length > 0 && 'active'}
 					>
 						다음
-						<LoadingIcon className="loading"></LoadingIcon>
+						{passwordButtonLoading && <LoadingIcon className="loading"></LoadingIcon>}
 					</button>
 				</FindIdButton>
 			</div>

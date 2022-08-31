@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
 	AuthInput,
 	Container,
@@ -6,34 +6,46 @@ import {
 	RadioButton,
 	RadioDetail,
 	RadioItem,
-} from 'components/FindPage/UserFindId/styles';
-import { useParams, useLocation, Routes, Route, Link } from 'react-router-dom';
+} from 'components/FindPage/UserFindAuth/styles';
+import {
+	useParams,
+	useLocation,
+	Routes,
+	Route,
+	Link,
+	Navigate,
+	useNavigate,
+} from 'react-router-dom';
 import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
 import qs from 'qs';
 import useInput from 'hooks/useInput';
-import UserFindId from '../UserFindId';
+import UserFindAuth from '../UserFindAuth';
+import { useUserFindDispatch, useUserFindState } from 'context/UserFindContext';
 
 const UserFindPasswordAuth = () => {
+	const userFind = useUserFindState();
+	const dispatch = useUserFindDispatch();
+	const { auth, emailCheck, phoneCheck, findUserId, modalAuthConfirm, authSuccess } = userFind;
 	const location = useLocation();
 	const query = qs.parse(location.search, {
 		ignoreQueryPrefix: true,
 	});
 	console.log(query);
+	const navigate = useNavigate();
 
-	const [userId, onChangeUserId, setUserId] = useInput('');
+	// 아이디 찾기
+	useEffect(() => {
+		if (authSuccess) {
+			return navigate(`/find/password/change?token=12ewawdasd12`);
+		}
+	}, [authSuccess]);
 
-	const onClickClear = useCallback(() => {
-		setUserId('');
-	}, []);
-
-	const onClickCheckPassword = useCallback(() => {
-		if (userId.length === 0) return;
-
-		console.log(1);
-	}, [userId]);
-
-	return <UserFindId></UserFindId>;
+	return (
+		<>
+			<UserFindAuth></UserFindAuth>
+		</>
+	);
 };
 
 export default UserFindPasswordAuth;

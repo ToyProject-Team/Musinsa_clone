@@ -68,6 +68,7 @@ const Payment = ({ dummyUser, submit, price, pay_method }) => {
 							break;
 						case 'success':
 							console('결제 완전 성공');
+						// 장바구니에서 상품 삭제
 					}
 				});
 			} else {

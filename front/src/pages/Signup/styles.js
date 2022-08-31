@@ -121,16 +121,45 @@ export const SignupSection = styled.section`
 	padding: 40px;
 `;
 
-export const Header = styled.h2`
+export const Header = styled.div`
 	display: flex;
-	-webkit-box-align: center;
 	align-items: center;
-	-webkit-box-pack: center;
-	justify-content: center;
 	height: 50px;
 	position: relative;
+	justify-content: center;
 	font-size: 16px;
 	font-weight: 600;
+
+	& > div {
+		display: flex;
+		align-items: center;
+		top: 5px;
+		left: 5px;
+
+		& > div {
+			position: absolute;
+			left: 0;
+		}
+
+		button {
+			display: inline-flex;
+			width: 40px;
+			height: 40px;
+			position: relative;
+			padding: 5px;
+			box-sizing: border-box;
+			border: 0;
+			background: 0 0;
+			font-size: inherit;
+			font-family: inherit;
+			line-height: 1.5;
+			cursor: pointer;
+
+			span {
+				display: none;
+			}
+		}
+	}
 `;
 
 export const SignupInner = styled.div`
