@@ -8,17 +8,18 @@ const ProductImg = require('../models/productImg')
 
 router.get('/favoriteGoods', authJWT, async (req, res, next) => {
     try {
+        console.log(req.myId)
         const me = await User.findOne({
             where: {
                 id: req.myId
             }
         })
-
+        console.log(me)
         if (!me) {
             return res.status(400).send({ message: "유저의 조회 결과가 없습니다"})
         }
 
-        const likeProduct = await me.getLiker({
+        const likeProduct = await me.getLikeIt({
             joinTableAttributes: [],
             attributes: ["productPrice", "likes", "productTitle"],
             include: [

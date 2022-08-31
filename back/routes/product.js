@@ -10,7 +10,6 @@ const fs = require('fs');
 const {sequelize, Op} = require('sequelize')
 const authJWT = require('../utils/authJWT')
 const axios = require('axios')
-
 const router = express.Router()
 
 function checkParams (bigCategory, price) {
@@ -79,7 +78,6 @@ router.get('/productList', async (req, res, next) => {
                 },
                 
             ],
-            
             order: [
                 req.query.mainSort==1? ['productPrice', 'ASC']:
                 req.query.mainSort==2? ['productPrice', 'DESC']:
@@ -89,7 +87,7 @@ router.get('/productList', async (req, res, next) => {
             limit: 100,
             offset: startIndx,
             attributes: ['id', 'productTitle', 'productPrice', 'likes', 'comments']
-        })
+        }).map(v => console.log(v))
         //a
         if (!productData) {
             return res.status(400).json({ message: "상품 조회 결과가 없습니다 입력값을 다시 확인해주세요" })
