@@ -127,7 +127,7 @@ router.post("/logout", authJWT, async (req, res, next) => {
 router.post('/kakao', (req,res) => {
   const kakao = {
     clientID: process.env.KAKAO_ID,
-    redirectUri: 'http://localhost/api/auth/kakao/callback'
+    redirectUri: 'http://localhost:80/api/auth/kakao/callback'
   }
   const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.redirectUri}&response_type=code&scope=profile_nickname,account_email`;
   return res.status(200).send({ url :kakaoAuthURL })
@@ -137,7 +137,7 @@ router.get('/kakao/callback', async (req, res, next) => {
   try {
     const kakao = {
       clientID: process.env.KAKAO_ID,
-      redirectUri: 'http://localhost/api/auth/kakao/callback'
+      redirectUri: 'http://localhost:80/api/auth/kakao/callback'
     }
     token = await axios({//token
       method: 'POST',
@@ -174,6 +174,7 @@ router.get('/kakao/callback', async (req, res, next) => {
       return res.status(200).send({
         refreshToken,
         accessToken,
+        userInfo
       })
     }
     userInfo = await User.create({
@@ -357,27 +358,30 @@ router.post('/findPassword', async (req, res, next) => {
       loginId: req.body.loginId
     }
   })
-  console.log(exUser)
+  // console.log(exUser)
   if (!exUser) {
     return res.status(401).send({ message: "해당 로그인 아이디에 대한 유저 조회 결과가 없습니다"})
   }
   // console.log(req.headers)
-  console.log(req.headers.phonecheck)
   const client = redisClient
   const getAsync = promisify(client.get).bind(client);
-  const checkSMS = await getAsync(req.headers.phonecheck? req.headers.phonecheck: -111)
+  const userInfo = await getAsync(req.headers.phonecheck? req.headers.phonecheck: req.headers.emailcheck ? req.headers.emailcheck: -111)
 
-  if (!checkSMS) {
+  if (!userInfo) {
     return res.status(402).send({ message: "SMS 인증 시도하셔야합니다. 시도하셨다면 세션 스토리지의 phoneCheck가 headers로 전달됐는지 확인해주세요" })
   }
-  if (exUser.phoneNumber != req.body.phoneNumber) {
+
+  if (exUser.email != req.body.email && req.body.email != undefined ) {
+    return res.status(405).send({ message: "로그인 아이디로 조회된 유저에 대한 이메일이 아닙니다"})
+  }
+  if (exUser.phoneNumber != req.body.phoneNumber && req.body.phoneNumber != undefined ) {
     return res.status(403).send({ message: "로그인 아이디로 조회된 유저에 대한 전화번호가 아닙니다" })
   }
-
+  const userId = exUser.loginId
   const changePasswordToken = new Date().valueOf() 
   await redisClient.set(changePasswordToken, req.body.loginId);
   await redisClient.expire(changePasswordToken, 300)
-  res.status(200).send({ changePasswordToken })
+  res.status(200).send({ changePasswordToken, userId })
 })
 
 router.post('/changePassword', async (req, res, next) => {
@@ -442,6 +446,50 @@ router.post('/findId', async (req, res, next) => {
     res.status(200).send({ loginId: exUser.loginId })
   } catch (e) {
     console.error(e)
+    next(e)
+  }
+})
+
+router.post('/isExistedLoginId', async (req, res, next) => {
+  try {
+    if (!req.body.loginId) {
+      return res.status(400).send({ message: "로그인 아이디가 지급되지 않았습니다" })
+    }
+    const exUser = await User.findOne({
+      where: {
+        loginId: req.body.loginId
+      }
+    })
+    
+    if (!exUser) {
+      return res.status(401).send({ message: "해당 아이디에 대한 유저 조회 결과가 없습니다" })
+    } 
+    
+    const userData = exUser.email ? exUser.email : exUser.phoneNumber
+    loginIdCheckToken = await CryptoJS.AES.encrypt(JSON.stringify(userData), 'secret key 123').toString();
+    await redisClient.set(loginIdCheckToken, userData);
+    await redisClient.expire(loginIdCheckToken, 1200)
+    res.status(200).send({ userData, loginIdCheckToken })
+  } catch (e) {
+    console.error(e)
+    next(e)
+  }
+})
+
+router.post('/checkIsLoginIdCheckUser', (req, res, next) => {
+  try {
+    a = req.headers.loginidchecktoken
+    if (!req.header.loginidchecktoken) {
+      return res.status(400).send({ message: "헤더로 토큰이 지급되지 않았습니다" })
+    }
+    var bytes  = CryptoJS.AES.decrypt(req.headers.loginidchecktoken, 'secret key 123');
+    var userData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    if (!userData) {
+      return res.status(401).send({ message: "토큰을 복호화한 결과가 없습니다 입력을 다시 확인해주세요" })
+    }
+    res.status(200).send({ userData })
+  } catch (e) {
+    console.log(e)
     next(e)
   }
 })
