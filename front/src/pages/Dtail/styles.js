@@ -4,7 +4,6 @@ export const ProductWrapper = styled.div`
 	display: flex;
 	margin-top: 20px;
 	padding-bottom: 40px;
-	border-bottom: 1px solid #cdcdcd;
 `;
 
 export const DetailWrapper = styled.div`
