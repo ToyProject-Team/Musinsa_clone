@@ -16,7 +16,6 @@ import { PostQueryApi } from 'utils/api';
 // import { useInView } from 'react-intersection-observer';
 import { Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import loadable from '@loadable/component';
-import Footer from "../../layouts/Header/index";
 
 const Main = () => {
 	const ShowList = loadable(() => import('./showList'), {
@@ -409,9 +408,7 @@ const Main = () => {
 					</ListBox>
 				</Items>
 			</ItemSection>
-			<Footer/>
 		</MainContainer>
-		
 	);
 };
 
