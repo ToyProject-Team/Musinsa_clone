@@ -362,15 +362,18 @@ router.post('/findPassword', async (req, res, next) => {
     return res.status(401).send({ message: "해당 로그인 아이디에 대한 유저 조회 결과가 없습니다"})
   }
   // console.log(req.headers)
-  console.log(req.headers.phonecheck)
   const client = redisClient
   const getAsync = promisify(client.get).bind(client);
-  const checkSMS = await getAsync(req.headers.phonecheck? req.headers.phonecheck: -111)
+  const userInfo = await getAsync(req.headers.phonecheck? req.headers.phonecheck: req.headers.emailcheck ? req.headers.emailcheck: -111)
 
-  if (!checkSMS) {
+  if (!userInfo) {
     return res.status(402).send({ message: "SMS 인증 시도하셔야합니다. 시도하셨다면 세션 스토리지의 phoneCheck가 headers로 전달됐는지 확인해주세요" })
   }
-  if (exUser.phoneNumber != req.body.phoneNumber) {
+
+  if (exUser.email != req.body.email && req.body.email != undefined ) {
+    return res.status(405).send({ message: "로그인 아이디로 조회된 유저에 대한 이메일이 아닙니다"})
+  }
+  if (exUser.phoneNumber != req.body.phoneNumber && req.body.phoneNumber != undefined ) {
     return res.status(403).send({ message: "로그인 아이디로 조회된 유저에 대한 전화번호가 아닙니다" })
   }
   const userId = exUser.loginId
@@ -462,13 +465,30 @@ router.post('/isExistedLoginId', async (req, res, next) => {
     } 
     
     const userData = exUser.email ? exUser.email : exUser.phoneNumber
-    phoneCheck = CryptoJS.AES.encrypt(JSON.stringify(req.body.phoneNumber), 'secret key 123').toString();
-    console.log()
-    // await redisClient.set(phoneCheck, req.body.phoneNumber);
-    // await redisClient.expire(phoneCheck, 1200)
-    res.status(200).send({ userData })
+    loginIdCheckToken = await CryptoJS.AES.encrypt(JSON.stringify(userData), 'secret key 123').toString();
+    await redisClient.set(loginIdCheckToken, userData);
+    await redisClient.expire(loginIdCheckToken, 1200)
+    res.status(200).send({ userData, loginIdCheckToken })
   } catch (e) {
     console.error(e)
+    next(e)
+  }
+})
+
+router.post('/checkIsLoginIdCheckUser', (req, res, next) => {
+  try {
+    a = req.headers.loginidchecktoken
+    if (!req.header.loginidchecktoken) {
+      return res.status(400).send({ message: "헤더로 토큰이 지급되지 않았습니다" })
+    }
+    var bytes  = CryptoJS.AES.decrypt(req.headers.loginidchecktoken, 'secret key 123');
+    var userData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    if (!userData) {
+      return res.status(401).send({ message: "토큰을 복호화한 결과가 없습니다 입력을 다시 확인해주세요" })
+    }
+    res.status(200).send({ userData })
+  } catch (e) {
+    console.log(e)
     next(e)
   }
 })

@@ -411,10 +411,14 @@
       - auth
     summary: 비밀번호 찾기
     parameters:
+      - name: emailcheck
+        in: header
+        description: /api/auth/checkEmail 에서 발급받은 토큰(emailCheck, phoneCheck 둘 중 하나만 지급)
+        required: true
       - name: phoneCheck
         in: header
+        description: /api/auth/checkSMS 에서 발급받은 토큰(emailCheck, phoneCheck 둘 중 하나만 지급)
         required: true
-        description: /api/auth/checkSMS 에서 발급받는 토큰
       - name: body
         in: body
         required: true
@@ -533,6 +537,9 @@
             userData: 
               type: string
               example: sola2014@naver.com
+            loginIdCheckToken:
+              type: string
+              example: U2FsdGVkX1/u1lEtti8UnuU5J/D5hKZYAYJV+MPWgeyyCjjIG3uz6QBqmBhYwLVm
       400:
         description: 로그인 아이디가 지급되지 않았을 경우
         schema:
@@ -547,6 +554,40 @@
             message:
               type: string
               example: 해당 아이디에 대한 유저 조회 결과가 없습니다
+      500:
+        $ref: "./openapi.yaml#/serverError"
+
+/api/auth/checkIsLoginIdCheckUser:
+  post:
+    tags:
+      - auth
+    summary: 아이디 존재 여부 확인 완료(비밀번호 찾기 절차)
+    parameters:
+      - name: loginidchecktoken
+        in: header
+        required: true
+        description: /api/auth/isExistedLoginId 에서 발급받은 토큰
+    responses:
+      200:
+        schema:
+          properties:
+            userData: 
+              type: string
+              example: sola2014@naver.com
+      400:
+        description: 헤더로 토큰이 지급되지 않았습니다(undefined)
+        schema:
+          properties:
+            message:
+              type: string
+              example: 헤더로 토큰이 지급되지 않았습니다
+      401:
+        description: 토큰을 복호화한 결과가 없을 경우(잘못된 인풋)
+        schema:
+          properties:
+            message:
+              type: string
+              example: 토큰을 복호화한 결과가 없습니다 입력을 다시 확인해주세요
       500:
         $ref: "./openapi.yaml#/serverError"
 
