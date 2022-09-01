@@ -2,7 +2,7 @@ import UserEmail from 'components/UserEmail';
 import UserPassword from 'components/UserPassword';
 import useInput from 'hooks/useInput';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { GetApi, PostApi } from 'utils/api';
 import { getData } from 'utils/getData';
 import {
@@ -18,8 +18,15 @@ import {
 	SignupLink,
 } from './styles';
 import { ReactComponent as KakaoIcon } from 'assets/svg/Kakao.svg';
+import Kakao from 'pages/Kakao';
 
 const LogIn = () => {
+	const REST_API_KEY = '[내어플리 케이션 > 요약정보 > REST API 키]';
+	const REDIRECT_URI = 'http://localhost:3000/kakao/oauth/callback';
+	const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+	const navigate = useNavigate();
+
 	const [login, setLogin] = useState(getData());
 
 	const [email, onChangeEmail, setEmail] = useInput('');
@@ -98,10 +105,9 @@ const LogIn = () => {
 	);
 
 	const KakaoLogin = useCallback(async () => {
-		const KAKAO_AUTH_URL = await GetApi('/api/auth/kakao');
+		// const KAKAO_AUTH_URL = await GetApi('/api/auth/kakao');
 
-		console.log(KAKAO_AUTH_URL);
-		// window.location.href = KAKAO_AUTH_URL.data.url;
+		window.location.href = KAKAO_AUTH_URL;
 	}, []);
 
 	if (login) {
@@ -163,7 +169,8 @@ const LogIn = () => {
 					<div>
 						<KakaoLogIn
 							className="login-button__item login-button__item--kakao"
-							onClick={KakaoLogin}
+							// onClick={KakaoLogin}
+							href={KAKAO_AUTH_URL}
 						>
 							<KakaoIcon />
 							카카오 로그인
