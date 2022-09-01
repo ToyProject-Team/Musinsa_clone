@@ -14,7 +14,8 @@ import {
 } from './styles';
 import { PostQueryApi } from 'utils/api';
 // import { useInView } from 'react-intersection-observer';
-import { Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
+import { Router, Route, Routes, Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import qs from 'qs';
 import loadable from '@loadable/component';
 
 const Main = () => {
@@ -47,8 +48,6 @@ const Main = () => {
 	// 	}
 	// }, [inView, loading]);
 
-	let navigate = useNavigate();
-
 	useEffect(() => {
 		const params = {
 			page,
@@ -60,8 +59,16 @@ const Main = () => {
 	}, [page, price, bigCategoryId, smallCategoryId]);
 
 	//데이터 복사본
-
 	const [newProduct, setNewProduct] = useState([]);
+
+	//qs?
+	const location = useLocation();
+	const query = qs.parse(location.search, {
+		ignoreQueryPrefix: true,
+	});
+	console.log(query);
+
+	const navigate = useNavigate();
 
 	const [selectBox, setSelectBox] = useState(false);
 	const [searchInput, setSearchInput] = useState('');
@@ -86,15 +93,20 @@ const Main = () => {
 				}),
 			),
 		);
+
+		navigate(`/category`, {
+			state: params.page,
+		});
+
 		setSelectBox(true);
 	};
 
 	//페이지 이동
-	const onPage = () => {
-		setPage(page + 1);
-	};
+	// const onPage = () => {
+	// 	setPage(page + 1);
+	// };
 
-	//가격별로 filter
+	//가격별로 분류
 	const onFilterPrice = val => {
 		const params = {
 			page,
@@ -107,6 +119,10 @@ const Main = () => {
 		PostQueryApi('/api/product/productList', params).then(res =>
 			setNewProduct(res.data.productData),
 		);
+
+		navigate(`/price`, {
+			state: params.page,
+		});
 	};
 
 	const onFilterPriceRange = (val1, val2) => {
@@ -119,6 +135,10 @@ const Main = () => {
 		PostQueryApi('/api/product/productList', params).then(res =>
 			setNewProduct(res.data.productData),
 		);
+
+		navigate(`/price`, {
+			state: params.page,
+		});
 	};
 
 	//검색창
@@ -136,7 +156,10 @@ const Main = () => {
 				),
 			),
 		);
-		// setToggle(false);
+
+		navigate(`/search`, {
+			state: params.page,
+		});
 	};
 
 	//가격순 정렬
@@ -201,7 +224,7 @@ const Main = () => {
 			{/* 카테고리 */}
 			<Category>
 				<CategoryTitle>
-					<div className="page_title">Bag</div>
+					<div className="page_title">useLocation테스트 {location.pathname}</div>
 					<div className="hash_tag">#노트북</div>
 					<div className="hash_tag">#캐주얼</div>
 				</CategoryTitle>
@@ -242,16 +265,16 @@ const Main = () => {
 								.map(data => {
 									return (
 										<li onClick={e => onSort(e.target.textContent)}>
-											<Link
+											{/* <Link
 												to="/category"
 												style={{
 													'text-decoration': 'none',
 													color: '#b2b2b2',
 													'font-weight': 'bold',
 												}}
-											>
-												{data}
-											</Link>
+											> */}
+											{data}
+											{/* </Link> */}
 										</li>
 									);
 								})}
@@ -282,45 +305,23 @@ const Main = () => {
 								</Link>
 							</li>
 							<li onClick={() => onFilterPrice(1)}>
-								<Link
+								{/* <Link
 									to="/price"
-									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-								>
-									~ 50,000원
-								</Link>
+									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}> */}
+								~ 50,000원
+								{/* </Link> */}
 							</li>
 							<li onClick={() => onFilterPrice(2)}>
-								<Link
+								{/* <Link
 									to="/price"
 									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-								>
-									50,000원 ~ 100,000원
-								</Link>
+								> */}
+								50,000원 ~ 100,000원
+								{/* </Link> */}
 							</li>
-							<li onClick={() => onFilterPrice(3)}>
-								<Link
-									to="/price"
-									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-								>
-									100,000원 ~ 200,000원
-								</Link>
-							</li>
-							<li onClick={() => onFilterPrice(4)}>
-								<Link
-									to="/price"
-									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-								>
-									200,000원 ~ 300,000원
-								</Link>
-							</li>
-							<li onClick={() => onFilterPrice(5)}>
-								<Link
-									to="/price"
-									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-								>
-									300,000원 ~
-								</Link>
-							</li>
+							<li onClick={() => onFilterPrice(3)}>100,000원 ~ 200,000원</li>
+							<li onClick={() => onFilterPrice(4)}>200,000원 ~ 300,000원</li>
+							<li onClick={() => onFilterPrice(5)}>300,000원 ~</li>
 							<li style={{ width: '248px' }}>
 								<input
 									className="minPrice"
@@ -341,9 +342,9 @@ const Main = () => {
 										onFilterPriceRange(minPriceInput, maxPriceInput);
 									}}
 								>
-									<Link to="/price" style={{ 'text-decoration': 'none', color: 'black' }}>
-										검색
-									</Link>
+									{/* <Link to="/price" style={{ 'text-decoration': 'none', color: 'black' }}> */}
+									검색
+									{/* </Link> */}
 								</span>
 							</li>
 						</ul>
@@ -355,9 +356,7 @@ const Main = () => {
 					<div className="search_items">
 						<input type="text" id="search_items" onChange={e => setSearchTerm(e.target.value)} />
 						<span type="submit" className="search_btn" onClick={() => onSearch()}>
-							<Link to="/search" style={{ 'text-decoration': 'none', color: 'black' }}>
-								검색
-							</Link>
+							검색
 						</span>
 					</div>
 				</OtherCategory>
