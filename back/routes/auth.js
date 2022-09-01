@@ -137,7 +137,7 @@ router.get('/kakao/callback', async (req, res, next) => {
   try {
     const kakao = {
       clientID: process.env.KAKAO_ID,
-      redirectUri: 'http://localhost/api/auth/kakao/callback'
+      redirectUri: 'http://141.164.48.244/api/auth/kakao/callback'
     }
     token = await axios({//token
       method: 'POST',
