@@ -127,7 +127,7 @@ router.post("/logout", authJWT, async (req, res, next) => {
 router.post('/kakao', (req,res) => {
   const kakao = {
     clientID: process.env.KAKAO_ID,
-    redirectUri: 'http://localhost/api/auth/kakao/callback'
+    redirectUri: 'http://141.164.48.244/api/auth/kakao/callback'
   }
   const kakaoAuthURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakao.clientID}&redirect_uri=${kakao.redirectUri}&response_type=code&scope=profile_nickname,account_email`;
   return res.status(200).send({ url :kakaoAuthURL })
@@ -462,6 +462,10 @@ router.post('/isExistedLoginId', async (req, res, next) => {
     } 
     
     const userData = exUser.email ? exUser.email : exUser.phoneNumber
+    phoneCheck = CryptoJS.AES.encrypt(JSON.stringify(req.body.phoneNumber), 'secret key 123').toString();
+    console.log()
+    // await redisClient.set(phoneCheck, req.body.phoneNumber);
+    // await redisClient.expire(phoneCheck, 1200)
     res.status(200).send({ userData })
   } catch (e) {
     console.error(e)
