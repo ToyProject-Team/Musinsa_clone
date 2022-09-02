@@ -15,13 +15,14 @@ import {
 	EMAILCODEFLAG,
 	AUTHSUCCESS,
 	EMAILCHECK,
+	EMAILAUTHTEXT,
 } from 'context/UserFindContext';
 import { authError } from 'utils/error';
 
 const UserFindAuthEmail = forwardRef((props, ref) => {
 	const userFind = useUserFindState();
 	const dispatch = useUserFindDispatch();
-	const { email, emailCode, emailCodeFlag } = userFind;
+	const { showAuth, showValue, email, emailCode, emailCodeFlag, emailAuthText } = userFind;
 
 	const [emailNumberReg, setEmailNumberReg] = useState(true);
 	const [emailCodeReg, setEmailCodeReg] = useState(true);
@@ -44,6 +45,7 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 		e => {
 			const { value } = e.target;
 			changeDispatch(EMAIL, { email: value });
+			changeDispatch(EMAILAUTHTEXT, { emailAuthText: '이메일을 입력해 주세요.' });
 
 			const regExp =
 				/^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
@@ -59,9 +61,13 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 
 		changeDispatch(EMAILCODE, { emailCode: value });
 	}, []);
-	console.log(userFind);
 
 	const onClickAuth = useCallback(() => {
+		if (showAuth === 'emailAuth' && email !== showValue) {
+			changeDispatch(EMAILAUTHTEXT, { emailAuthText: '회원정보를 다시 확인해주세요.' });
+			return setEmailNumberReg(false);
+		}
+
 		// 이메일 1차인증
 		const params = {
 			email,
@@ -147,7 +153,7 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 							{emailNumberLoading && <LoadingIcon className="loading"></LoadingIcon>}
 						</button>
 					</AuthInput>
-					{!emailNumberReg && <p>이메일을 입력해 주세요.</p>}
+					{!emailNumberReg && <p>{emailAuthText}</p>}
 				</div>
 				{emailCodeFlag && (
 					<div>

@@ -21,7 +21,7 @@ import { ReactComponent as KakaoIcon } from 'assets/svg/Kakao.svg';
 import Kakao from 'pages/Kakao';
 
 const LogIn = () => {
-	const REST_API_KEY = '[내어플리 케이션 > 요약정보 > REST API 키]';
+	const REST_API_KEY = '4046f853b8826bbb808cfe399ce9b3f6';
 	const REDIRECT_URI = 'http://localhost:3000/kakao/oauth/callback';
 	const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 

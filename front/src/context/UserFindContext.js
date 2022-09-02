@@ -2,13 +2,17 @@ import React, { useReducer, createContext, useContext } from 'react';
 
 const initialFind = {
 	auth: 'phoneAuth',
+	showAuth: 'all',
+	showValue: '',
 
 	phoneNumber: '',
+	phoneNumberAuthText: '',
 	phoneCode: '',
 	phoneCodeFlag: false,
 	phoneCheck: '',
 
 	email: '',
+	emailAuthText: '',
 	emailCode: '',
 	emailCodeFlag: false,
 	emailCheck: '',
@@ -24,13 +28,17 @@ const initialFind = {
 
 export const INIT = 'INIT';
 export const AUTH = 'AUTH';
+export const SHOWAUTH = 'SHOWAUTH';
+export const SHOWVALUE = 'SHOWVALUE';
 
 export const PHONENUMBER = 'PHONENUMBER';
+export const PHONENUMBERAUTHTEXT = 'PHONENUMBERAUTHTEXT';
 export const PHONECODE = 'PHONECODE';
 export const PHONECODEFLAG = 'PHONECODEFLAG';
 export const PHONECHECK = 'PHONECHECK';
 
 export const EMAIL = 'EMAIL';
+export const EMAILAUTHTEXT = 'EMAILAUTHTEXT';
 export const EMAILCODE = 'EMAILCODE';
 export const EMAILCODEFLAG = 'EMAILCODEFLAG';
 export const EMAILCHECK = 'EMAILCHECK';
@@ -55,10 +63,28 @@ function userReducer(state, action) {
 				auth: action.payload.auth,
 			};
 
+		case SHOWAUTH:
+			return {
+				...state,
+				showAuth: action.payload.showAuth,
+			};
+
+		case SHOWVALUE:
+			return {
+				...state,
+				showValue: action.payload.showValue,
+			};
+
 		case PHONENUMBER:
 			return {
 				...state,
 				phoneNumber: action.payload.phoneNumber,
+			};
+
+		case PHONENUMBERAUTHTEXT:
+			return {
+				...state,
+				phoneNumberAuthText: action.payload.phoneNumberAuthText,
 			};
 
 		case PHONECODE:
@@ -83,6 +109,12 @@ function userReducer(state, action) {
 			return {
 				...state,
 				email: action.payload.email,
+			};
+
+		case EMAILAUTHTEXT:
+			return {
+				...state,
+				emailAuthText: action.payload.emailAuthText,
 			};
 
 		case EMAILCODE:

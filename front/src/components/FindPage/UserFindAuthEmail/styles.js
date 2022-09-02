@@ -164,6 +164,7 @@ export const AuthInput = styled.div`
 		margin-right: 7px;
 		padding: 5px;
 		flex: 0 0 auto;
+		background: 0 0;
 	}
 
 	.authBtn {

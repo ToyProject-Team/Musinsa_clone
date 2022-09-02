@@ -54,7 +54,6 @@ const UserFindId = () => {
 
 	// 아이디 찾기
 	useEffect(() => {
-		console.log(userFind);
 		if (auth === 'emailAuth' && authSuccess && emailCheck) {
 			// 이메일로 아이디 찾기
 			PostHeaderApi('/api/auth/findId', 'emailCheck', emailCheck)

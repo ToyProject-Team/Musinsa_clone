@@ -28,7 +28,6 @@ export const PostApi = async (PATH, params) => {
 	const result = await axios.post(baseUrl + PATH, params, {
 		headers: { 'Content-Type': 'application/json' },
 	});
-	console.log(result);
 
 	return result;
 };
@@ -64,6 +63,21 @@ export const PostHeaderApi = async (PATH, header, params) => {
 			headers: { 'Content-Type': 'application/json', [header]: params },
 		},
 	);
+
+	return result;
+};
+
+/**
+ *
+ * @param URL주소 PATH
+ * @param header이름 header
+ * @param header값 params
+ * @returns result 데이터
+ */
+export const PostHeaderBodyApi = async (PATH, data, header, params) => {
+	const result = await axios.post(baseUrl + PATH, data, {
+		headers: { 'Content-Type': 'application/json', [header]: params },
+	});
 
 	return result;
 };

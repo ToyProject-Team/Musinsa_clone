@@ -21,7 +21,7 @@ import { authError } from 'utils/error';
 const UserFindAuthPhone = forwardRef((props, ref) => {
 	const userFind = useUserFindState();
 	const dispatch = useUserFindDispatch();
-	const { phoneNumber, phoneCode, phoneCodeFlag } = userFind;
+	const { phoneNumber, phoneCode, phoneCodeFlag, showAuth } = userFind;
 
 	const [phoneNumberReg, setPhoneNumberReg] = useState(true);
 	const [phoneCodeReg, setPhoneCodeReg] = useState(true);

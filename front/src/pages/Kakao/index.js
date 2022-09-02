@@ -5,9 +5,9 @@ import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
 const Kakao = () => {
-	const REST_API_KEY = '[내어플리 케이션 > 요약정보 > REST API 키]';
+	const REST_API_KEY = '4046f853b8826bbb808cfe399ce9b3f6';
 	const REDIRECT_URI = 'http://localhost:3000/kakao/oauth/callback';
-	const CLIENT_SECRET = '[내어플리 케이션 > 카카오 로그인 > 보안 > Client Secret]';
+	const CLIENT_SECRET = 'cgzjVzop5f7TnoSXG7FxhLCS6lMbVlCE';
 
 	// calllback으로 받은 인가코드
 	const code = new URL(window.location.href).searchParams.get('code');
