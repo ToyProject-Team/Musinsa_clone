@@ -4,6 +4,14 @@ export const Container = styled.div`
 	min-height: 100vh;
 	background-color: #f1f1f1;
 	overflow: hidden;
+
+	& .clearBtn {
+		display: flex;
+		margin-right: 7px;
+		padding: 5px;
+		flex: 0 0 auto;
+		background: 0 0;
+	}
 `;
 
 export const Inner = styled.div`

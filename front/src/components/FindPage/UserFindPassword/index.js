@@ -4,7 +4,12 @@ import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
 import { Container, AuthInput, FindIdButton } from 'components/FindPage/UserFindAuth/styles';
 import useInput from 'hooks/useInput';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { INIT, useUserFindDispatch, useUserFindState } from 'context/UserFindContext';
+import {
+	INIT,
+	FINDPASSWORDSHOWID,
+	useUserFindDispatch,
+	useUserFindState,
+} from 'context/UserFindContext';
 import { PostApi } from 'utils/api';
 
 const UserFindPassword = () => {
@@ -34,8 +39,15 @@ const UserFindPassword = () => {
 			};
 			const result = await PostApi('/api/auth/isExistedLoginId', params);
 			let token = result.data.loginIdCheckToken;
+
+			const payload = {
+				findPasswordShowId: userId,
+			};
+			dispatch({ type: FINDPASSWORDSHOWID, payload });
+
 			navigate(`choice?token=${token}`);
 		} catch (error) {
+			alert('회원정보가 없습니다.');
 			console.log(error);
 		}
 	}, [userId]);

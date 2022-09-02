@@ -3,7 +3,9 @@ import React, { useReducer, createContext, useContext } from 'react';
 const initialFind = {
 	auth: 'phoneAuth',
 	showAuth: 'all',
-	showValue: '',
+
+	findPasswordShowId: '',
+	findPasswordShowMarkingData: '',
 
 	phoneNumber: '',
 	phoneNumberAuthText: '',
@@ -29,7 +31,9 @@ const initialFind = {
 export const INIT = 'INIT';
 export const AUTH = 'AUTH';
 export const SHOWAUTH = 'SHOWAUTH';
-export const SHOWVALUE = 'SHOWVALUE';
+
+export const FINDPASSWORDSHOWID = 'FINDPASSWORDSHOWID';
+export const FINDPASSWORDSHOWMARKINGDATA = 'FINDPASSWORDSHOWMARKINGDATA';
 
 export const PHONENUMBER = 'PHONENUMBER';
 export const PHONENUMBERAUTHTEXT = 'PHONENUMBERAUTHTEXT';
@@ -63,16 +67,22 @@ function userReducer(state, action) {
 				auth: action.payload.auth,
 			};
 
+		case FINDPASSWORDSHOWID:
+			return {
+				...state,
+				findPasswordShowId: action.payload.findPasswordShowId,
+			};
+
 		case SHOWAUTH:
 			return {
 				...state,
 				showAuth: action.payload.showAuth,
 			};
 
-		case SHOWVALUE:
+		case FINDPASSWORDSHOWMARKINGDATA:
 			return {
 				...state,
-				showValue: action.payload.showValue,
+				findPasswordShowMarkingData: action.payload.findPasswordShowMarkingData,
 			};
 
 		case PHONENUMBER:

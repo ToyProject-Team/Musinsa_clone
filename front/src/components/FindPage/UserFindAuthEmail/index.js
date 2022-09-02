@@ -22,7 +22,8 @@ import { authError } from 'utils/error';
 const UserFindAuthEmail = forwardRef((props, ref) => {
 	const userFind = useUserFindState();
 	const dispatch = useUserFindDispatch();
-	const { showAuth, showValue, email, emailCode, emailCodeFlag, emailAuthText } = userFind;
+	const { showAuth, findPasswordShowMarkingData, email, emailCode, emailCodeFlag, emailAuthText } =
+		userFind;
 
 	const [emailNumberReg, setEmailNumberReg] = useState(true);
 	const [emailCodeReg, setEmailCodeReg] = useState(true);
@@ -63,7 +64,7 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 	}, []);
 
 	const onClickAuth = useCallback(() => {
-		if (showAuth === 'emailAuth' && email !== showValue) {
+		if (showAuth === 'emailAuth' && email !== findPasswordShowMarkingData) {
 			changeDispatch(EMAILAUTHTEXT, { emailAuthText: '회원정보를 다시 확인해주세요.' });
 			return setEmailNumberReg(false);
 		}

@@ -159,13 +159,6 @@ export const AuthInput = styled.div`
 		transition: border 0.2s ease-in-out;
 	}
 
-	.clearBtn {
-		display: flex;
-		margin-right: 7px;
-		padding: 5px;
-		flex: 0 0 auto;
-	}
-
 	.authBtn {
 		display: inline-block;
 		box-sizing: border-box;
