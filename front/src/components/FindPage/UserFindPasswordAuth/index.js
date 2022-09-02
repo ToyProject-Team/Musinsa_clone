@@ -36,7 +36,8 @@ import { authError } from 'utils/error';
 const UserFindPasswordAuth = () => {
 	const userFind = useUserFindState();
 	const dispatch = useUserFindDispatch();
-	const { auth, emailCheck, phoneCheck, email, authSuccess, findPasswordShowId } = userFind;
+	const { auth, emailCheck, phoneNumber, phoneCheck, email, authSuccess, findPasswordShowId } =
+		userFind;
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -51,9 +52,8 @@ const UserFindPasswordAuth = () => {
 		return dispatch({ type, payload });
 	}, []);
 
-	// 아이디 찾기
+	// 개인정보 마킹
 	useEffect(() => {
-		// if (authSuccess) {
 		const asyncFunction = async () => {
 			const loginidchecktoken = query.token.replace(/\s/g, '+');
 			const result = await PostHeaderApi(
@@ -85,8 +85,6 @@ const UserFindPasswordAuth = () => {
 		};
 
 		asyncFunction();
-
-		// }
 	}, []);
 
 	// 아이디 찾기
@@ -116,22 +114,27 @@ const UserFindPasswordAuth = () => {
 			asyncFunction();
 		} else if (auth === 'phoneAuth' && authSuccess && phoneCheck) {
 			// 휴대전화로 아이디 찾기
-			// PostHeaderApi('/api/auth/findPassword', 'phoneCheck', phoneCheck)
-			// 	.then(res => {
-			// 		switch (res.status) {
-			// 			case 200:
-			// 				// changeDispatch(FINDUSERID, { findUserId: res.data.loginId });
-			// 				// changeDispatch(MODALAUTHCONFIRM, { modalAuthConfirm: true });
-			// 				// changeDispatch(FINDBUTTONLOADING, { findButtonLoading: false });
-			// 				break;
-			// 			default:
-			// 				console.log(res);
-			// 				break;
-			// 		}
-			// 	})
-			// 	.catch(err => {
-			// 		authError(err);
-			// 	});
+			const asyncFunction = async () => {
+				const data = {
+					loginId: findPasswordShowId,
+					phoneNumber: phoneNumber.replaceAll('-', ''),
+				};
+
+				try {
+					const result = await PostHeaderBodyApi(
+						'/api/auth/findPassword',
+						data,
+						'phoneCheck',
+						phoneCheck,
+					);
+					const token = result.data.changePasswordToken;
+					navigate(`/find/password/change?token=${token}`);
+				} catch (error) {
+					console.log(error);
+				}
+			};
+
+			asyncFunction();
 		}
 	}, [authSuccess, emailCheck, phoneCheck]);
 

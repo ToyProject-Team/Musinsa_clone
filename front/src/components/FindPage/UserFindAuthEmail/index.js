@@ -119,6 +119,14 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 		},
 	}));
 
+	// key 이벤트
+	const onKeyUp = useCallback(
+		e => {
+			if (e.keyCode === 13) onClickAuth();
+		},
+		[email],
+	);
+
 	return (
 		<>
 			<RadioDetail>
@@ -129,6 +137,7 @@ const UserFindAuthEmail = forwardRef((props, ref) => {
 							value={email}
 							onChange={onChangeEmailNumber}
 							onFocus={onChangeEmailNumber}
+							onKeyUp={onKeyUp}
 							title="이메일 인증"
 							placeholder="이메일"
 						/>

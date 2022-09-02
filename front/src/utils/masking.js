@@ -60,12 +60,12 @@ export const maskingFunc = {
 				// 1.1) 0110000000
 				maskingStr = originStr
 					.toString()
-					.replace(phoneStr, phoneStr.toString().replace(/(\d{3})(\d{3})(\d{4})/gi, '$1***$3'));
+					.replace(phoneStr, phoneStr.toString().replace(/(\d{3})(\d{3})(\d{4})/gi, '$1-***-$3'));
 			} else {
 				// 1.2) 01000000000
 				maskingStr = originStr
 					.toString()
-					.replace(phoneStr, phoneStr.toString().replace(/(\d{3})(\d{4})(\d{4})/gi, '$1****$3'));
+					.replace(phoneStr, phoneStr.toString().replace(/(\d{3})(\d{4})(\d{4})/gi, '$1-****-$3'));
 			}
 		} else {
 			// 2) -가 있는 경우
