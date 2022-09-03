@@ -39,20 +39,27 @@ const UserFindPasswordChange = () => {
 	}, []);
 
 	// onChange 정규식 검사
-	const onChangePassword = useCallback(e => {
-		setPassword(e.target.value);
+	const onChangePassword = useCallback(
+		e => {
+			const { value } = e.target;
+			setPassword(value);
 
-		const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,25}$/;
-		if (regExp.test(e.target.value)) setPasswordReg(true);
-		else setPasswordReg(false);
-	}, []);
+			const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,25}$/;
+			if (regExp.test(value)) setPasswordReg(true);
+			else setPasswordReg(false);
+
+			if (value === passwordConfirm) setPasswordConfirmReg(true);
+			else setPasswordConfirmReg(false);
+		},
+		[passwordConfirm],
+	);
 
 	const onChangePasswordConfirm = useCallback(
 		e => {
-			console.log(e);
-			setPasswordConfirm(e.target.value);
+			const { value } = e.target;
+			setPasswordConfirm(value);
 
-			if (password === e.target.value) setPasswordConfirmReg(true);
+			if (password === value) setPasswordConfirmReg(true);
 			else setPasswordConfirmReg(false);
 		},
 		[password],
@@ -65,13 +72,12 @@ const UserFindPasswordChange = () => {
 
 	// 버튼 활성화
 	useEffect(() => {
-		if (passwordReg && password.length > 0) {
+		if (passwordReg && password.length > 0 && passwordConfirmReg && passwordConfirm.length > 0) {
 			setPasswordButton(true);
-		} else if (!passwordReg && password.length === 0) {
-			setPasswordButton(false);
-		} else if (passwordConfirmReg && passwordConfirm.length > 0) {
-			setPasswordButton(true);
-		} else if (!passwordConfirmReg && passwordConfirm.length === 0) {
+		} else if (
+			(!passwordReg && password.length === 0) ||
+			(!passwordConfirmReg && passwordConfirm.length === 0)
+		) {
 			setPasswordButton(false);
 		}
 

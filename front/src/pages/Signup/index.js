@@ -307,6 +307,8 @@ const Signup = () => {
 	);
 
 	const onCloseModal = useCallback(() => {
+		setModalAuth(false);
+		setModalAuthConfirm(false);
 		setModalSignUp(false);
 
 		if (authStage === 1) {
