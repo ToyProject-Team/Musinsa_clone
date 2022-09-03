@@ -4,6 +4,7 @@ import {
     HDiv,
     HLogo,
     HSearch,
+    HUser,
 } from "./styles";
 import { Link } from 'react-router-dom';
 import { AiOutlineCamera, AiOutlineSearch } from "react-icons/ai";
@@ -25,6 +26,15 @@ const Header = () =>{
                     </div>
                 </HSearch>
 
+                <HUser>
+                    <Link to="/Login"><button>로그인</button></Link>
+                    <div><a>마이페이지</a></div>
+                    <div><a>최근 본 상품</a></div>
+                    <div><a>좋아요</a></div>
+                    <div><a>장바구니</a></div>
+                    <div><a>주문배송조회</a></div>
+                    <div><a>고객센터</a></div>
+                </HUser>
 
             </HDiv>
 
