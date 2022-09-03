@@ -479,7 +479,8 @@ router.post('/isExistedLoginId', async (req, res, next) => {
 router.post('/checkIsLoginIdCheckUser', (req, res, next) => {
   try {
     a = req.headers.loginidchecktoken
-    if (!req.header.loginidchecktoken) {
+    console.log(a)
+    if (!req.headers.loginidchecktoken) {
       return res.status(400).send({ message: "헤더로 토큰이 지급되지 않았습니다" })
     }
     var bytes  = CryptoJS.AES.decrypt(req.headers.loginidchecktoken, 'secret key 123');

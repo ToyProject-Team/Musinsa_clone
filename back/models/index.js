@@ -10,6 +10,7 @@ const Comment = require('./comment')
 const Order = require('./order')
 const ProductSize = require('./productSize')
 const CategoryColor = require('./categoryColor')
+const DeliveryList = require('./deliveryList')
 
 const db = {};
 db.User = user;
