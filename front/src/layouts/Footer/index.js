@@ -19,14 +19,14 @@ const Footer = () => {
 
 		if (open === 'Notice')
 			win = window.open(
-				'../../contract/Footer/Notice',
+				'footer/notice',
 				'자세히보기',
 				'width=500px,height=800px,scrollbars=yes',
 			);
 		else if (open === 'Declar') {
 			win = window.open(
-				// '/signup/agreement/terms',
-				// '무신사, 무신사 스토어 이용 악관',
+				'footer/declar',
+				'신고',
 				'width=500px,height=800px,scrollbars=yes',
 			);
 		} 

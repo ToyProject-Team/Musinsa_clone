@@ -28,6 +28,7 @@ export const HLogo = styled.h1`
 
 export const HSearch = styled.div`
     margin-left: 20px;
+    margin-right: auto;
     
     & div{
         width: 260px;
@@ -87,26 +88,30 @@ export const HSearch = styled.div`
 
 export const HUser = styled.div`
     display: flex;
-    flex-direction: row;
-    color: white;
-    width: 100%;
-    justify-content: flex-end;
+    color: #fff;
+    gap: 20px;
+    justify-content: center;
     align-items: center;
+    padding-right: 40px;
+    font-weight: 900;
+    cursor: pointer;
 
     & button{
         cursor: pointer;
-        border: 1px solid gray;
+        border: 2px solid white;
         background: none;
         color: white;
         padding: 6px 24px 6px 24px;
-        margin-right: 30px;
+        font-size: 18px;
     }
 
     & div{
-        width: 8%;
         text-align: center;
-
+        word-break: keep-all;
+        font-size: 18px;
     }
+
+   
 `;
 
 
