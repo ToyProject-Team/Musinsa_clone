@@ -2,12 +2,11 @@ import styled from '@emotion/styled';
 
 
 export const HContainer = styled.div`
-    min-width: 1560px;
     border-bottom: 1px solid #dddddd;
+    max-width: 100%;
 `;
 
 export const HDiv = styled.div`
-    min-width: 1560px;
     min-height: 32px;
     height: auto;
     width: 100%;
@@ -83,6 +82,30 @@ export const HSearch = styled.div`
             }
         }
         
+    }
+`;
+
+export const HUser = styled.div`
+    display: flex;
+    flex-direction: row;
+    color: white;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+
+    & button{
+        cursor: pointer;
+        border: 1px solid gray;
+        background: none;
+        color: white;
+        padding: 6px 24px 6px 24px;
+        margin-right: 30px;
+    }
+
+    & div{
+        width: 8%;
+        text-align: center;
+
     }
 `;
 
