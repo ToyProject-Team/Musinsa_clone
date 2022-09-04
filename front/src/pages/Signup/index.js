@@ -32,6 +32,7 @@ import { Link } from 'react-router-dom';
 const Signup = () => {
 	const user = useUserState();
 	const dispatch = useUserDispatch();
+	const navigate = useNavigate();
 
 	const [email, setEmail] = useState('');
 	const [emailReg, setEmailReg] = useState(false);
@@ -323,7 +324,7 @@ const Signup = () => {
 	const onCloseLinkModal = useCallback(() => {
 		setModalSignUp(false);
 
-		return <Navigate to="/login" />;
+		return navigate(`/login`);
 	}, []);
 
 	useEffect(() => {
@@ -344,8 +345,7 @@ const Signup = () => {
 	const onChangeEmail = useCallback(e => {
 		setEmail(e.target.value);
 
-		const regExp =
-			/^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+		const regExp = /^[A-Za-z0-9]{4,11}$/;
 		if (regExp.test(e.target.value)) setEmailReg(true);
 		else setEmailReg(false);
 	}, []);

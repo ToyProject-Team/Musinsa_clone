@@ -25,6 +25,7 @@ import {
 } from 'react-router-dom';
 // import qs from 'qs';
 import loadable from '@loadable/component';
+import Header from 'layouts/Header';
 
 const Main = () => {
 	const ShowList = loadable(() => import('./showList'), {
@@ -214,221 +215,226 @@ const Main = () => {
 	};
 
 	return (
-		<MainContainer>
-			{/* 카테고리 */}
-			<Category>
-				<CategoryTitle>
-					<div className="page_title">useLocation테스트</div>
-					<div className="hash_tag">#노트북</div>
-					<div className="hash_tag">#캐주얼</div>
-				</CategoryTitle>
+		<>
+			<Header></Header>
+			<MainContainer>
+				{/* 카테고리 */}
+				<Category>
+					<CategoryTitle>
+						<div className="page_title">useLocation테스트</div>
+						<div className="hash_tag">#노트북</div>
+						<div className="hash_tag">#캐주얼</div>
+					</CategoryTitle>
 
-				<MiddleCategory>
-					<CategoryName>
-						<div>중분류</div>
-						<div>
-							<form>
-								<input
-									type="text"
-									title="검색"
-									onChange={e => {
-										setSearchInput(e.target.value.toLowerCase());
-									}}
-								></input>
-								<img src="https://image.msscdn.net/skin/musinsa/images/search_grey_14.gif"></img>
-							</form>
-						</div>
-					</CategoryName>
-					<div className="all_item">
-						<Link
-							to="/"
-							style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
-						>
-							전체
-						</Link>
-					</div>
-					<div className="all_item_list">
-						<ul>
-							{product
-								?.map(data => data.productTitle)
-								.filter((val, idx) => product?.map(data => data.productTitle).indexOf(val) === idx)
-								.filter(val => {
-									if (searchInput === '') return val;
-									else if (val.toLowerCase().includes(searchInput)) return val;
-								})
-								.map(data => {
-									return (
-										<li onClick={e => onSort(e.target.textContent)}>
-											<Link
-												to="/category"
-												style={{
-													'text-decoration': 'none',
-													color: '#b2b2b2',
-													'font-weight': 'bold',
-												}}
-											>
-												{data}
-											</Link>
-										</li>
-									);
-								})}
-						</ul>
-					</div>
-				</MiddleCategory>
-
-				<OtherCategory>
-					<CategoryName>색상</CategoryName>
-					<div className="color">
-						<ul>
-							<li>..빨강</li>
-							<li>..파랑</li>
-						</ul>
-					</div>
-				</OtherCategory>
-
-				<OtherCategory>
-					<CategoryName>가격</CategoryName>
-					<div className="price">
-						<ul>
-							<li>
-								<Link
-									to="/"
-									style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
-								>
-									전체보기
-								</Link>
-							</li>
-							<li onClick={() => onFilterPrice(1)}>
-								<Link
-									to="/price"
-									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-								>
-									~ 50,000원
-								</Link>
-							</li>
-							<li onClick={() => onFilterPrice(2)}>
-								<Link
-									to="/price"
-									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-								>
-									50,000원 ~ 100,000원
-								</Link>
-							</li>
-							<li onClick={() => onFilterPrice(3)}>
-								<Link
-									to="/price"
-									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-								>
-									100,000원 ~ 200,000원
-								</Link>
-							</li>
-							<li onClick={() => onFilterPrice(4)}>
-								<Link
-									to="/price"
-									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-								>
-									200,000원 ~ 300,000원
-								</Link>
-							</li>
-							<li onClick={() => onFilterPrice(5)}>
-								<Link
-									to="/price"
-									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-								>
-									300,000원 ~
-								</Link>
-							</li>
-							<li style={{ width: '248px' }}>
-								<input
-									className="minPrice"
-									type="text"
-									onChange={e => setMinPriceInput(e.target.value)}
-								></input>
-								<span>원 ~</span>
-								<input
-									className="maxPrice"
-									type="text"
-									onChange={e => setMaxPriceInput(e.target.value)}
-								></input>
-								<span>원</span>
-								<span
-									type="submit"
-									className="search_btn"
-									onClick={() => {
-										onFilterPriceRange(minPriceInput, maxPriceInput);
-									}}
-								>
-									<Link to="/price" style={{ 'text-decoration': 'none', color: 'black' }}>
-										검색
-									</Link>
-								</span>
-							</li>
-						</ul>
-					</div>
-				</OtherCategory>
-
-				<OtherCategory>
-					<CategoryName>검색</CategoryName>
-					<div className="search_items">
-						<input type="text" id="search_items" onChange={e => setSearchTerm(e.target.value)} />
-						<span type="submit" className="search_btn" onClick={() => onSearch()}>
+					<MiddleCategory>
+						<CategoryName>
+							<div>중분류</div>
+							<div>
+								<form>
+									<input
+										type="text"
+										title="검색"
+										onChange={e => {
+											setSearchInput(e.target.value.toLowerCase());
+										}}
+									></input>
+									<img src="https://image.msscdn.net/skin/musinsa/images/search_grey_14.gif"></img>
+								</form>
+							</div>
+						</CategoryName>
+						<div className="all_item">
 							<Link
-								to="/search"
+								to="/"
 								style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
 							>
-								검색
+								전체
 							</Link>
-						</span>
-					</div>
-				</OtherCategory>
-			</Category>
+						</div>
+						<div className="all_item_list">
+							<ul>
+								{product
+									?.map(data => data.productTitle)
+									.filter(
+										(val, idx) => product?.map(data => data.productTitle).indexOf(val) === idx,
+									)
+									.filter(val => {
+										if (searchInput === '') return val;
+										else if (val.toLowerCase().includes(searchInput)) return val;
+									})
+									.map(data => {
+										return (
+											<li onClick={e => onSort(e.target.textContent)}>
+												<Link
+													to="/category"
+													style={{
+														'text-decoration': 'none',
+														color: '#b2b2b2',
+														'font-weight': 'bold',
+													}}
+												>
+													{data}
+												</Link>
+											</li>
+										);
+									})}
+							</ul>
+						</div>
+					</MiddleCategory>
 
-			{/* Item List - 컴포넌트로 따로 빼기 */}
-			<ItemSection>
-				{selectBox === true ? (
-					<SelectBox
-						onClick={() => {
-							setSelectBox(false);
-						}}
-					>
-						<span className="select-medium">중분류: {}</span>
-						<span className="select-medium-button">&#160;X</span>
-					</SelectBox>
-				) : null}
+					<OtherCategory>
+						<CategoryName>색상</CategoryName>
+						<div className="color">
+							<ul>
+								<li>..빨강</li>
+								<li>..파랑</li>
+							</ul>
+						</div>
+					</OtherCategory>
 
-				<Items>
-					<SortBox>
-						<span className="sort">무신사 추천순</span>
-						<span className="sort" onClick={() => onSortPriceUp()}>
-							<Link to="/sort" style={{ 'text-decoration': 'none', color: 'black' }}>
-								낮은 가격순
-							</Link>
-						</span>
-						<span className="sort" onClick={() => onSortPriceDown()}>
-							<Link to="/sort" style={{ 'text-decoration': 'none', color: 'black' }}>
-								높은 가격순
-							</Link>
-						</span>
-						<span className="sort" onClick={() => onSortComments()}>
-							<Link to="/sort" style={{ 'text-decoration': 'none', color: 'black' }}>
-								후기순
-							</Link>
-						</span>
-					</SortBox>
-					<ListBox>
-						<ul className="list_item">
-							<Routes>
-								<Route exact path="/" element={<ShowList product={product} />}></Route>
-								<Route path="/category" element={<NewList newProduct={newProduct} />}></Route>
-								<Route path="/price" element={<NewList newProduct={newProduct} />}></Route>
-								<Route path="/sort" element={<NewList newProduct={newProduct} />}></Route>
-								<Route path="/search" element={<NewList newProduct={newProduct} />}></Route>
-							</Routes>
-						</ul>
-					</ListBox>
-				</Items>
-			</ItemSection>
-		</MainContainer>
+					<OtherCategory>
+						<CategoryName>가격</CategoryName>
+						<div className="price">
+							<ul>
+								<li>
+									<Link
+										to="/"
+										style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
+									>
+										전체보기
+									</Link>
+								</li>
+								<li onClick={() => onFilterPrice(1)}>
+									<Link
+										to="/price"
+										style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+									>
+										~ 50,000원
+									</Link>
+								</li>
+								<li onClick={() => onFilterPrice(2)}>
+									<Link
+										to="/price"
+										style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+									>
+										50,000원 ~ 100,000원
+									</Link>
+								</li>
+								<li onClick={() => onFilterPrice(3)}>
+									<Link
+										to="/price"
+										style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+									>
+										100,000원 ~ 200,000원
+									</Link>
+								</li>
+								<li onClick={() => onFilterPrice(4)}>
+									<Link
+										to="/price"
+										style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+									>
+										200,000원 ~ 300,000원
+									</Link>
+								</li>
+								<li onClick={() => onFilterPrice(5)}>
+									<Link
+										to="/price"
+										style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+									>
+										300,000원 ~
+									</Link>
+								</li>
+								<li style={{ width: '248px' }}>
+									<input
+										className="minPrice"
+										type="text"
+										onChange={e => setMinPriceInput(e.target.value)}
+									></input>
+									<span>원 ~</span>
+									<input
+										className="maxPrice"
+										type="text"
+										onChange={e => setMaxPriceInput(e.target.value)}
+									></input>
+									<span>원</span>
+									<span
+										type="submit"
+										className="search_btn"
+										onClick={() => {
+											onFilterPriceRange(minPriceInput, maxPriceInput);
+										}}
+									>
+										<Link to="/price" style={{ 'text-decoration': 'none', color: 'black' }}>
+											검색
+										</Link>
+									</span>
+								</li>
+							</ul>
+						</div>
+					</OtherCategory>
+
+					<OtherCategory>
+						<CategoryName>검색</CategoryName>
+						<div className="search_items">
+							<input type="text" id="search_items" onChange={e => setSearchTerm(e.target.value)} />
+							<span type="submit" className="search_btn" onClick={() => onSearch()}>
+								<Link
+									to="/search"
+									style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
+								>
+									검색
+								</Link>
+							</span>
+						</div>
+					</OtherCategory>
+				</Category>
+
+				{/* Item List - 컴포넌트로 따로 빼기 */}
+				<ItemSection>
+					{selectBox === true ? (
+						<SelectBox
+							onClick={() => {
+								setSelectBox(false);
+							}}
+						>
+							<span className="select-medium">중분류: {}</span>
+							<span className="select-medium-button">&#160;X</span>
+						</SelectBox>
+					) : null}
+
+					<Items>
+						<SortBox>
+							<span className="sort">무신사 추천순</span>
+							<span className="sort" onClick={() => onSortPriceUp()}>
+								<Link to="/sort" style={{ 'text-decoration': 'none', color: 'black' }}>
+									낮은 가격순
+								</Link>
+							</span>
+							<span className="sort" onClick={() => onSortPriceDown()}>
+								<Link to="/sort" style={{ 'text-decoration': 'none', color: 'black' }}>
+									높은 가격순
+								</Link>
+							</span>
+							<span className="sort" onClick={() => onSortComments()}>
+								<Link to="/sort" style={{ 'text-decoration': 'none', color: 'black' }}>
+									후기순
+								</Link>
+							</span>
+						</SortBox>
+						<ListBox>
+							<ul className="list_item">
+								<Routes>
+									<Route exact path="/" element={<ShowList product={product} />}></Route>
+									<Route path="/category" element={<NewList newProduct={newProduct} />}></Route>
+									<Route path="/price" element={<NewList newProduct={newProduct} />}></Route>
+									<Route path="/sort" element={<NewList newProduct={newProduct} />}></Route>
+									<Route path="/search" element={<NewList newProduct={newProduct} />}></Route>
+								</Routes>
+							</ul>
+						</ListBox>
+					</Items>
+				</ItemSection>
+			</MainContainer>
+		</>
 	);
 };
 
