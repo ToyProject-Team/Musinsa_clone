@@ -18,13 +18,34 @@ import {
 import { useState, useCallback } from 'react';
 import PriceList from 'components/DetailProduct/ProductInfoRight/PriceList';
 import PurchaseForm from '../PurchaseForm';
+import { useProductDetailState } from 'context/ProductDetailContext';
+import { ReactComponent as ArrowDown } from 'assets/svg/ArrowDown.svg';
 
 const ProductInfoRight = ({ data }) => {
+	const detail = useProductDetailState();
 	const [toggle, setToggle] = useState(false);
 
 	const onToggle = useCallback(() => {
 		setToggle(prev => !prev);
 	}, [toggle]);
+
+	// 숫자 단위로 바꾸기
+	// ex) 8 => 1, 82 => 10, 5912 => 1000
+	function roundDown(v) {
+		let wordCnt = 0;
+		let unitWords = ['', '만', '억', '조', '경'];
+		let value = Math.pow(10, Math.floor(Math.log10(v)));
+		let limitValue = 10000;
+
+		while (value >= limitValue) {
+			value /= limitValue;
+			wordCnt++;
+		}
+
+		return value + unitWords[wordCnt];
+	}
+
+	console.log(123, detail.product);
 
 	return (
 		<div>
@@ -37,13 +58,13 @@ const ProductInfoRight = ({ data }) => {
 					<DetailInfoWrapper>
 						<DetailInfo>
 							<InfoTitle>시즌 / 성별</InfoTitle>
-							<InfoContent>{data.season}</InfoContent>
+							<InfoContent>{detail.product.season}</InfoContent>
 							<span>/</span>
-							<InfoContent>{data.gender}</InfoContent>
+							<InfoContent>{detail.product.gender === 1 ? '남' : '여'}</InfoContent>
 						</DetailInfo>
 						<DetailInfo>
 							<InfoTitle>조회수(1개월)</InfoTitle>
-							<InfoContent>{data.views}</InfoContent>
+							<InfoContent>{roundDown(detail.product.views)}회 이상</InfoContent>
 						</DetailInfo>
 						<DetailInfo>
 							<InfoTitle>좋아요</InfoTitle>
@@ -51,7 +72,7 @@ const ProductInfoRight = ({ data }) => {
 								src="	https://image.msscdn.net/skin/musinsa/images/icon_like_small_on.png"
 								style={{ paddingRight: '6px', width: 15, height: 15 }}
 							/>
-							<InfoContent style={{ color: 'red' }}>{data.likes}</InfoContent>
+							<InfoContent style={{ color: 'red' }}>{detail.product.likes}</InfoContent>
 						</DetailInfo>
 					</DetailInfoWrapper>
 				</InfoWrapperProduct>
@@ -67,11 +88,13 @@ const ProductInfoRight = ({ data }) => {
 						</DetailInfo>
 						<DetailInfo>
 							<InfoTitle>배송 방법</InfoTitle>
-							<InfoContent>{data.deliveryFrom}</InfoContent>
+							<InfoContent>{detail.product.deliveryFrom ? '국내' : '해외'}</InfoContent>
 							<span>/</span>
-							<InfoContent>{data.deliveryWay}</InfoContent>
+							<InfoContent>
+								{detail.product.deliveryWay ? '입점사 배송' : '해외사 배송'}
+							</InfoContent>
 							<span>/</span>
-							<InfoContent>{data.deliveryCompany}</InfoContent>
+							<InfoContent>{detail.product.deliveryCompany}</InfoContent>
 						</DetailInfo>
 					</DetailInfoWrapper>
 				</InfoWrapper>
@@ -84,37 +107,24 @@ const ProductInfoRight = ({ data }) => {
 						<DetailInfo>
 							<PriceTitle>무신사 판매가</PriceTitle>
 							<PriceContent className="line">
-								{data.productPrice}
+								{detail.product.productPrice}
 								<Price>원</Price>
 							</PriceContent>
 						</DetailInfo>
 						<DetailInfo>
 							<PriceTitle>무신사 회원가</PriceTitle>
 							<PriceContent onClick={onToggle}>
-								{data.rookiePrice}
+								{detail.product.rookiePrice}
 								<Price>원</Price>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 16 16"
-									width="16"
-									height="16"
-									style={{ paddingLeft: '6px' }}
-								>
-									<path
-										fill-rule="evenodd"
-										d="M12.78 6.22a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06 0L3.22 7.28a.75.75 0 011.06-1.06L8 9.94l3.72-3.72a.75.75 0 011.06 0z"
-									></path>
-								</svg>
+								<ArrowDown style={{ paddingLeft: '8px' }} />
 							</PriceContent>
-							{toggle ? <PriceList data={data} /> : <></>}
+							{toggle ? <PriceList /> : <></>}
 						</DetailInfo>
 					</DetailInfoWrapper>
 					<TextBox>
-						<Box>무신사는 전 상품 무료배송입니다.</Box>
-						<Box>회원 특별 혜택</Box>
+						<li>3만원 이상 시 무료배송입니다.</li>
+						<li>회원 특별 혜택</li>
 					</TextBox>
-					{/* <Add_1>무신사는 전 상품 무료배송입니다.</Add_1>
-					<Add_2>회원 특별 혜택</Add_2> */}
 				</InfoWrapper>
 			</ProductInfo>
 			<PurchaseForm data={data} />

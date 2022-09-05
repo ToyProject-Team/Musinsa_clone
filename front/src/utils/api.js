@@ -10,7 +10,7 @@ export const baseUrl = process.env.REACT_APP_HOST_URL;
  * @returns result 데이터
  */
 export const GetApi = async PATH => {
-	const result = await axios.post(baseUrl + PATH, {
+	const result = await axios.get(baseUrl + PATH, {
 		headers: { 'Content-Type': 'application/json' },
 	});
 
