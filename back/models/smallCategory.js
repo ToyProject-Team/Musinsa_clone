@@ -23,5 +23,6 @@ module.exports = class SmallCategory extends Model {
     static associate(db) {
         db.SmallCategory.hasMany(db.Product)
         db.SmallCategory.belongsTo(db.BigCategory)
+        db.SmallCategory.hasMany(db.CategoryColor)
     }
 }

@@ -86,11 +86,32 @@ export const RefundInfo = styled.ul`
 	}
 	span {
 		margin-right: 50px;
+		margin-bottom: 10px;
 		color: #777;
 	}
 	input {
 		border: 1px solid #cdcdcd;
 		height: 20px;
+	}
+	div {
+		margin-bottom: 15px;
+		span {
+			float: left;
+			width: 70px;
+		}
+		div {
+			display: block;
+			padding-left: 100px;
+		}
+	}
+	label {
+		position: relative;
+		margin-right: 10px;
+		input {
+			position: relative;
+			top: 4px;
+			margin-right: 8px;
+		}
 	}
 `;
 
@@ -117,4 +138,17 @@ export const X = styled.div`
 	font-size: 20px;
 	margin-left: 410px;
 	cursor: pointer;
+`;
+
+export const AddressButton = styled.button`
+	border: 1px solid #cdcdcd;
+	width: 100px;
+	span {
+		background-color: #f3f3f3;
+		color: #000;
+		text-align: center;
+		font-weight: bold;
+		cursor: pointer;
+		margin: 6px 0px 10px 8px;
+	}
 `;

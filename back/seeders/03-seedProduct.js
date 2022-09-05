@@ -77,7 +77,7 @@ module.exports = {
         views: rand(1000, 20000),
         sells: rand(1000, 3000),
         likes: rand(0, 1000),
-        comments: rand(0, 1000),
+        comments: rand(0, 12000),
         gender : rand(0,1),
         season : String(rand(2020, 2021))+" "+weather(rand(0,2)),
         beRleased : faker.date.between('2022-07-09T00:00:00.000Z', '2022-09-31T00:00:00.000Z'),

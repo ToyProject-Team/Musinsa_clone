@@ -3,6 +3,7 @@ import MyHeader from 'components/Mypage/Header';
 import { StyleNav, MypageLayout, MypageMain } from './styles';
 import { Routes, Route, NavLink, useParams, Navigate } from 'react-router-dom';
 import loadable from '@loadable/component';
+import { getData } from 'utils/getData';
 
 const OrderList = loadable(() => import('components/Mypage/OrderList'), {
 	fallback: <div>로딩중</div>,
@@ -17,9 +18,12 @@ const Cart = loadable(() => import('components/Mypage/Cart'), {
 });
 
 const Mypage = () => {
+	const [data, setData] = useState(() => getData());
 	const pageURL = Object.values(useParams())[0];
 	if (pageURL === '') {
 		return <Navigate to="/mypage/orderlist" />;
+	} else if(data === null){
+		return <Navigate to="/login" />;
 	}
 
 	return (
