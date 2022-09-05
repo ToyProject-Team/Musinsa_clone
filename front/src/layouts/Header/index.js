@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
     HContainer,
     HDiv,
@@ -8,11 +8,17 @@ import {
 } from "./styles";
 import { Link } from 'react-router-dom';
 import { AiOutlineCamera, AiOutlineSearch } from "react-icons/ai";
+import { getData } from 'utils/getData';
+
 
 const Header = () =>{
+    const [login, setLogin] = useState(getData());
+    // console.log(login.userData.nickname)
+
     return (
         <HContainer>
             <HDiv>
+            
                 <Link to="/"><HLogo>MUSINSA</HLogo></Link>
                 <HSearch>
                     <div>
@@ -26,15 +32,30 @@ const Header = () =>{
                     </div>
                 </HSearch>
 
-                <HUser>
-                    <Link to="/Login"><button>로그인</button></Link>
-                    <div><a>마이페이지</a></div>
-                    <div><a>최근 본 상품</a></div>
-                    <div><a>좋아요</a></div>
-                    <div><a>장바구니</a></div>
-                    <div><a>주문배송조회</a></div>
-                    <div><a>고객센터</a></div>
+                {login&&
+                    <HUser>
+                        <button>{login.userData.nickname}</button>
+                        <div><a>마이페이지</a></div>
+                        <div><a>최근 본 상품</a></div>
+                        <div><a>좋아요</a></div>
+                        <div><a>장바구니</a></div>
+                        <div><a>주문배송조회</a></div>
+                        <div><a>고객센터</a></div>
+                        <div>로그아웃</div>
+                    </HUser> 
+                }
+                {!login&&
+                    <HUser>
+                        <Link to="/Login"><button>로그인</button></Link>
+                        <div><a>마이페이지</a></div>
+                        <div><a>최근 본 상품</a></div>
+                        <div><a>좋아요</a></div>
+                        <div><a>장바구니</a></div>
+                        <div><a>주문배송조회</a></div>
+                        <div><a>고객센터</a></div>
                 </HUser>
+                }
+                
 
             </HDiv>
 

@@ -96,6 +96,9 @@ export const HUser = styled.div`
     font-weight: 900;
     cursor: pointer;
 
+
+    
+
     & button{
         cursor: pointer;
         border: 2px solid white;
@@ -103,7 +106,72 @@ export const HUser = styled.div`
         color: white;
         padding: 6px 24px 6px 24px;
         font-size: 18px;
-    }
+        position: relative;
+        border-radius: 4px;
+
+        &:hover{
+            background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbow 6s ease-in-out infinite;
+            background-size: 400% 100%;
+            
+
+            &::after{
+                content: '';
+                position: absolute;
+                top: -3px;
+                left: -2px;
+                right: -3px;
+                bottom: -3px;
+                border-radius: 4px;
+                background: linear-gradient(120deg, #00F260, #0575E6, #00F260);
+                background-size: 300% 300%;
+                clip-path: polygon(0% 100%, 3px 100%, 3px 3px, calc(100% - 3px) 3px, calc(100% - 3px) calc(100% - 3px), 3px calc(100% - 3px), 3px 100%, 100% 100%, 100% 0%, 0% 0%);
+                animation: rainbow_frame 1s forwards ease-in-out reverse, rainbow_border 4s ease-in-out infinite;
+            }
+        }
+        
+        @keyframes rainbow {
+            0%,100% {
+                background-position: 0 0;
+            }
+            50% {
+                background-position: 100% 0;
+            }
+        }
+       
+        @keyframes rainbow_border {
+            0% {
+                background-position: 15% 0%;
+            }
+            50% {
+                background-position: 85% 100%;
+            }
+            100% {
+                background-position: 15% 0%;
+            }
+        }
+
+        @keyframes rainbow_frame {
+            0% {
+                clip-path: polygon(0% 100%, 3px 100%, 3px 3px, calc(100% - 3px) 3px, calc(100% - 3px) calc(100% - 3px), 3px calc(100% - 3px), 3px 100%, 100% 100%, 100% 0%, 0% 0%);
+            }
+            25% {
+                clip-path: polygon(0% 100%, 3px 100%, 3px 3px, calc(100% - 3px) 3px, calc(100% - 3px) calc(100% - 3px), calc(100% - 3px) calc(100% - 3px), calc(100% - 3px) 100%, 100% 100%, 100% 0%, 0% 0%);
+            }
+            50% {
+                clip-path: polygon(0% 100%, 3px 100%, 3px 3px, calc(100% - 3px) 3px, calc(100% - 3px) 3px, calc(100% - 3px) 3px, calc(100% - 3px) 3px, calc(100% - 3px) 3px, 100% 0%, 0% 0%);
+            }
+            75% {
+                -webkit-clip-path: polygon(0% 100%, 3px 100%, 3px 3px, 3px 3px, 3px 3px, 3px 3px, 3px 3px, 3px 3px, 3px 0%, 0% 0%);
+            }
+            100% {
+                -webkit-clip-path: polygon(0% 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 0% 100%);
+            }
+        }
+    
 
     & div{
         text-align: center;
@@ -116,11 +184,7 @@ export const HUser = styled.div`
 
 
 
-
-
-
-
-
+ 
 
 
 
