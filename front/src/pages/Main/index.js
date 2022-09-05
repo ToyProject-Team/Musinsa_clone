@@ -28,6 +28,8 @@ import loadable from '@loadable/component';
 import Header from 'layouts/Header';
 
 const Main = () => {
+	const navigate = useNavigate();
+
 	const ShowList = loadable(() => import('./showList'), {
 		fallback: <div>로딩중</div>,
 	});
@@ -54,16 +56,25 @@ const Main = () => {
 	const [newProduct, setNewProduct] = useState([]);
 
 	//params
+	const [mainSort, setMainSort] = useState();
 	const [page, setPage] = useState(1);
 	const [price, setPrice] = useState(1);
-	// const [priceMin, setPriceMin] = useState(0);
-	// const [priceMax, setPriceMax] = useState(100000000);
+	const [priceMin, setPriceMin] = useState(0);
+	const [priceMax, setPriceMax] = useState(100000000);
 	const [bigCategoryId, setBigCategoryId] = useState(1);
 	const [smallCategoryId, setSmallCategoryId] = useState(1);
 
-	//데이터 받아오기
+	//상품리스트 리셋(전체보기)
+	const resetList = () => {
+		setMainSort(0);
+		setPage(1);
+		setPrice(1);
+	};
+
+	//데이터 받아오기 1
 	useEffect(() => {
 		const params = {
+			mainSort,
 			page,
 			price,
 			bigCategoryId,
@@ -72,12 +83,7 @@ const Main = () => {
 		PostQueryApi('/api/product/productList', params).then(res => setProduct(res.data.productData));
 	}, [page, price, bigCategoryId, smallCategoryId]);
 
-	//쿼리스트링 사용. . .
-	// let [searchParams, setSearchParams] = useSearchParams();
-	// const query = val => {
-	// 	setSearchParams({ page: 1, price: val });
-	// };
-
+	const [inputState, setInputState] = useState(false);
 	const [selectBox, setSelectBox] = useState(false);
 	const [searchInput, setSearchInput] = useState('');
 	const [minPriceInput, setMinPriceInput] = useState(0);
@@ -85,118 +91,129 @@ const Main = () => {
 	const [searchTerm, setSearchTerm] = useState('');
 	// const [toggle, setToggle] = useState(true);
 
-	//중분류 분류
+	//중분류 분류 2
 	//onSort버튼 클릭 -> params 값 전송 -> url에 박아넣기 구현..
 	const onSort = val => {
 		const params = {
+			mainSort,
 			page,
 			price,
 			bigCategoryId,
 			smallCategoryId,
 		};
 
-		PostQueryApi('/api/product/productList', params).then(res =>
-			setNewProduct(
-				res.data.productData.filter(data => {
-					return data.productTitle === val;
-				}),
-			),
+		//백엔드 데이터에 상품명이 없기 때문에 쿼리스트링으로 못넣음
+		PostQueryApi('/api/product/productList', params).then(
+			res =>
+				setNewProduct(
+					res.data.productData.filter(data => {
+						return data.productTitle === val;
+					}),
+				),
+			navigate('/products'),
 		);
-		// navigate(
-		// 	`/category?price=${price}&bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}`,
-		// );
 		setSelectBox(true);
 	};
 
-	//페이지 이동
-	const onPage = () => {
-		setPage(page + 1);
-	};
-
-	//가격별로 분류
+	//가격별로 분류 3
 	const onFilterPrice = val => {
+		setPrice(val);
 		const params = {
+			mainSort,
 			page,
 			price: val,
 			bigCategoryId,
 			smallCategoryId,
 		};
-		// setPrice(val); -> 두번 클릭해야함
-
-		PostQueryApi('/api/product/productList', params).then(res =>
-			setNewProduct(res.data.productData),
+		PostQueryApi(`/api/product/productList`, params).then(
+			res => setNewProduct(res.data.productData),
+			navigate(`/products?price=${params.price}`),
 		);
 	};
 
+	//가격별로 분류 4
 	const onFilterPriceRange = (val1, val2) => {
+		setPriceMin(val1);
+		setPriceMax(val2);
+
 		const params = {
+			mainSort,
+			page,
 			priceMin: val1,
 			priceMax: val2,
+			bigCategoryId,
+			smallCategoryId,
 		};
-		// setPriceMin(val1);
-		// setPriceMax(val2);
-		PostQueryApi('/api/product/productList', params).then(res =>
-			setNewProduct(res.data.productData),
+
+		PostQueryApi('/api/product/productList', params).then(
+			res => setNewProduct(res.data.productData),
+			navigate(`/products?priceMin=${params.priceMin}&&priceMax=${params.priceMax}`),
 		);
 	};
 
-	//검색창
+	//검색창 5
 	const onSearch = () => {
 		const params = {
+			mainSort,
 			page,
 			price,
 			bigCategoryId,
 			smallCategoryId,
 		};
-		PostQueryApi('/api/product/productList', params).then(res =>
-			setNewProduct(
-				res.data.productData.filter(data =>
-					data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
+		PostQueryApi('/api/product/productList', params).then(
+			res =>
+				setNewProduct(
+					res.data.productData.filter(data =>
+						data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
+					),
 				),
-			),
+			navigate(`/products?search=${searchTerm}`),
 		);
 	};
 
 	//가격순 정렬
-	//내림차순
+	//내림차순 6
 	const onSortPriceDown = () => {
 		const params = {
 			page,
 			price,
-			// //mainSort: 2,
+			mainSort: 2,
 			bigCategoryId,
 			smallCategoryId,
 		};
-		PostQueryApi('/api/product/productList', params).then(res =>
-			//setNewProduct(res.data.productData),
-			setNewProduct(
-				res.data.productData.sort((a, b) => {
-					return b.productPrice - a.productPrice;
-				}),
-			),
+		//정렬 - 백엔
+		PostQueryApi('/api/product/productList', params).then(
+			res => setNewProduct(res.data.productData),
+			// setNewProduct(
+			// 	res.data.productData.sort((a, b) => {
+			// 		return b.productPrice - a.productPrice;
+			// 	}),
+			// ),
+			navigate(`/products?mainSort=${params.mainSort}`),
 		);
 	};
 
-	//오름차순
+	//오름차순 7
 	const onSortPriceUp = () => {
 		const params = {
 			page,
 			price,
-			// mainSort: 1,
+			mainSort: 1,
 			bigCategoryId,
 			smallCategoryId,
 		};
-		PostQueryApi('/api/product/productList', params).then(res =>
-			//setNewProduct(res.data.productData),
-			setNewProduct(
-				res.data.productData.sort((a, b) => {
-					return a.productPrice - b.productPrice;
-				}),
-			),
+		PostQueryApi('/api/product/productList', params).then(
+			res => setNewProduct(res.data.productData),
+			// setNewProduct(
+			// 	res.data.productData.sort((a, b) => {
+			// 		return a.productPrice - b.productPrice;
+			// 	}),
+			// ),
+			navigate(`/products?mainSort=${params.mainSort}`),
 		);
 	};
 
-	//후기순 정렬 sort함수사용
+	//후기순 정렬 sort함수사용 8
 	const onSortComments = () => {
 		const params = {
 			page,
@@ -205,12 +222,14 @@ const Main = () => {
 			smallCategoryId,
 		};
 
-		PostQueryApi('/api/product/productList', params).then(res =>
-			setNewProduct(
-				res.data.productData.sort((a, b) => {
-					return b.comments - a.comments;
-				}),
-			),
+		PostQueryApi('/api/product/productList', params).then(
+			res =>
+				setNewProduct(
+					res.data.productData.sort((a, b) => {
+						return b.comments - a.comments;
+					}),
+				),
+			navigate(`/products`),
 		);
 	};
 
@@ -242,7 +261,12 @@ const Main = () => {
 								</form>
 							</div>
 						</CategoryName>
-						<div className="all_item">
+						<div
+							className="all_item"
+							onClick={() => {
+								resetList();
+							}}
+						>
 							<Link
 								to="/"
 								style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
@@ -282,20 +306,14 @@ const Main = () => {
 					</MiddleCategory>
 
 					<OtherCategory>
-						<CategoryName>색상</CategoryName>
-						<div className="color">
-							<ul>
-								<li>..빨강</li>
-								<li>..파랑</li>
-							</ul>
-						</div>
-					</OtherCategory>
-
-					<OtherCategory>
 						<CategoryName>가격</CategoryName>
 						<div className="price">
 							<ul>
-								<li>
+								<li
+									onClick={() => {
+										resetList();
+									}}
+								>
 									<Link
 										to="/"
 										style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
@@ -304,50 +322,52 @@ const Main = () => {
 									</Link>
 								</li>
 								<li onClick={() => onFilterPrice(1)}>
-									<Link
-										to="/price"
-										style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-									>
-										~ 50,000원
-									</Link>
+									{/* <Link
+									to="/price"
+									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+								> */}
+									~ 50,000원
+									{/* </Link> */}
 								</li>
 								<li onClick={() => onFilterPrice(2)}>
-									<Link
-										to="/price"
-										style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-									>
-										50,000원 ~ 100,000원
-									</Link>
+									{/* <Link
+									to="/price"
+									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+								>								</Link> */}
+									50,000원 ~ 100,000원
 								</li>
 								<li onClick={() => onFilterPrice(3)}>
-									<Link
-										to="/price"
-										style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-									>
-										100,000원 ~ 200,000원
-									</Link>
+									{/* <Link
+									to="/price"
+									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+								> */}
+									100,000원 ~ 200,000원
+									{/* </Link> */}
 								</li>
 								<li onClick={() => onFilterPrice(4)}>
-									<Link
-										to="/price"
-										style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-									>
-										200,000원 ~ 300,000원
-									</Link>
+									{/* <Link
+									to="/price"
+									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+								>
+								</Link> */}
+									200,000원 ~ 300,000원
 								</li>
 								<li onClick={() => onFilterPrice(5)}>
-									<Link
-										to="/price"
-										style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
-									>
-										300,000원 ~
-									</Link>
+									{/* <Link
+									to="/price"
+									style={{ 'text-decoration': 'none', color: '#b2b2b2', 'font-weight': 'bold' }}
+								>
+
+								</Link> */}
+									300,000원 ~
 								</li>
 								<li style={{ width: '248px' }}>
 									<input
 										className="minPrice"
 										type="text"
-										onChange={e => setMinPriceInput(e.target.value)}
+										onChange={e => {
+											setMinPriceInput(e.target.value);
+										}}
 									></input>
 									<span>원 ~</span>
 									<input
@@ -372,38 +392,64 @@ const Main = () => {
 						</div>
 					</OtherCategory>
 
-					<OtherCategory>
+					{/* <MiddleCategory>
 						<CategoryName>검색</CategoryName>
 						<div className="search_items">
 							<input type="text" id="search_items" onChange={e => setSearchTerm(e.target.value)} />
 							<span type="submit" className="search_btn" onClick={() => onSearch()}>
 								<Link
-									to="/search"
+									to="/"
 									style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
 								>
-									검색
+									전체
 								</Link>
 							</span>
+						</div>
+						<div className="all_item_list">
+							<ul>
+								{product
+									?.map(data => data.productTitle)
+									.filter(
+										(val, idx) => product?.map(data => data.productTitle).indexOf(val) === idx,
+									)
+									.filter(val => {
+										if (searchInput === '') return val;
+										else if (val.toLowerCase().includes(searchInput)) return val;
+									})
+									.map(data => {
+										return (
+											<li onClick={e => onSort(e.target.textContent)}>
+												<Link
+													to="/category"
+													style={{
+														'text-decoration': 'none',
+														color: '#b2b2b2',
+														'font-weight': 'bold',
+													}}
+												>
+													{data}
+												</Link>
+											</li>
+										);
+									})}
+							</ul>
+						</div>
+					</MiddleCategory> */}
+
+					<OtherCategory>
+						<CategoryName>색상</CategoryName>
+						<div className="color">
+							<ul>
+								<li>..빨강</li>
+								<li>..파랑</li>
+							</ul>
 						</div>
 					</OtherCategory>
 				</Category>
 
-				{/* Item List - 컴포넌트로 따로 빼기 */}
 				<ItemSection>
-					{selectBox === true ? (
-						<SelectBox
-							onClick={() => {
-								setSelectBox(false);
-							}}
-						>
-							<span className="select-medium">중분류: {}</span>
-							<span className="select-medium-button">&#160;X</span>
-						</SelectBox>
-					) : null}
-
 					<Items>
 						<SortBox>
-							<span className="sort">무신사 추천순</span>
 							<span className="sort" onClick={() => onSortPriceUp()}>
 								<Link to="/sort" style={{ 'text-decoration': 'none', color: 'black' }}>
 									낮은 가격순
@@ -424,10 +470,7 @@ const Main = () => {
 							<ul className="list_item">
 								<Routes>
 									<Route exact path="/" element={<ShowList product={product} />}></Route>
-									<Route path="/category" element={<NewList newProduct={newProduct} />}></Route>
-									<Route path="/price" element={<NewList newProduct={newProduct} />}></Route>
-									<Route path="/sort" element={<NewList newProduct={newProduct} />}></Route>
-									<Route path="/search" element={<NewList newProduct={newProduct} />}></Route>
+									<Route path="/products" element={<NewList newProduct={newProduct} />}></Route>
 								</Routes>
 							</ul>
 						</ListBox>
