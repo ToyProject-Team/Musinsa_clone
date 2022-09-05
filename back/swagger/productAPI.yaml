@@ -245,7 +245,35 @@
           properties:
             message:
               type: string
-              example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요        
+              example: 상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요
+      401:
+        description: 주문 번호가 지급되지 않았을 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요
+      402:
+        description: uniqueKey가 지급되지 않았읋 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요
+      403:
+        description: 가격 정보가 지급되지 않았을 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요
+      405:
+        description: 실제 결제 금액과 넘겨준 상품의 가격이 다를 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 위조된 결제 시도입니다 
       500:
         $ref: "./openapi.yaml#/serverError"
 
