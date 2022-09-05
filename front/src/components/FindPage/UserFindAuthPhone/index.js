@@ -15,13 +15,21 @@ import {
 	PHONECODEFLAG,
 	AUTHSUCCESS,
 	PHONECHECK,
+	PHONENUMBERAUTHTEXT,
 } from 'context/UserFindContext';
 import { authError } from 'utils/error';
 
 const UserFindAuthPhone = forwardRef((props, ref) => {
 	const userFind = useUserFindState();
 	const dispatch = useUserFindDispatch();
-	const { phoneNumber, phoneCode, phoneCodeFlag } = userFind;
+	const {
+		phoneNumber,
+		phoneCode,
+		phoneCodeFlag,
+		showAuth,
+		phoneNumberAuthText,
+		findPasswordShowMarkingData,
+	} = userFind;
 
 	const [phoneNumberReg, setPhoneNumberReg] = useState(true);
 	const [phoneCodeReg, setPhoneCodeReg] = useState(true);
@@ -45,6 +53,9 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 			const { value } = e.target;
 			const onlyNumber = value.replace(/[^0-9]/g, '');
 			changeDispatch(PHONENUMBER, { phoneNumber: value });
+			changeDispatch(PHONENUMBERAUTHTEXT, {
+				phoneNumberAuthText: '휴대전화 번호를 입력해 주세요.',
+			});
 
 			const regExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
 			if (regExp.test(onlyNumber)) setPhoneNumberReg(true);
@@ -63,6 +74,15 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 
 	const onClickAuth = useCallback(
 		e => {
+			if (
+				showAuth === 'phoneAuth' &&
+				phoneNumber.replaceAll('-', '') !== findPasswordShowMarkingData
+			) {
+				changeDispatch(PHONENUMBERAUTHTEXT, {
+					phoneNumberAuthText: '회원정보를 다시 확인해주세요.',
+				});
+				return setPhoneNumberReg(false);
+			}
 			// 휴대폰 1차인증
 			const params = {
 				phoneNumber: phoneNumber.replaceAll('-', ''),
@@ -91,17 +111,16 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 
 			const { phoneNumber } = userFind;
 			const params = {
-				phoneNumber,
+				phoneNumber: phoneNumber.replaceAll('-', ''),
 				code: phoneCode,
 			};
 
 			try {
-				const result = await PostApi('/api/auth/checkSMS', params)
+				await PostApi('/api/auth/checkSMS', params)
 					.then(res => {
 						changeDispatch(AUTHSUCCESS, { authSuccess: true });
-						changeDispatch(PHONECHECK, { emailCheck: res.data.emailCheck });
+						changeDispatch(PHONECHECK, { phoneCheck: res.data.phoneCheck });
 						setPhoneCodeReg(true);
-						return res;
 					})
 					.catch(err => {
 						setPhoneCodeReg(false);
@@ -169,7 +188,7 @@ const UserFindAuthPhone = forwardRef((props, ref) => {
 							{phoneNumberLoading && <LoadingIcon className="loading"></LoadingIcon>}
 						</button>
 					</AuthInput>
-					{!phoneNumberReg && <p>휴대전화 번호를 입력해 주세요.</p>}
+					{!phoneNumberReg && <p>{phoneNumberAuthText}</p>}
 				</div>
 				{phoneCodeFlag && (
 					<div>

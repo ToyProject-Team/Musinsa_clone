@@ -65,8 +65,7 @@ const Find = () => {
 							<Route path="/id" element={<FindId />} /> {/* id 찾기 */}
 							<Route exact path="/password" element={<FindPassword />} /> {/* 패스워드 찾기 */}
 							<Route path="/password/choice" element={<FindPasswordAuth />} /> {/* 패스워드 찾기 */}
-							<Route path="/password/change" element={<UserFindPasswordChange />} />{' '}
-							{/* 패스워드 변경 */}
+							<Route path="/password/change" element={<UserFindPasswordChange />} />{/* 패스워드 변경 */}
 						</Routes>
 					</Section>
 				</Inner>

@@ -15,6 +15,7 @@ module.exports = {
       email: "sola2014@naver.com",
       password: await bcrypt.hash("lee2030!", 10),
       nickname: "이민서",
+      phoneNumber: 01062077206,
       createdAt: new Date(),
       updatedAt: new Date(),
       agreement: 1,

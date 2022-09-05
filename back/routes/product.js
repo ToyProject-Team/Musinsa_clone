@@ -10,7 +10,6 @@ const fs = require('fs');
 const {sequelize, Op} = require('sequelize')
 const authJWT = require('../utils/authJWT')
 const axios = require('axios')
-
 const router = express.Router()
 
 function checkParams (bigCategory, price) {
@@ -79,7 +78,6 @@ router.get('/productList', async (req, res, next) => {
                 },
                 
             ],
-            
             order: [
                 req.query.mainSort==1? ['productPrice', 'ASC']:
                 req.query.mainSort==2? ['productPrice', 'DESC']:

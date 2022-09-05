@@ -1,18 +1,18 @@
 const DataTypes = require('sequelize');
 const { Model } = DataTypes
 
-module.exports = class SmallCategory extends Model {
+module.exports = class DeliveryList extends Model {
     static init(sequelize) {
         return super.init(
             {
-                categoryName: {
-                    type: DataTypes.STRING(100),
+                orderPrice: {
+                    type: DataTypes.INTEGER(11),
                     allowNull: false,
-                }
+                },
             },
             {
-                modelName: 'SmallCategory',
-                tableName: 'SmallCategories',
+                modelName: 'DeliveryList',
+                tableName: 'DeliveryLists',
                 paranoid: true,
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
@@ -21,8 +21,5 @@ module.exports = class SmallCategory extends Model {
         )
     }
     static associate(db) {
-        db.SmallCategory.hasMany(db.Product)
-        db.SmallCategory.belongsTo(db.BigCategory)
-        db.SmallCategory.hasMany(db.CategoryColor)
     }
 }

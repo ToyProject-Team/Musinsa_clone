@@ -4,7 +4,13 @@ import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
 import { Container, AuthInput, FindIdButton } from 'components/FindPage/UserFindAuth/styles';
 import useInput from 'hooks/useInput';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { INIT, useUserFindDispatch, useUserFindState } from 'context/UserFindContext';
+import {
+	INIT,
+	FINDPASSWORDSHOWID,
+	useUserFindDispatch,
+	useUserFindState,
+} from 'context/UserFindContext';
+import { PostApi } from 'utils/api';
 
 const UserFindPassword = () => {
 	const userFind = useUserFindState();
@@ -12,7 +18,6 @@ const UserFindPassword = () => {
 
 	// useContext 초기화
 	useEffect(() => {
-		console.log(123);
 		dispatch({ type: INIT });
 	}, []);
 
@@ -25,13 +30,26 @@ const UserFindPassword = () => {
 		setUserId('');
 	}, []);
 
-	const onClickCheckPassword = useCallback(() => {
+	const onClickCheckPassword = useCallback(async () => {
 		if (userId.length === 0) return;
 
 		try {
-			let token = 'ff693e722616e8b0c8c959c6e3ce02f8e47df71f';
+			const params = {
+				loginId: userId,
+			};
+			const result = await PostApi('/api/auth/isExistedLoginId', params);
+			let token = result.data.loginIdCheckToken;
+
+			const payload = {
+				findPasswordShowId: userId,
+			};
+			dispatch({ type: FINDPASSWORDSHOWID, payload });
+
 			navigate(`choice?token=${token}`);
-		} catch (error) {}
+		} catch (error) {
+			alert('회원정보가 없습니다.');
+			console.log(error);
+		}
 	}, [userId]);
 
 	// key 이벤트

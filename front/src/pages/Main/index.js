@@ -25,6 +25,7 @@ import {
 } from 'react-router-dom';
 // import qs from 'qs';
 import loadable from '@loadable/component';
+import Header from 'layouts/Header';
 
 const Main = () => {
 	const navigate = useNavigate();
@@ -233,14 +234,16 @@ const Main = () => {
 	};
 
 	return (
-		<MainContainer>
-			{/* 카테고리 */}
-			<Category>
-				<CategoryTitle>
-					<div className="page_title">useLocation테스트</div>
-					<div className="hash_tag">#노트북</div>
-					<div className="hash_tag">#캐주얼</div>
-				</CategoryTitle>
+		<>
+			<Header></Header>
+			<MainContainer>
+				{/* 카테고리 */}
+				<Category>
+					<CategoryTitle>
+						<div className="page_title">useLocation테스트</div>
+						<div className="hash_tag">#노트북</div>
+						<div className="hash_tag">#캐주얼</div>
+					</CategoryTitle>
 
 				<MiddleCategory>
 					<CategoryName>
@@ -397,35 +400,62 @@ const Main = () => {
 					</div>
 				</OtherCategory>
 
-				<OtherCategory>
+				<MiddleCategory>
 					<CategoryName>검색</CategoryName>
 					<div className="search_items">
 						<input type="text" id="search_items" onChange={e => setSearchTerm(e.target.value)} />
 						<span type="submit" className="search_btn" onClick={() => onSearch()}>
 							<Link
-								to="/search"
+								to="/"
 								style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
 							>
-								검색
+								전체
 							</Link>
-						</span>
-					</div>
-				</OtherCategory>
-			</Category>
+							</span>
+						</div>
+						<div className="all_item_list">
+							<ul>
+								{product
+									?.map(data => data.productTitle)
+									.filter(
+										(val, idx) => product?.map(data => data.productTitle).indexOf(val) === idx,
+									)
+									.filter(val => {
+										if (searchInput === '') return val;
+										else if (val.toLowerCase().includes(searchInput)) return val;
+									})
+									.map(data => {
+										return (
+											<li onClick={e => onSort(e.target.textContent)}>
+												<Link
+													to="/category"
+													style={{
+														'text-decoration': 'none',
+														color: '#b2b2b2',
+														'font-weight': 'bold',
+													}}
+												>
+													{data}
+												</Link>
+											</li>
+										);
+									})}
+							</ul>
+						</div>
+					</MiddleCategory>
 
-			{/* Item List - 컴포넌트로 따로 빼기 */}
-			<ItemSection>
-				{selectBox === true ? (
-					<SelectBox
-						onClick={() => {
-							setSelectBox(false);
-						}}
-					>
-						<span className="select-medium">중분류: {}</span>
-						<span className="select-medium-button">&#160;X</span>
-					</SelectBox>
-				) : null}
+					<OtherCategory>
+						<CategoryName>색상</CategoryName>
+						<div className="color">
+							<ul>
+								<li>..빨강</li>
+								<li>..파랑</li>
+							</ul>
+						</div>
+					</OtherCategory>
+				</Category>
 
+				<ItemSection>					
 				<Items>
 					<SortBox>
 						<span className="sort" onClick={() => onSortPriceUp()}>
@@ -448,16 +478,14 @@ const Main = () => {
 						<ul className="list_item">
 							<Routes>
 								<Route exact path="/" element={<ShowList product={product} />}></Route>
-								{/* <Route path="/category" element={<NewList newProduct={newProduct} />}></Route> */}
 								<Route path="/products" element={<NewList newProduct={newProduct} />}></Route>
-								{/* <Route path="/sort" element={<NewList newProduct={newProduct} />}></Route>
-								<Route path="/search" element={<NewList newProduct={newProduct} />}></Route> */}
 							</Routes>
 						</ul>
 					</ListBox>
 				</Items>
 			</ItemSection>
 		</MainContainer>
+		</>
 	);
 };
 

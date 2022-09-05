@@ -41,7 +41,6 @@ export const Container = styled.div`
 
 	button {
 		border: 0;
-		background: 0 0;
 		font-size: inherit;
 		font-family: inherit;
 		line-height: 1.5;
@@ -102,13 +101,6 @@ export const AuthInput = styled.div`
 	&:focus-within {
 		border-color: #aaa;
 		transition: border 0.2s ease-in-out;
-	}
-
-	.clearBtn {
-		display: flex;
-		margin-right: 7px;
-		padding: 5px;
-		flex: 0 0 auto;
 	}
 
 	.authBtn {

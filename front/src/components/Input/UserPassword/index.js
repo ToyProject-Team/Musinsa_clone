@@ -46,7 +46,7 @@ const UserPassword = ({
 					placeholder={placeholder}
 				/>
 				{password?.length > 0 && (
-					<button type="button" onClick={() => onClickClear('password')}>
+					<button type="button" className="clearBtn" onClick={() => onClickClear('password')}>
 						<CancelIcon />
 					</button>
 				)}

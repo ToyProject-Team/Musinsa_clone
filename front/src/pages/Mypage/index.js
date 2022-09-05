@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MyHeader from 'components/Mypage/Header';
 import { StyleNav, MypageLayout, MypageMain } from './styles';
-import { Routes, Route, NavLink } from 'react-router-dom';
+import { Routes, Route, NavLink, useParams, Navigate } from 'react-router-dom';
 import loadable from '@loadable/component';
 
 const OrderList = loadable(() => import('components/Mypage/OrderList'), {
@@ -17,6 +17,12 @@ const Cart = loadable(() => import('components/Mypage/Cart'), {
 });
 
 const Mypage = () => {
+
+	const pageURL = Object.values(useParams())[0];
+	if(pageURL === '') {
+		return <Navigate to ='/mypage/orderlist' />;
+	}
+
 	return (
 		<MypageLayout>
 			<MyHeader />
@@ -52,7 +58,6 @@ const Mypage = () => {
 			</StyleNav>
 			<div>
 				<Routes>
-					<Route path="/" element={<OrderList />} /> {/* => 마이페이지 메인 */}
 					<Route path="/orderlist" element={<OrderList />} /> {/* => 주문내역조회 */}
 					<Route path="/like" element={<Like />} /> {/* => 좋아요페이지 */}
 					<Route path="/cart" element={<Cart />} /> {/* => 장바구니페이지 */}

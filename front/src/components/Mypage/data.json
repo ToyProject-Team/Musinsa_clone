@@ -10,7 +10,8 @@
       "orderday" : "2020.03.02",
       "oredrnum" : "12345",
       "productnum" : "1",
-      "orderstatus" : "배송완료"
+      "orderstatus" : "배송완료",
+      "like" : 1578
 
     },
     {
@@ -24,7 +25,8 @@
       "orderday" : "2020.03.02",
       "oredrnum" : "12345",
       "productnum" : "1",
-      "orderstatus" : "배송완료"
+      "orderstatus" : "배송완료",
+      "like" : 1578
     },
     {
       "id" : 3,
@@ -37,7 +39,8 @@
       "orderday" : "2020.03.02",
       "oredrnum" : "12345",
       "productnum" : "1",
-      "orderstatus" : "배송완료"
+      "orderstatus" : "배송완료",
+      "like" : 1578
     },
     {
       "id" : 4,
@@ -51,7 +54,8 @@
       "orderday" : "2020.03.02",
       "oredrnum" : "12345",
       "productnum" : "1",
-      "orderstatus" : "배송완료"
+      "orderstatus" : "배송완료",
+      "like" : 1578
     },
     {
       "id" : 5,
@@ -64,7 +68,8 @@
       "orderday" : "2020.03.02",
       "oredrnum" : "12345",
       "productnum" : "1",
-      "orderstatus" : "배송완료"
+      "orderstatus" : "배송완료",
+      "like" : 1578
     },
     {
       "id" : 6,
@@ -77,7 +82,8 @@
       "orderday" : "2020.03.02",
       "oredrnum" : "12345",
       "productnum" : "1",
-      "orderstatus" : "배송완료"
+      "orderstatus" : "배송완료",
+      "like" : 1578
     },
     {
       "id" : 7,
@@ -90,7 +96,8 @@
       "orderday" : "2020.03.02",
       "oredrnum" : "12345",
       "productnum" : "1",
-      "orderstatus" : "배송완료"
+      "orderstatus" : "배송완료",
+      "like" : 1578
     },
     {
       "id" : 8,
@@ -103,6 +110,7 @@
       "orderday" : "2020.03.02",
       "oredrnum" : "12345",
       "productnum" : "1",
-      "orderstatus" : "배송완료"
+      "orderstatus" : "배송완료",
+      "like" : 1578
     }
     ]

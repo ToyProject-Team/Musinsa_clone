@@ -3,15 +3,16 @@ import { Container, FindPasswordButton } from 'components/FindPage/UserFindPassw
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
 import qs from 'qs';
-import { useUserFindDispatch, useUserFindState } from 'context/UserFindContext';
+import { MODALAUTHCONFIRM, useUserFindDispatch, useUserFindState } from 'context/UserFindContext';
 import UserPassword from 'components/Input/UserPassword';
 import TextModal from 'components/Modals/TextModal';
-import { PostApi } from 'utils/api';
+import { PostApi, PostHeaderBodyApi } from 'utils/api';
+import UserFindPasswordFinishModal from 'components/Modals/UserFindPasswordFinishModal';
 
 const UserFindPasswordChange = () => {
 	const userFind = useUserFindState();
 	const dispatch = useUserFindDispatch();
-	const { auth, emailCheck, phoneCheck, findUserId, modalAuthConfirm, authSuccess } = userFind;
+	const { findPasswordShowId, findUserId, modalAuthConfirm } = userFind;
 
 	const [password, setPassword] = useState('');
 	const [passwordReg, setPasswordReg] = useState(true);
@@ -32,41 +33,51 @@ const UserFindPasswordChange = () => {
 	const query = qs.parse(location.search, {
 		ignoreQueryPrefix: true,
 	});
-	// console.log(query);
+
+	const changeDispatch = useCallback((type, payload) => {
+		return dispatch({ type, payload });
+	}, []);
 
 	// onChange 정규식 검사
-	const onChangePassword = useCallback(e => {
-		setPassword(e.target.value);
+	const onChangePassword = useCallback(
+		e => {
+			const { value } = e.target;
+			setPassword(value);
 
-		const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,25}$/;
-		if (regExp.test(e.target.value)) setPasswordReg(true);
-		else setPasswordReg(false);
-	}, []);
+			const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,25}$/;
+			if (regExp.test(value)) setPasswordReg(true);
+			else setPasswordReg(false);
+
+			if (value === passwordConfirm) setPasswordConfirmReg(true);
+			else setPasswordConfirmReg(false);
+		},
+		[passwordConfirm],
+	);
 
 	const onChangePasswordConfirm = useCallback(
 		e => {
-			console.log(e);
-			setPasswordConfirm(e.target.value);
+			const { value } = e.target;
+			setPasswordConfirm(value);
 
-			if (password === e.target.value) setPasswordConfirmReg(true);
+			if (password === value) setPasswordConfirmReg(true);
 			else setPasswordConfirmReg(false);
 		},
 		[password],
 	);
 
+	// 모달창 Close
 	const onCloseModal = useCallback(() => {
-		setModalAuth(false);
+		changeDispatch(MODALAUTHCONFIRM, { modalAuthConfirm: false });
 	}, []);
 
 	// 버튼 활성화
 	useEffect(() => {
-		if (passwordReg && password.length > 0) {
+		if (passwordReg && password.length > 0 && passwordConfirmReg && passwordConfirm.length > 0) {
 			setPasswordButton(true);
-		} else if (!passwordReg && password.length === 0) {
-			setPasswordButton(false);
-		} else if (passwordConfirmReg && passwordConfirm.length > 0) {
-			setPasswordButton(true);
-		} else if (!passwordConfirmReg && passwordConfirm.length === 0) {
+		} else if (
+			(!passwordReg && password.length === 0) ||
+			(!passwordConfirmReg && passwordConfirm.length === 0)
+		) {
 			setPasswordButton(false);
 		}
 
@@ -77,13 +88,24 @@ const UserFindPasswordChange = () => {
 
 	const onClickChangePassword = useCallback(async () => {
 		if (!passwordButton) return;
+		setPasswordButtonLoading(true);
 
-		const params = {
-			password,
-		};
-		PostApi('/api/auth/changePassword', params);
+		try {
+			const params = {
+				password,
+			};
+			await PostHeaderBodyApi(
+				'/api/auth/changePassword',
+				params,
+				'changepasswordtoken',
+				query.token,
+			);
+			changeDispatch(MODALAUTHCONFIRM, { modalAuthConfirm: true });
 
-		console.log(1);
+			setPasswordButtonLoading(false);
+		} catch (error) {
+			setPasswordButtonLoading(false);
+		}
 	}, [passwordButton]);
 
 	return (
@@ -91,7 +113,7 @@ const UserFindPasswordChange = () => {
 			<div>
 				<h3>새로운 비밀번호를 입력해주세요.</h3>
 				<p>
-					아이디 : <strong>hello</strong>
+					아이디 : <strong>{findPasswordShowId}</strong>
 				</p>
 				<div>
 					<UserPassword
@@ -134,11 +156,13 @@ const UserFindPasswordChange = () => {
 					</button>
 				</FindPasswordButton>
 			</div>
-			<TextModal
-				show={modalAuth}
+			<UserFindPasswordFinishModal
+				show={modalAuthConfirm}
 				onCloseModal={onCloseModal}
-				content="비밀번호가 변경되었습니다."
-			></TextModal>
+				title="비밀번호가 변경되었습니다."
+				content={`${findUserId}`}
+				rest={'아이디'}
+			></UserFindPasswordFinishModal>
 		</Container>
 	);
 };
