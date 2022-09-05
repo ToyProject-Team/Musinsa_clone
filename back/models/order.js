@@ -6,15 +6,27 @@ module.exports = class Order extends Model {
         return super.init(
             {
                 orderPrice: {
-                    type: DataTypes.INTEGER(11),
+                    type: DataTypes.INTEGER,
                     allowNull: false,
                 },
                 amount: {
-                    type: DataTypes.INTEGER(11),
+                    type: DataTypes.INTEGER,
                     allowNull: false,
                 },
                 state: {
-                    type: DataTypes.INTEGER(11),
+                    type: DataTypes.INTEGER,
+                    allowNull: false
+                },
+                MerchantUid: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false
+                },
+                ImpUid: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false
+                },
+                cancelableAmount: {
+                    type: DataTypes.INTEGER,
                     allowNull: false
                 }
             },

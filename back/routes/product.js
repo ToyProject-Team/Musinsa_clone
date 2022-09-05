@@ -28,7 +28,7 @@ const s3 = new AWS.S3({
 router.get('/productList', async (req, res, next) => {
     try {
         const startIndx = req.query.page==undefined?0 : Number(req.query.page)*100
-        console.log(req.query.page)
+        console.log(req.query)
         const productData = await Product.findAll({
             
             where: {
@@ -194,6 +194,19 @@ router.post('/likeProduct', authJWT, async (req, res, next) => {
 
 router.post('/purchase', authJWT, async (req, res) => {
     try {
+        if (!req.body.ProductId) {
+            return res.status(400).send({ message: '상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요' })
+        }
+        if (!req.body.MerchantUid) {
+            return res.status(401).send({ message: '주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요' })
+        }
+        if (!req.body.imp_uid) {
+            return res.status(402).send({ message: 'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요' })
+        }
+        if (req.body.price) {
+            return res.status(403).send({ message: '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
+        }
+
         const { imp_uid, merchant_uid } = req.body; // req의 query에서 imp_uid, merchant_uid 추출
           // 액세스 토큰(access token) 발급 받기
         const getToken = await axios({
@@ -215,11 +228,8 @@ router.post('/purchase', authJWT, async (req, res) => {
         const paymentData = getPaymentData.data.response; // 조회한 결제 정보
         // 결제 검증하기
         const { amount, status } = paymentData;
-        if (req.body.length < 7) {
-            return res.status(401).send({ message: "가격 정보가 전달되지 않았습니다 입력값을 다시 확인해주세요" })
-        }        
-        if (amount != req.body.productPrice) {
-            return res.status(402).send({ message: "위조된 결제 시도입니다" })
+        if (amount != req.body.price) {
+            return res.status(405).send({ message: "위조된 결제 시도입니다" })
         }
         const exUser = await User.findOne({
             where: {
@@ -227,10 +237,13 @@ router.post('/purchase', authJWT, async (req, res) => {
             }
         })
         
-        exUser.addmyOrder({
-            id: req.ProductId,
+        await exUser.addmyOrder({
+            id: req.body.ProductId,
             orderPrice: req.body.price,
-            state: 1
+            state: 1,
+            MerchantUid: merchant_uid,
+            cancelableAmount: req.body.price,
+            ImpUid: imp_uid
         })
         res.status(200).send({message: "일반 결제 성공" });
     } catch(e) {

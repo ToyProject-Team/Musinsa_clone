@@ -131,5 +131,6 @@ module.exports = class Product extends Model {
         db.Product.belongsTo(db.BigCategory)
 
         db.Product.hasMany(db.ProductSize)
+        
     }
 }
