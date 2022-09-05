@@ -19,7 +19,7 @@ const UserFindAuth = () => {
 
 	const userFind = useUserFindState();
 	const dispatch = useUserFindDispatch();
-	const { auth, emailCode, phoneCode, findButtonLoading, modalAuth } = userFind;
+	const { showAuth, auth, emailCode, phoneCode, findButtonLoading, modalAuth } = userFind;
 
 	const [findIdButton, setFindIdButton] = useState(false);
 	const emailFindRef = useRef();
@@ -67,45 +67,49 @@ const UserFindAuth = () => {
 		<>
 			<Container>
 				<div>
-					<RadioItem>
-						<RadioButton>
-							<label
-								htmlFor="phoneAuth"
-								className={auth === 'phoneAuth' ? 'radio-label active' : 'radio-label'}
-							>
-								휴대전화
-							</label>
-							<input
-								type="radio"
-								value="phoneAuth"
-								id="phoneAuth"
-								onChange={onChangeRadio}
-								name="auth"
-							/>
-						</RadioButton>
+					{(showAuth === 'all' || showAuth === 'phoneAuth') && (
+						<RadioItem>
+							<RadioButton>
+								<label
+									htmlFor="phoneAuth"
+									className={auth === 'phoneAuth' ? 'radio-label active' : 'radio-label'}
+								>
+									휴대전화
+								</label>
+								<input
+									type="radio"
+									value="phoneAuth"
+									id="phoneAuth"
+									onChange={onChangeRadio}
+									name="auth"
+								/>
+							</RadioButton>
 
-						{auth === 'phoneAuth' && <UserFindAuthPhone ref={phoneFindRef}></UserFindAuthPhone>}
-					</RadioItem>
+							{auth === 'phoneAuth' && <UserFindAuthPhone ref={phoneFindRef}></UserFindAuthPhone>}
+						</RadioItem>
+					)}
 
-					<RadioItem>
-						<RadioButton>
-							<label
-								htmlFor="emailAuth"
-								className={auth === 'emailAuth' ? 'radio-label active' : 'radio-label'}
-							>
-								이메일
-							</label>
-							<input
-								type="radio"
-								value="emailAuth"
-								id="emailAuth"
-								onChange={onChangeRadio}
-								name="auth"
-							/>
-						</RadioButton>
+					{(showAuth === 'all' || showAuth === 'emailAuth') && (
+						<RadioItem>
+							<RadioButton>
+								<label
+									htmlFor="emailAuth"
+									className={auth === 'emailAuth' ? 'radio-label active' : 'radio-label'}
+								>
+									이메일
+								</label>
+								<input
+									type="radio"
+									value="emailAuth"
+									id="emailAuth"
+									onChange={onChangeRadio}
+									name="auth"
+								/>
+							</RadioButton>
 
-						{auth === 'emailAuth' && <UserFindAuthEmail ref={emailFindRef}></UserFindAuthEmail>}
-					</RadioItem>
+							{auth === 'emailAuth' && <UserFindAuthEmail ref={emailFindRef}></UserFindAuthEmail>}
+						</RadioItem>
+					)}
 				</div>
 
 				<FindIdButton>

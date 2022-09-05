@@ -26,12 +26,13 @@ import {
 	useUserState,
 } from 'context/UserContext';
 import axios from 'axios';
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
 const Signup = () => {
 	const user = useUserState();
 	const dispatch = useUserDispatch();
+	const navigate = useNavigate();
 
 	const [email, setEmail] = useState('');
 	const [emailReg, setEmailReg] = useState(false);
@@ -51,6 +52,8 @@ const Signup = () => {
 	const [authNumberReg, setauthNumberReg] = useState(false);
 	const [authNumberBtnReg, setauthNumberBtnReg] = useState(false);
 	const [authStage, setAuthStage] = useState(1);
+
+	const [authKakao, setAuthKakao] = useState(false);
 
 	const [checkValue, setCheckValue] = useState({
 		checkAll: false,
@@ -80,6 +83,27 @@ const Signup = () => {
 	const [modalSignUp, setModalSignUp] = useState(false);
 
 	const [signUpBtn, setSignUpBtn] = useState(false);
+
+	// 카카오 가입
+	const kakaoSignUp = async () => {
+		try {
+			// Kakao SDK API를 이용해 사용자 정보 획득
+			let data = await window.Kakao.API.request({
+				url: '/v2/user/me',
+			});
+
+			// 사용자 정보 변수에 저장
+			setauthNumber(data.kakao_account.email);
+			setAuthStage(3);
+			setAuthKakao(true);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	useEffect(() => {
+		kakaoSignUp();
+	}, []);
 
 	const onClickClear = useCallback(() => {
 		setauthNumber('');
@@ -284,6 +308,8 @@ const Signup = () => {
 	);
 
 	const onCloseModal = useCallback(() => {
+		setModalAuth(false);
+		setModalAuthConfirm(false);
 		setModalSignUp(false);
 
 		if (authStage === 1) {
@@ -298,7 +324,7 @@ const Signup = () => {
 	const onCloseLinkModal = useCallback(() => {
 		setModalSignUp(false);
 
-		return <Navigate to="/login" />;
+		return navigate(`/login`);
 	}, []);
 
 	useEffect(() => {
@@ -319,8 +345,7 @@ const Signup = () => {
 	const onChangeEmail = useCallback(e => {
 		setEmail(e.target.value);
 
-		const regExp =
-			/^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
+		const regExp = /^[A-Za-z0-9]{4,11}$/;
 		if (regExp.test(e.target.value)) setEmailReg(true);
 		else setEmailReg(false);
 	}, []);
@@ -493,18 +518,23 @@ const Signup = () => {
 									id="emailAuth"
 									onChange={onChangeRadio}
 									name="auth"
+									disabled={authKakao}
 								/>
 
-								<label htmlFor="phoneAuth" className={auth === 'phoneAuth' && 'active'}>
-									휴대폰
-								</label>
-								<input
-									type="radio"
-									value="phoneAuth"
-									id="phoneAuth"
-									onChange={onChangeRadio}
-									name="auth"
-								/>
+								{!authKakao && (
+									<>
+										<label htmlFor="phoneAuth" className={auth === 'phoneAuth' && 'active'}>
+											휴대폰
+										</label>
+										<input
+											type="radio"
+											value="phoneAuth"
+											id="phoneAuth"
+											onChange={onChangeRadio}
+											name="auth"
+										/>
+									</>
+								)}
 							</div>
 							<label>
 								<span>필수 입력</span>
@@ -519,7 +549,7 @@ const Signup = () => {
 									maxLength={authStage === 2 ? 6 : auth === 'phoneAuth' && 13}
 									disabled={authStage === 3 ? true : false}
 								/>
-								{authNumber?.length > 0 && (
+								{!authKakao && authNumber?.length > 0 && (
 									<button type="button" onClick={() => onClickClear()}>
 										<CancelIcon />
 									</button>

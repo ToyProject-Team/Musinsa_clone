@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { ImgSpan, LikeLi, LikeUl } from '../styles';
 import { FaHeart } from 'react-icons/fa';
+import { FiX } from 'react-icons/fi';
 
-function Likelist({ img, brand, model, price, state, option, id }) {
-	const [value, setValue] = useState('');
-
-	const handleChange = ({ target: { value } }) => setValue(value);
-
+function Likelist({ img, brand, model, price, state, option, id, like, onRemove }) {
+	
 	return (
 		<LikeUl>
 			<LikeLi>
@@ -15,15 +13,20 @@ function Likelist({ img, brand, model, price, state, option, id }) {
 				</ImgSpan>
 				<ul>
 					<li className="brand">{brand}</li>
-					<li className="name">{model}</li>
+					<li className="name">
+						<a href="#">{model}</a>
+					</li>
 					<li className="price">{price}원</li>
 					<li className="like">
-						<FaHeart /> 346
+						<FaHeart /> {like}
 					</li>
 				</ul>
+
+				<button onClick={onRemove()}>
+					<FiX />
+				</button>
 			</LikeLi>
 		</LikeUl>
-
 	);
 }
 

@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 
 export const LikeSection = styled.section`
-	width: calc(100% - 210px);
 	padding: 0;
 	/* float: right; */
 	header {
@@ -74,6 +73,10 @@ export const LikeLi = styled.li`
 			max-height: 22px;
 			font-weight: bold;
 			overflow: hidden;
+			a {
+				text-decoration: none;
+				color: black;
+			}
 		}
 		.price {
 			margin-top: 6px;
@@ -83,6 +86,17 @@ export const LikeLi = styled.li`
 			line-height: 16px;
 			padding-top: 5px;
 			color: red;
+		}
+	}
+	button {
+		position: absolute;
+		right: 10px;
+		border: none;
+		background: none;
+		svg {
+			width: 15px;
+			height: 15px;
+			cursor: pointer;
 		}
 	}
 `;
@@ -114,11 +128,12 @@ export const PagenationBox = styled.div`
 				color: gray;
 				font-size: 1rem;
 				font-weight: bold;
-				&:active{
-					color: black;
-				}
 			}
-			
+		}
+		.active {
+			a {
+				color: black;
+			}
 		}
 	}
 `;

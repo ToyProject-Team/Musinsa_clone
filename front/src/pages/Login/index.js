@@ -2,7 +2,7 @@ import UserEmail from 'components/UserEmail';
 import UserPassword from 'components/UserPassword';
 import useInput from 'hooks/useInput';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { GetApi, PostApi } from 'utils/api';
 import { getData } from 'utils/getData';
 import {
@@ -17,8 +17,16 @@ import {
 	KakaoLogIn,
 	SignupLink,
 } from './styles';
+import { ReactComponent as KakaoIcon } from 'assets/svg/Kakao.svg';
+import Kakao from 'pages/Kakao';
 
 const LogIn = () => {
+	const REST_API_KEY = '4046f853b8826bbb808cfe399ce9b3f6';
+	const REDIRECT_URI = 'http://localhost:3000/kakao/oauth/callback';
+	const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+	const navigate = useNavigate();
+
 	const [login, setLogin] = useState(getData());
 
 	const [email, onChangeEmail, setEmail] = useInput('');
@@ -97,9 +105,9 @@ const LogIn = () => {
 	);
 
 	const KakaoLogin = useCallback(async () => {
-		const KAKAO_AUTH_URL = await GetApi('/api/auth/kakao');
+		// const KAKAO_AUTH_URL = await GetApi('/api/auth/kakao');
 
-		window.location.href = KAKAO_AUTH_URL.data.url;
+		window.location.href = KAKAO_AUTH_URL;
 	}, []);
 
 	if (login) {
@@ -161,24 +169,10 @@ const LogIn = () => {
 					<div>
 						<KakaoLogIn
 							className="login-button__item login-button__item--kakao"
-							onClick={KakaoLogin}
+							// onClick={KakaoLogin}
+							href={KAKAO_AUTH_URL}
 						>
-							<svg
-								width="30"
-								height="30"
-								viewBox="0 0 30 30"
-								fill="none"
-								xmlns="http://www.w3.org/2000/svg"
-								className="login-button__item__logo"
-							>
-								<title>kakao 로고</title>
-								<path
-									fillRule="evenodd"
-									clipRule="evenodd"
-									d="M15 7C10.029 7 6 10.129 6 13.989C6 16.389 7.559 18.505 9.932 19.764L8.933 23.431C8.845 23.754 9.213 24.013 9.497 23.826L13.874 20.921C14.243 20.958 14.618 20.978 15 20.978C19.971 20.978 24 17.849 24 13.989C24 10.129 19.971 7 15 7Z"
-									fill="black"
-								></path>
-							</svg>
+							<KakaoIcon />
 							카카오 로그인
 						</KakaoLogIn>
 					</div>
