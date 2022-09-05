@@ -25,7 +25,7 @@ const s3 = new AWS.S3({
   region : 'ap-northeast-2'
 });
 
-router.get('/productList', authJWT, async (req, res, next) => {
+router.get('/productList', async (req, res, next) => {
     try {
         const startIndx = req.query.page==undefined?0 : Number(req.query.page)*100
         console.log(req.query)
