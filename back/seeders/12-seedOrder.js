@@ -13,13 +13,15 @@ module.exports = {
     for (let i = 1; i < 50; i++) {
         let ranNumber = []
         let amount = rand(0,6)
+        let randPrice = rand(10000, 200000)
         for (let j = 0; j < amount; j++) {
             let temp = rand(1, 1500)
             if (!ranNumber.includes(temp)) {
                 ranNumber.push(temp)
             }
             dummyOrder.push({
-                orderPrice: rand(10000, 200000),
+                orderPrice: randPrice,
+                cancelableAmount: randPrice,
                 amount: rand(1,20),
                 state: rand(1,2),
                 MerchantUid: rand(1324141,4324141),

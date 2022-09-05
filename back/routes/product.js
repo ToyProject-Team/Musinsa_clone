@@ -25,7 +25,7 @@ const s3 = new AWS.S3({
   region : 'ap-northeast-2'
 });
 
-router.get('/productList', async (req, res, next) => {
+router.get('/productList', authJWT, async (req, res, next) => {
     try {
         const startIndx = req.query.page==undefined?0 : Number(req.query.page)*100
         console.log(req.query)
@@ -241,7 +241,8 @@ router.post('/purchase', authJWT, async (req, res) => {
             id: req.body.ProductId,
             orderPrice: req.body.price,
             state: 1,
-            MerchantUid: merchant_uid, 
+            MerchantUid: merchant_uid,
+            cancelableAmount: req.body.price,
             ImpUid: imp_uid
         })
         res.status(200).send({message: "일반 결제 성공" });

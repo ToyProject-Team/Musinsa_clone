@@ -39,7 +39,7 @@ router.post('/refundMyOrder', async (req, res, next) => {
         }
           /* ... 중략 ... */
         const paymentData = userOrder; // 조회된 결제정보
-        const { imp_uid, amount, cancel_amount } = paymentData; // 조회한 결제정보로부터 imp_uid, amount(결제금액), cancel_amount(환불된 총 금액) 추출
+        const { ImpUid, amount, cancel_amount } = paymentData; // 조회한 결제정보로부터 imp_uid, amount(결제금액), cancel_amount(환불된 총 금액) 추출
         const cancelableAmount = amount - cancel_amount; // 환불 가능 금액(= 결제금액 - 환불된 총 금액) 계산
         if (cancelableAmount <= 0) { // 이미 전액 환불된 경우
             return res.status(400).json({ message: "이미 전액환불된 주문입니다." });
@@ -54,7 +54,7 @@ router.post('/refundMyOrder', async (req, res, next) => {
             },
             data: {
             reason, // 가맹점 클라이언트로부터 받은 환불사유
-            imp_uid, // imp_uid를 환불 `unique key`로 입력
+            ImpUid: ImpUid, // imp_uid를 환불 `unique key`로 입력
             amount: cancel_request_amount, // 가맹점 클라이언트로부터 받은 환불금액
             checksum: cancelableAmount, // [권장] 환불 가능 금액 입력
             refund_holder, // [가상계좌 환불시 필수입력] 환불 수령계좌 예금주
