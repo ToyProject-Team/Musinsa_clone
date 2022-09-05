@@ -20,6 +20,7 @@ const authRouter = require('./routes/auth')
 const productRouter = require('./routes/product')
 const myPageRouter = require('./routes/mypage')
 const shoppingBasketRouter = require('./routes/shoppingBasket')
+const orderRouter = require('./routes/order')
 
 //swagger
 const swaggerUi = require("swagger-ui-express");
@@ -72,6 +73,7 @@ app.use('/api/shoppingBasket', shoppingBasketRouter)
 app.use('/api/mypage', myPageRouter)
 app.use('/api/product', productRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/order', orderRouter)
 app.use(
     "/api-docs",
     swaggerUi.serve,
