@@ -23,13 +23,6 @@ export const Profile = styled.dl`
 	}
 `;
 
-export const PRFL_IMAGE = styled.dt`
-	float: left;
-	width: 160px;
-	height: 160px;
-	border-radius: 50%;
-	background: white;
-`;
 
 export const NickName = styled.dd`
 	display: inline-block;

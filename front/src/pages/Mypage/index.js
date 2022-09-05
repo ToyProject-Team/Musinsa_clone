@@ -17,10 +17,9 @@ const Cart = loadable(() => import('components/Mypage/Cart'), {
 });
 
 const Mypage = () => {
-
 	const pageURL = Object.values(useParams())[0];
-	if(pageURL === '') {
-		return <Navigate to ='/mypage/orderlist' />;
+	if (pageURL === '') {
+		return <Navigate to="/mypage/orderlist" />;
 	}
 
 	return (
