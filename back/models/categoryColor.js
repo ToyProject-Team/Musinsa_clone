@@ -5,7 +5,7 @@ module.exports = class CategoryColor extends Model {
     static init(sequelize) {
         return super.init(
             {
-                Color: {
+                color: {
                     type: DataTypes.STRING(50),
                     allowNull: false,
                     unique: true
