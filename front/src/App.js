@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Redirect, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Redirect, Route} from 'react-router-dom';
 import loadable from '@loadable/component';
 import { UserProvider } from 'context/UserContext';
 
@@ -69,7 +69,8 @@ function App() {
 					<Route path="signup/agreement/agree" element={<Agree />} />
 					<Route path="signup/agreement/terms" element={<Terms />} />
 					<Route path="signup/agreement/sns" element={<Sns />} />
-					<Route path="footer/notice" element={<Notice />} />
+					{/* 공용 컴포넌트 */}
+					<Route path="footer/notice" element={<Notice/>} />
 					<Route path="footer/declar" element={<Declar />} />
 				</Routes>
 			</BrowserRouter>

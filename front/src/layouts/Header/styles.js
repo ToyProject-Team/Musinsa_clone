@@ -96,10 +96,17 @@ export const HUser = styled.div`
     font-weight: 900;
     cursor: pointer;
 
+    .nowLogin{
+        cursor: pointer;
+        background: none;
+        color: white;
+        padding: 6px 24px 6px 24px;
+        font-size: 18px;
+        position: relative;
+        border-radius: 4px;
+    }
 
-    
-
-    & button{
+    .notLogin{
         cursor: pointer;
         border: 2px solid white;
         background: none;
@@ -109,7 +116,7 @@ export const HUser = styled.div`
         position: relative;
         border-radius: 4px;
 
-        &:hover{
+        &.notLogin:hover{
             background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
             -webkit-background-clip: text;
             background-clip: text;
@@ -171,7 +178,8 @@ export const HUser = styled.div`
                 -webkit-clip-path: polygon(0% 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 3px 100%, 0% 100%);
             }
         }
-    
+    }
+
 
     & div{
         text-align: center;
@@ -179,12 +187,14 @@ export const HUser = styled.div`
         font-size: 18px;
     }
 
+    & div:nth-of-type(3){
+        & a{
+            color: #ff0000;
+        }
+    }
    
 `;
 
-
-
- 
 
 
 
