@@ -5,6 +5,16 @@ import ProductInfoRight from 'components/DetailProduct/ProductInfoRight/InfoRigh
 import ProductInfoLeft from 'components/DetailProduct/ProductInfoLeft';
 import HeaderInfo from 'components/DetailProduct/ProductInfoRight/HeaderInfo';
 import ProductInfo from 'components/DetailProduct/ProductInfo';
+import { GetApi } from 'utils/api';
+import { useEffect } from 'react';
+import {
+	initialProduceDetail,
+	PRODUCTDETAIL,
+	ProductDetailProvider,
+	useProductDetailDispatch,
+	useProductDetailState,
+} from 'context/ProductDetailContext';
+import { useState } from 'react';
 
 const dummyProduct = {
 	BigCategoryName: '상의',
@@ -30,20 +40,55 @@ const dummyProduct = {
 	platinumPrice: 30900,
 	diamondPrice: 30900,
 	productInfo: 'https://neikidnis.imghost.cafe24.com/neikidnis/head_all.gif',
+	option: {
+		option1: ['95', '100', '105'],
+		option2: [['화이트', '블랙'], ['블랙', '그린', '네이비'], ['네이비']],
+		// add: ['추가옵션1', '추가옵션2'],
+	},
 };
 
 const DetailProduct = () => {
+	const [initialProduceDetail, setInitialProduceDetail] = useState({
+		user: {},
+		product: {},
+	});
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const asyncFunction = async () => {
+			try {
+				const result = await GetApi(`/api/product/productDetail?productId=1`);
+				setInitialProduceDetail(prev => ({
+					...prev,
+					product: result.data.product,
+				}));
+
+				setLoading(false);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		asyncFunction();
+	}, []);
+
 	return (
-		<div>
-			<DetailWrapper>
-				<HeaderInfo data={dummyProduct} />
-				<ProductWrapper>
-					<ProductInfoLeft data={dummyProduct} />
-					<ProductInfoRight data={dummyProduct} />
-				</ProductWrapper>
-			</DetailWrapper>
-			<ProductInfo />
-		</div>
+		<>
+			{loading ? (
+				<div>Loading...</div>
+			) : (
+				<ProductDetailProvider value={initialProduceDetail}>
+					<DetailWrapper>
+						<HeaderInfo />
+						<ProductWrapper>
+							<ProductInfoLeft data={dummyProduct} />
+							<ProductInfoRight data={dummyProduct} />
+						</ProductWrapper>
+					</DetailWrapper>
+					<ProductInfo />
+				</ProductDetailProvider>
+			)}
+		</>
 	);
 };
 

@@ -100,22 +100,23 @@ export const Price = styled.p`
 	padding-left: 5px;
 `;
 
-export const TextBox = styled.ul``;
+export const TextBox = styled.ul`
+	& > li {
+		display: inline-block;
+		color: #000;
+		font-size: 12px;
+		font-weight: 500;
+		padding: 15px;
+		margin-top: 20px;
+		border: 1px solid #000;
+		width: 85px;
+		text-align: center;
 
-export const Box = styled.li`
-	display: inline-block;
-	color: #000;
-	font-size: 12px;
-	font-weight: 500;
-	padding: 15px;
-	margin-top: 20px;
-	border: 1px solid #000;
-	width: 85px;
-
-	:not(:last-child) {
-		color: #f00;
-		border: 1px solid #f00;
-		width: 185px;
-		margin-right: 5px;
+		&:first-of-type {
+			color: #f00;
+			border: 1px solid #f00;
+			width: 185px;
+			margin-right: 5px;
+		}
 	}
 `;
