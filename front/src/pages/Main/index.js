@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-	scrollContainer,
+	ScrollContainer,
 	MainContainer,
 	Category,
 	CategoryTitle,
@@ -13,23 +13,39 @@ import {
 	SortBox,
 	ListBox,
 } from './styles';
-import { PostQueryApi } from 'utils/api';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import {
-	Router,
-	Route,
-	Routes,
-	Link,
-	useLocation,
-	useNavigate,
-	useSearchParams,
-} from 'react-router-dom';
+
+import { Router, Route, Routes, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 // import qs from 'qs';
+import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
 import Header from 'layouts/Header';
 
 const Main = () => {
 	const navigate = useNavigate();
+	const bigCategory = [
+		'상의',
+		'아우터',
+		'바지',
+		'원피스',
+		'스커트',
+		'스니커즈',
+		'신발',
+		'가방',
+		'여성 가방',
+		'스포츠/용품',
+		'모자',
+		'양말/레그웨어',
+		'속옷',
+		'선글라스/안경테',
+		'악세서리',
+		'시계',
+		'주얼리',
+		'뷰티',
+		'디지털/테크',
+		'생활/취미/예술',
+		'책/음악/티켓',
+		'반려동물',
+	];
 
 	const ShowList = loadable(() => import('./showList'), {
 		fallback: <div>로딩중</div>,
@@ -54,9 +70,10 @@ const Main = () => {
 
 	//상품리스트 리셋(전체보기)
 	const onResetList = () => {
-		setPage(0);
+		// setPage(0);
 		setPrice();
 		setMainSort();
+		navigate('/');
 	};
 
 	//데이터 받아오기 1
@@ -74,27 +91,36 @@ const Main = () => {
 		getItems();
 	}, [page]);
 
-	//무한스크롤 관련 state
-	const [hasMore, setHasMore] = useState(true);
+	//🔶🔶무한스크롤 관련 함수🔶🔶
+	//데이터 더 불러오기
+	//데이터 100개 받아오기
+	//setProduct([...product, res.data.productData])는 안됨
+	//뭐가 잘못된건지 잘모르겠는데 일단 pass하고 그냥 100개씩 불러옴
+	//✅asysnc await로 비동기처리해보기(노션 참고)
+	//가져올 데이터 수 min, max 설정가능?
+	//option 누를때마다 axios
+	// const getMoreItems = () => {
+	// 	//페이지 + 1하고 나머지 params들은 리셋
+	// 	setPage(page + 1);
+	// 	setPrice();
+	// 	setMainSort();
+	// 	const params = {
+	// 		page: page + 1,
+	// 		bigCategoryId,
+	// 		smallCategoryId,
+	// 	};
 
-	const getMoreItems = () => {
-		setPage(page + 1);
-		setPrice();
-		setMainSort();
-		const params = {
-			page: page + 1,
-			bigCategoryId,
-			smallCategoryId,
-		};
+	// 	// const [loading, setLoading] = useState(true);
 
-		setTimeout(() => {
-			PostQueryApi('/api/product/productList', params).then(res =>
-				setProduct(res.data.productData),
-			);
-		}, 3000);
-	};
+	// 	const async = async () => {
+	// 		await PostQueryApi('/api/product/productList', params).then(res =>
+	// 			setProduct(prev => [...prev, res.data.productData]),
+	// 		);
+	// 	};
 
-	//무한스크롤
+	// 	async();
+	// };
+
 	const [selectBox, setSelectBox] = useState(false);
 	const [searchInput, setSearchInput] = useState('');
 	const [minPriceInput, setMinPriceInput] = useState(0);
@@ -186,7 +212,7 @@ const Main = () => {
 	//내림차순 6
 	const onSortPriceDown = () => {
 		const params = {
-			// page,
+			page,
 			// price,
 			mainSort: 2,
 			bigCategoryId,
@@ -195,11 +221,6 @@ const Main = () => {
 		//정렬 - 백엔
 		PostQueryApi('/api/product/productList', params).then(
 			res => setNewProduct(res.data.productData),
-			// setNewProduct(
-			// 	res.data.productData.sort((a, b) => {
-			// 		return b.productPrice - a.productPrice;
-			// 	}),
-			// ),
 			navigate(`/products?mainSort=${params.mainSort}`),
 		);
 	};
@@ -207,7 +228,7 @@ const Main = () => {
 	//오름차순 7
 	const onSortPriceUp = () => {
 		const params = {
-			// page,
+			page,
 			// price,
 			mainSort: 1,
 			bigCategoryId,
@@ -215,11 +236,6 @@ const Main = () => {
 		};
 		PostQueryApi('/api/product/productList', params).then(
 			res => setNewProduct(res.data.productData),
-			// setNewProduct(
-			// 	res.data.productData.sort((a, b) => {
-			// 		return a.productPrice - b.productPrice;
-			// 	}),
-			// ),
 			navigate(`/products?mainSort=${params.mainSort}`),
 		);
 	};
@@ -228,31 +244,21 @@ const Main = () => {
 	const onSortComments = () => {
 		const params = {
 			page,
-			price,
+			// price,
+			mainSort: 3,
 			bigCategoryId,
 			smallCategoryId,
 		};
 
 		PostQueryApi('/api/product/productList', params).then(
-			res =>
-				setNewProduct(
-					res.data.productData.sort((a, b) => {
-						return b.comments - a.comments;
-					}),
-				),
-			navigate(`/products`),
+			res => setNewProduct(res.data.productData),
+			navigate(`/products?mainSort=${params.mainSort}`),
 		);
 	};
 
 	return (
-		<scrollContainer>
-			<InfiniteScroll
-				dataLength={page}
-				next={getMoreItems}
-				hasMore={hasMore}
-				height={document.documentElement.scrollHeight}
-				loader={<h4>Loading...</h4>}
-			>
+		<>
+			<ScrollContainer>
 				<Header></Header>
 				<MainContainer>
 					{/* 카테고리 */}
@@ -267,7 +273,7 @@ const Main = () => {
 									setMainSort();
 								}}
 							>
-								bigCategory명..
+								{bigCategory[bigCategoryId - 1]}
 							</div>
 							<div className="hash_tag">#smallCategory명</div>
 							<div className="hash_tag">#한국어</div>
@@ -294,13 +300,9 @@ const Main = () => {
 								onClick={() => {
 									onResetList();
 								}}
+								style={{ color: 'black', 'font-weight': 'bold' }}
 							>
-								<Link
-									to="/"
-									style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
-								>
-									전체
-								</Link>
+								전체
 							</div>
 							<div className="all_item_list">
 								<ul>
@@ -314,20 +316,7 @@ const Main = () => {
 											else if (val.toLowerCase().includes(searchInput)) return val;
 										})
 										.map(data => {
-											return (
-												<li onClick={e => onSort(e.target.textContent)}>
-													<Link
-														to="/category"
-														style={{
-															'text-decoration': 'none',
-															color: '#b2b2b2',
-															'font-weight': 'bold',
-														}}
-													>
-														{data}
-													</Link>
-												</li>
-											);
+											return <li onClick={e => onSort(e.target.textContent)}>{data}</li>;
 										})}
 								</ul>
 							</div>
@@ -341,13 +330,9 @@ const Main = () => {
 										onClick={() => {
 											onResetList();
 										}}
+										style={{ color: 'black', fontWeight: 'bold' }}
 									>
-										<Link
-											to="/"
-											style={{ 'text-decoration': 'none', color: 'black', 'font-weight': 'bold' }}
-										>
-											전체보기
-										</Link>
+										전체보기
 									</li>
 									<li onClick={() => onFilterPrice(1)}>~ 50,000원</li>
 									<li onClick={() => onFilterPrice(2)}>50,000원 ~ 100,000원</li>
@@ -409,23 +394,27 @@ const Main = () => {
 					</Category>
 
 					<ItemSection>
+						{selectBox === true ? (
+							<SelectBox
+								onClick={() => {
+									setSelectBox(false);
+								}}
+							>
+								<span className="select-medium">중분류: {}</span>
+								<span className="select-medium-button">&#160;X</span>
+							</SelectBox>
+						) : null}
 						<Items>
 							<SortBox>
 								<div>
 									<span className="sort" onClick={() => onSortPriceUp()}>
-										<Link to="/sort" style={{ 'text-decoration': 'none', color: 'black' }}>
-											낮은 가격순
-										</Link>
+										낮은 가격순
 									</span>
 									<span className="sort" onClick={() => onSortPriceDown()}>
-										<Link to="/sort" style={{ 'text-decoration': 'none', color: 'black' }}>
-											높은 가격순
-										</Link>
+										높은 가격순
 									</span>
 									<span className="sort" onClick={() => onSortComments()}>
-										<Link to="/sort" style={{ 'text-decoration': 'none', color: 'black' }}>
-											후기순
-										</Link>
+										후기순
 									</span>
 								</div>
 								<div className="page">{page}</div>
@@ -434,7 +423,22 @@ const Main = () => {
 							<ListBox>
 								<ul className="list_item">
 									<Routes>
-										<Route exact path="/" element={<ShowList product={product} />}></Route>
+										<Route
+											exact
+											path="/"
+											element={
+												<ShowList
+													product={product}
+													page={page}
+													setPage={setPage}
+													setPrice={setPrice}
+													setMainSort={setMainSort}
+													bigCategoryId={bigCategoryId}
+													smallCategoryId={smallCategoryId}
+													setProduct={setProduct}
+												/>
+											}
+										></Route>
 										<Route path="/products" element={<NewList newProduct={newProduct} />}></Route>
 									</Routes>
 								</ul>
@@ -442,8 +446,9 @@ const Main = () => {
 						</Items>
 					</ItemSection>
 				</MainContainer>
-			</InfiniteScroll>
-		</scrollContainer>
+				{/* </InfiniteScroll> */}
+			</ScrollContainer>
+		</>
 	);
 };
 
