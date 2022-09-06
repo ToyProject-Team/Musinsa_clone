@@ -61,6 +61,7 @@ const PurchaseForm = ({ data }) => {
 	const [selectList, setSelectList] = useState({});
 	const [selectIdx, setSelectIdx] = useState();
 
+	// 새로고침
 	// 선택 List 옵션 초기화
 	const optionListInit = useCallback(() => {
 		const value = Object.keys(data.option);
@@ -82,6 +83,7 @@ const PurchaseForm = ({ data }) => {
 			const objData = Object.keys(data.option);
 			const index = Number(e.target.getAttribute('data-index'));
 			const lastOptionIndex = objData.includes('add') ? objData.length - 2 : objData.length - 1;
+			let inifFlag = false;
 
 			if (index === 0) {
 				optionListInit();
@@ -91,13 +93,13 @@ const PurchaseForm = ({ data }) => {
 			if (index === lastOptionIndex && value !== '옵션 선택') {
 				// 마지막 옵션 눌렀다면?
 				if (objData.length === Number(name.replace('option', ''))) {
-					const key = option[objData[0]];
+					const key = option[0][objData[0]];
 					const nowValue = value;
 					const oldValue = selectList[key];
 					let flag = false;
 
 					if (objData.length > 1) {
-						// 옵션이 1개 이상일 경우
+						// 옵션이 2개 이상일 경우
 						selectList[key]?.map(v => {
 							if (Object.keys(v)[0] === nowValue) flag = true;
 						});
@@ -109,6 +111,7 @@ const PurchaseForm = ({ data }) => {
 								[key]: oldValue ? [...oldValue, { [nowValue]: 1 }] : [{ [nowValue]: 1 }],
 							};
 						});
+						inifFlag = true;
 					} else {
 						// 옵션이 1개인 경우
 						if (selectList[nowValue]) return alert('이미 선택한 상품입니다.');
@@ -119,16 +122,18 @@ const PurchaseForm = ({ data }) => {
 								[nowValue]: 1,
 							};
 						});
+						inifFlag = true;
 					}
 				}
 			}
+			setOption(prev => {
+				prev[index][name] = value;
+				return prev;
+			});
 
-			setOption(prev => ({
-				...prev,
-				[name]: value,
-			}));
+			if (inifFlag) optionListInit();
 		},
-		[option],
+		[option, selectList],
 	);
 
 	const SelectForm = ({ price, size, color }) => {
@@ -206,23 +211,29 @@ const PurchaseForm = ({ data }) => {
 	return (
 		<div>
 			<FormWrapper style={{ backgroundColor: '#f3f3f3' }}>
-				{Object.keys(data.option).map((item, idx) => (
-					<BuyOption
-						key={idx}
-						onChange={selectOption}
-						value={option[item]}
-						name={item}
-						data-index={idx}
-					>
-						<option>옵션 선택</option>
-						{typeof data.option[item][0] === 'string'
-							? data.option[item].map(itemOption => <option key={itemOption}>{itemOption}</option>)
-							: selectIdx >= 0 &&
-							  data.option[item][selectIdx].map(itemOption => (
-									<option key={itemOption}>{itemOption}</option>
-							  ))}
-					</BuyOption>
-				))}
+				{Object.keys(data.option).map((item, idx) => {
+					return (
+						Array.isArray(option) && (
+							<BuyOption
+								key={item + idx}
+								onChange={selectOption}
+								value={option[idx][item]}
+								name={item}
+								data-index={idx}
+							>
+								<option>옵션 선택</option>
+								{typeof data.option[item][0] === 'string'
+									? data.option[item].map(itemOption => (
+											<option key={itemOption}>{itemOption}</option>
+									  ))
+									: selectIdx >= 0 &&
+									  data.option[item][selectIdx].map(itemOption => (
+											<option key={itemOption}>{itemOption}</option>
+									  ))}
+							</BuyOption>
+						)
+					);
+				})}
 			</FormWrapper>
 			{Object.keys(selectList)?.map((option_1, idx) => {
 				if (typeof selectList[option_1] === 'number') {
