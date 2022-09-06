@@ -82,6 +82,7 @@ router.get('/productList', async (req, res, next) => {
                 req.query.mainSort==1? ['productPrice', 'ASC']:
                 req.query.mainSort==2? ['productPrice', 'DESC']:
                 req.query.mainSort==3? ['comments', 'DESC']: 
+                req.query.mainSort==4? ['comments', 'ASC']: 
                 ['id', 'ASC'], [ProductSize, 'size', 'ASC']
             ],
             limit: 100,
