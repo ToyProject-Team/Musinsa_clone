@@ -109,13 +109,72 @@ export const ButtonCart = styled.div`
 `;
 
 export const SelectedOption = styled.div`
-	background-color: white;
-  border : 1px solid #ddd;
-  border-top:none;
-  width : 100%
-  padding: 12px 9px 7px 9px;
-  margin-left: 20px; 
-  height: 47px;
+	display: flex;
+	width: 100%;
+	max-width: 402px;
+	margin-left: 20px;
+	border: 1px solid #ddd;
+	height: 50px;
+	align-items: center;
+	margin-top: -1px;
+
+	& > div:nth-of-type(1) {
+		flex: 1;
+		padding-right: 10px;
+		color: #777;
+		font-size: 12px;
+		font-weight: bold;
+		padding-left: 17px;
+	}
+
+	& > div:nth-of-type(2) {
+		display: inline-block;
+		padding: 10px;
+		font-size: 12px;
+		flex: 1;
+		text-align: right;
+		padding-right: 10px;
+		color: #777;
+		font-size: 12px;
+		font-weight: bold;
+		padding-left: 17px;
+
+		li:last-child {
+			font-size: 20px;
+			font-weight: bold;
+			background-color: #eee;
+			border-left: none;
+			cursor: pointer;
+		}
+		li {
+			float: left;
+			width: 25px;
+			height: 25px;
+			text-align: center;
+			line-height: 23px;
+			border: 1px solid #eee;
+		}
+	}
+
+	& > div:nth-of-type(3) {
+		flex: 1;
+		text-align: right;
+		padding-right: 10px;
+
+		div {
+			font-size: 13px;
+			font-weight: bold;
+			color: #777;
+			display: inline-block;
+		}
+		p {
+			font-size: 12px;
+			font-weight: bold;
+			display: inline-block;
+			cursor: pointer;
+			margin-left: 5px;
+		}
+	}
 `;
 
 export const Selected = styled.div`
