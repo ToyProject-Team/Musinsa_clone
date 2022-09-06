@@ -61,6 +61,7 @@ const PurchaseForm = ({ data }) => {
 	const [selectList, setSelectList] = useState({});
 	const [selectIdx, setSelectIdx] = useState();
 
+	// 새로고침
 	// 선택 List 옵션 초기화
 	const optionListInit = useCallback(() => {
 		const value = Object.keys(data.option);
