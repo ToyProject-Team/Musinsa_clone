@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 
 export const LikeSection = styled.section`
-	width: calc(100% - 210px);
 	padding: 0;
 	/* float: right; */
 	header {

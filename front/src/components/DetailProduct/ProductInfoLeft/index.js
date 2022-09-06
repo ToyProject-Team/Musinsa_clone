@@ -1,3 +1,4 @@
+import { useProductDetailState } from 'context/ProductDetailContext';
 import { useState, useCallback, useEffect } from 'react';
 import { ProductImage, MainImage, ImageList, Image } from './styles';
 
@@ -12,11 +13,13 @@ const dummyImage = {
 };
 
 const ProductInfoLeft = ({ data }) => {
+	const detail = useProductDetailState();
+
 	const [thumbNum, setThumbNum] = useState(0);
 
 	const imageList = dummyImage.Images.map((image, index) => (
-		<div>
-			<img src={image.src} key={index} onMouseOver={() => setThumbNum(image.id)} />
+		<div key={index}>
+			<img src={image.src} onMouseOver={() => setThumbNum(image.id)} />
 		</div>
 	));
 
