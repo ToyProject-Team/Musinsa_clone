@@ -27,7 +27,7 @@ const s3 = new AWS.S3({
 
 router.get('/productList', async (req, res, next) => {
     try {
-        const startIndx = req.query.page==undefined?0 : Number(req.query.page)*100
+        const startIndx = req.query.page == undefined ? 0 : Number(req.query.page)*100
         console.log(req.query)
         const productData = await Product.findAll({
             
@@ -100,42 +100,55 @@ router.get('/productList', async (req, res, next) => {
     }
 })
 
-router.get('/productDetail', async (req, res) => {
+router.get('/productDetail', async (req, res, next) => {
     console.log(req.query.productId)
-    let product = await Product.findOne({
-        include: [
-            {
-                model: CustomCategory,
-                attributes: ["id"],
-                through: {attributes: []}
-            }
-        ],
-        where: {
-            id: req.query.productId
-        },
-        attributes: {exclude: ['productInfo', "createdAt", "updatedAt", "deletedAt", ]},
-    })
+    try{
+        if (!req.query.productId) {
+            return res.status(401).send({ message: "productId가 쿼리로 전달되지 않았습니다"})
+        }
+        let product = await Product.findOne({
+            include: [
+                {
+                    model: ProductImg,
+                    attributes: ["src"]
+                },
+                {
+                    model: CustomCategory,
+                    attributes: ["id"],
+                    through: {attributes: []}
+                }
+            ],
+            where: {
+                id: req.query.productId
+            },
 
-    if (!product) {
-        return res.status(400).json({ message: '상품 조회 결과가 없습니다'})
+            attributes: {exclude: ['productInfo', "createdAt", "updatedAt", "deletedAt", ]},
+        })
+        
+        if (!product) {
+            return res.status(400).json({ message: '상품 조회 결과가 없습니다'})
+        }
+        const comment = await Comment.findAndCountAll({
+            raw: true,
+            where: {
+                ProductId: product.id
+            },
+        })
+        sum = 0
+        for (let i = 0; i < comment.count; i++) {
+            sum += comment.rows[i].ValueBrightness
+            sum += comment.rows[i].ValueColorSense
+            sum += comment.rows[i].ValueStorageSpace
+        }
+        rated = (sum / (comment.count * 3)).toFixed(1)
+        product.setDataValue('commentCount', comment.count)
+        product.setDataValue('rated', rated)
+        
+        res.status(200).json({ product })
+    } catch (e) {
+        console.error(e)
+        next(e)
     }
-    const comment = await Comment.findAndCountAll({
-        raw: true,
-        where: {
-            ProductId: product.id
-        },
-    })
-    sum = 0
-    for (let i = 0; i < comment.count; i++) {
-        sum += comment.rows[i].ValueBrightness
-        sum += comment.rows[i].ValueColorSense
-        sum += comment.rows[i].ValueStorageSpace
-    }
-    rated = (sum / (comment.count * 3)).toFixed(1)
-    product.setDataValue('commentCount', comment.count)
-    product.setDataValue('rated', rated)
-    
-    res.status(200).json({ product })
 })
 
 router.post('/addCart', authJWT, async (req, res, next) => {

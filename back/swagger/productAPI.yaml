@@ -104,7 +104,7 @@
         description: 상품 id 쿼리입니다. 상품 식별 id 를 보내주세요
     responses:
       200:
-        description: 성공 - product 배열에 데이터들이 지급됩니다
+        description: 성공 - product 배열에 데이터들이 지급됩니다<br>`gender [0 == 여자, 1 == 남자]`<br>`deliveryFrom [0 == 국내, 1 == 해외]`<br>`deliveryWay [0 == 입점사 배송, 1 == 무신사 직배송]<br>`
         schema:
           properties:
             product:
@@ -115,12 +115,12 @@
                   id:
                     type: integer
                     example: 33
-                  productTitle:
+                  productTitle: 
                     type: string
                     example: Chips
                   productPrice:
                     type: integer
-                    example: 94160
+                    example: 94160 
                   views:
                     type: integer
                     example: 1661
@@ -197,6 +197,13 @@
             message:
               type: string
               example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요        
+      401:
+        description: productId가 undefined인 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: productId가 쿼리로 전달되지 않았습니다
       500:
         $ref: "./openapi.yaml#/serverError"
 

@@ -751,7 +751,7 @@ paths:
           description: 상품 id 쿼리입니다. 상품 식별 id 를 보내주세요
       responses:
         '200':
-          description: 성공 - product 배열에 데이터들이 지급됩니다
+          description: '성공 - product 배열에 데이터들이 지급됩니다<br>`gender [0 == 여자, 1 == 남자]`<br>`deliveryFrom [0 == 국내, 1 == 해외]`<br>`deliveryWay [0 == 입점사 배송, 1 == 무신사 직배송]<br>`'
           schema:
             properties:
               product:
@@ -844,6 +844,13 @@ paths:
               message:
                 type: string
                 example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요
+        '401':
+          description: productId가 undefined인 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: productId가 쿼리로 전달되지 않았습니다
         '500':
           $ref: '#/serverError'
   /api/product/purchase:
@@ -1168,6 +1175,67 @@ paths:
               message:
                 type: string
                 example: 장바구니에 없는 상품을 삭제 시도하셨습니다
+        '500':
+          $ref: '#/serverError'
+  /api/order/refundMyOrder:
+    post:
+      tags:
+        - order
+      summary: 상품 환불
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              merchant_uid:
+                type: string
+              reason:
+                type: string
+              cancel_request_amount:
+                type: string
+              refund_holder:
+                type: string
+              refund_bank:
+                type: string
+              refund_account:
+                type: string
+      responses:
+        '200':
+          description: 성공 - 환불 시 어케가는지 아직 모름
+          schema:
+            properties:
+              likeProduct:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    productPrice:
+                      type: integer
+                      example: 1
+                    likes:
+                      type: string
+                      example: 845
+                    productTitle:
+                      type: string
+                      example: Car
+                    ProductImg:
+                      type: object
+                      properties:
+                        src:
+                          type: string
+                          example: Accessory/Accessory2
+        '400':
+          description: 주문 상품에 대한 데이터가 없을 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 주문 상품에 대한 데이터가 없습니다
         '500':
           $ref: '#/serverError'
 success:
