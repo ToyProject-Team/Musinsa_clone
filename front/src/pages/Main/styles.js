@@ -1,10 +1,19 @@
 import styled from '@emotion/styled';
 
-export const MainContainer = styled.div`
+export const scrollContainer = styled.div`
 	height: 100vh;
+	-ms-overflow-style: none;
+	::-webkit-scrollbar {
+		display: none;
+	}
+`;
+
+export const MainContainer = styled.div`
+	//height: 100vh;
 	font-size: 12px;
-	min-width: 1229px;
-	//	overflow: hidden;
+	max-width: 100%;
+	// min-width: 1229px;
+	//overflow: hidden;
 `;
 
 // 카테고리
@@ -24,6 +33,10 @@ export const CategoryTitle = styled.div`
 		float: left;
 		padding-right: 20px;
 		font-size: 24px;
+
+		:hover {
+			cursor: pointer;
+		}
 	}
 
 	.hash_tag {
@@ -227,11 +240,11 @@ export const OtherCategory = styled.div`
 		}
 
 		.search_btn {
-			width: 40px;
-			height: 19px;
-			padding: 2px 5px 2px;
-			margin: 0;
-			text-align: center;
+			display: inline-block;
+			font-weight: bold;
+			line-height: 15px;
+			padding: 3px 4px 2px 4px;
+			margin: -3px 0 0 4px;
 			border: 1px solid #ddd;
 			background: #fff;
 			cursor: pointer;
@@ -386,10 +399,12 @@ export const Items = styled.div`
 	min-width: 924px;
 	background-color: #fff;
 	height: auto;
-	// border-right: 1px solid #ddd;
+	border-right: 1px solid #ddd;
 `;
 
 export const SortBox = styled.div`
+	display: flex;
+	justify-content: space-between;
 	padding-left: 15px;
 	padding-bottom: 10px;
 	width: 100%;
@@ -422,10 +437,19 @@ export const SortBox = styled.div`
 		text-decoration: underline;
 		color: black;
 	}
+
+	.page {
+		border-left: 1px solid #ddd;
+		height: 42px;
+		padding-left: 15px;
+		padding-right: 15px;
+		font-weight: bold;
+	}
 `;
 
 export const ListBox = styled.div`
 	width: 100%;
+	border-right: 1px solid #ddd;
 
 	& ul {
 		display: inline-block;

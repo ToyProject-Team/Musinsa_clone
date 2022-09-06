@@ -6,7 +6,7 @@ const NewList = props => {
 		<li className="li_outer">
 			<div className="li_inner">
 				<div className="list_img">
-					<a href="/detail">
+					<a href={`/detail?productId=${data.id}`}>
 						<img
 							src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.ProductImg.src}`}
 						></img>
