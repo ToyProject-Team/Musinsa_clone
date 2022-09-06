@@ -21,7 +21,7 @@ router.get('/favoriteGoods', authJWT, async (req, res, next) => {
 
         const likeProduct = await me.getLikeIt({
             joinTableAttributes: [],
-            attributes: ["productPrice", "likes", "productTitle"],
+            attributes: ["id", "productPrice", "likes", "productTitle"],
             include: [
                 {
                     model: ProductImg,

@@ -18,7 +18,8 @@ router.get('/orderList', authJWT, async (req, res, next) => {
         })
         res.status(200).send({ myOrder })
     } catch (e) {
-
+        console.error(e)
+        next(e)
     }
 })
 
@@ -40,10 +41,6 @@ router.post('/refundMyOrder', async (req, res, next) => {
           /* ... 중략 ... */
         const paymentData = userOrder; // 조회된 결제정보
         const { ImpUid, amount, cancel_amount } = paymentData; // 조회한 결제정보로부터 imp_uid, amount(결제금액), cancel_amount(환불된 총 금액) 추출
-        const cancelableAmount = amount - cancel_amount; // 환불 가능 금액(= 결제금액 - 환불된 총 금액) 계산
-        if (cancelableAmount <= 0) { // 이미 전액 환불된 경우
-            return res.status(400).json({ message: "이미 전액환불된 주문입니다." });
-        }
         /* 아임포트 REST API로 결제환불 요청 */
         const getCancelData = await axios({
             url: "https://api.iamport.kr/payments/cancel",
@@ -56,16 +53,18 @@ router.post('/refundMyOrder', async (req, res, next) => {
             reason, // 가맹점 클라이언트로부터 받은 환불사유
             ImpUid: ImpUid, // imp_uid를 환불 `unique key`로 입력
             amount: cancel_request_amount, // 가맹점 클라이언트로부터 받은 환불금액
-            checksum: cancelableAmount, // [권장] 환불 가능 금액 입력
             refund_holder, // [가상계좌 환불시 필수입력] 환불 수령계좌 예금주
             refund_bank, // [가상계좌 환불시 필수입력] 환불 수령계좌 은행코드(ex. KG이니시스의 경우 신한은행은 88번)
             refund_account // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
             }
         });
-        res.status(200).send({ response: getCancelData.data }); // 환불 결과
+
+        const data = getCancelData.data
+        res.status(200).send({ data }); // 환불 결과
           /* 환불 결과 동기화 */
-      } catch (error) {
-        res.status(400).send(error);
-      }
+    } catch (e) {
+        console.error(e)
+        next(e)
+    }
 })
 module.exports = router
