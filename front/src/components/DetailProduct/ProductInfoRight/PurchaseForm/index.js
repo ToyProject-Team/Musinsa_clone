@@ -131,6 +131,8 @@ const PurchaseForm = ({ data }) => {
 		[option],
 	);
 
+	console.log(selectList);
+
 	const SelectForm = ({ price, size, color }) => {
 		const onIncrease = () => {
 			setOrderAmount(orderAmount + 1);
