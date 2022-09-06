@@ -61,6 +61,7 @@ export const ButtonLike = styled.div`
 	background-color: ${props => (props.clickedlike === true ? '#fff' : '#F42C28')};
 	width: 60px;
 	position: relative;
+	cursor: pointer;
 `;
 
 export const Like = styled.span`
@@ -71,7 +72,8 @@ export const Like = styled.span`
 	font-size: 12px;
 	font-weight: bold;
 	top: 35px;
-	left: 12px;
+	left: 50%;
+	transform: translateX(-50%);
 `;
 
 export const Button = styled.i`

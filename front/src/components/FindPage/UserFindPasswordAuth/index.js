@@ -1,25 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-	AuthInput,
-	Container,
-	FindIdButton,
-	RadioButton,
-	RadioDetail,
-	RadioItem,
-} from 'components/FindPage/UserFindAuth/styles';
-import {
-	useParams,
-	useLocation,
-	Routes,
-	Route,
-	Link,
-	Navigate,
-	useNavigate,
-} from 'react-router-dom';
-import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
-import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
+import { useLocation, useNavigate } from 'react-router-dom';
 import qs from 'qs';
-import useInput from 'hooks/useInput';
 import UserFindAuth from '../UserFindAuth';
 import {
 	AUTH,
@@ -31,13 +12,13 @@ import {
 import { PostHeaderApi, PostHeaderBodyApi } from 'utils/api';
 import { AuthUser } from './styles';
 import { maskingFunc } from 'utils/masking';
-import { authError } from 'utils/error';
+import { storageData } from 'utils/storageData';
 
 const UserFindPasswordAuth = () => {
 	const userFind = useUserFindState();
 	const dispatch = useUserFindDispatch();
-	const { auth, emailCheck, phoneNumber, phoneCheck, email, authSuccess, findPasswordShowId } =
-		userFind;
+	const userId = storageData('userId');
+	const { auth, emailCheck, phoneNumber, phoneCheck, email, authSuccess } = userFind;
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -93,7 +74,7 @@ const UserFindPasswordAuth = () => {
 			// 이메일로 아이디 찾기
 			const asyncFunction = async () => {
 				const data = {
-					loginId: findPasswordShowId,
+					loginId: userId,
 					email,
 				};
 
@@ -116,7 +97,7 @@ const UserFindPasswordAuth = () => {
 			// 휴대전화로 아이디 찾기
 			const asyncFunction = async () => {
 				const data = {
-					loginId: findPasswordShowId,
+					loginId: userId,
 					phoneNumber: phoneNumber.replaceAll('-', ''),
 				};
 

@@ -18,9 +18,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import Order from 'pages/Order';
-import { useUserState } from 'context/UserContext';
-import { PAYMENT, useProductDispatch } from 'context/ProductContext';
-import { useRef } from 'react';
+import { useProductDetailState } from 'context/ProductDetailContext';
+import { thousandComma } from 'utils/thousandComma';
 
 const ModalStyle = {
 	overlay: {
@@ -45,9 +44,7 @@ const ModalStyle = {
 
 const PurchaseForm = ({ data }) => {
 	const navigate = useNavigate();
-
-	const dispatch = useProductDispatch();
-	const user = useUserState();
+	const detail = useProductDetailState();
 
 	const [size, setSize] = useState('옵션 선택');
 	const [color, setColor] = useState('옵션 선택');
@@ -131,7 +128,10 @@ const PurchaseForm = ({ data }) => {
 				return prev;
 			});
 
-			if (inifFlag) optionListInit();
+			if (inifFlag) {
+				optionListInit();
+				setSelectIdx(-1);
+			}
 		},
 		[option, selectList],
 	);
@@ -296,9 +296,9 @@ const PurchaseForm = ({ data }) => {
 				) : (
 					<></>
 				)}
-				<ButtonLike clickedlike={clickedlike}>
-					<Button clickedlike={clickedlike} onClick={onLikeClicked} />
-					<Like clickedlike={clickedlike}>{data.likes}</Like>
+				<ButtonLike clickedlike={clickedlike} onClick={onLikeClicked}>
+					<Button clickedlike={clickedlike} />
+					<Like clickedlike={clickedlike}>{thousandComma(detail.product.likes)}</Like>
 				</ButtonLike>
 				<ButtonCart>
 					<i></i>

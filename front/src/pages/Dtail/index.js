@@ -15,6 +15,8 @@ import {
 	useProductDetailState,
 } from 'context/ProductDetailContext';
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+import qs from 'qs';
 
 const dummyProduct = {
 	BigCategoryName: '상의',
@@ -48,6 +50,11 @@ const dummyProduct = {
 };
 
 const DetailProduct = () => {
+	const location = useLocation();
+	const query = qs.parse(location.search, {
+		ignoreQueryPrefix: true,
+	});
+
 	const [initialProduceDetail, setInitialProduceDetail] = useState({
 		user: {},
 		product: {},
@@ -57,7 +64,7 @@ const DetailProduct = () => {
 	useEffect(() => {
 		const asyncFunction = async () => {
 			try {
-				const result = await GetApi(`/api/product/productDetail?productId=1`);
+				const result = await GetApi(`/api/product/productDetail?productId=${query.productId}`);
 				setInitialProduceDetail(prev => ({
 					...prev,
 					product: result.data.product,

@@ -1,4 +1,18 @@
 import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
+
+/* Keyframes */
+const upDown = keyframes`
+  	0% {
+    	top: 47%;
+	}
+	30% {
+		top: 53%
+	}
+	50%, 100% {
+		top: 47%;
+	}
+`;
 
 export const InfoWrapper = styled.div`
 	width: 1000px;
@@ -49,6 +63,7 @@ export const ImagagaInfo = styled.div`
 `;
 
 export const Button = styled.button`
+	position: relative;
 	color: #0078ff;
 	background: #fff;
 	border: 1px solid #0078ff;
@@ -58,6 +73,14 @@ export const Button = styled.button`
 	margin-left: 260px;
 	cursor: pointer;
 	z-index: 1;
+
+	& > svg {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%) scale(1.5);
+		margin-left: 5px;
+		animation: ${upDown} 0.9s ease-in-out infinite;
+	}
 `;
 
 export const MoreInfo = styled.div`

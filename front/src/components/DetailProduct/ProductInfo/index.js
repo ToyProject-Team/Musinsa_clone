@@ -8,6 +8,8 @@ import {
 	ImagagaInfo,
 	ButtonWrapper,
 } from './styles';
+import { ReactComponent as ArrowDown } from 'assets/svg/ArrowDown.svg';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 const ProductInfo = () => {
 	const [buttonClick, setButtonClick] = useState(false);
@@ -30,7 +32,10 @@ const ProductInfo = () => {
 		return (
 			<div>
 				<MoreInfo />
-				<Button>상품정보 더보기</Button>
+				<Button>
+					상품정보 더보기
+					<IoIosArrowDown />
+				</Button>
 			</div>
 		);
 	};
@@ -46,7 +51,13 @@ const ProductInfo = () => {
 				<img src="https://www.dummyimage.com/943x1800/bdbdbd/000000&text=productInfo" />
 			</ImageInfo>
 			<ButtonWrapper onClick={() => setButtonClick(!buttonClick)}>
-				{!buttonClick ? <IsMore /> : <Button>상품정보 접기</Button>}
+				{!buttonClick ? (
+					<IsMore />
+				) : (
+					<Button>
+						상품정보 접기 <IoIosArrowUp />
+					</Button>
+				)}
 			</ButtonWrapper>
 		</InfoWrapper>
 	);

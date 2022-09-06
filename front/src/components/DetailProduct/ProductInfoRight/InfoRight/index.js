@@ -45,8 +45,6 @@ const ProductInfoRight = ({ data }) => {
 		return value + unitWords[wordCnt];
 	}
 
-	console.log(123, detail.product);
-
 	return (
 		<div>
 			<ProductInfo>

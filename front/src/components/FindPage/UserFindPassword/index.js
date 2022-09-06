@@ -3,7 +3,7 @@ import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
 import { Container, AuthInput, FindIdButton } from 'components/FindPage/UserFindAuth/styles';
 import useInput from 'hooks/useInput';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { INIT, useUserFindDispatch, useUserFindState } from 'context/UserFindContext';
 import { PostApi } from 'utils/api';
 
