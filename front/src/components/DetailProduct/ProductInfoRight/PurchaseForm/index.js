@@ -20,6 +20,7 @@ import Modal from 'react-modal';
 import Order from 'pages/Order';
 import { useUserState } from 'context/UserContext';
 import { PAYMENT, useProductDispatch } from 'context/ProductContext';
+import { useRef } from 'react';
 
 const ModalStyle = {
 	overlay: {
@@ -43,6 +44,11 @@ const ModalStyle = {
 };
 
 const PurchaseForm = ({ data }) => {
+	const navigate = useNavigate();
+
+	const dispatch = useProductDispatch();
+	const user = useUserState();
+
 	const [size, setSize] = useState('옵션 선택');
 	const [color, setColor] = useState('옵션 선택');
 	const [selected, setSelected] = useState(false);
@@ -51,10 +57,79 @@ const PurchaseForm = ({ data }) => {
 	const [orderAmount, setOrderAmount] = useState(1);
 	const [showModal, setShowModal] = useState(false);
 
-	const navigate = useNavigate();
+	const [option, setOption] = useState({});
+	const [selectList, setSelectList] = useState({});
+	const [selectIdx, setSelectIdx] = useState();
 
-	const dispatch = useProductDispatch();
-	const user = useUserState();
+	// 선택 List 옵션 초기화
+	const optionListInit = useCallback(() => {
+		const value = Object.keys(data.option);
+		setOption(() =>
+			value.map(v => {
+				return { [v]: '옵션 선택' };
+			}),
+		);
+	}, []);
+
+	useEffect(() => {
+		optionListInit();
+	}, []);
+
+	// 옵션 선택
+	const selectOption = useCallback(
+		e => {
+			const { name, value } = e.target;
+			const objData = Object.keys(data.option);
+			const index = Number(e.target.getAttribute('data-index'));
+			const lastOptionIndex = objData.includes('add') ? objData.length - 2 : objData.length - 1;
+
+			if (index === 0) {
+				optionListInit();
+				setSelectIdx(data.option[name].indexOf(value));
+			}
+
+			if (index === lastOptionIndex && value !== '옵션 선택') {
+				// 마지막 옵션 눌렀다면?
+				if (objData.length === Number(name.replace('option', ''))) {
+					const key = option[objData[0]];
+					const nowValue = value;
+					const oldValue = selectList[key];
+					let flag = false;
+
+					if (objData.length > 1) {
+						// 옵션이 1개 이상일 경우
+						selectList[key]?.map(v => {
+							if (Object.keys(v)[0] === nowValue) flag = true;
+						});
+						if (flag) return alert('이미 선택한 상품입니다.');
+
+						setSelectList(prev => {
+							return {
+								...prev,
+								[key]: oldValue ? [...oldValue, { [nowValue]: 1 }] : [{ [nowValue]: 1 }],
+							};
+						});
+					} else {
+						// 옵션이 1개인 경우
+						if (selectList[nowValue]) return alert('이미 선택한 상품입니다.');
+
+						setSelectList(prev => {
+							return {
+								...prev,
+								[nowValue]: 1,
+							};
+						});
+					}
+				}
+			}
+
+			setOption(prev => ({
+				...prev,
+				[name]: value,
+			}));
+		},
+		[option],
+	);
 
 	const SelectForm = ({ price, size, color }) => {
 		const onIncrease = () => {
@@ -101,19 +176,12 @@ const PurchaseForm = ({ data }) => {
 		);
 	};
 
-	const sizeSelected = e => {
-		setSize(e.target.value);
-	};
-	const colorSelected = e => {
-		setColor(e.target.value);
-	};
-
-	useEffect(() => {
-		if (size !== '옵션 선택' && color !== '옵션 선택') {
-			setSelected(true);
-		} else {
-		}
-	}, [size, color]);
+	// useEffect(() => {
+	// 	if (size !== '옵션 선택' && color !== '옵션 선택') {
+	// 		setSelected(true);
+	// 	} else {
+	// 	}
+	// }, [size, color]);
 
 	const onLikeClicked = useCallback(() => {
 		setClickedlike(prev => !prev);
@@ -121,39 +189,89 @@ const PurchaseForm = ({ data }) => {
 
 	const openModal = () => {
 		setShowModal(showModal => !showModal);
-		// if(!user.login){
-		//   alert("로그인 후 구매가 가능합니다.")
-		//   navigate("/login");
+		// if (!user.login) {
+		// 	alert('로그인 후 구매가 가능합니다.');
+		// 	navigate('/login');
 		// } else {
-		// const payment_data = {
-		// 	price: selectedPrice + data.productPrice,
-		// 	id: data.ProductId,
-		// 	name: data.productTitle,
-		// 	date: new Date(),
-		// };
-		// dispatch({ payment_data, type: PAYMENT });
+		// 	const payment_data = {
+		// 		price: selectedPrice + data.productPrice,
+		// 		id: data.ProductId,
+		// 		name: data.productTitle,
+		// 		date: new Date(),
+		// 	};
+		// 	dispatch({ payment_data, type: PAYMENT });
 		// }
 	};
 
 	return (
 		<div>
-			<FormWrapper style={{ 'background-color': '#f3f3f3' }}>
-				<BuyOption onChange={sizeSelected} value={size}>
-					<option>옵션 선택</option>
-					<option>S</option>
-					<option>M</option>
-					<option>L</option>
-					<option>XL</option>
-				</BuyOption>
-				<BuyOption onChange={colorSelected} value={color}>
-					<option>옵션 선택</option>
-					<option>블랙</option>
-					<option>네이비</option>
-					<option>차콜</option>
-					<option>화이트</option>
-				</BuyOption>
+			<FormWrapper style={{ backgroundColor: '#f3f3f3' }}>
+				{Object.keys(data.option).map((item, idx) => (
+					<BuyOption
+						key={idx}
+						onChange={selectOption}
+						value={option[item]}
+						name={item}
+						data-index={idx}
+					>
+						<option>옵션 선택</option>
+						{typeof data.option[item][0] === 'string'
+							? data.option[item].map(itemOption => <option key={itemOption}>{itemOption}</option>)
+							: selectIdx >= 0 &&
+							  data.option[item][selectIdx].map(itemOption => (
+									<option key={itemOption}>{itemOption}</option>
+							  ))}
+					</BuyOption>
+				))}
 			</FormWrapper>
-			{selected ? <SelectForm price={data.productPrice} size={size} color={color} /> : <></>}
+			{Object.keys(selectList)?.map((option_1, idx) => {
+				if (typeof selectList[option_1] === 'number') {
+					// 옵션 1개 인경우
+					return (
+						<div key={option_1 + idx}>
+							<SelectedOption>
+								<Selected>{option_1}</Selected>
+								<Amount>
+									<ul>
+										<Decrease orderAmount={orderAmount}>-</Decrease>
+										<li>{orderAmount}</li>
+										<li>+</li>
+									</ul>
+								</Amount>
+								<Price>
+									<div>{selectedPrice + data.productPrice}원</div>
+									<p>X</p>
+								</Price>
+							</SelectedOption>
+						</div>
+					);
+				} else {
+					// 옵션 2개 이상
+					return selectList[option_1].map(item => {
+						const option_2 = Object.keys(item)[0];
+						return (
+							<div key={option_1 + option_2}>
+								<SelectedOption>
+									<Selected>
+										{option_1}/{option_2}
+									</Selected>
+									<Amount>
+										<ul>
+											<Decrease orderAmount={orderAmount}>-</Decrease>
+											<li>{orderAmount}</li>
+											<li>+</li>
+										</ul>
+									</Amount>
+									<Price>
+										<div>{selectedPrice + data.productPrice}원</div>
+										<p>X</p>
+									</Price>
+								</SelectedOption>
+							</div>
+						);
+					});
+				}
+			})}
 			<TotalPrice>
 				<p>총 상품 금액</p>
 				<div>{!selected ? 0 : selectedPrice + data.productPrice}원</div>

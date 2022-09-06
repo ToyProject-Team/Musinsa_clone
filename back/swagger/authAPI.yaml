@@ -4,6 +4,9 @@
       - auth
     summary: 회원가입
     parameters:
+      - name: encryptioncode
+        in: header
+        description: 소셜로그인 확인 토큰
       - name: emailCheck
         in: header
         required: true
@@ -81,6 +84,9 @@
       - auth
     summary: 로그인
     parameters:
+      - name: encryptioncode
+        in: header
+        description: 소셜로그인 확인 토큰
       - name: body
         in: body
         required: true
@@ -221,13 +227,13 @@
       200:
         schema:
           properties:
-            refreshToken:
+            alreadyMember:
               type: string
-              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTk1MTI5OTQsImV4cCI6MTY2MDcyMjU5NH0.I-9dst19UegB0a0RLXGND00auSNabUywhfUf97-waRM
-            accessToken:
+              example: true
+            encryptionCode:
               type: string
-              example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NTk1MTI5OTQsImV4cCI6MTY1OTU5OTM5NH0.vME0u2mgPL1xeu0riuwXnIFyD50fBm2bd9R3zzDpuI4
-
+              example: U2FsdGVkX18p+20q6O89nafZmNt+VXhqe0hyrqE4SGc=
+            
 /api/auth/authEmail:
   post:
     tags:

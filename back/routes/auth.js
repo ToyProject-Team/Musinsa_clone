@@ -18,23 +18,21 @@ const { promisify } = require("util");
 dotenv.config();
 router.post('/signup', async (req, res, next) => {
     try {
-        console.log(req.body)
         const exUser = await User.findOne({
           where: {
               loginId: req.body.loginId
           }
         })
-        console.log(req.headers, "??")
-        console.log(req.headers.phonecheck)
         
+        if (req.headers.encryptioncode) {
+          bytes  = CryptoJS.AES.decrypt(req.headers.encryptioncode, 'secret key 123');
+          req.headers.encryptioncode = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+        }
         const client = redisClient
         const getAsync = promisify(client.get).bind(client);
         const checkSMS = await getAsync(req.headers.phonecheck? req.headers.phonecheck: -111)
         const checkEmail = await getAsync(req.headers.emailcheck? req.headers.emailcheck: -111)
-        
-        console.log(checkSMS, "????")
-        console.log(checkEmail)
-        console.log()
+        const checkSocialEmail = await getAsync(req.headers.encryptioncode? req.headers.encryptioncode: -111)
         if (!checkSMS && !checkEmail) {
           return res.status(400).send({ message: "이메일 인증 또는 휴대폰 인증이 완료되지 않은 사용자입니다" })
         }
@@ -68,9 +66,9 @@ router.post('/signup', async (req, res, next) => {
           email: checkEmail ? checkEmail: null ,
           agreement: req.body.agreement== 1 ? 1: 0,
           address: req.body.address,
-          phoneNumber: checkSMS ? checkSMS: null
+          phoneNumber: checkSMS ? checkSMS: null,
+          socialEmail: checkSocialEmail ? checkSocialEmail: null
         })
-        console.log(req.body.questionType)
 
         return res.status(200).send({ success: true })
     }catch (error) {
@@ -81,6 +79,36 @@ router.post('/signup', async (req, res, next) => {
 
 router.post("/signin", async (req, res, next) => {
     const { email, password } = req.body;
+    if (req.headers.encryptioncode) {
+      const client = redisClient
+      const getAsync = promisify(client.get).bind(client);
+      bytes  = CryptoJS.AES.decrypt(req.headers.encryptioncode, 'secret key 123');
+      req.headers.encryptioncode = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+      const checkEmail = await getAsync(req.headers.encryptioncode? req.headers.encryptioncode: -111)
+      
+      const userData = await User.findOne({
+        where: {
+          socialEmail: checkEmail
+        },
+        attributes: {
+          exclude: ["password", "createdAt", "updatedAt", "deletedAt"],
+        },
+      })
+
+      if (!userData) {
+        return res.status(401).send({
+          message: "유저가 존재하지 않습니다!",
+        });
+      }
+      const accessToken = jwt.sign(userData);
+      const refreshToken = jwt.refresh(userData);
+      redisClient.set(userData.id, refreshToken);
+      return res.status(200).send({
+        userData,
+        refreshToken,
+        accessToken,
+      });
+    }
     const user = await User.findOne({
       where: {
         loginId: req.body.loginId,
@@ -160,33 +188,21 @@ router.get('/kakao/callback', async (req, res, next) => {
           Authorization: `Bearer ${token.data.access_token}`
       }//헤더에 내용을 보고 보내주겠다.
     })
-    
+    const randNum =  Math.floor(Math.random() * (10000 - 1 + 1)) + 1
+    await redisClient.set(randNum, user.data.kakao_account.email);
+    await redisClient.expire(randNum, 1200)
+    const encryptionCode = await CryptoJS.AES.encrypt(JSON.stringify(randNum ), 'secret key 123').toString()
+
     let userInfo = await User.findOne({
       where: {
         socialEmail : user.data.kakao_account.email
     }
     })
-
     if (userInfo) {
-      const accessToken = jwt.sign(user);
-      const refreshToken = jwt.refresh(user);
-      redisClient.set(userInfo.id, refreshToken);
-      return res.status(200).send({
-        refreshToken,
-        accessToken,
-        userInfo
-      })
+      res.status(200).send({ alreadyMember: true, encryptionCode })
+    } else {
+      res.status(200).send({ alreadyMember: false, encryptionCode })
     }
-    userInfo = await User.create({
-      socialEmail : user.data.kakao_account.email
-    })
-
-    const accessToken = jwt.sign(userInfo);
-    const refreshToken = jwt.refresh(userInfo);
-    res.status(200).send({
-      refreshToken,
-      accessToken,
-    })
   } catch (e) {
     console.error(e)
     next(e)
