@@ -1,11 +1,8 @@
 import styled from '@emotion/styled';
 
-export const scrollContainer = styled.div`
+export const ScrollContainer = styled.div`
 	height: 100vh;
-	-ms-overflow-style: none;
-	::-webkit-scrollbar {
-		display: none;
-	}
+	// scroll-width: none;
 `;
 
 export const MainContainer = styled.div`
@@ -396,10 +393,10 @@ export const SelectBox = styled.div`
 `;
 
 export const Items = styled.div`
-	min-width: 924px;
+	min-width: 933px;
 	background-color: #fff;
 	height: auto;
-	border-right: 1px solid #ddd;
+	// border-right: 1px solid #ddd;
 `;
 
 export const SortBox = styled.div`
@@ -440,6 +437,7 @@ export const SortBox = styled.div`
 
 	.page {
 		border-left: 1px solid #ddd;
+		border-right: 1px solid #ddd;
 		height: 42px;
 		padding-left: 15px;
 		padding-right: 15px;
@@ -449,11 +447,11 @@ export const SortBox = styled.div`
 
 export const ListBox = styled.div`
 	width: 100%;
-	border-right: 1px solid #ddd;
+	// border-right: 1px solid #ddd;
 
 	& ul {
 		display: inline-block;
-		// border-left: 1px solid #ddd;
+		border-right: 1px solid #ddd;
 	}
 
 	& li {
@@ -463,6 +461,7 @@ export const ListBox = styled.div`
 		margin: 0;
 		background-color: white;
 		border-left: 1px solid #ddd;
+		// border-right: 1px solid #ddd;
 		border-bottom: 1px solid #ddd;
 	}
 
