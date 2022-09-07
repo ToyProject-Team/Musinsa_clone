@@ -91,6 +91,7 @@ const Signup = () => {
 			let data = await window.Kakao.API.request({
 				url: '/v2/user/me',
 			});
+			console.log(data);
 
 			// 사용자 정보 변수에 저장
 			setauthNumber(data.kakao_account.email);

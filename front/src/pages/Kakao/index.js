@@ -28,8 +28,8 @@ const Kakao = () => {
 			await window.Kakao.init(REST_API_KEY);
 			// access token 설정
 			await window.Kakao.Auth.setAccessToken(res.data.access_token);
-			await console.log(res);
-			history('/signup');
+			console.log(123123, res);
+			// history('/signup');
 		} catch (err) {
 			console.log(err);
 		}
