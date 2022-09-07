@@ -3,13 +3,13 @@ import { ImgSpan, LikeLi, LikeUl } from '../styles';
 import { FaHeart } from 'react-icons/fa';
 import { FiX } from 'react-icons/fi';
 
-function Likelist({ img, brand, model, price, state, option, id, like, onRemove }) {
+function Likelist({ img, brand, model, price, like, onRemove }) {
 	
 	return (
 		<LikeUl>
 			<LikeLi>
 				<ImgSpan>
-					<img src={img} alt="더미데이터" />
+					<img src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${img}`} alt="더미데이터" />
 				</ImgSpan>
 				<ul>
 					<li className="brand">{brand}</li>

@@ -6,6 +6,8 @@ import {
 	FDescription,
 	FBttom,
 	SNS,
+	Filter,
+	Pointer,
 } from './styles';
 
 const Footer = () => {
@@ -19,14 +21,14 @@ const Footer = () => {
 
 		if (open === 'Notice')
 			win = window.open(
-				'../../contract/Footer/Notice',
+				'footer/notice',
 				'자세히보기',
 				'width=500px,height=800px,scrollbars=yes',
 			);
 		else if (open === 'Declar') {
 			win = window.open(
-				// '/signup/agreement/terms',
-				// '무신사, 무신사 스토어 이용 악관',
+				'footer/declar',
+				'신고',
 				'width=500px,height=800px,scrollbars=yes',
 			);
 		} 
@@ -35,6 +37,20 @@ const Footer = () => {
 	}
 
 	return (
+		<>
+		<Filter>
+			<button>전체</button>
+			<button>남성</button>
+			<button>여성</button>
+		</Filter>
+
+		<Pointer>
+			<div><a>장바구니</a></div>
+			<a title="공유 하기"></a>
+			<a title="위로 가기"></a>
+			<a title="아래로 가기"></a>
+		</Pointer>
+
 		<FContainer>
 			<FDiv>
 				<div>
@@ -64,13 +80,12 @@ const Footer = () => {
 					일부 상품의 경우 주식회사 무신사는 통신판매의 당사자가 아닌 통신판매중개자로서<br/> 상품, 상품정보, 거래에 대한 책임이 제한될 수 있으므로, 각 상품 페이지에서 구체적인 내용을 확인하시기 바랍니다.
 					</FDescription>
 				</div>
-
-				
 			</FDiv>
 			<div>
 				<FBttom><span>FASHION WEB MAGAZINE / LIFE STYLE SELECT SHOP</span> WWW.MUSINSA.COM</FBttom>
 			</div>
 		</FContainer>
+		</>
 	);
 };
 

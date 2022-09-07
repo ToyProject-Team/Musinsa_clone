@@ -20,6 +20,7 @@ import PriceList from 'components/DetailProduct/ProductInfoRight/PriceList';
 import PurchaseForm from '../PurchaseForm';
 import { useProductDetailState } from 'context/ProductDetailContext';
 import { ReactComponent as ArrowDown } from 'assets/svg/ArrowDown.svg';
+import { thousandComma } from 'utils/thousandComma';
 
 const ProductInfoRight = ({ data }) => {
 	const detail = useProductDetailState();
@@ -44,8 +45,6 @@ const ProductInfoRight = ({ data }) => {
 
 		return value + unitWords[wordCnt];
 	}
-
-	console.log(123, detail.product);
 
 	return (
 		<div>
@@ -107,14 +106,14 @@ const ProductInfoRight = ({ data }) => {
 						<DetailInfo>
 							<PriceTitle>무신사 판매가</PriceTitle>
 							<PriceContent className="line">
-								{detail.product.productPrice}
+								{thousandComma(detail.product.productPrice)}
 								<Price>원</Price>
 							</PriceContent>
 						</DetailInfo>
 						<DetailInfo>
 							<PriceTitle>무신사 회원가</PriceTitle>
 							<PriceContent onClick={onToggle}>
-								{detail.product.rookiePrice}
+								{thousandComma(detail.product.rookiePrice)}
 								<Price>원</Price>
 								<ArrowDown style={{ paddingLeft: '8px' }} />
 							</PriceContent>

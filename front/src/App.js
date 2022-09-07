@@ -43,6 +43,14 @@ const Kakao = loadable(() => import('pages/Kakao'), {
 	fallback: <div>로딩중</div>,
 });
 
+const Notice = loadable(() => import('contract/Footer/Notice'), {
+	fallback: <div>로딩중</div>,
+});
+
+const Declar = loadable(() => import('contract/Footer/Declar'), {
+	fallback: <div>로딩중</div>,
+});
+
 function App() {
 	return (
 		<UserProvider>
@@ -60,6 +68,9 @@ function App() {
 					<Route path="signup/agreement/agree" element={<Agree />} />
 					<Route path="signup/agreement/terms" element={<Terms />} />
 					<Route path="signup/agreement/sns" element={<Sns />} />
+					{/* 공용 컴포넌트 */}
+					<Route path="footer/notice" element={<Notice />} />
+					<Route path="footer/declar" element={<Declar />} />
 				</Routes>
 			</BrowserRouter>
 		</UserProvider>

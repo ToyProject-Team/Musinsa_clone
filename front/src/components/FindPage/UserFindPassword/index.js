@@ -3,13 +3,8 @@ import { ReactComponent as CancelIcon } from 'assets/svg/Cancel.svg';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
 import { Container, AuthInput, FindIdButton } from 'components/FindPage/UserFindAuth/styles';
 import useInput from 'hooks/useInput';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import {
-	INIT,
-	FINDPASSWORDSHOWID,
-	useUserFindDispatch,
-	useUserFindState,
-} from 'context/UserFindContext';
+import { useNavigate } from 'react-router-dom';
+import { INIT, useUserFindDispatch, useUserFindState } from 'context/UserFindContext';
 import { PostApi } from 'utils/api';
 
 const UserFindPassword = () => {
@@ -40,10 +35,7 @@ const UserFindPassword = () => {
 			const result = await PostApi('/api/auth/isExistedLoginId', params);
 			let token = result.data.loginIdCheckToken;
 
-			const payload = {
-				findPasswordShowId: userId,
-			};
-			dispatch({ type: FINDPASSWORDSHOWID, payload });
+			localStorage.setItem('userId', userId);
 
 			navigate(`choice?token=${token}`);
 		} catch (error) {

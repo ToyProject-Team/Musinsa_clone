@@ -4,47 +4,44 @@ import Ul from 'components/Mypage/Like/List';
 import { LikeSection, PagenationBox } from './styles';
 import dummy from 'components/Mypage/data.json';
 import Pagination from 'react-js-pagination';
-import { GetApi, PostQueryApi } from 'utils/api';
+import { GetApi, PostHeaderApi, PostQueryApi } from 'utils/api';
 import { getData } from 'utils/getData';
 
 function Mainlike() {
 	// 페이지네이션
 	const [page, setPage] = useState(1);
-	const [items, setItems] = useState(4);
+	const [items, setItems] = useState(8);
 	const handlePageChange = page => {
 		setPage(page);
 	};
 
-	// 좋아요 리스트 추가 삭제 
-	const [likeProducts, setlikeProduct] = useState([]);
+	// 좋아요 리스트 추가 삭제
+	const [likeList, setlikeList] = useState([]);
 
 	const onRemove = id => e => {
-		setlikeProduct(likeProducts.filter(dummy.id != id));
+		setlikeList(likeList.filter(dummy.id != id));
 	};
 
-	// const [loginToken, setLoginToken] = useState(() => getData());
-	// console.log(loginToken);
-
-	// console.log(getData().accessToken)
-
 	const loginToken = getData();
-	console.log(loginToken)
-
-
-
+	// console.log(loginToken)
 	useEffect(() => {
+		// const params = {
+		// 	header: loginToken.accessToken
+		// }
+		// PostHeaderApi('/api/mypage/favoriteGoods',{Authorization: params} ).then(res => {setlikeList(res.likeProduct)});
 		fetch('http://141.164.48.244/api/mypage/favoriteGoods', {
 			headers: {
-				'Content-Type':'application/json',
+				'Content-Type': 'application/json',
 				Authorization: loginToken.accessToken,
 			},
 		})
-		.then(res => res.json())
-		.then(res => {setlikeProduct(res);}
-		);
-	},[]);
+			.then(res => res.json())
+			.then(res => {
+				setlikeList(res.likeProduct);
+			});
+	}, []);
 
-	console.log(likeProducts);
+	// console.log('like', likeList);
 	return (
 		<>
 			<MypageMain>
@@ -53,25 +50,22 @@ function Mainlike() {
 						<h1>좋아요</h1>
 						<h2>상품</h2>
 					</header>
-					{dummy.slice(items * (page - 1), items * (page - 1) + items).map((data, index) => (
+					{likeList.slice(items * (page - 1), items * (page - 1) + items).map((data, index) => (
 						<Ul
-							key={data.id}
-							id={data.id}
-							img={data.url}
-							brand={data.brandName}
-							model={data.model}
-							price={data.price}
-							state={data.orderstatus}
-							option={data.option}
-							like={data.like}
-							onRemove = {onRemove}
+							key={index}
+							id={index}
+							img={data.ProductImg.src}
+							model={data.productTitle}
+							price={data.productPrice}
+							like={data.likes}
+							onRemove={onRemove}
 						/>
 					))}
 					<PagenationBox>
 						<Pagination
 							activePage={page}
-							itemsCountPerPage={4}
-							totalItemsCount={dummy.length - 1}
+							itemsCountPerPage={items}
+							totalItemsCount={likeList.length - 1}
 							pageRangeDisplayed={5}
 							onChange={handlePageChange}
 							firstPageText={''}
