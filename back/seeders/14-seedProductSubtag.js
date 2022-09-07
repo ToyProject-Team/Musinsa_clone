@@ -5,10 +5,10 @@ module.exports = {
 
     // const categoryCount = [9, 12, 8, 3, 3, 3, 11, 13, 9, 13, 7, 2, 5, 3, 8, 5, 7, 12, 11, 11, 2, 2]
 
-    // const dummyCategoryColors = []
+    // const dummyProductSubtag = []
     // for (var i = 1; i < 23; i++) {
     //   for (var j = 0; j < categoryCount[i-1]; j++) {
-    //     dummyCategoryColors.push({
+    //     dummyProductSubtag.push({
     //       categoryName: j+1,
     //       createdAt: new Date(),
     //       updatedAt: new Date(),
@@ -17,7 +17,7 @@ module.exports = {
     //   }
     // }
     
-    // await queryInterface.bulkInsert("categorycolors", dummyCategoryColors);
+    // await queryInterface.bulkInsert("productsubtags", dummyProductSubtag);
   },
 
   async down (queryInterface, Sequelize) {
