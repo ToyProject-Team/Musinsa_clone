@@ -85,7 +85,6 @@ function CartTable({
 											<img src={img} alt="더미데이터" />
 										</ImgSpan>
 										<ul>
-											<li>{brand}</li>
 											<li>
 												<strong>{model}</strong>
 											</li>

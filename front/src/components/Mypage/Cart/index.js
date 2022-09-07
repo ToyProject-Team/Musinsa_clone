@@ -6,6 +6,7 @@ import { FaPlus, FaEquals } from 'react-icons/fa';
 import dummy from 'components/Mypage/data.json';
 import Modal from 'react-modal';
 import Order from 'pages/Order';
+import { getData } from 'utils/getData';
 
 function Cart() {
 	// 전체 체크박스
@@ -33,8 +34,22 @@ function Cart() {
 	// 상품금액 계산
 	const [selectedPrice, setSelectedPrice] = useState([]);
 	const [sum, setSum] = useState(0);
+	const [cartList, setCartList] = useState([]);
+	const loginToken = getData();
+	console.log(loginToken);
 
 	useEffect(() => {
+		fetch('http://141.164.48.244/api/shoppingBasket/shoppingList', {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: loginToken.accessToken,
+			},
+		})
+			.then(res => res.json())
+			.then(res => {
+				setCartList(res.exCart);
+			});
+
 		if (selectedPrice.length > 0) {
 			let total = [...selectedPrice].reduce((a, b) => a + b);
 			setSum(total);
@@ -42,12 +57,12 @@ function Cart() {
 			setSum(0);
 		}
 	}, [selectedPrice]);
-	
-	console.log(selectedPrice);
-	console.log(checkedItems);
-	console.log(sum);
 
-	
+	// console.log(selectedPrice);
+	// console.log(checkedItems);
+	// console.log(sum);
+
+	console.log(cartList);
 
 	return (
 		<>
@@ -90,15 +105,14 @@ function Cart() {
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
-						{dummy.map((data, index) => (
+						{cartList.map((data, index) => (
 							<CartTable
-								key={data.id}
+								key={index}
 								id={data.id}
 								img={data.url}
-								brand={data.brandName}
-								model={data.model}
-								price={data.price}
-								state={data.orderstatus}
+								model={data.productTitle}
+								price={data.productPrice}
+								state={data.deliveryCompany}
 								option={data.option}
 								checkedItems={checkedItems}
 								setCheckedItems={setCheckedItems}
