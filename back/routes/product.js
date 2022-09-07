@@ -44,7 +44,7 @@ router.get('/productList', async (req, res, next) => {
                                     req.query.price==4 ? 200000:
                                     300000 
                                     : 0 
-                                    , 
+                                , 
                                 req.query.priceMax ? Number(req.query.priceMax) : 
                                     req.query.price ? 
                                     req.query.price==1 ? 50000: 

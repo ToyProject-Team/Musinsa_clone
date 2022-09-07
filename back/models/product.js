@@ -132,5 +132,6 @@ module.exports = class Product extends Model {
 
         db.Product.hasMany(db.ProductSize)
         
+        db.Product.hasMany(db.ProductMainTag)
     }
 }
