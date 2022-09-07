@@ -1,18 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Container, FindPasswordButton } from 'components/FindPage/UserFindPassword/styles';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
 import qs from 'qs';
 import { MODALAUTHCONFIRM, useUserFindDispatch, useUserFindState } from 'context/UserFindContext';
 import UserPassword from 'components/Input/UserPassword';
-import TextModal from 'components/Modals/TextModal';
-import { PostApi, PostHeaderBodyApi } from 'utils/api';
+import { PostHeaderBodyApi } from 'utils/api';
 import UserFindPasswordFinishModal from 'components/Modals/UserFindPasswordFinishModal';
+import { storageData } from 'utils/storageData';
 
 const UserFindPasswordChange = () => {
 	const userFind = useUserFindState();
 	const dispatch = useUserFindDispatch();
-	const { findPasswordShowId, findUserId, modalAuthConfirm } = userFind;
+	const userId = storageData('userId');
+	const { findUserId, modalAuthConfirm } = userFind;
 
 	const [password, setPassword] = useState('');
 	const [passwordReg, setPasswordReg] = useState(true);
@@ -113,7 +114,7 @@ const UserFindPasswordChange = () => {
 			<div>
 				<h3>새로운 비밀번호를 입력해주세요.</h3>
 				<p>
-					아이디 : <strong>{findPasswordShowId}</strong>
+					아이디 : <strong>{userId}</strong>
 				</p>
 				<div>
 					<UserPassword

@@ -4,7 +4,6 @@ const initialFind = {
 	auth: 'phoneAuth',
 	showAuth: 'all',
 
-	findPasswordShowId: '',
 	findPasswordShowMarkingData: '',
 
 	phoneNumber: '',
@@ -32,7 +31,6 @@ export const INIT = 'INIT';
 export const AUTH = 'AUTH';
 export const SHOWAUTH = 'SHOWAUTH';
 
-export const FINDPASSWORDSHOWID = 'FINDPASSWORDSHOWID';
 export const FINDPASSWORDSHOWMARKINGDATA = 'FINDPASSWORDSHOWMARKINGDATA';
 
 export const PHONENUMBER = 'PHONENUMBER';
@@ -65,12 +63,6 @@ function userReducer(state, action) {
 			return {
 				...state,
 				auth: action.payload.auth,
-			};
-
-		case FINDPASSWORDSHOWID:
-			return {
-				...state,
-				findPasswordShowId: action.payload.findPasswordShowId,
 			};
 
 		case SHOWAUTH:

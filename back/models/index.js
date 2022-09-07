@@ -10,6 +10,8 @@ const Comment = require('./comment')
 const Order = require('./order')
 const ProductSize = require('./productSize')
 const CategoryColor = require('./categoryColor')
+const ProductMainTag = require('./productMainTag')
+const ProductSubTag = require('./productSubTag')
 
 const db = {};
 db.User = user;
@@ -22,6 +24,8 @@ db.Comment = Comment
 db.Order = Order
 db.ProductSize = ProductSize
 db.CategoryColor = CategoryColor
+db.ProductMainTag = ProductMainTag
+db.ProductSubTag = ProductSubTag
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];

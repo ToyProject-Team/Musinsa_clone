@@ -75,3 +75,30 @@ export const SNS = styled.a`
     cursor: pointer;
     background: url(https://static.msscdn.net/skin/musinsa/images/footer_sns.png?20190903) no-repeat;
 `; 
+
+
+
+
+
+export const Filter = styled.div`
+    position: fixed;
+    right: 0;
+    bottom: 264px;
+    height: 200px;
+    background: black;
+
+    & button{
+        display: block;
+    }
+`;
+
+export const Pointer = styled.div`
+    position: fixed;
+    right: 0;
+    bottom: 50px;
+    height: 200px;
+    background: coral;
+`;
+
+
+

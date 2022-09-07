@@ -21,7 +21,7 @@ router.get('/favoriteGoods', authJWT, async (req, res, next) => {
 
         const likeProduct = await me.getLikeIt({
             joinTableAttributes: [],
-            attributes: ["productPrice", "likes", "productTitle"],
+            attributes: ["id", "productPrice", "likes", "productTitle"],
             include: [
                 {
                     model: ProductImg,
@@ -54,10 +54,10 @@ router.delete('/favoriteGoods/del', authJWT, async (req, res, next) => {
         if (!me) {
             return res.status(401).send({ message: "유저의 조회 결과가 없습니다"})
         }
-
+        console.log(me)
         const checkLength = []
         for (let i = 0; i < delProductLength; i++) {
-            let checkList = await me.getLiker({
+            let checkList = await me.getLikeIt({
                 where: {   
                     id: req.body.productId[i]
                 }
@@ -74,7 +74,7 @@ router.delete('/favoriteGoods/del', authJWT, async (req, res, next) => {
 
 
         for (let i = 0; i < delProductLength; i++) {
-            temp = await me.removeLiker(checkLength[i])
+            temp = await me.removeLikeIt(checkLength[i])
         }
         res.status(200).send({ success: true })
     } catch (e) {

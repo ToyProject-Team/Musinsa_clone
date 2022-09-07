@@ -223,6 +223,10 @@
     tags:
       - auth
     summary: 소셜 로그인(카카오)
+    parameters:
+      - name: code
+        in: query
+        required: true
     responses:
       200:
         schema:

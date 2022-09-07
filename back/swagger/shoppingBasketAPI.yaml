@@ -47,6 +47,7 @@
               example: 유저의 조회 결과가 없습니다       
       500:
         $ref: "./openapi.yaml#/serverError"
+        
 /api/shoppingBasket/delshoppingList:
   delete:
     tags:
@@ -93,3 +94,4 @@
       500:
         $ref: "./openapi.yaml#/serverError"
 
+$ref: "./orderAPI.yaml"
