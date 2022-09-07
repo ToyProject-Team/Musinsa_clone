@@ -1,12 +1,20 @@
 import React, { useReducer, createContext, useContext } from 'react';
 
 export const PRODUCTDETAIL = 'PRODUCTDETAIL';
+export const LIKES = 'LIKES';
 
 function productDetailReducer(state, action) {
 	switch (action.type) {
 		case PRODUCTDETAIL:
 			return {
+				...state,
 				product: action.payload.product,
+			};
+		case LIKES:
+			console.log(action);
+			return {
+				...state,
+				likes: action.payload.likes,
 			};
 
 		default:

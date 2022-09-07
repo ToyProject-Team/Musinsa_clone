@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Container, FindPasswordButton } from 'components/FindPage/UserFindPassword/styles';
 import { useLocation } from 'react-router-dom';
 import { ReactComponent as LoadingIcon } from 'assets/svg/Loading.svg';
-import qs from 'qs';
 import { MODALAUTHCONFIRM, useUserFindDispatch, useUserFindState } from 'context/UserFindContext';
 import UserPassword from 'components/Input/UserPassword';
 import { PostHeaderBodyApi } from 'utils/api';
 import UserFindPasswordFinishModal from 'components/Modals/UserFindPasswordFinishModal';
 import { storageData } from 'utils/storageData';
+import { URLquery } from 'utils/URLquery';
 
 const UserFindPasswordChange = () => {
 	const userFind = useUserFindState();
@@ -31,9 +31,7 @@ const UserFindPasswordChange = () => {
 	const [modalAuth, setModalAuth] = useState(false);
 
 	const location = useLocation();
-	const query = qs.parse(location.search, {
-		ignoreQueryPrefix: true,
-	});
+	const query = URLquery(location);
 
 	const changeDispatch = useCallback((type, payload) => {
 		return dispatch({ type, payload });

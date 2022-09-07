@@ -2,7 +2,7 @@ import UserEmail from 'components/UserEmail';
 import UserPassword from 'components/UserPassword';
 import useInput from 'hooks/useInput';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { GetApi, PostApi } from 'utils/api';
 import { getData } from 'utils/getData';
 import {
@@ -19,6 +19,7 @@ import {
 } from './styles';
 import { ReactComponent as KakaoIcon } from 'assets/svg/Kakao.svg';
 import Kakao from 'pages/Kakao';
+import { URLquery } from 'utils/URLquery';
 
 const LogIn = () => {
 	const REST_API_KEY = '4046f853b8826bbb808cfe399ce9b3f6';
@@ -26,6 +27,7 @@ const LogIn = () => {
 	const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const [login, setLogin] = useState(getData());
 
@@ -75,8 +77,11 @@ const LogIn = () => {
 							}
 
 							setLogin(true);
+							const query = URLquery(location);
+							console.log(query.redirect);
+							if (query.redirect) return navigate(query.redirect);
 
-							return <Navigate to="/" />;
+							return navigate('/');
 
 						default:
 							break;

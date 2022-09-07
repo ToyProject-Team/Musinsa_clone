@@ -58,7 +58,7 @@ export const ButtonBuy = styled.div`
 export const ButtonLike = styled.div`
 	border: 1px solid #ddd;
 	margin-left: 5px;
-	background-color: ${props => (props.clickedlike === true ? '#fff' : '#F42C28')};
+	background-color: ${props => (props.clickedlike ? '#F42C28' : '#fff')};
 	width: 60px;
 	position: relative;
 	cursor: pointer;
@@ -68,7 +68,7 @@ export const Like = styled.span`
 	position: absolute;
 	line-height: normal;
 	color: #bbb;
-	color: ${props => (props.clickedlike ? '#bbb' : '#fff')};
+	color: ${props => (props.clickedlike ? '#fff' : '#bbb')};
 	font-size: 12px;
 	font-weight: bold;
 	top: 35px;
@@ -83,7 +83,7 @@ export const Button = styled.i`
 	width: 30px;
 	height: 30px;
 	background: url('https://static.msscdn.net/skin/musinsa/images/icon.png?20190715');
-	background-position: ${props => (props.clickedlike === true ? '-181px -12px' : '-212px -12px')};
+	background-position: ${props => (props.clickedlike ? '-212px -12px' : '-181px -12px')};
 
 	cursor: pointer;
 	color: rgb(0, 0, 0, 0);

@@ -15,11 +15,19 @@ import {
 	Price,
 } from './styles';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import Order from 'pages/Order';
-import { useProductDetailState } from 'context/ProductDetailContext';
+import {
+	LIKES,
+	useProductDetailDispatch,
+	useProductDetailState,
+} from 'context/ProductDetailContext';
 import { thousandComma } from 'utils/thousandComma';
+import { getData } from 'utils/getData';
+import { URLquery } from 'utils/URLquery';
+import { baseUrl, DeleteHeaderBodyApi, GetApi, GetTokenApi, PostHeaderBodyApi } from 'utils/api';
+import axios from 'axios';
 
 const ModalStyle = {
 	overlay: {
@@ -44,14 +52,14 @@ const ModalStyle = {
 
 const PurchaseForm = ({ data }) => {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const detail = useProductDetailState();
+	const dispatch = useProductDetailDispatch();
+	const user = getData();
 
-	const [size, setSize] = useState('옵션 선택');
-	const [color, setColor] = useState('옵션 선택');
-	const [selected, setSelected] = useState(false);
 	const [clickedlike, setClickedlike] = useState(true);
 	const [selectedPrice, setSelectedPrice] = useState(0);
-	const [orderAmount, setOrderAmount] = useState(1);
+	// const [orderAmount, setOrderAmount] = useState(1);
 	const [showModal, setShowModal] = useState(false);
 
 	const [option, setOption] = useState({});
@@ -70,8 +78,26 @@ const PurchaseForm = ({ data }) => {
 		);
 	}, []);
 
+	// 좋아요 표시
+	const userLikes = useCallback(async () => {
+		const token = user.accessToken;
+		const query = URLquery(location);
+		try {
+			const result = await GetTokenApi('/api/mypage/favoriteGoods', token);
+			let likeProduct = result.data.likeProduct.filter(v => `${v.id}` === query.productId);
+			setClickedlike(Object.keys(likeProduct).length > 0 ? true : false);
+		} catch (error) {
+			console.log(error);
+		}
+	}, []);
+
 	useEffect(() => {
 		optionListInit();
+		if (user) userLikes();
+	}, []);
+
+	const changeDispatch = useCallback((type, payload) => {
+		return dispatch({ type, payload });
 	}, []);
 
 	// 옵션 선택
@@ -215,7 +241,6 @@ const PurchaseForm = ({ data }) => {
 	useEffect(() => {
 		let answer = 0;
 		if (Object.keys(selectList).length > 0) {
-			console.log(123);
 			answer = Object.values(selectList)
 				?.map(v =>
 					v.map(item => {
@@ -236,12 +261,61 @@ const PurchaseForm = ({ data }) => {
 	// 	}
 	// }, [size, color]);
 
-	const onLikeClicked = useCallback(() => {
+	// 좋아요
+	const onLikeClicked = useCallback(async () => {
+		if (!user) {
+			const { pathname, search } = location;
+			navigate(`/login?redirect=${pathname}${search}`);
+		}
+
+		const token = user.accessToken;
+		const query = URLquery(location);
+
 		setClickedlike(prev => !prev);
+		if (clickedlike) {
+			changeDispatch(LIKES, {
+				likes: detail.product.likes - 1,
+			});
+			detail.product.likes -= 1;
+
+			try {
+				const params = {
+					productId: query.productId,
+				};
+				await DeleteHeaderBodyApi('/api/mypage/favoriteGoods/del', params, 'Authorization', token);
+			} catch (error) {
+				setClickedlike(true);
+			}
+		} else {
+			changeDispatch(LIKES, {
+				likes: detail.product.likes + 1,
+			});
+			detail.product.likes += 1;
+
+			try {
+				const params = {
+					productId: query.productId,
+				};
+				PostHeaderBodyApi('/api/product/likeProduct', params, 'Authorization', token);
+			} catch (error) {
+				setClickedlike(false);
+			}
+		}
 	}, [clickedlike]);
 
+	// 장바구니 추가
 	const onClickBasket = useCallback(() => {
-		console.log(1);
+		if (!user) {
+			const { pathname, search } = location;
+			navigate(`/login?redirect=${pathname}${search}`);
+		}
+
+		const token = user.accessToken;
+		const query = URLquery(location);
+		const params = {
+			productId: query.productId,
+		};
+		PostHeaderBodyApi('/api/product/addCart', params, 'Authorization', token);
 	}, []);
 
 	const openModal = () => {
@@ -288,6 +362,7 @@ const PurchaseForm = ({ data }) => {
 				})}
 			</FormWrapper>
 			{Object.keys(selectList)?.map((option_1, idx) => {
+				// const orderCount = item[option_1];
 				if (typeof selectList[option_1] === 'number') {
 					// 옵션 1개 인경우
 					return (
@@ -296,8 +371,8 @@ const PurchaseForm = ({ data }) => {
 								<Selected>{option_1}</Selected>
 								<Amount>
 									<ul>
-										<Decrease orderAmount={orderAmount}>-</Decrease>
-										<li>{orderAmount}</li>
+										<Decrease orderAmount={1}>-</Decrease>
+										<li>{1}</li>
 										<li>+</li>
 									</ul>
 								</Amount>
