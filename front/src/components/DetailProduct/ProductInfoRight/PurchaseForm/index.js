@@ -213,15 +213,18 @@ const PurchaseForm = ({ data }) => {
 	};
 
 	useEffect(() => {
-		let answer = Object.values(selectList)
-			?.map(v =>
-				v.map(item => {
-					return Number(Object.values(item)[0]);
-				}),
-			)
-			.flat(Infinity);
-
-		if (answer.length > 0) answer = answer.reduce((a, b) => a + b);
+		let answer = 0;
+		if (Object.keys(selectList).length > 0) {
+			console.log(123);
+			answer = Object.values(selectList)
+				?.map(v =>
+					v.map(item => {
+						return Number(Object.values(item)[0]);
+					}),
+				)
+				.flat(Infinity)
+				.reduce((a, b) => a + b);
+		}
 
 		setTotalPrice(answer);
 	}, [selectList]);
@@ -341,7 +344,6 @@ const PurchaseForm = ({ data }) => {
 			<TotalPrice>
 				<p>총 상품 금액</p>
 				<div>{thousandComma(totalPrice * detail.product.rookiePrice)}원</div>
-				{/* <div>{!selected ? 0 : selectedPrice + data.productPrice}원</div> */}
 			</TotalPrice>
 			<ButtonWrapper>
 				<ButtonBuy onClick={openModal}>바로구매</ButtonBuy>
