@@ -190,6 +190,24 @@
                   rated:
                     type: integer
                     example: 4.1
+                  ProductImg:
+                    type: object
+                    properties:
+                      src:
+                        type: string
+                        example: Accessory/Accessory2
+                  ProductSizes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        size:
+                          type: integer
+                          example: 30
+                        amount:
+                          type: integer
+                          example: 2
+                  
       400:
         description: 상품 조회 결과가 없을 경우
         schema:

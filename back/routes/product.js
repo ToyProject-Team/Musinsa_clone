@@ -113,6 +113,10 @@ router.get('/productDetail', async (req, res, next) => {
                     model: ProductImg,
                     attributes: ["src"]
                 },
+                { 
+                    model: ProductSize,
+                    attributes: ["size", "amount"],
+                },
                 {
                     model: CustomCategory,
                     attributes: ["id"],
