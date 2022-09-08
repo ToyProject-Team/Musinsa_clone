@@ -1,5 +1,6 @@
 import { useProductDetailState } from 'context/ProductDetailContext';
 import { useState, useCallback, useEffect } from 'react';
+import ImageZoom from '../ImageZoom';
 import { ProductImage, MainImage, ImageList, Image } from './styles';
 
 const dummyImage = {
@@ -26,7 +27,7 @@ const ProductInfoLeft = ({ data }) => {
 	return (
 		<ProductImage>
 			<MainImage>
-				<img src={dummyImage.Images[thumbNum].src} />
+				<ImageZoom img={dummyImage.Images[thumbNum].src} alt={'사진'}></ImageZoom>
 			</MainImage>
 			<ImageList>{imageList}</ImageList>
 		</ProductImage>
