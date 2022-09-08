@@ -95,6 +95,8 @@ export const ButtonCart = styled.div`
 	background-color: white;
 	width: 60px;
 	position: relative;
+	cursor: pointer;
+
 	i {
 		position: absolute;
 		top: 12px;
@@ -103,8 +105,10 @@ export const ButtonCart = styled.div`
 		height: 30px;
 		background: url('https://static.msscdn.net/skin/musinsa/images/icon.png?20190715');
 		background-position: -240px -10px;
-		cursor: pointer;
 		color: rgb(0, 0, 0, 0);
+		text-indent: 100%;
+		white-space: nowrap;
+		overflow: hidden;
 	}
 `;
 
