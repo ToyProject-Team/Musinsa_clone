@@ -13,7 +13,7 @@ export const CreateModal = styled.div`
 export const BoxLayout = styled.div`
 	position: fixed;
 	top: 50%;
-	left: 44%;
+	left: 37%;
 	background: transparent;
 	z-index: 1010;
 

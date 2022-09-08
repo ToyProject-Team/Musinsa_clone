@@ -17,6 +17,21 @@ const DialLog = () => {
 		setModalAuth(false);
 	}, []);
 
+	const scrollTop = () => {
+		window.scrollTo({
+			top: 0,
+			behavior: 'auto',
+		});
+	};
+
+	const scrollBtm = () => {
+		window.scrollTo({
+			block: 'center',
+			behavior: 'smooth',
+		});
+		console.log(window.innerHeight);
+	};
+
 	return (
 		<>
 			<Filter>
@@ -34,7 +49,7 @@ const DialLog = () => {
 					</Link>
 				</div>
 				<div>
-					<Link to="/Mypage/Cart">
+					<Link to="/mypage/cart">
 						<button type="button">
 							<BiShoppingBag />
 						</button>
@@ -45,12 +60,12 @@ const DialLog = () => {
 						<BsShare />
 					</a>
 				</div>
-				<div>
+				<div onClick={scrollTop}>
 					<a title="위로 가기">
 						<TbArrowBigUpLine />
 					</a>
 				</div>
-				<div>
+				<div onClick={scrollBtm}>
 					<a title="아래로 가기">
 						<TbArrowBigDownLine />
 					</a>

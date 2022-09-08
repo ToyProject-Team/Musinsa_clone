@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { HContainer, HDiv, HLogo, HSearch, HUser } from './styles';
+import { HContainer, HDiv, HLogo, HSearch, HUser, CountNum } from './styles';
 import { Link } from 'react-router-dom';
 import { AiOutlineCamera, AiOutlineSearch } from 'react-icons/ai';
 import { getData } from 'utils/getData';
@@ -8,6 +8,7 @@ import { PostHeaderApi } from 'utils/api';
 
 const Header = () => {
 	const [login, setLogin] = useState(getData());
+	const [cartNum, setCartNum] = useState(0);
 
 	const deleteLogout = useCallback(() => {
 		PostHeaderApi('/api/auth/logout', 'Authorization', login.accessToken)
@@ -49,10 +50,15 @@ const Header = () => {
 							<a>알림</a>
 						</div>
 						<div>
-							<a>좋아요</a>
+							<Link to="/mypage/like">
+								<a>좋아요</a>
+							</Link>
 						</div>
 						<div>
-							<a>장바구니</a>
+							<Link to="/mypage/cart">
+								<a>장바구니</a>
+							</Link>
+							<CountNum>{cartNum}</CountNum>
 						</div>
 						<div>
 							<a>주문배송조회</a>
@@ -69,10 +75,15 @@ const Header = () => {
 							<a>알림</a>
 						</div>
 						<div>
-							<a>좋아요</a>
+							<Link to="/mypage/like">
+								<a>좋아요</a>
+							</Link>
 						</div>
 						<div>
-							<a>장바구니</a>
+							<Link to="/mypage/cart">
+								<a>장바구니</a>
+							</Link>
+							<CountNum>{cartNum}</CountNum>
 						</div>
 						<div>
 							<a>주문배송조회</a>

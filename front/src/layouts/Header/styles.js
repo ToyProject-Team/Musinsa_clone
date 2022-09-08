@@ -99,7 +99,6 @@ export const HUser = styled.div`
 		cursor: pointer;
 		background: none;
 		color: white;
-		padding: 6px 24px 6px 24px;
 		font-size: 18px;
 		position: relative;
 		border-radius: 4px;
@@ -252,6 +251,11 @@ export const HUser = styled.div`
 		text-align: center;
 		word-break: keep-all;
 		font-size: 18px;
+
+		& a {
+			text-decoration: none;
+			color: inherit;
+		}
 	}
 
 	& div:nth-of-type(2) {
@@ -259,4 +263,19 @@ export const HUser = styled.div`
 			color: #ff0000;
 		}
 	}
+`;
+
+export const CountNum = styled.span`
+	display: inline-block;
+	min-width: 18px;
+	height: 18px;
+	padding: 1px 0 0 0;
+	border-radius: 10px;
+	background-color: #0078ff;
+	font-size: 12px;
+	font-family: 'Arial', 'sans-serif';
+	line-height: normal;
+	color: white;
+	vertical-align: top;
+	margin-left: 2px;
 `;

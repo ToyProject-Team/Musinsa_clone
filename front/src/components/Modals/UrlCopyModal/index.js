@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react';
 import { CreateModal, BoxLayout } from './styles';
 import { CgClose } from 'react-icons/cg';
+import { GrFacebook } from 'react-icons/gr';
+import { AiFillTwitterCircle } from 'react-icons/ai';
 import TextModal from 'components/Modals/TextModal';
 
 const UrlCopyModal = ({ show, onCloseModal }) => {
@@ -11,11 +13,11 @@ const UrlCopyModal = ({ show, onCloseModal }) => {
 		setOpen(!e);
 	};
 
+	// URL 복사
 	const copyURL = useCallback(
 		async text => {
 			try {
 				await navigator.clipboard.writeText(text);
-				// await setCopy(text);
 
 				const timer = setTimeout(() => setCopy(''), 5000);
 				setOpen(true);
@@ -51,6 +53,10 @@ const UrlCopyModal = ({ show, onCloseModal }) => {
 							<span onClick={() => copyURL(window.location.href)}>URL 복사</span>
 						</div>
 						<p>- 현재 보고 있는 페이지를 공유합니다.</p>
+						<div>
+							<GrFacebook />
+							<AiFillTwitterCircle />
+						</div>
 					</div>
 				</BoxLayout>
 			</CreateModal>
