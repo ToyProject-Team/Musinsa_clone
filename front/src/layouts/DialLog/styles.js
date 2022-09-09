@@ -6,6 +6,7 @@ export const Filter = styled.div`
 	bottom: 100px;
 	height: 260px;
 	cursor: pointer;
+	z-index: 9999;
 
 	& div {
 		display: flex;
