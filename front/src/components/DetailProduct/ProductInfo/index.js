@@ -11,22 +11,37 @@ import {
 import { ReactComponent as ArrowDown } from 'assets/svg/ArrowDown.svg';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
+const dummyImage = {
+	dummyImage: [
+		{
+			id: 0,
+			src: 'https://file.platformshop.co.kr/saintjames/2022/ASJU223KR43-017_02.jpg',
+		},
+		{
+			id: 1,
+			src: 'https://file.platformshop.co.kr/saintjames/2022/ASJU223KR43-017_03.jpg',
+		},
+		{
+			id: 2,
+			src: 'https://file.platformshop.co.kr/saintjames/2022/ASJU223KR43-017_04.jpg',
+		},
+		{
+			id: 3,
+			src: 'https://file.platformshop.co.kr/saintjames/2022/ASJU223KR43-017_05.jpg',
+		},
+		{
+			id: 4,
+			src: 'https://file.platformshop.co.kr/saintjames/2022/ASJU223KR43-017_06.jpg',
+		},
+		{
+			id: 5,
+			src: 'https://file.platformshop.co.kr/saintjames/2022/ASJU223KR43-017_07.jpg',
+		},
+	],
+};
+
 const ProductInfo = () => {
 	const [buttonClick, setButtonClick] = useState(false);
-
-	// const IsMore = useMemo(() => {
-	// 	const ImageSimpleInfo = () => {
-	// 		return (
-	// 			<ImageInfo clicked={buttonClick}>
-	// 				<img src="https://www.dummyimage.com/943x1800/bdbdbd/000000&text=productInfo" />
-	// 			</ImageInfo>
-	// 		);
-	// 	};
-	// 	if (buttonClick === false) {
-	// 		return <ImageSimpleInfo />;
-	// 	}
-	// 	return <ImageSimpleInfo />;
-	// }, [buttonClick]);
 
 	const IsMore = () => {
 		return (
@@ -48,7 +63,9 @@ const ProductInfo = () => {
 				<div>해당 상품정보에 문제가 있으면 알려주세요.</div>
 			</TitleBox>
 			<ImageInfo clicked={buttonClick}>
-				<img src="https://www.dummyimage.com/943x1800/bdbdbd/000000&text=productInfo" />
+				{dummyImage.dummyImage.map(image => (
+					<img key={image.id} src={image.src} />
+				))}
 			</ImageInfo>
 			<ButtonWrapper onClick={() => setButtonClick(!buttonClick)}>
 				{!buttonClick ? (

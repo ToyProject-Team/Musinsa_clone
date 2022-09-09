@@ -7,6 +7,7 @@ import {
 	ProductImgZoomContainer,
 	ProductImgZoom,
 	Cursor,
+	Close,
 } from './styles';
 
 const ImageZoom = ({ img, alt }) => {
@@ -63,6 +64,9 @@ const ImageZoom = ({ img, alt }) => {
 					></Cursor>
 				)}
 			</ProductImgZoomContainer>
+			<Close show={show} onClick={onClickZoomOut}>
+				close
+			</Close>
 		</ProductImgContainer>
 	);
 };

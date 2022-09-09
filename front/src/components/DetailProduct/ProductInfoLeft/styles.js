@@ -10,22 +10,39 @@ export const MainImage = styled.div`
 	width: 500px;
 	height: 600px;
 	img {
-		object-fit: cover;
 		width: 500px;
 		height: 600px;
 	}
 `;
 
 export const ImageList = styled.div`
-	margin: 20px;
+	width: 400px;
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	gap: 10px;
+	margin-bottom: 15px;
+	padding: 16px 14px 0 19px;
+	box-sizing: border-box;
+
 	div {
 		width: 60px;
 		height: 72px;
 		display: inline-flex;
-		margin-left: 8px;
-		& :hover {
-			border: 1px solid black;
+		padding: 10px 0;
+
+		& > img {
+			display: inline-block;
+			vertical-align: middle;
+			width: auto;
+			max-width: 100%;
+			max-height: 100%;
+			border: none;
+			line-height: 0;
+			background: transparent;
 		}
-		object-fit: cover;
+
+		&.active {
+			outline: 1px solid black;
+		}
 	}
 `;

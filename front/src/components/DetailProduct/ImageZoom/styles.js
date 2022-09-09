@@ -32,7 +32,6 @@ export const ProductImgContainer = styled.div`
 export const ProductImg = styled.div`
 	opacity: ${props => (props.show ? 0 : 1)};
 	visibility: ${props => (props.show ? 'hidden' : 'visible')};
-	cursor: none;
 
 	img: {
 		width: '100%';
@@ -42,15 +41,15 @@ export const ProductImg = styled.div`
 export const ProductImgZoomContainer = styled.div`
 	position: absolute;
 	left: 0;
-	top: 0;
+	top: -1px;
 	width: 200%;
 	height: 100%;
+	border: 1px solid #ddd;
 	opacity: ${props => (props.show ? 1 : 0)};
 	visibility: ${props => (props.show ? 'visible' : 'hidden')};
 	transition: ${props => (props.show ? '0s' : '0.5s')};
 	z-index: 100;
 	overflow: hidden;
-	cursor: none;
 `;
 
 export const ProductImgZoom = styled.div`
@@ -80,10 +79,14 @@ export const Cursor = styled.div`
 	width: 25px;
 	height: 25px;
 	/* background-color: rgba(255, 255, 255, 0.5); */
-	background-color: red;
 	z-index: 999;
+	cursor: ${props => {
+		return props.show
+			? `url('https://image.msscdn.net/skin/musinsa/images/img/cursor-zoomOut.png'), crosshair`
+			: `url('https://image.msscdn.net/skin/musinsa/images/img/cursor-zoom.png'), crosshair`;
+	}};
 
-	&::before {
+	/* &::before {
 		content: '${props => (props.show ? '-' : '+')}';
 		position: absolute;
 		top: 40%;
@@ -92,5 +95,24 @@ export const Cursor = styled.div`
 		font-weight: 900;
 		font-size: 30px;
 		color: #828282;
-	}
+	} */
+`;
+
+export const Close = styled.div`
+	position: absolute;
+	top: 0;
+	left: calc(200% + 1px);
+	border: 3px solid red;
+	z-index: 9999;
+	width: 34px;
+	height: 34px;
+	border: 1px solid #ddd;
+	display: block;
+	text-indent: -9999px;
+	background: url('https://static.msscdn.net/skin/musinsa/images/btn_close_pop.png') no-repeat 50%
+		50%;
+	cursor: pointer;
+
+	opacity: ${props => (props.show ? 1 : 0)};
+	visibility: ${props => (props.show ? 'visible' : 'hidden')};
 `;
