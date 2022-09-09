@@ -28,6 +28,7 @@ import { getData } from 'utils/getData';
 import { URLquery } from 'utils/URLquery';
 import { baseUrl, DeleteHeaderBodyApi, GetApi, GetTokenApi, PostHeaderBodyApi } from 'utils/api';
 import axios from 'axios';
+import ConfirmModal from 'components/Modals/ConfirmModal';
 
 const ModalStyle = {
 	overlay: {
@@ -66,6 +67,8 @@ const PurchaseForm = ({ data }) => {
 	const [selectList, setSelectList] = useState({});
 	const [selectIdx, setSelectIdx] = useState();
 	const [totalPrice, setTotalPrice] = useState(0);
+
+	const [modalBasket, setModalBasket] = useState(false);
 
 	// 새로고침
 	// 선택 List 옵션 초기화
@@ -193,6 +196,22 @@ const PurchaseForm = ({ data }) => {
 		[selectList],
 	);
 
+	const onClickRemove = useCallback(
+		(option_1, option_2) => {
+			setSelectList(prev => {
+				prev = {
+					...prev,
+					[option_1]: prev[option_1].filter(v => !v[option_2]),
+				};
+
+				if (prev[option_1].length === 0) delete prev[option_1];
+
+				return prev;
+			});
+		},
+		[selectList],
+	);
+
 	// const SelectForm = ({ price, size, color }) => {
 	// 	const onIncrease = () => {
 	// 		setOrderAmount(orderAmount + 1);
@@ -312,11 +331,24 @@ const PurchaseForm = ({ data }) => {
 
 		const token = user.accessToken;
 		const query = URLquery(location);
-		const params = {
-			productId: query.productId,
-		};
-		PostHeaderBodyApi('/api/product/addCart', params, 'Authorization', token);
+
+		try {
+			const params = {
+				productId: query.productId,
+			};
+			PostHeaderBodyApi('/api/product/addCart', params, 'Authorization', token);
+			setModalBasket(true);
+		} catch (error) {}
 	}, []);
+
+	const onCloseModal = useCallback(() => {
+		setModalBasket(false);
+	}, [modalBasket]);
+
+	const onLinkModal = useCallback(() => {
+		setModalBasket(false);
+		navigate('/mypage/cart');
+	}, [modalBasket]);
 
 	const openModal = () => {
 		setShowModal(showModal => !showModal);
@@ -412,7 +444,7 @@ const PurchaseForm = ({ data }) => {
 									</div>
 									<div>
 										<div>{thousandComma(orderCount * detail.product.rookiePrice)}원</div>
-										<p>X</p>
+										<p onClick={() => onClickRemove(option_1, option_2)}>X</p>
 									</div>
 								</SelectedOption>
 							</div>
@@ -441,6 +473,13 @@ const PurchaseForm = ({ data }) => {
 					<i>장바구니 아이콘</i>
 				</ButtonCart>
 			</ButtonWrapper>
+
+			<ConfirmModal
+				show={modalBasket}
+				onCloseModal={onCloseModal}
+				onLinkModal={onLinkModal}
+				content={'장바구니로 이동하시겠습니까?'}
+			></ConfirmModal>
 		</div>
 	);
 };
