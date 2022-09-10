@@ -17,7 +17,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
-import Order from 'pages/Order';
+import Order from 'components/Order';
 import {
 	LIKES,
 	useProductDetailDispatch,
@@ -29,6 +29,7 @@ import { URLquery } from 'utils/URLquery';
 import { baseUrl, DeleteHeaderBodyApi, GetApi, GetTokenApi, PostHeaderBodyApi } from 'utils/api';
 import axios from 'axios';
 import ConfirmModal from 'components/Modals/ConfirmModal';
+import OrderModal from 'components/Modals/OrderModal';
 
 const ModalStyle = {
 	overlay: {
@@ -68,6 +69,9 @@ const PurchaseForm = ({ data }) => {
 	const [selectIdx, setSelectIdx] = useState();
 	const [totalPrice, setTotalPrice] = useState(0);
 
+	const [order, setOrder] = useState(false);
+
+	const [modalOrder, setModalOrder] = useState(false);
 	const [modalBasket, setModalBasket] = useState(false);
 
 	// 새로고침
@@ -343,28 +347,50 @@ const PurchaseForm = ({ data }) => {
 
 	const onCloseModal = useCallback(() => {
 		setModalBasket(false);
-	}, [modalBasket]);
+		setModalOrder(false);
+	}, [modalBasket, modalOrder]);
 
 	const onLinkModal = useCallback(() => {
 		setModalBasket(false);
 		navigate('/mypage/cart');
 	}, [modalBasket]);
 
-	const openModal = () => {
-		setShowModal(showModal => !showModal);
+	// 바로구매
+	const onClickOrderButton = useCallback(() => {
+		if (!user) {
+			const { pathname, search } = location;
+			navigate(`/login?redirect=${pathname}${search}`);
+		}
+
+		setModalOrder(true);
+	}, []);
+
+	// 결제
+	const onClickOrder = useCallback(() => {
+		if (!user) {
+			const { pathname, search } = location;
+			navigate(`/login?redirect=${pathname}${search}`);
+		}
+
+		setModalOrder(false);
+	}, []);
+
+	const openModal = useCallback(() => {
+		setModalOrder(true);
+		setOrder(true);
 		// if (!user.login) {
 		// 	alert('로그인 후 구매가 가능합니다.');
 		// 	navigate('/login');
 		// } else {
-		// 	const payment_data = {
-		// 		price: selectedPrice + data.productPrice,
-		// 		id: data.ProductId,
-		// 		name: data.productTitle,
-		// 		date: new Date(),
-		// 	};
-		// 	dispatch({ payment_data, type: PAYMENT });
+		// const payment_data = {
+		// 	price: selectedPrice + data.productPrice,
+		// 	id: data.ProductId,
+		// 	name: data.productTitle,
+		// 	date: new Date(),
+		// };
+		// dispatch({ payment_data, type: PAYMENT });
 		// }
-	};
+	}, []);
 
 	return (
 		<div>
@@ -457,14 +483,8 @@ const PurchaseForm = ({ data }) => {
 				<div>{thousandComma(totalPrice * detail.product.rookiePrice)}원</div>
 			</TotalPrice>
 			<ButtonWrapper>
-				<ButtonBuy onClick={openModal}>바로구매</ButtonBuy>
-				{showModal ? (
-					<Modal style={ModalStyle} isOpen={true}>
-						<Order openModal={openModal} price={selectedPrice + data.productPrice} />
-					</Modal>
-				) : (
-					<></>
-				)}
+				<ButtonBuy onClick={onClickOrderButton}>바로구매</ButtonBuy>
+				{order && <Order openModal={openModal} price={selectedPrice + data.productPrice} />}
 				<ButtonLike clickedlike={clickedlike} onClick={onLikeClicked}>
 					<Button clickedlike={clickedlike} />
 					<Like clickedlike={clickedlike}>{thousandComma(detail.product.likes)}</Like>
@@ -474,10 +494,18 @@ const PurchaseForm = ({ data }) => {
 				</ButtonCart>
 			</ButtonWrapper>
 
+			<OrderModal
+				show={modalOrder}
+				onCloseModal={onCloseModal}
+				onClickConfirm={onClickOrder}
+				price={thousandComma(10000)}
+				// price={thousandComma(totalPrice * detail.product.rookiePrice)}
+			></OrderModal>
+
 			<ConfirmModal
 				show={modalBasket}
 				onCloseModal={onCloseModal}
-				onLinkModal={onLinkModal}
+				onClickConfirm={onLinkModal}
 				content={'장바구니로 이동하시겠습니까?'}
 			></ConfirmModal>
 		</div>

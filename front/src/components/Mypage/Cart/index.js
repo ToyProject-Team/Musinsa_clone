@@ -5,7 +5,7 @@ import { OrderTable, CartPayment, OrderBtn, ModalStyle } from 'components/Mypage
 import { FaPlus, FaEquals } from 'react-icons/fa';
 import dummy from 'components/Mypage/data.json';
 import Modal from 'react-modal';
-import Order from 'pages/Order';
+import Order from 'components/Order';
 
 function Cart() {
 	// 전체 체크박스
@@ -42,12 +42,10 @@ function Cart() {
 			setSum(0);
 		}
 	}, [selectedPrice]);
-	
+
 	console.log(selectedPrice);
 	console.log(checkedItems);
 	console.log(sum);
-
-	
 
 	return (
 		<>
