@@ -57,6 +57,10 @@ const DetailProduct = () => {
 	const [initialProduceDetail, setInitialProduceDetail] = useState({
 		user: {},
 		product: {},
+		order: {
+			pay: 'card',
+			modal: false,
+		},
 	});
 	const [loading, setLoading] = useState(true);
 

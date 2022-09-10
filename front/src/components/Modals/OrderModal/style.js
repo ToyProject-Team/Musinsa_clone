@@ -12,7 +12,8 @@ export const Price = styled.div`
 `;
 
 export const Address = styled.div`
-	padding: 40px 0;
+	padding-top: 40px;
+	padding-bottom: 20px;
 	text-align: left;
 
 	& > label {
@@ -123,4 +124,10 @@ export const Address = styled.div`
 			transition: border 0.2s ease-in-out;
 		}
 	}
+`;
+
+export const RadioContainer = styled.div`
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	margin-bottom: 40px;
 `;

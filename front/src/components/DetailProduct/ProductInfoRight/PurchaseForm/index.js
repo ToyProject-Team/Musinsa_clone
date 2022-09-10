@@ -20,6 +20,7 @@ import Modal from 'react-modal';
 import Order from 'components/Order';
 import {
 	LIKES,
+	ORDERMODAL,
 	useProductDetailDispatch,
 	useProductDetailState,
 } from 'context/ProductDetailContext';
@@ -348,6 +349,7 @@ const PurchaseForm = ({ data }) => {
 	const onCloseModal = useCallback(() => {
 		setModalBasket(false);
 		setModalOrder(false);
+		changeDispatch(ORDERMODAL, { modal: false });
 	}, [modalBasket, modalOrder]);
 
 	const onLinkModal = useCallback(() => {
@@ -373,11 +375,11 @@ const PurchaseForm = ({ data }) => {
 		}
 
 		setModalOrder(false);
+		changeDispatch(ORDERMODAL, { modal: true });
 	}, []);
 
 	const openModal = useCallback(() => {
 		setModalOrder(true);
-		setOrder(true);
 		// if (!user.login) {
 		// 	alert('로그인 후 구매가 가능합니다.');
 		// 	navigate('/login');
@@ -484,7 +486,7 @@ const PurchaseForm = ({ data }) => {
 			</TotalPrice>
 			<ButtonWrapper>
 				<ButtonBuy onClick={onClickOrderButton}>바로구매</ButtonBuy>
-				{order && <Order openModal={openModal} price={selectedPrice + data.productPrice} />}
+				{detail.order.modal && <Order />}
 				<ButtonLike clickedlike={clickedlike} onClick={onLikeClicked}>
 					<Button clickedlike={clickedlike} />
 					<Like clickedlike={clickedlike}>{thousandComma(detail.product.likes)}</Like>

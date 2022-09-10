@@ -1,6 +1,8 @@
 import React, { useReducer, createContext, useContext } from 'react';
 
 export const PRODUCTDETAIL = 'PRODUCTDETAIL';
+export const ORDERMODAL = 'ORDERMODAL';
+export const ORDER = 'ORDER';
 export const LIKES = 'LIKES';
 
 function productDetailReducer(state, action) {
@@ -10,11 +12,32 @@ function productDetailReducer(state, action) {
 				...state,
 				product: action.payload.product,
 			};
-		case LIKES:
-			console.log(action);
+
+		case ORDERMODAL:
 			return {
 				...state,
-				likes: action.payload.likes,
+				order: {
+					...state.order,
+					modal: action.payload.modal,
+				},
+			};
+
+		case ORDER:
+			return {
+				...state,
+				order: {
+					...state.order,
+					pay: action.payload.pay,
+				},
+			};
+
+		case LIKES:
+			return {
+				...state,
+				product: {
+					...state.order,
+					likes: action.payload.likes,
+				},
 			};
 
 		default:
