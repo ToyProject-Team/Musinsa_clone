@@ -78,23 +78,29 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price }) => {
 				<RadioItem>
 					<RadioButton>
 						<label
+							htmlFor="Virtual"
+							className={detail.order.pay === 'Virtual' ? 'radio-label active' : 'radio-label'}
+						>
+							가상계좌
+						</label>
+						<input
+							type="radio"
+							value="Virtual"
+							id="Virtual"
+							onChange={onChangeRadio}
+							name="order"
+						/>
+					</RadioButton>
+				</RadioItem>
+				<RadioItem>
+					<RadioButton>
+						<label
 							htmlFor="kakao"
 							className={detail.order.pay === 'kakao' ? 'radio-label active' : 'radio-label'}
 						>
 							카카오페이
 						</label>
 						<input type="radio" value="kakao" id="kakao" onChange={onChangeRadio} name="order" />
-					</RadioButton>
-				</RadioItem>
-				<RadioItem>
-					<RadioButton>
-						<label
-							htmlFor="naver"
-							className={detail.order.pay === 'naver' ? 'radio-label active' : 'radio-label'}
-						>
-							네이버페이
-						</label>
-						<input type="radio" value="naver" id="naver" onChange={onChangeRadio} name="order" />
 					</RadioButton>
 				</RadioItem>
 				<RadioItem>

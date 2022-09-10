@@ -1,58 +1,79 @@
-import Payment from 'components/OrderPayment';
-
-import {
-	ButtonWrapper,
-	OrderContainer,
-	InfoWrapper,
-	Button,
-	OrderButton,
-	RefundHolder,
-	RefundInfo,
-	DefalutInfo,
-	AddressButton,
-	X,
-	Hello,
-} from './styles';
-import { useState, useCallback, useRef } from 'react';
-import { useProductState } from 'context/ProductContext';
-import Modal from 'components/Modals/Modal';
+import { useCallback } from 'react';
 import {
 	ORDERMODAL,
 	useProductDetailDispatch,
 	useProductDetailState,
 } from 'context/ProductDetailContext';
+import { useState } from 'react';
+import TextModal from 'components/Modals/TextModal';
+import { useEffect } from 'react';
+import { PostHeaderBodyApi } from 'utils/api';
+import { getData } from 'utils/getData';
+import { URLquery } from 'utils/URLquery';
+import { useLocation } from 'react-router';
+import axios from 'axios';
 
 const Order = () => {
 	const detail = useProductDetailState();
 	const dispatch = useProductDetailDispatch();
 
+	const data = getData();
+	const { accessToken } = data;
+
+	const location = useLocation();
+	const query = URLquery(location);
+	const { productId } = query;
+
+	const [modalOrder, setModalOrder] = useState(false);
+
 	const changeDispatch = useCallback((type, payload) => {
 		return dispatch({ type, payload });
 	}, []);
-	console.log(detail);
 
-	const requestPay = useCallback(() => {
+	useEffect(() => {
+		let pg = '';
+		let pay_method = '';
+		let price = 10;
+		if (detail.order.pay === 'card') pg = 'html5_inicis';
+		else if (detail.order.pay === 'Virtual') pg = 'html5_inicis';
+		else if (detail.order.pay === 'kakao') pg = 'kakaopay';
+		else if (detail.order.pay == 'payco') pg = 'payco';
+
+		if (detail.order.pay === 'Virtual') pay_method = 'vbank';
+		else pay_method = 'card';
+
 		var { IMP } = window; // 생략가능
 		IMP.init('imp64782340'); // <-- 본인 가맹점 식별코드 삽입
 		IMP.request_pay(
 			{
-				// param
-				pg: 'html5_inicis',
-				pay_method: 'card',
-				merchant_uid: 'ORD20180131-0000011',
+				pg,
+				pay_method,
+				merchant_uid: `mid_${new Date().getTime()}`,
 				name: 'Test 상품',
-				amount: 64900,
-				buyer_email: 'gildong@gmail.com',
+				amount: price,
+				buyer_email: 'devhyuktest@gmail.com',
 				buyer_name: '홍길동',
-				buyer_tel: '010-4242-4242',
+				buyer_tel: '01096361038',
 				buyer_addr: '서울특별시 강남구 신사동',
 				buyer_postcode: '01181',
 			},
 			rsp => {
+				console.log(rsp);
 				// callback
 				if (rsp.success) {
 					// 결제 성공 시 로직,
-					console.log(1);
+					const data = {
+						imp_uid: rsp.imp_uid,
+						merchant_uid: rsp.merchant_uid,
+						ProductId: productId,
+						price,
+					};
+
+					PostHeaderBodyApi('/api/product/purchase', data, 'Authorization', accessToken).then(
+						res => {
+							setModalOrder(true);
+						},
+					);
 				} else {
 					// 결제 실패 시 로직,
 					changeDispatch(ORDERMODAL, { modal: false });
@@ -60,9 +81,11 @@ const Order = () => {
 				}
 			},
 		);
-	}, []);
-	requestPay();
+	}, [detail.order]);
 
+	const onCloseModal = useCallback(() => {
+		setModalOrder(false);
+	}, []);
 	// const paymentWay = ['신용카드', '가상계좌(무통장)', '카카오페이', '페이코'];
 
 	// const [btnActive, setBtnActive] = useState('');
@@ -112,7 +135,13 @@ const Order = () => {
 	// 	setSelectedAddress(checkThis.value);
 	// };
 
-	return;
+	return (
+		<TextModal
+			show={modalOrder}
+			onCloseModal={onCloseModal}
+			content="결제가 완료 되었습니다."
+		></TextModal>
+	);
 	// <div>
 	// 	<X onClick={() => props.openModal(false)}>X</X>
 	// 	<OrderContainer>
