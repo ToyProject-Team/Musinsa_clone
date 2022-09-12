@@ -3,6 +3,7 @@ import { ImgSpan } from '../styles';
 import { FiMinus, FiPlus, FiX } from 'react-icons/fi';
 
 function CartTable({
+	data,
 	img,
 	brand,
 	model,
@@ -92,11 +93,11 @@ function CartTable({
 								<td>
 									<div className="input_amount">
 										<button value={value} onClick={minusCount}>
-											<FiMinus />
+											<FiMinus style={value === 1 ? { color: '#ddd' } : { color: '#777' }} />
 										</button>
 										<input type="text" value={value} onChange={handleChange}></input>
 										<button value={value} onClick={plusCount}>
-											<FiPlus />
+											<FiPlus style={{ color: '#777' }} />
 										</button>
 									</div>
 								</td>

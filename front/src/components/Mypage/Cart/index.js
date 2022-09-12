@@ -20,6 +20,7 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
+			count: 1,
 		},
 		{
 			id: '5',
@@ -29,6 +30,7 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
+			count: 2,
 		},
 		{
 			id: '6',
@@ -38,6 +40,7 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
+			count: 3,
 		},
 		{
 			id: '7',
@@ -47,6 +50,7 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
+			count: 3,
 		},
 		{
 			id: '8',
@@ -56,6 +60,7 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
+			count: 3,
 		},
 		{
 			id: '9',
@@ -65,6 +70,7 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
+			count: 3,
 		},
 		{
 			id: '10',
@@ -74,6 +80,7 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
+			count: 3,
 		},
 	],
 };
@@ -179,6 +186,7 @@ function Cart() {
 						</thead>
 						{dummyCart[Object.keys(dummyCart)].map((data, index) => (
 							<CartTable
+								data={data}
 								key={data.id}
 								id={data.id}
 								img={
