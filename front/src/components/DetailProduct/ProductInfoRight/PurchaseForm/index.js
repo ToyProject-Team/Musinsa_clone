@@ -496,13 +496,15 @@ const PurchaseForm = ({ data }) => {
 				</ButtonCart>
 			</ButtonWrapper>
 
-			<OrderModal
-				show={modalOrder}
-				onCloseModal={onCloseModal}
-				onClickConfirm={onClickOrder}
-				price={thousandComma(10000)}
-				// price={thousandComma(totalPrice * detail.product.rookiePrice)}
-			></OrderModal>
+			{modalOrder && (
+				<OrderModal
+					show={modalOrder}
+					onCloseModal={onCloseModal}
+					onClickConfirm={onClickOrder}
+					price={thousandComma(10000)}
+					// price={thousandComma(totalPrice * detail.product.rookiePrice)}
+				></OrderModal>
+			)}
 
 			<ConfirmModal
 				show={modalBasket}
