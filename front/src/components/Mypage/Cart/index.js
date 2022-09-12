@@ -6,8 +6,85 @@ import { FaPlus, FaEquals } from 'react-icons/fa';
 import dummy from 'components/Mypage/data.json';
 import Modal from 'react-modal';
 import Order from 'components/Order';
+import OrderModal from 'components/Modals/OrderModal';
+import { useNavigate } from 'react-router';
+import { thousandComma } from 'utils/thousandComma';
 
+const dummyCart = {
+	exCart: [
+		{
+			id: '4',
+			productTitle: 'Fish',
+			productPrice: 57200,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+		},
+		{
+			id: '5',
+			productTitle: 'Fish',
+			productPrice: 57200,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+		},
+		{
+			id: '6',
+			productTitle: 'Fish',
+			productPrice: 57200,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+		},
+		{
+			id: '7',
+			productTitle: 'Fish',
+			productPrice: 57200,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+		},
+		{
+			id: '8',
+			productTitle: 'Fish',
+			productPrice: 57200,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+		},
+		{
+			id: '9',
+			productTitle: 'Fish',
+			productPrice: 57200,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+		},
+		{
+			id: '10',
+			productTitle: 'Fish',
+			productPrice: 57200,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+		},
+	],
+};
 function Cart() {
+	const navigate = useNavigate();
+
+	const [pay, setPay] = useState('card');
+	const [order, setOrder] = useState(false);
+
+	const [modalOrder, setModalOrder] = useState(false);
+
 	// 전체 체크박스
 	const [checkedItems, setCheckedItems] = useState([]);
 	const onCheckedAll = useCallback(
@@ -43,9 +120,21 @@ function Cart() {
 		}
 	}, [selectedPrice]);
 
-	console.log(selectedPrice);
-	console.log(checkedItems);
-	console.log(sum);
+	const onCloseModal = useCallback(() => {
+		setModalOrder(false);
+		setOrder(false);
+	}, [modalOrder]);
+
+	// 바로구매
+	const onClickOrderButton = useCallback(() => {
+		setModalOrder(true);
+	}, []);
+
+	// 결제
+	const onClickOrder = useCallback(() => {
+		setModalOrder(false);
+		setOrder(true);
+	}, []);
 
 	return (
 		<>
@@ -88,16 +177,18 @@ function Cart() {
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
-						{dummy.map((data, index) => (
+						{dummyCart[Object.keys(dummyCart)].map((data, index) => (
 							<CartTable
 								key={data.id}
 								id={data.id}
-								img={data.url}
-								brand={data.brandName}
-								model={data.model}
-								price={data.price}
-								state={data.orderstatus}
-								option={data.option}
+								img={
+									'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800'
+								}
+								brand={data.id}
+								model={data.id}
+								price={data.id}
+								state={data.id}
+								option={data.id}
 								checkedItems={checkedItems}
 								setCheckedItems={setCheckedItems}
 								setSelectedPrice={setSelectedPrice}
@@ -132,17 +223,21 @@ function Cart() {
 						</li>
 					</CartPayment>
 					<OrderBtn>
-						<button onClick={openModal}>결제하기</button>
-						{showModal ? (
-							<Modal style={ModalStyle} isOpen={true}>
-								<Order openModal={openModal} price={selectedPrice + dummy.price} />
-							</Modal>
-						) : (
-							<></>
-						)}
+						<button onClick={onClickOrderButton}>결제하기</button>
+						{order && <Order pay={pay} />}
 					</OrderBtn>
 				</div>
-				;
+
+				{modalOrder && (
+					<OrderModal
+						show={modalOrder}
+						onCloseModal={onCloseModal}
+						onClickConfirm={onClickOrder}
+						price={thousandComma(100000)}
+						pay={pay}
+						setPay={setPay}
+					></OrderModal>
+				)}
 			</MypageMain>
 		</>
 	);

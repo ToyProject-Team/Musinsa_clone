@@ -71,12 +71,7 @@ function CartTable({
 							<tr>
 								<td>
 									<label key={id}>
-										<input
-											name="oncheck"
-											type="checkbox"
-											checked={checkedItems.includes(id) ? true : false}
-											onChange={e => onChecked(e.target.checked, id, price)}
-										/>
+										<input name="oncheck" type="checkbox" />
 									</label>
 								</td>
 								<td className="top">

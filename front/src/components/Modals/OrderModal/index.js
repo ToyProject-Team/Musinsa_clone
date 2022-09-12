@@ -7,11 +7,12 @@ import {
 	useProductDetailState,
 } from 'context/ProductDetailContext';
 import React from 'react';
+import { useState } from 'react';
 import { useCallback } from 'react';
 import { getData } from 'utils/getData';
 import { Address, Price, RadioContainer } from './style';
 
-const OrderModal = ({ show, onCloseModal, onClickConfirm, price }) => {
+const OrderModal = ({ show, onCloseModal, onClickConfirm, price, pay, setPay }) => {
 	const detail = useProductDetailState();
 	const dispatch = useProductDetailDispatch();
 
@@ -24,7 +25,7 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price }) => {
 
 	const onChangeRadio = useCallback(e => {
 		const { value } = e.target;
-		console.log(e.target);
+		setPay(value);
 		changeDispatch(ORDER, { pay: value });
 	}, []);
 
@@ -66,10 +67,7 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price }) => {
 			<RadioContainer>
 				<RadioItem>
 					<RadioButton>
-						<label
-							htmlFor="card"
-							className={detail.order.pay === 'card' ? 'radio-label active' : 'radio-label'}
-						>
+						<label htmlFor="card" className={pay === 'card' ? 'radio-label active' : 'radio-label'}>
 							신용카드
 						</label>
 						<input type="radio" value="card" id="card" onChange={onChangeRadio} name="order" />
@@ -79,7 +77,7 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price }) => {
 					<RadioButton>
 						<label
 							htmlFor="Virtual"
-							className={detail.order.pay === 'Virtual' ? 'radio-label active' : 'radio-label'}
+							className={pay === 'Virtual' ? 'radio-label active' : 'radio-label'}
 						>
 							가상계좌
 						</label>
@@ -96,7 +94,7 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price }) => {
 					<RadioButton>
 						<label
 							htmlFor="kakao"
-							className={detail.order.pay === 'kakao' ? 'radio-label active' : 'radio-label'}
+							className={pay === 'kakao' ? 'radio-label active' : 'radio-label'}
 						>
 							카카오페이
 						</label>
@@ -107,7 +105,7 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price }) => {
 					<RadioButton>
 						<label
 							htmlFor="payco"
-							className={detail.order.pay === 'payco' ? 'radio-label active' : 'radio-label'}
+							className={pay === 'payco' ? 'radio-label active' : 'radio-label'}
 						>
 							페이코
 						</label>
