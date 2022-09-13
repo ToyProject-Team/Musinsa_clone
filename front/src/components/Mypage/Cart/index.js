@@ -10,6 +10,7 @@ import OrderModal from 'components/Modals/OrderModal';
 import { useNavigate } from 'react-router';
 import { thousandComma } from 'utils/thousandComma';
 import { data } from 'jquery';
+import { CheckLabel } from './Table/styles';
 
 const dummyCart = {
 	exCart: [
@@ -127,50 +128,24 @@ const dummyCart = {
 		},
 	],
 };
+
 function Cart() {
 	const navigate = useNavigate();
 
 	const [data, setData] = useState(dummyCart.exCart);
+	const [checkBox, setCheckBox] = useState(false);
+	const [sum, setSum] = useState(0);
 
 	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);
 
 	const [modalOrder, setModalOrder] = useState(false);
 
-	// 전체 체크박스
-	const [checkedItems, setCheckedItems] = useState([]);
-	const onCheckedAll = useCallback(
-		checked => {
-			if (checked) {
-				const checkedItemsArray = [];
-				dummy.forEach(data => checkedItemsArray.push(data.id));
-				dummy.forEach(data => setSelectedPrice(prev => [...prev, data.price]));
-				setCheckedItems(checkedItemsArray);
-			} else {
-				setCheckedItems([]);
-				setSelectedPrice([]);
-			}
-		},
-		[dummy],
-	);
-
-	const [showModal, setShowModal] = useState(false);
-	const openModal = () => {
-		setShowModal(showModal => !showModal);
-	};
-
-	// 상품금액 계산
-	const [selectedPrice, setSelectedPrice] = useState([]);
-	const [sum, setSum] = useState(0);
-
-	useEffect(() => {
-		if (selectedPrice.length > 0) {
-			let total = [...selectedPrice].reduce((a, b) => a + b);
-			setSum(total);
-		} else {
-			setSum(0);
-		}
-	}, [selectedPrice]);
+	// 체크
+	const checkItem = useCallback(() => {
+		setCheckBox(check => !check);
+		setData(data => data.map(v => ({ ...v, check: !checkBox })));
+	}, [data, checkBox]);
 
 	const onCloseModal = useCallback(() => {
 		setModalOrder(false);
@@ -187,6 +162,15 @@ function Cart() {
 		setModalOrder(false);
 		setOrder(true);
 	}, []);
+
+	// 모두 체크 확인
+	useEffect(() => {
+		let cnt = 0;
+		data.map(v => v.check && cnt++);
+
+		if (data.length === cnt) setCheckBox(true);
+		else setCheckBox(false);
+	}, [data]);
 
 	return (
 		<>
@@ -206,20 +190,7 @@ function Cart() {
 						<thead>
 							<tr>
 								<th scope="col">
-									<label>
-										<input
-											type="checkbox"
-											id="check_all"
-											onChange={e => onCheckedAll(e.target.checked)}
-											checked={
-												checkedItems.length === 0
-													? false
-													: checkedItems.length === dummy.length
-													? true
-													: false
-											}
-										/>
-									</label>
+									<CheckLabel onClick={checkItem} className={checkBox ? 'active' : ''}></CheckLabel>
 								</th>
 								<th scope="col">상품정보</th>
 								<th scope="col">상품금액</th>
@@ -246,7 +217,7 @@ function Cart() {
 						<li>
 							<p>배송비</p>
 							<p>
-								<span>0</span>원
+								<span>{sum > 30000 ? 0 : thousandComma(3000)}</span>원
 							</p>
 						</li>
 						<li>
