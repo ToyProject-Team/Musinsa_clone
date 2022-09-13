@@ -172,15 +172,17 @@ function Cart() {
 		else setCheckBox(false);
 
 		// 총 상품 금액
-		setSum(
-			arrId
-				.map(v => {
-					let total = 0;
-					data.map(m => m.id === v && (total += m.count * m.productPrice));
-					return total;
-				})
-				.reduce((a, b) => a + b),
-		);
+		if (arrId.length > 0) {
+			setSum(
+				arrId
+					.map(v => {
+						let total = 0;
+						data.map(m => m.id === v && (total += m.count * m.productPrice));
+						return total;
+					})
+					?.reduce((a, b) => a + b),
+			);
+		} else setSum(0);
 	}, [data]);
 
 	return (
@@ -228,7 +230,7 @@ function Cart() {
 						<li>
 							<p>배송비</p>
 							<p>
-								<span>{sum > 30000 ? 0 : thousandComma(3000)}</span>원
+								<span>{sum > 30000 || sum === 0 ? 0 : thousandComma(3000)}</span>원
 							</p>
 						</li>
 						<li>
@@ -237,7 +239,7 @@ function Cart() {
 						<li>
 							<p>최종 결제 금액</p>
 							<p>
-								<span>{thousandComma(sum + (sum > 30000 ? 0 : 3000))}</span>원
+								<span>{thousandComma(sum + (sum > 30000 || sum === 0 ? 0 : 3000))}</span>원
 							</p>
 						</li>
 					</CartPayment>
