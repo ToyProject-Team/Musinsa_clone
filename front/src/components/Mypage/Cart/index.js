@@ -9,83 +9,128 @@ import Order from 'components/Order';
 import OrderModal from 'components/Modals/OrderModal';
 import { useNavigate } from 'react-router';
 import { thousandComma } from 'utils/thousandComma';
+import { data } from 'jquery';
 
 const dummyCart = {
 	exCart: [
 		{
 			id: '4',
 			productTitle: 'Fish',
-			productPrice: 57200,
+			productPrice: 20200,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
 			count: 1,
+			bigCategory: 1,
+			smallCategory: 2,
+			option_1: 'Gray',
+			option_2: '4',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: false,
 		},
 		{
 			id: '5',
 			productTitle: 'Fish',
-			productPrice: 57200,
+			productPrice: 20200,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
 			count: 2,
+			bigCategory: 1,
+			smallCategory: 1,
+			option_1: 'Gray',
+			option_2: '5',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: false,
 		},
 		{
 			id: '6',
 			productTitle: 'Fish',
-			productPrice: 57200,
+			productPrice: 20200,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
 			count: 3,
+			bigCategory: 1,
+			smallCategory: 5,
+			option_1: 'Gray',
+			option_2: '6',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: true,
 		},
 		{
 			id: '7',
 			productTitle: 'Fish',
-			productPrice: 57200,
+			productPrice: 20200,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
 			count: 3,
+			bigCategory: 1,
+			smallCategory: 5,
+			option_1: 'Gray',
+			option_2: '7',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: false,
 		},
 		{
 			id: '8',
 			productTitle: 'Fish',
-			productPrice: 57200,
+			productPrice: 20200,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
 			count: 3,
+			bigCategory: 1,
+			smallCategory: 5,
+			option_1: 'Gray',
+			option_2: '8',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: false,
 		},
 		{
 			id: '9',
 			productTitle: 'Fish',
-			productPrice: 57200,
+			productPrice: 20200,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
 			count: 3,
+			bigCategory: 1,
+			smallCategory: 5,
+			option_1: 'Gray',
+			option_2: '9',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: false,
 		},
 		{
 			id: '10',
 			productTitle: 'Fish',
-			productPrice: 57200,
+			productPrice: 20200,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
 			count: 3,
+			bigCategory: 1,
+			smallCategory: 5,
+			option_1: 'Gray',
+			option_2: '10',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: false,
 		},
 	],
 };
 function Cart() {
 	const navigate = useNavigate();
+
+	const [data, setData] = useState(dummyCart.exCart);
 
 	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);
@@ -184,24 +229,8 @@ function Cart() {
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
-						{dummyCart[Object.keys(dummyCart)].map((data, index) => (
-							<CartTable
-								data={data}
-								key={data.id}
-								id={data.id}
-								img={
-									'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800'
-								}
-								brand={data.id}
-								model={data.id}
-								price={data.id}
-								state={data.id}
-								option={data.id}
-								checkedItems={checkedItems}
-								setCheckedItems={setCheckedItems}
-								setSelectedPrice={setSelectedPrice}
-								selectedPrice={selectedPrice}
-							/>
+						{data.map((item, index) => (
+							<CartTable data={data} setData={setData} item={item} index={index} />
 						))}
 					</OrderTable>
 					<CartPayment>

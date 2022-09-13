@@ -46,19 +46,27 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price, pay, setPay }) 
 					</colgroup>
 					<tbody>
 						<tr>
-							<th scope="row">수령인</th>
+							<th className="modal" scope="row">
+								수령인
+							</th>
 							<td>허허</td>
 						</tr>
 						<tr>
-							<th scope="row">휴대전화</th>
+							<th className="modal" scope="row">
+								휴대전화
+							</th>
 							<td>010-1234-5678</td>
 						</tr>
 						<tr>
-							<th scope="row">전화번호</th>
+							<th className="modal" scope="row">
+								전화번호
+							</th>
 							<td>010-1234-5678</td>
 						</tr>
 						<tr>
-							<th scope="row">배송지 주소</th>
+							<th className="modal" scope="row">
+								배송지 주소
+							</th>
 							<td className="address-input">{userData.address}</td>
 						</tr>
 					</tbody>

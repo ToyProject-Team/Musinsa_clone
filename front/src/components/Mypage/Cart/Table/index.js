@@ -1,58 +1,65 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { ImgSpan } from '../styles';
 import { FiMinus, FiPlus, FiX } from 'react-icons/fi';
+import { thousandComma } from 'utils/thousandComma';
+import { smallCategory } from 'utils/smallCategory';
+import { CheckLabel } from './styles';
+import OrderModal from 'components/Modals/OrderModal';
+import Order from 'components/Order';
 
-function CartTable({
-	data,
-	img,
-	brand,
-	model,
-	price,
-	state,
-	option,
-	checkedItems,
-	setCheckedItems,
-	setSelectedPrice,
-	selectedPrice,
-	id,
-}) {
-	// 수량변경
-	// input 입력
-	const [amount, setAmount] = useState(price);
-	const [value, setValue] = useState(1);
-	const handleChange = ({ target: { value } }) => setValue(value);
+function CartTable({ data, index, setData, item }) {
+	const [modalOrder, setModalOrder] = useState(false);
+	const [pay, setPay] = useState('card');
+	const [order, setOrder] = useState(false);
 
-	let priceidx = checkedItems.findIndex(el => el === id);
+	// 수량 기입
+	const handleChange = useCallback(
+		({ target: { value } }) => {
+			setData(prev => prev.map(v => (v.id === item.id ? { ...v, count: Number(value) } : v)));
+		},
+		[data],
+	);
 
-	const plusCount = () => {
-		setValue(value + 1);
-		setSelectedPrice([selectedPrice[priceidx] + price]);
-		setAmount(amount + price);
-	};
+	// 수량 증가
+	const plusCount = useCallback(() => {
+		setData(prev => prev.map(v => (v.id === item.id ? { ...v, count: v.count + 1 } : v)));
+	}, [data]);
 
-	const minusCount = () => {
-		if (value === 1) {
+	// 수량 감소
+	const minusCount = useCallback(() => {
+		if (item.count === 1) {
 			alert('수량을 줄일 수 없습니다.');
 		} else {
-			setValue(value - 1);
-			setSelectedPrice([selectedPrice[priceidx] - price]);
-			setAmount(amount - price);
+			setData(prev => prev.map(v => (v.id === item.id ? { ...v, count: v.count - 1 } : v)));
 		}
-	};
+	}, [data]);
 
-	// 개별 체크박스
-	const onChecked = useCallback(
-		(checked, id) => {
-			if (checked) {
-				setCheckedItems([...checkedItems, id]);
-				setSelectedPrice(prev => [...prev, price]);
-			} else {
-				setCheckedItems(checkedItems.filter(el => el !== id));
-				setSelectedPrice(prev => prev.filter(el => el !== price));
-			}
-		},
-		[checkedItems],
-	);
+	// 체크
+	const checkItem = useCallback(() => {
+		setData(prev => prev.map(v => (v.id === item.id ? { ...v, check: !v.check } : v)));
+	}, [data]);
+
+	// 삭제
+	const removeItem = useCallback(() => {
+		setData(prev => prev.filter(v => v.id !== item.id));
+	}, [data]);
+
+	// 결제 모달창
+	const onCloseModal = useCallback(() => {
+		setModalOrder(false);
+		setOrder(false);
+	}, [modalOrder]);
+
+	// 바로구매
+	const onClickOrderButton = useCallback(() => {
+		setModalOrder(true);
+	}, []);
+
+	// 결제
+	const onClickOrder = useCallback(() => {
+		setModalOrder(false);
+		setOrder(true);
+	}, []);
 
 	return (
 		<tbody>
@@ -71,46 +78,50 @@ function CartTable({
 						<tbody>
 							<tr>
 								<td>
-									<label key={id}>
-										<input name="oncheck" type="checkbox" />
-									</label>
+									<CheckLabel
+										onClick={checkItem}
+										className={item.check ? 'active' : ''}
+									></CheckLabel>
 								</td>
 								<td className="top">
 									<div>
 										<ImgSpan>
-											<img src={img} alt="더미데이터" />
+											<img src={item.img} alt="더미데이터" />
 										</ImgSpan>
 										<ul>
-											<li>{brand}</li>
+											<li>{smallCategory[item.bigCategory][item.smallCategory]}</li>
 											<li>
-												<strong>{model}</strong>
+												<strong>{item.productTitle}</strong>
 											</li>
-											<li>{option}</li>
+											<li>
+												{item.option_1} / {item.option_2}
+											</li>
 										</ul>
 									</div>
 								</td>
-								<td> {price}원</td>
+								<td> {thousandComma(item.productPrice)}원</td>
 								<td>
 									<div className="input_amount">
-										<button value={value} onClick={minusCount}>
-											<FiMinus style={value === 1 ? { color: '#ddd' } : { color: '#777' }} />
+										<button value={item.count} onClick={minusCount}>
+											<FiMinus style={item.count === 1 ? { color: '#ddd' } : { color: '#777' }} />
 										</button>
-										<input type="text" value={value} onChange={handleChange}></input>
-										<button value={value} onClick={plusCount}>
+										<input type="text" value={item.count} onChange={handleChange}></input>
+										<button value={item.count} onClick={plusCount}>
 											<FiPlus style={{ color: '#777' }} />
 										</button>
 									</div>
 								</td>
-								<td>{amount}원</td>
-								<td>{state}</td>
+								<td>{thousandComma(item.productPrice * item.count)}원</td>
+								<td>{item.productPrice * item.count > 30000 ? 0 : thousandComma(3000)}</td>
 								<td>
 									<div>
-										<a href="" className="btn">
+										<button className="btn" onClick={onClickOrderButton}>
 											결제하기
-										</a>
-										<a href="" className="del_btn">
+										</button>
+										{order && <Order pay={pay} />}
+										<button className="del_btn" onClick={removeItem}>
 											<FiX />
-										</a>
+										</button>
 									</div>
 								</td>
 							</tr>
@@ -118,6 +129,19 @@ function CartTable({
 					</table>
 				</td>
 			</tr>
+
+			{modalOrder && (
+				<OrderModal
+					show={modalOrder}
+					onCloseModal={onCloseModal}
+					onClickConfirm={onClickOrder}
+					price={thousandComma(
+						item.productPrice * item.count + (item.productPrice * item.count > 30000 ? 0 : 3000),
+					)}
+					pay={pay}
+					setPay={setPay}
+				></OrderModal>
+			)}
 		</tbody>
 	);
 }

@@ -10,8 +10,8 @@ const Kakao = () => {
 	const CLIENT_SECRET = 'cgzjVzop5f7TnoSXG7FxhLCS6lMbVlCE';
 
 	// calllback으로 받은 인가코드
-	const code = new URL(window.location.href).searchParams.get('code');
 	const history = useNavigate();
+	const code = new URL(window.location.href).searchParams.get('code');
 	const getToken = async () => {
 		const payload = qs.stringify({
 			grant_type: 'authorization_code',
