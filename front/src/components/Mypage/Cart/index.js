@@ -17,7 +17,7 @@ const dummyCart = {
 		{
 			id: '4',
 			productTitle: 'Fish',
-			productPrice: 20200,
+			productPrice: 20000,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
@@ -26,14 +26,14 @@ const dummyCart = {
 			bigCategory: 1,
 			smallCategory: 2,
 			option_1: 'Gray',
-			option_2: '4',
+			option_2: '95',
 			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
 			check: false,
 		},
 		{
 			id: '5',
 			productTitle: 'Fish',
-			productPrice: 20200,
+			productPrice: 15000,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
@@ -42,14 +42,14 @@ const dummyCart = {
 			bigCategory: 1,
 			smallCategory: 1,
 			option_1: 'Gray',
-			option_2: '5',
+			option_2: '95',
 			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
 			check: false,
 		},
 		{
 			id: '6',
 			productTitle: 'Fish',
-			productPrice: 20200,
+			productPrice: 5000,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
@@ -58,14 +58,14 @@ const dummyCart = {
 			bigCategory: 1,
 			smallCategory: 5,
 			option_1: 'Gray',
-			option_2: '6',
+			option_2: '95',
 			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
 			check: true,
 		},
 		{
 			id: '7',
 			productTitle: 'Fish',
-			productPrice: 20200,
+			productPrice: 70000,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
@@ -74,14 +74,14 @@ const dummyCart = {
 			bigCategory: 1,
 			smallCategory: 5,
 			option_1: 'Gray',
-			option_2: '7',
+			option_2: '95',
 			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
 			check: false,
 		},
 		{
 			id: '8',
 			productTitle: 'Fish',
-			productPrice: 20200,
+			productPrice: 8000,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
@@ -90,14 +90,14 @@ const dummyCart = {
 			bigCategory: 1,
 			smallCategory: 5,
 			option_1: 'Gray',
-			option_2: '8',
+			option_2: '95',
 			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
 			check: false,
 		},
 		{
 			id: '9',
 			productTitle: 'Fish',
-			productPrice: 20200,
+			productPrice: 9000,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
@@ -106,14 +106,14 @@ const dummyCart = {
 			bigCategory: 1,
 			smallCategory: 5,
 			option_1: 'Gray',
-			option_2: '9',
+			option_2: '95',
 			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
 			check: false,
 		},
 		{
 			id: '10',
 			productTitle: 'Fish',
-			productPrice: 20200,
+			productPrice: 1000,
 			nonMemberPrice: 52000,
 			deliveryFrom: true,
 			deliveryWay: false,
@@ -122,7 +122,7 @@ const dummyCart = {
 			bigCategory: 1,
 			smallCategory: 5,
 			option_1: 'Gray',
-			option_2: '10',
+			option_2: '95',
 			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
 			check: false,
 		},
@@ -163,13 +163,24 @@ function Cart() {
 		setOrder(true);
 	}, []);
 
-	// 모두 체크 확인
+	// 모두 체크 확인 및 총상품 금액
 	useEffect(() => {
-		let cnt = 0;
-		data.map(v => v.check && cnt++);
+		let arrId = [];
+		data.map(v => (v.check ? arrId.push(v.id) : arrId.filter(f => f !== v.id)));
 
-		if (data.length === cnt) setCheckBox(true);
+		if (data.length === arrId.length) setCheckBox(true);
 		else setCheckBox(false);
+
+		// 총 상품 금액
+		setSum(
+			arrId
+				.map(v => {
+					let total = 0;
+					data.map(m => m.id === v && (total += m.count * m.productPrice));
+					return total;
+				})
+				.reduce((a, b) => a + b),
+		);
 	}, [data]);
 
 	return (
@@ -208,7 +219,7 @@ function Cart() {
 						<li>
 							<p>상품금액</p>
 							<p>
-								<span>{sum}</span>원
+								<span>{thousandComma(sum)}</span>원
 							</p>
 						</li>
 						<li>
@@ -226,7 +237,7 @@ function Cart() {
 						<li>
 							<p>최종 결제 금액</p>
 							<p>
-								<span>0</span>원
+								<span>{thousandComma(sum + (sum > 30000 ? 0 : 3000))}</span>원
 							</p>
 						</li>
 					</CartPayment>
@@ -241,7 +252,7 @@ function Cart() {
 						show={modalOrder}
 						onCloseModal={onCloseModal}
 						onClickConfirm={onClickOrder}
-						price={thousandComma(100000)}
+						price={thousandComma(sum + (sum > 30000 ? 0 : 3000))}
 						pay={pay}
 						setPay={setPay}
 					></OrderModal>
