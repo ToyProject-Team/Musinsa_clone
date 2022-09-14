@@ -40,7 +40,7 @@ export const SDiv = styled.div`
 		padding-left: 10px;
 
 		& div {
-			padding-bottom: 20px;
+			cursor: pointer;
 
 			& div {
 				text-align: left;
@@ -79,6 +79,14 @@ export const SDiv = styled.div`
 				padding-top: 20px;
 				display: flex;
 				flex-wrap: wrap;
+				overflow: hidden;
+				max-height: 200px;
+				transition: all 0.5s ease;
+
+				&[aria-expanded='true'] {
+					max-height: 0px;
+					transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+				}
 
 				& li {
 					font-size: 12px;
