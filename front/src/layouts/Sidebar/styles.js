@@ -4,8 +4,7 @@ export const SContainer = styled.section`
 	float: left;
 	background: white;
 	width: 270px;
-	height: 100vh;
-	border: 1px solid #d3d3d3;
+	border-right: 1px solid #d3d3d3;
 `;
 
 export const SDiv = styled.div`
@@ -48,7 +47,6 @@ export const SDiv = styled.div`
 				font-weight: 900;
 				font-family: 'Arial', 'monospace';
 				border-top: 1px solid #d3d3d3;
-				border-bottom: 1px solid #d3d3d3;
 				padding: 14px 0;
 				clear: both;
 
@@ -76,6 +74,7 @@ export const SDiv = styled.div`
 			}
 
 			& ul {
+				border-top: 1px solid #d3d3d3;
 				padding-top: 20px;
 				display: flex;
 				flex-wrap: wrap;
