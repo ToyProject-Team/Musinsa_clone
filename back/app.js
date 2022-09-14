@@ -81,7 +81,7 @@ app.use(
 );
 app.use((req, res, next, err) => {
   console.log(err)
-  res.send({ errMessage: err})
+  res.json(err)
 });
 
 var AWS = require('aws-sdk');
