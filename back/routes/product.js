@@ -250,7 +250,7 @@ router.post('/purchase', authJWT, async (req, res) => {
         if (!req.body.imp_uid) {
             return res.status(402).send({ message: 'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요' })
         }
-        if (req.body.price) {
+        if (!req.body.price) {
             return res.status(403).send({ message: '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
         }
 
