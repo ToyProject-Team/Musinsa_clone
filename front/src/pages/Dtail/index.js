@@ -48,6 +48,38 @@ const dummyProduct = {
 		option2: [['화이트', '블랙'], ['블랙', '그린', '네이비'], ['네이비']],
 		// add: ['추가옵션1', '추가옵션2'],
 	},
+	ProductMainTags: [
+		{
+			name: 'XL',
+			ProductSubTags: [
+				{
+					name: '딥레드',
+					amount: 8,
+					count: '1',
+				},
+				{
+					name: '블루',
+					amount: 8,
+					count: '1',
+				},
+			],
+		},
+		{
+			name: 'L',
+			ProductSubTags: [
+				{
+					name: '딥레드',
+					amount: 8,
+					count: '1',
+				},
+				{
+					name: '그린',
+					amount: 8,
+					count: '1',
+				},
+			],
+		},
+	],
 };
 
 const DetailProduct = () => {

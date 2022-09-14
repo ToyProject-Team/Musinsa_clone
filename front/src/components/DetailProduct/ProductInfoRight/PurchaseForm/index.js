@@ -16,7 +16,6 @@ import {
 } from './styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Modal from 'react-modal';
 import Order from 'components/Order';
 import {
 	LIKES,
@@ -26,31 +25,9 @@ import {
 import { thousandComma } from 'utils/thousandComma';
 import { getData } from 'utils/getData';
 import { URLquery } from 'utils/URLquery';
-import { baseUrl, DeleteHeaderBodyApi, GetApi, GetTokenApi, PostHeaderBodyApi } from 'utils/api';
-import axios from 'axios';
+import { DeleteHeaderBodyApi, GetTokenApi, PostHeaderBodyApi } from 'utils/api';
 import ConfirmModal from 'components/Modals/ConfirmModal';
 import OrderModal from 'components/Modals/OrderModal';
-
-const ModalStyle = {
-	overlay: {
-		position: 'fixed',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		backgroundColor: 'rgba(255, 255, 255, 0.75)',
-	},
-	content: {
-		position: 'absolute',
-		width: '445px',
-		height: '700px',
-		position: 'absolute',
-		top: '90px',
-		left: '30%',
-		right: '40px',
-		bottom: '40px',
-	},
-};
 
 const PurchaseForm = ({ data }) => {
 	const navigate = useNavigate();
@@ -61,9 +38,9 @@ const PurchaseForm = ({ data }) => {
 
 	const [clickedlike, setClickedlike] = useState(true);
 	const [selectedPrice, setSelectedPrice] = useState(0);
-	// const [orderAmount, setOrderAmount] = useState(1);
-	const [showModal, setShowModal] = useState(false);
 
+	const [option_1, setOpion_1] = useState(data.ProductMainTags.map(item => item.name));
+	const [option_2, setOpion_2] = useState([]);
 	const [option, setOption] = useState({});
 	const [selectList, setSelectList] = useState({});
 	const [selectIdx, setSelectIdx] = useState();
@@ -108,6 +85,25 @@ const PurchaseForm = ({ data }) => {
 		return dispatch({ type, payload });
 	}, []);
 
+	const onChangeOption_1 = useCallback(
+		e => {
+			const { value } = e.target;
+			const obj = data.ProductMainTags.filter(v => v.name === value)[0];
+			const arr = obj.ProductSubTags.map(v => v.name);
+			setOpion_2(arr);
+		},
+		[data],
+	);
+
+	const onChangeOption_2 = useCallback(
+		e => {
+			const { value } = e.target;
+			const obj = data.ProductMainTags.filter(v => v.name === value)[0];
+			const arr = obj.ProductSubTags.map(v => v.name);
+			setOpion_2(arr);
+		},
+		[data],
+	);
 	// 옵션 선택
 	const selectOption = useCallback(
 		e => {
@@ -217,51 +213,6 @@ const PurchaseForm = ({ data }) => {
 		[selectList],
 	);
 
-	// const SelectForm = ({ price, size, color }) => {
-	// 	const onIncrease = () => {
-	// 		setOrderAmount(orderAmount + 1);
-	// 		setSelectedPrice(selectedPrice + price);
-	// 	};
-	// 	const onDecrease = () => {
-	// 		if (orderAmount === 1) {
-	// 			alert('더이상 수량을 줄일 수 없습니다.');
-	// 		} else {
-	// 			setOrderAmount(orderAmount - 1);
-	// 			setSelectedPrice(selectedPrice - price);
-	// 		}
-	// 	};
-	// 	const onCancel = () => {
-	// 		setSelected(!selected);
-	// 		setSelectedPrice(0);
-	// 		setOrderAmount(1);
-	// 		setSize('옵션 선택');
-	// 		setColor('옵션 선택');
-	// 	};
-
-	// 	return (
-	// 		<div>
-	// 			<SelectedOption>
-	// 				<Selected>
-	// 					{size}/{color}
-	// 				</Selected>
-	// 				<Amount>
-	// 					<ul>
-	// 						<Decrease orderAmount={orderAmount} onClick={onDecrease}>
-	// 							-
-	// 						</Decrease>
-	// 						<li>{orderAmount}</li>
-	// 						<li onClick={onIncrease}>+</li>
-	// 					</ul>
-	// 				</Amount>
-	// 				<Price>
-	// 					<div>{selectedPrice + data.productPrice}원</div>
-	// 					<p onClick={onCancel}>X</p>
-	// 				</Price>
-	// 			</SelectedOption>
-	// 		</div>
-	// 	);
-	// };
-
 	useEffect(() => {
 		let answer = 0;
 		if (Object.keys(selectList).length > 0) {
@@ -277,13 +228,6 @@ const PurchaseForm = ({ data }) => {
 
 		setTotalPrice(answer);
 	}, [selectList]);
-
-	// useEffect(() => {
-	// 	if (size !== '옵션 선택' && color !== '옵션 선택') {
-	// 		setSelected(true);
-	// 	} else {
-	// 	}
-	// }, [size, color]);
 
 	// 좋아요
 	const onLikeClicked = useCallback(async () => {
@@ -378,48 +322,21 @@ const PurchaseForm = ({ data }) => {
 		setOrder(true);
 	}, []);
 
-	const openModal = useCallback(() => {
-		setModalOrder(true);
-		// if (!user.login) {
-		// 	alert('로그인 후 구매가 가능합니다.');
-		// 	navigate('/login');
-		// } else {
-		// const payment_data = {
-		// 	price: selectedPrice + data.productPrice,
-		// 	id: data.ProductId,
-		// 	name: data.productTitle,
-		// 	date: new Date(),
-		// };
-		// dispatch({ payment_data, type: PAYMENT });
-		// }
-	}, []);
-
 	return (
 		<div>
 			<FormWrapper style={{ backgroundColor: '#f3f3f3' }}>
-				{Object.keys(data.option).map((item, idx) => {
-					return (
-						Array.isArray(option) && (
-							<BuyOption
-								key={item + idx}
-								onChange={selectOption}
-								value={option[idx][item]}
-								name={item}
-								data-index={idx}
-							>
-								<option>옵션 선택</option>
-								{typeof data.option[item][0] === 'string'
-									? data.option[item].map(itemOption => (
-											<option key={itemOption}>{itemOption}</option>
-									  ))
-									: selectIdx >= 0 &&
-									  data.option[item][selectIdx].map(itemOption => (
-											<option key={itemOption}>{itemOption}</option>
-									  ))}
-							</BuyOption>
-						)
-					);
-				})}
+				<BuyOption onChange={onChangeOption_1}>
+					<option>옵션 선택</option>
+					{option_1.map(option => (
+						<option value={option}>{option}</option>
+					))}
+				</BuyOption>
+				<BuyOption onChange={onChangeOption_2}>
+					<option>옵션 선택</option>
+					{option_2.map(option => (
+						<option>{option}</option>
+					))}
+				</BuyOption>
 			</FormWrapper>
 			{Object.keys(selectList)?.map((option_1, idx) => {
 				// const orderCount = item[option_1];
