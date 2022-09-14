@@ -255,7 +255,7 @@
           properties:
             imp_uid:
               type: string
-            merchant_uid:
+            Merchant_uid:
               type: string
             ProductId:
               type: string

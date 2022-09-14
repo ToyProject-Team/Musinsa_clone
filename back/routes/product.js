@@ -78,6 +78,15 @@ router.get('/productList', async (req, res, next) => {
                     model: ProductSize,
                     attributes: ["size", "amount"],
                 },
+                {
+                    model: ProductMainTag,
+                    attributes: ["name"],
+                    include: {
+                        model: ProductSubTag,
+                        attributes: ["name", "amount"]
+                    }
+                    // attributes: ["src"]
+                },
                 
             ],
             order: [
@@ -231,6 +240,7 @@ router.post('/likeProduct', authJWT, async (req, res, next) => {
 
 router.post('/purchase', authJWT, async (req, res) => {
     try {
+        console.log(req.body)
         if (!req.body.ProductId) {
             return res.status(400).send({ message: '상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요' })
         }
