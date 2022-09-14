@@ -3,9 +3,10 @@ import { ImgSpan } from '../styles';
 import { FiMinus, FiPlus, FiX } from 'react-icons/fi';
 import { thousandComma } from 'utils/thousandComma';
 import { smallCategory } from 'utils/smallCategory';
-import { CheckLabel } from './styles';
+import { CheckLabel, ItemUl } from './styles';
 import OrderModal from 'components/Modals/OrderModal';
 import Order from 'components/Order';
+import { Link } from 'react-router-dom';
 
 function CartTable({ data, index, setData, item }) {
 	const [modalOrder, setModalOrder] = useState(false);
@@ -61,6 +62,8 @@ function CartTable({ data, index, setData, item }) {
 		setOrder(true);
 	}, []);
 
+	const dlvChr = thousandComma(3000);
+
 	return (
 		<tbody>
 			<tr>
@@ -88,15 +91,19 @@ function CartTable({ data, index, setData, item }) {
 										<ImgSpan>
 											<img src={item.img} alt="더미데이터" />
 										</ImgSpan>
-										<ul>
-											<li>{smallCategory[item.bigCategory][item.smallCategory]}</li>
+										<ItemUl>
 											<li>
-												<strong>{item.productTitle}</strong>
+												<a href="/"> {smallCategory[item.bigCategory][item.smallCategory]}</a>
+											</li>
+											<li>
+												<a href="/detail">
+													<strong>{item.productTitle}</strong>
+												</a>
 											</li>
 											<li>
 												{item.option_1} / {item.option_2}
 											</li>
-										</ul>
+										</ItemUl>
 									</div>
 								</td>
 								<td> {thousandComma(item.productPrice)}원</td>
@@ -112,7 +119,12 @@ function CartTable({ data, index, setData, item }) {
 									</div>
 								</td>
 								<td>{thousandComma(item.productPrice * item.count)}원</td>
-								<td>{item.productPrice * item.count > 30000 ? 0 : thousandComma(3000)}</td>
+								<td>
+									택배배송 <br />{' '}
+									<strong>
+										{item.productPrice * item.count > 30000 ? '배송비 무료' : `${dlvChr}원`}
+									</strong>
+								</td>
 								<td>
 									<div>
 										<button className="btn" onClick={onClickOrderButton}>
