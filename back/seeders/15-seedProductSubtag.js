@@ -43,7 +43,7 @@ module.exports = {
         })        
       }
     }
-    await queryInterface.bulkInsert("productsubtags", dummyProductMainTags);
+    await queryInterface.bulkInsert("ProductSubtags", dummyProductMainTags);
   },
 
   async down (queryInterface, Sequelize) {
