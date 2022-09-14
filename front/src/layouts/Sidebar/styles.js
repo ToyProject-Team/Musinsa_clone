@@ -28,6 +28,8 @@ export const SDiv = styled.div`
 		font-weight: 900;
 		vertical-align: -webkit-baseline-middle;
 		cursor: pointer;
+		width: 100%;
+		height: 100%;
 
 		&:hover {
 			opacity: 0.7;
@@ -40,6 +42,7 @@ export const SDiv = styled.div`
 
 		& div {
 			cursor: pointer;
+			margin-top: -1px;
 
 			& div {
 				text-align: left;
@@ -79,7 +82,7 @@ export const SDiv = styled.div`
 				display: flex;
 				flex-wrap: wrap;
 				overflow: hidden;
-				max-height: 200px;
+				max-height: 600px;
 				transition: all 0.5s ease;
 
 				&[aria-expanded='true'] {
