@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router';
 import { thousandComma } from 'utils/thousandComma';
 import { data } from 'jquery';
 import { CheckLabel } from './Table/styles';
+import { getData } from 'utils/getData';
 
 const dummyCart = {
 	exCart: [
