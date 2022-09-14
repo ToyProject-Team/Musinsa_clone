@@ -1,35 +1,96 @@
 import styled from '@emotion/styled';
 
 export const SContainer = styled.section`
+	position: relative;
 	float: left;
 	background: white;
 	width: 270px;
 	border-right: 1px solid #d3d3d3;
-`;
-
-export const SDiv = styled.div`
-	padding-top: 20px;
-	text-align: center;
 
 	& h1 {
 		position: absolute;
-		left: 240px;
-		font-size: 1.4em;
+		left: calc(100% + 1px);
+		top: 0px;
+		font-size: 33px;
+		border-right: 1px solid #d3d3d3;
+		border-bottom: 1px solid #d3d3d3;
+		padding: 5px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		cursor: pointer;
+	}
 
-		& svg {
-			vertical-align: middle;
-			cursor: pointer;
+	.toggle {
+		position: absolute;
+		top: 0;
+		left: 100%;
+		width: 23px;
+		height: 23px;
+		padding: 10px;
+		border-right: 1px solid #d3d3d3;
+		border-bottom: 1px solid #d3d3d3;
+		cursor: pointer;
+
+		.line {
+			position: absolute;
+			width: calc(100% - 20px);
+			height: 4px;
+			background-color: #000;
+			transition: 0.3s;
+
+			&:nth-of-type(1) {
+				top: 10px;
+			}
+			&:nth-of-type(2) {
+				top: calc(50% - 2px);
+			}
+			&:nth-of-type(3) {
+				top: calc(100% - 14px);
+			}
 		}
 	}
 
-	& button {
+	.toggle.active {
+		.line {
+			&:nth-of-type(1) {
+				top: calc(50% - 2px);
+				transform: rotate(-45deg);
+			}
+			&:nth-of-type(2) {
+				opacity: 0;
+				visibility: hidden;
+			}
+			&:nth-of-type(3) {
+				top: calc(50% - 2px);
+				transform: rotate(45deg);
+			}
+		}
+	}
+`;
+
+export const SDiv = styled.div`
+	text-align: center;
+
+	& a {
+		display: block;
 		border: none;
 		font-size: 16px;
 		font-weight: 900;
 		vertical-align: -webkit-baseline-middle;
 		cursor: pointer;
-		width: 100%;
-		height: 100%;
+		text-decoration: none;
+		color: #000;
+		padding: 14px 10px;
+		text-align: left;
+
+		span {
+			font-size: 10px;
+			padding-left: 6px;
+			color: #b2b2b2;
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+				'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+		}
 
 		&:hover {
 			opacity: 0.7;
@@ -37,7 +98,6 @@ export const SDiv = styled.div`
 	}
 
 	& nav {
-		margin-top: 10px;
 		padding-left: 10px;
 
 		& div {
