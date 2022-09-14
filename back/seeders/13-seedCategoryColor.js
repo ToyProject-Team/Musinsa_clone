@@ -9,10 +9,10 @@ module.exports = {
     // for (var i = 1; i < 23; i++) {
     //   for (var j = 0; j < categoryCount[i-1]; j++) {
     //     dummyCategoryColors.push({
-    //       categoryName: j+1,
+    //       color: j+1,
     //       createdAt: new Date(),
     //       updatedAt: new Date(),
-    //       BigCategoryId: i
+    //       SmallCategoryId: i
     //     })
     //   }
     // }

@@ -70,17 +70,23 @@
                       src:
                         type: string
                         example: Accessory/Accessory2
-                  ProductSizes:
+                  ProductMainTags:
                     type: array
                     items:
                       type: object
                       properties:
-                        size:
-                          type: integer
-                          example: 30
-                        amount:
-                          type: integer
-                          example: 2
+                        name:
+                          type: string
+                          example: XL
+                        ProductSubTags:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                example: 딥레드
+                                amount: 3
       400:
         description: 상품 조회 결과가 없을 경우
         schema:
@@ -181,15 +187,46 @@
                   SmallCategoryId:
                     type: integer
                     example: 1
-                  CustomCategories:
-                    type: integer
-                    example: 33
                   commentCount:
                     type: integer
                     example: 3
                   rated:
                     type: integer
                     example: 4.1
+                  ProductImg:
+                    type: object
+                    properties:
+                      src:
+                        type: string
+                        example: Accessory/Accessory2
+                  CustomCategories:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 5
+                  ProductMainTags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: XL
+                        ProductSubTags:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                example: 딥레드
+                                amount: 3
+
+                      
+                  
       400:
         description: 상품 조회 결과가 없을 경우
         schema:
@@ -224,7 +261,7 @@
           properties:
             imp_uid:
               type: string
-            merchant_uid:
+            Merchant_uid:
               type: string
             ProductId:
               type: string

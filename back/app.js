@@ -79,10 +79,11 @@ app.use(
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, { explorer: true }) //검색 허용가능
 );
-app.use((err, req, res, next) => {
-  console.log(err)
-  res.send({ errMessage: err})
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
+
 
 var AWS = require('aws-sdk');
 var fs = require('fs');
