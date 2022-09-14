@@ -254,7 +254,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
             return res.status(403).send({ message: '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
         }
         if (!req.body.amount) {
-            return res.status(405).send({ message: '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
+            return res.status(405).send({ message: '구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
         }
 
         const { imp_uid, merchant_uid } = req.body; // req의 query에서 imp_uid, merchant_uid 추출
@@ -286,9 +286,10 @@ router.post('/purchase', authJWT, async (req, res, next) => {
                 id: req.myId
             }
         })
-        
+        console.log(req.body)
         await exUser.addMyOrder({
-            id: req.body.ProductId,
+            ProductId: req.body.ProductId,
+            // id: req.body.ProductId,
             orderPrice: req.body.price,
             amount: req.body.amount,
             state: 1,
