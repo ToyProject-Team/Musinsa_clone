@@ -25,10 +25,14 @@ const Sidebar = () => {
 
 	return (
 		<SContainer>
+			<div onClick={() => setCancel(e => !e)} className={cancel ? 'toggle' : 'toggle active'}>
+				<span className="line"></span>
+				<span className="line"></span>
+				<span className="line"></span>
+			</div>
 			<SDiv>
-				<h1 onClick={() => setCancel(e => !e)}>{cancel ? <GiHamburgerMenu /> : <CgClose />}</h1>
 				<Link to="/">
-					<button>전체</button>
+					전체<span>All</span>
 				</Link>
 				<nav>
 					{bigCategory.map((big, idx) => (

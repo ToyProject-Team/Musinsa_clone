@@ -21,6 +21,7 @@ import loadable from '@loadable/component';
 import Header from 'layouts/Header';
 // import NewList from './newList';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Sidebar from 'layouts/Sidebar';
 
 const Main = () => {
 	const navigate = useNavigate();
@@ -299,6 +300,7 @@ const Main = () => {
 			>
 				<ScrollContainer>
 					<Header></Header>
+					<Sidebar></Sidebar>
 					<MainContainer>
 						{/* 카테고리 */}
 						<Category>
