@@ -87,10 +87,10 @@ const ProductInfoRight = ({ data }) => {
 						</DetailInfo>
 						<DetailInfo>
 							<InfoTitle>배송 방법</InfoTitle>
-							<InfoContent>{detail.product.deliveryFrom ? '국내' : '해외'}</InfoContent>
+							<InfoContent>{detail.product.deliveryFrom ? '해외' : '국내'}</InfoContent>
 							<span>/</span>
 							<InfoContent>
-								{detail.product.deliveryWay ? '입점사 배송' : '해외사 배송'}
+								{detail.product.deliveryWay ? '무신사 직배송' : '입점사 배송'}
 							</InfoContent>
 							<span>/</span>
 							<InfoContent>{detail.product.deliveryCompany}</InfoContent>

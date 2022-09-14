@@ -72,6 +72,17 @@ export const Button = styled.button`
 	}
 `;
 
+export const ButtonContainer = styled.div`
+	display: flex;
+	gap: 10px;
+
+	& > button:nth-of-type(1) {
+		color: #0078ff;
+		background-color: #fff;
+		border: 1px solid #0078ff;
+	}
+`;
+
 export const Title = styled.h2`
 	display: flex;
 	-webkit-box-align: center;

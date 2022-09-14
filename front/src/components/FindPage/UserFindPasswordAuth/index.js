@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import qs from 'qs';
 import UserFindAuth from '../UserFindAuth';
 import {
 	AUTH,
@@ -13,6 +12,7 @@ import { PostHeaderApi, PostHeaderBodyApi } from 'utils/api';
 import { AuthUser } from './styles';
 import { maskingFunc } from 'utils/masking';
 import { storageData } from 'utils/storageData';
+import { URLquery } from 'utils/URLquery';
 
 const UserFindPasswordAuth = () => {
 	const userFind = useUserFindState();
@@ -22,9 +22,7 @@ const UserFindPasswordAuth = () => {
 
 	const navigate = useNavigate();
 	const location = useLocation();
-	const query = qs.parse(location.search, {
-		ignoreQueryPrefix: true,
-	});
+	const query = URLquery(location);
 
 	const [authUser, setAuthUser] = useState('');
 	const [authStyle, setAuthStyle] = useState('');
