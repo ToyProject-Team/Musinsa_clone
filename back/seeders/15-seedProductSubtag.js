@@ -23,7 +23,7 @@ module.exports = {
     let randNums = []
     let ranName
     for (let i = 0; i < exProduct.length; i++) {
-      let x = rand(0,4)
+      let x = rand(1,4)
       for (let j = 0; j < x; j++) {
         if (cur != exProduct.ProductId) {
           cur = exProduct.ProductId

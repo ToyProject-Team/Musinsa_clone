@@ -261,8 +261,8 @@ router.post('/purchase', authJWT, async (req, res) => {
         method: "post", // POST method
         headers: { "Content-Type": "application/json" }, // "Content-Type": "application/json"
         data: {
-            imp_key: "7886282210238108", // REST API 키
-            imp_secret: "lNItGvMSCUT2kTs0QiIha0fzoOgE3VgRFC2ykVwmEuCnoOpd2VTkLy4LHohY2ZZpyxhxP5uEhs9QyFPC" // REST API Secret
+            imp_key: "3360868424546062", // REST API 키
+            imp_secret: "R0poOeLPunhouN0YaMFSRKJh1ACv6C9Atijr0BHTBUB2DWk3sc7Fv3s3qvlqpZprvqli25IWWG7brjXq" // REST API Secret
         }
         });
         const { access_token } = getToken.data.response; // 인증 토큰
