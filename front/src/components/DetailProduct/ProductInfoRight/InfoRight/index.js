@@ -20,6 +20,7 @@ import PriceList from 'components/DetailProduct/ProductInfoRight/PriceList';
 import PurchaseForm from '../PurchaseForm';
 import { useProductDetailState } from 'context/ProductDetailContext';
 import { ReactComponent as ArrowDown } from 'assets/svg/ArrowDown.svg';
+import { thousandComma } from 'utils/thousandComma';
 
 const ProductInfoRight = ({ data }) => {
 	const detail = useProductDetailState();
@@ -86,10 +87,10 @@ const ProductInfoRight = ({ data }) => {
 						</DetailInfo>
 						<DetailInfo>
 							<InfoTitle>배송 방법</InfoTitle>
-							<InfoContent>{detail.product.deliveryFrom ? '국내' : '해외'}</InfoContent>
+							<InfoContent>{detail.product.deliveryFrom ? '해외' : '국내'}</InfoContent>
 							<span>/</span>
 							<InfoContent>
-								{detail.product.deliveryWay ? '입점사 배송' : '해외사 배송'}
+								{detail.product.deliveryWay ? '무신사 직배송' : '입점사 배송'}
 							</InfoContent>
 							<span>/</span>
 							<InfoContent>{detail.product.deliveryCompany}</InfoContent>
@@ -105,14 +106,14 @@ const ProductInfoRight = ({ data }) => {
 						<DetailInfo>
 							<PriceTitle>무신사 판매가</PriceTitle>
 							<PriceContent className="line">
-								{detail.product.productPrice}
+								{thousandComma(detail.product.productPrice)}
 								<Price>원</Price>
 							</PriceContent>
 						</DetailInfo>
 						<DetailInfo>
 							<PriceTitle>무신사 회원가</PriceTitle>
 							<PriceContent onClick={onToggle}>
-								{detail.product.rookiePrice}
+								{thousandComma(detail.product.rookiePrice)}
 								<Price>원</Price>
 								<ArrowDown style={{ paddingLeft: '8px' }} />
 							</PriceContent>

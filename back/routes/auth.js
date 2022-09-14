@@ -162,6 +162,7 @@ router.post('/kakao', (req,res) => {
 })
 
 router.get('/kakao/callback', async (req, res, next) => {
+  console.log(req.query)
   try {
     const kakao = {
       clientID: process.env.KAKAO_ID,

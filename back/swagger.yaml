@@ -232,6 +232,10 @@ paths:
       tags:
         - auth
       summary: 소셜 로그인(카카오)
+      parameters:
+        - name: code
+          in: query
+          required: true
       responses:
         '200':
           schema:
@@ -655,7 +659,7 @@ paths:
           name: mainSort
           schema:
             type: integer
-          description: '상품정렬 쿼리입니다. 정렬할 인덱스를 보내주세요. <br>`1 == 낮은 가격순, 2 == 높은 가격순, 3 == 후기순`'
+          description: '상품정렬 쿼리입니다. 정렬할 인덱스를 보내주세요. <br>`1 == 낮은 가격순, 2 == 높은 가격순, 3 == 후기 내림차순 4 == 후기 오름차순`'
         - in: query
           name: page
           schema:

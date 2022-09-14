@@ -13,7 +13,7 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
         if (!exUser) {
             return res.status(400).send({ message: "유저의 조회 결과가 없습니다"})
         }
-        const exCart = await exUser.getProduct({
+        const exCart = await exUser.getMyCart({
             joinTableAttributes: [],
             attributes: ["id", "productTitle", "productPrice", "nonMemberPrice", "deliveryFrom", "deliveryWay","deliveryCompany"]
         })

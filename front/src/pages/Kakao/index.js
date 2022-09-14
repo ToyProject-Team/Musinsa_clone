@@ -10,8 +10,8 @@ const Kakao = () => {
 	const CLIENT_SECRET = 'cgzjVzop5f7TnoSXG7FxhLCS6lMbVlCE';
 
 	// calllback으로 받은 인가코드
-	const code = new URL(window.location.href).searchParams.get('code');
 	const history = useNavigate();
+	const code = new URL(window.location.href).searchParams.get('code');
 	const getToken = async () => {
 		const payload = qs.stringify({
 			grant_type: 'authorization_code',
@@ -28,8 +28,8 @@ const Kakao = () => {
 			await window.Kakao.init(REST_API_KEY);
 			// access token 설정
 			await window.Kakao.Auth.setAccessToken(res.data.access_token);
-			await console.log(res);
-			history('/signup');
+			console.log(123123, res);
+			// history('/signup');
 		} catch (err) {
 			console.log(err);
 		}

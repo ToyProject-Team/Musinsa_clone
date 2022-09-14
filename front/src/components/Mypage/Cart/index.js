@@ -5,49 +5,185 @@ import { OrderTable, CartPayment, OrderBtn, ModalStyle } from 'components/Mypage
 import { FaPlus, FaEquals } from 'react-icons/fa';
 import dummy from 'components/Mypage/data.json';
 import Modal from 'react-modal';
-import Order from 'pages/Order';
+import Order from 'components/Order';
+import OrderModal from 'components/Modals/OrderModal';
+import { useNavigate } from 'react-router';
+import { thousandComma } from 'utils/thousandComma';
+import { data } from 'jquery';
+import { CheckLabel } from './Table/styles';
+
+const dummyCart = {
+	exCart: [
+		{
+			id: '4',
+			productTitle: 'Fish',
+			productPrice: 20000,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+			count: 1,
+			bigCategory: 1,
+			smallCategory: 2,
+			option_1: 'Gray',
+			option_2: '95',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: false,
+		},
+		{
+			id: '5',
+			productTitle: 'Fish',
+			productPrice: 15000,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+			count: 2,
+			bigCategory: 1,
+			smallCategory: 1,
+			option_1: 'Gray',
+			option_2: '95',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: false,
+		},
+		{
+			id: '6',
+			productTitle: 'Fish',
+			productPrice: 5000,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+			count: 3,
+			bigCategory: 1,
+			smallCategory: 5,
+			option_1: 'Gray',
+			option_2: '95',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: true,
+		},
+		{
+			id: '7',
+			productTitle: 'Fish',
+			productPrice: 70000,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+			count: 3,
+			bigCategory: 1,
+			smallCategory: 5,
+			option_1: 'Gray',
+			option_2: '95',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: false,
+		},
+		{
+			id: '8',
+			productTitle: 'Fish',
+			productPrice: 8000,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+			count: 3,
+			bigCategory: 1,
+			smallCategory: 5,
+			option_1: 'Gray',
+			option_2: '95',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: false,
+		},
+		{
+			id: '9',
+			productTitle: 'Fish',
+			productPrice: 9000,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+			count: 3,
+			bigCategory: 1,
+			smallCategory: 5,
+			option_1: 'Gray',
+			option_2: '95',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: false,
+		},
+		{
+			id: '10',
+			productTitle: 'Fish',
+			productPrice: 1000,
+			nonMemberPrice: 52000,
+			deliveryFrom: true,
+			deliveryWay: false,
+			deliveryCompany: 'CJ대한통운',
+			count: 3,
+			bigCategory: 1,
+			smallCategory: 5,
+			option_1: 'Gray',
+			option_2: '95',
+			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			check: false,
+		},
+	],
+};
 
 function Cart() {
-	// 전체 체크박스
-	const [checkedItems, setCheckedItems] = useState([]);
-	const onCheckedAll = useCallback(
-		checked => {
-			if (checked) {
-				const checkedItemsArray = [];
-				dummy.forEach(data => checkedItemsArray.push(data.id));
-				dummy.forEach(data => setSelectedPrice(prev => [...prev, data.price]));
-				setCheckedItems(checkedItemsArray);
-			} else {
-				setCheckedItems([]);
-				setSelectedPrice([]);
-			}
-		},
-		[dummy],
-	);
+	const navigate = useNavigate();
 
-	const [showModal, setShowModal] = useState(false);
-	const openModal = () => {
-		setShowModal(showModal => !showModal);
-	};
-
-	// 상품금액 계산
-	const [selectedPrice, setSelectedPrice] = useState([]);
+	const [data, setData] = useState(dummyCart.exCart);
+	const [checkBox, setCheckBox] = useState(false);
 	const [sum, setSum] = useState(0);
 
-	useEffect(() => {
-		if (selectedPrice.length > 0) {
-			let total = [...selectedPrice].reduce((a, b) => a + b);
-			setSum(total);
-		} else {
-			setSum(0);
-		}
-	}, [selectedPrice]);
-	
-	console.log(selectedPrice);
-	console.log(checkedItems);
-	console.log(sum);
+	const [pay, setPay] = useState('card');
+	const [order, setOrder] = useState(false);
 
-	
+	const [modalOrder, setModalOrder] = useState(false);
+
+	// 체크
+	const checkItem = useCallback(() => {
+		setCheckBox(check => !check);
+		setData(data => data.map(v => ({ ...v, check: !checkBox })));
+	}, [data, checkBox]);
+
+	const onCloseModal = useCallback(() => {
+		setModalOrder(false);
+		setOrder(false);
+	}, [modalOrder]);
+
+	// 바로구매
+	const onClickOrderButton = useCallback(() => {
+		setModalOrder(true);
+	}, []);
+
+	// 결제
+	const onClickOrder = useCallback(() => {
+		setModalOrder(false);
+		setOrder(true);
+	}, []);
+
+	// 모두 체크 확인 및 총상품 금액
+	useEffect(() => {
+		let arrId = [];
+		data.map(v => (v.check ? arrId.push(v.id) : arrId.filter(f => f !== v.id)));
+
+		if (data.length === arrId.length) setCheckBox(true);
+		else setCheckBox(false);
+
+		// 총 상품 금액
+		if (arrId.length > 0) {
+			setSum(
+				arrId
+					.map(v => {
+						let total = 0;
+						data.map(m => m.id === v && (total += m.count * m.productPrice));
+						return total;
+					})
+					?.reduce((a, b) => a + b),
+			);
+		} else setSum(0);
+	}, [data]);
 
 	return (
 		<>
@@ -67,20 +203,7 @@ function Cart() {
 						<thead>
 							<tr>
 								<th scope="col">
-									<label>
-										<input
-											type="checkbox"
-											id="check_all"
-											onChange={e => onCheckedAll(e.target.checked)}
-											checked={
-												checkedItems.length === 0
-													? false
-													: checkedItems.length === dummy.length
-													? true
-													: false
-											}
-										/>
-									</label>
+									<CheckLabel onClick={checkItem} className={checkBox ? 'active' : ''}></CheckLabel>
 								</th>
 								<th scope="col">상품정보</th>
 								<th scope="col">상품금액</th>
@@ -90,28 +213,15 @@ function Cart() {
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
-						{dummy.map((data, index) => (
-							<CartTable
-								key={data.id}
-								id={data.id}
-								img={data.url}
-								brand={data.brandName}
-								model={data.model}
-								price={data.price}
-								state={data.orderstatus}
-								option={data.option}
-								checkedItems={checkedItems}
-								setCheckedItems={setCheckedItems}
-								setSelectedPrice={setSelectedPrice}
-								selectedPrice={selectedPrice}
-							/>
+						{data.map((item, index) => (
+							<CartTable data={data} setData={setData} item={item} index={index} />
 						))}
 					</OrderTable>
 					<CartPayment>
 						<li>
 							<p>상품금액</p>
 							<p>
-								<span>{sum}</span>원
+								<span>{thousandComma(sum)}</span>원
 							</p>
 						</li>
 						<li>
@@ -120,7 +230,7 @@ function Cart() {
 						<li>
 							<p>배송비</p>
 							<p>
-								<span>0</span>원
+								<span>{sum > 30000 || sum === 0 ? 0 : thousandComma(3000)}</span>원
 							</p>
 						</li>
 						<li>
@@ -129,22 +239,26 @@ function Cart() {
 						<li>
 							<p>최종 결제 금액</p>
 							<p>
-								<span>0</span>원
+								<span>{thousandComma(sum + (sum > 30000 || sum === 0 ? 0 : 3000))}</span>원
 							</p>
 						</li>
 					</CartPayment>
 					<OrderBtn>
-						<button onClick={openModal}>결제하기</button>
-						{showModal ? (
-							<Modal style={ModalStyle} isOpen={true}>
-								<Order openModal={openModal} price={selectedPrice + dummy.price} />
-							</Modal>
-						) : (
-							<></>
-						)}
+						<button onClick={onClickOrderButton}>결제하기</button>
+						{order && <Order pay={pay} />}
 					</OrderBtn>
 				</div>
-				;
+
+				{modalOrder && (
+					<OrderModal
+						show={modalOrder}
+						onCloseModal={onCloseModal}
+						onClickConfirm={onClickOrder}
+						price={thousandComma(sum + (sum > 30000 ? 0 : 3000))}
+						pay={pay}
+						setPay={setPay}
+					></OrderModal>
+				)}
 			</MypageMain>
 		</>
 	);

@@ -21,6 +21,6 @@ module.exports = class BigCategory extends Model {
         )
     }
     static associate(db) {
-        db.BigCategory.hasMany(db.Product)
+        db.BigCategory.belongsTo(db.Product)
     }
 }

@@ -1,14 +1,34 @@
 import { useProductDetailState } from 'context/ProductDetailContext';
 import { useState, useCallback, useEffect } from 'react';
+import ImageZoom from '../ImageZoom';
 import { ProductImage, MainImage, ImageList, Image } from './styles';
 
 const dummyImage = {
 	Images: [
-		{ id: 0, src: 'https://www.dummyimage.com/500x600/a9a9a9/000000&text=productImage1' },
-		{ id: 1, src: 'https://www.dummyimage.com/500x600/a9a9a9/000000&text=productImage2' },
-		{ id: 2, src: 'https://www.dummyimage.com/500x600/a9a9a9/000000&text=productImage3' },
-		{ id: 3, src: 'https://www.dummyimage.com/500x600/a9a9a9/000000&text=productImage4' },
-		{ id: 4, src: 'https://www.dummyimage.com/500x600/a9a9a9/000000&text=productImage5' },
+		{
+			id: 0,
+			src: 'https://image.msscdn.net/images/goods_img/20220907/2778463/2778463_1_500.jpg?t=20220907145349',
+		},
+		{
+			id: 1,
+			src: 'https://image.msscdn.net/images/prd_img/20220907/2778463/detail_2778463_1_big.jpg',
+		},
+		{
+			id: 2,
+			src: 'https://image.msscdn.net/images/prd_img/20220907/2778463/detail_2778463_2_big.jpg',
+		},
+		{
+			id: 3,
+			src: 'https://image.msscdn.net/images/prd_img/20220907/2778463/detail_2778463_3_500.jpg',
+		},
+		{
+			id: 4,
+			src: 'https://image.msscdn.net/images/prd_img/20220907/2778463/detail_2778463_4_500.jpg',
+		},
+		{
+			id: 5,
+			src: 'https://image.msscdn.net/images/prd_img/20220907/2778463/detail_2778463_5_500.jpg',
+		},
 	],
 };
 
@@ -16,17 +36,24 @@ const ProductInfoLeft = ({ data }) => {
 	const detail = useProductDetailState();
 
 	const [thumbNum, setThumbNum] = useState(0);
+	const [active, setActive] = useState('');
 
 	const imageList = dummyImage.Images.map((image, index) => (
-		<div key={index}>
+		<div
+			key={index}
+			onMouseOver={() => setActive(index)}
+			className={active === index ? 'active' : ''}
+		>
 			<img src={image.src} onMouseOver={() => setThumbNum(image.id)} />
 		</div>
 	));
 
+	console.log(active);
+
 	return (
 		<ProductImage>
 			<MainImage>
-				<img src={dummyImage.Images[thumbNum].src} />
+				<ImageZoom img={dummyImage.Images[thumbNum].src} alt={'사진'}></ImageZoom>
 			</MainImage>
 			<ImageList>{imageList}</ImageList>
 		</ProductImage>
