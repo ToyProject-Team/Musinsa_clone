@@ -721,17 +721,23 @@ paths:
                         src:
                           type: string
                           example: Accessory/Accessory2
-                    ProductSizes:
+                    ProductMainTags:
                       type: array
                       items:
                         type: object
                         properties:
-                          size:
-                            type: integer
-                            example: 30
-                          amount:
-                            type: integer
-                            example: 2
+                          name:
+                            type: string
+                            example: XL
+                          ProductSubTags:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                  example: 딥레드
+                                  amount: 3
         '400':
           description: 상품 조회 결과가 없을 경우
           schema:
@@ -902,7 +908,7 @@ paths:
             properties:
               imp_uid:
                 type: string
-              merchant_uid:
+              Merchant_uid:
                 type: string
               ProductId:
                 type: string

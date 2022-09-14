@@ -238,7 +238,7 @@ router.post('/likeProduct', authJWT, async (req, res, next) => {
     }
 })
 
-router.post('/purchase', authJWT, async (req, res) => {
+router.post('/purchase', authJWT, async (req, res, next) => {
     try {
         console.log(req.body)
         if (!req.body.ProductId) {
