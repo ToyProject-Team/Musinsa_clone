@@ -253,6 +253,9 @@ router.post('/purchase', authJWT, async (req, res, next) => {
         if (!req.body.price) {
             return res.status(403).send({ message: '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
         }
+        if (!req.body.amount) {
+            return res.status(405).send({ message: '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
+        }
 
         const { imp_uid, merchant_uid } = req.body; // req의 query에서 imp_uid, merchant_uid 추출
           // 액세스 토큰(access token) 발급 받기
@@ -287,6 +290,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
         await exUser.addMyOrder({
             id: req.body.ProductId,
             orderPrice: req.body.price,
+            amount: req.body.amount,
             state: 1,
             MerchantUid: merchant_uid,
             cancelableAmount: req.body.price,
