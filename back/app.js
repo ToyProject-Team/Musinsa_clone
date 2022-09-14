@@ -79,7 +79,7 @@ app.use(
     swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, { explorer: true }) //검색 허용가능
 );
-app.use((err, req, res, next) => {
+app.use((req, res, next, err) => {
   console.log(err)
   res.send({ errMessage: err})
 });
