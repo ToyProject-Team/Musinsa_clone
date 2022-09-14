@@ -20,7 +20,6 @@ import Modal from 'react-modal';
 import Order from 'components/Order';
 import {
 	LIKES,
-	ORDERMODAL,
 	useProductDetailDispatch,
 	useProductDetailState,
 } from 'context/ProductDetailContext';
@@ -70,6 +69,7 @@ const PurchaseForm = ({ data }) => {
 	const [selectIdx, setSelectIdx] = useState();
 	const [totalPrice, setTotalPrice] = useState(0);
 
+	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);
 
 	const [modalOrder, setModalOrder] = useState(false);
@@ -349,7 +349,7 @@ const PurchaseForm = ({ data }) => {
 	const onCloseModal = useCallback(() => {
 		setModalBasket(false);
 		setModalOrder(false);
-		changeDispatch(ORDERMODAL, { modal: false });
+		setOrder(false);
 	}, [modalBasket, modalOrder]);
 
 	const onLinkModal = useCallback(() => {
@@ -375,7 +375,7 @@ const PurchaseForm = ({ data }) => {
 		}
 
 		setModalOrder(false);
-		changeDispatch(ORDERMODAL, { modal: true });
+		setOrder(true);
 	}, []);
 
 	const openModal = useCallback(() => {
@@ -486,7 +486,7 @@ const PurchaseForm = ({ data }) => {
 			</TotalPrice>
 			<ButtonWrapper>
 				<ButtonBuy onClick={onClickOrderButton}>바로구매</ButtonBuy>
-				{detail.order.modal && <Order />}
+				{order && <Order pay={pay} />}
 				<ButtonLike clickedlike={clickedlike} onClick={onLikeClicked}>
 					<Button clickedlike={clickedlike} />
 					<Like clickedlike={clickedlike}>{thousandComma(detail.product.likes)}</Like>
@@ -501,8 +501,9 @@ const PurchaseForm = ({ data }) => {
 					show={modalOrder}
 					onCloseModal={onCloseModal}
 					onClickConfirm={onClickOrder}
-					price={thousandComma(10000)}
-					// price={thousandComma(totalPrice * detail.product.rookiePrice)}
+					price={thousandComma(totalPrice * detail.product.rookiePrice)}
+					pay={pay}
+					setPay={setPay}
 				></OrderModal>
 			)}
 

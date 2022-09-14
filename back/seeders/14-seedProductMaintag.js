@@ -5,25 +5,31 @@ module.exports = {
     function rand(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-    const categoryCount = [9, 12, 8, 3, 3, 3, 11, 13, 9, 13, 7, 2, 5, 3, 8, 5, 7, 12, 11, 11, 2, 2]
+    let option = ['S', 'M', 'L', 'XL', 'XXL']
     const dummyProductMainTags = []
-    for (var i = 1; i < 23; i++) {
+    for (var i = 1; i < 200; i++) {
       let randNums = []
-      let ran = rand(20, 40)
-      if (!randNums.includes(ran)) {
-        randNums.push(ran)
+      let amount = rand(1,5)
+      for (j = 0; j < amount; j++) { 
+        let ran = rand(0, 4)
+        if (!randNums.includes(ran)) {
+          randNums.push(option[ran])
+        }
+      }
+      if (randNums.length == 0) {
+        randNums.push(option[0])
       }
       console.log(randNums)
-      for (var j = 0; j < randNums.length; j++) {
+      for (var j = 0; j < amount; j++) {
         dummyProductMainTags.push({
-          name: randNums,
+          name: randNums[j],
           createdAt: new Date(),
           updatedAt: new Date(),
           ProductId: i
         })
       }
     }
-    
+    console.log(dummyProductMainTags)
     await queryInterface.bulkInsert("productmaintags", dummyProductMainTags);
   },
 

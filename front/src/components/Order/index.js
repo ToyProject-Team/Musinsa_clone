@@ -13,10 +13,7 @@ import { URLquery } from 'utils/URLquery';
 import { useLocation } from 'react-router';
 import axios from 'axios';
 
-const Order = () => {
-	const detail = useProductDetailState();
-	const dispatch = useProductDetailDispatch();
-
+const Order = ({ modal, pay }) => {
 	const data = getData();
 	const { accessToken } = data;
 
@@ -26,20 +23,16 @@ const Order = () => {
 
 	const [modalOrder, setModalOrder] = useState(false);
 
-	const changeDispatch = useCallback((type, payload) => {
-		return dispatch({ type, payload });
-	}, []);
-
 	useEffect(() => {
 		let pg = '';
 		let pay_method = '';
 		let price = 10;
-		if (detail.order.pay === 'card') pg = 'html5_inicis';
-		else if (detail.order.pay === 'Virtual') pg = 'html5_inicis';
-		else if (detail.order.pay === 'kakao') pg = 'kakaopay';
-		else if (detail.order.pay == 'payco') pg = 'payco';
+		if (pay === 'card') pg = 'html5_inicis';
+		else if (pay === 'Virtual') pg = 'html5_inicis';
+		else if (pay === 'kakao') pg = 'kakaopay';
+		else if (pay == 'payco') pg = 'payco';
 
-		if (detail.order.pay === 'Virtual') pay_method = 'vbank';
+		if (pay === 'Virtual') pay_method = 'vbank';
 		else pay_method = 'card';
 
 		var { IMP } = window; // 생략가능
@@ -76,12 +69,11 @@ const Order = () => {
 					);
 				} else {
 					// 결제 실패 시 로직,
-					changeDispatch(ORDERMODAL, { modal: false });
 					console.log(2);
 				}
 			},
 		);
-	}, [detail.order]);
+	}, [pay]);
 
 	const onCloseModal = useCallback(() => {
 		setModalOrder(false);
