@@ -10,9 +10,8 @@ import { HiOutlinePlusSm, HiOutlineMinusSm } from 'react-icons/hi';
 const Sidebar = () => {
 	const [cancel, setCancel] = useState(true);
 	const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
-	const parentRef = useRef(null);
-	const childRef = useRef(null);
-	const [collpse, setCollpse] = useState(false);
+	const parentRef = useRef();
+	const childRef = useRef();
 
 	const onClickCategory = useCallback(idx => {
 		console.log(parentRef.current, childRef.current);
@@ -20,7 +19,6 @@ const Sidebar = () => {
 		setOpen(prev => {
 			const newArray = [...prev];
 			newArray[idx] = !newArray[idx];
-
 			return newArray;
 		});
 	}, []);
@@ -39,7 +37,7 @@ const Sidebar = () => {
 							onClick={() => onClickCategory(idx)}
 							aria-expanded={open[idx]}
 						>
-							<div title="BigMenu" key={idx} ref={parentRef}>
+							<div title="BigMenu" key={idx}>
 								{big}
 								<span>{alpabet[idx]}</span>
 								<span>{!open[idx] ? <HiOutlinePlusSm /> : <HiOutlineMinusSm />}</span>
@@ -49,7 +47,7 @@ const Sidebar = () => {
 								title="smallMenu"
 								aria-expanded={!open[idx]}
 								style={!open[idx] ? { paddingTop: '0' } : { paddTop: '20px' }}
-								ref={childRef}
+								onClick={e => e.stopPropagation()}
 							>
 								{smallCategory[idx].map((small, idex) => (
 									<li key={idex}>
