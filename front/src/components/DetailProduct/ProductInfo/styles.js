@@ -48,18 +48,21 @@ export const TitleBox = styled.div`
 `;
 
 export const ImageInfo = styled.div`
-	margin: 20px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 50px;
+	margin: ${props => (!props.clicked ? '20px' : '100px')};
 	height: ${props => (!props.clicked ? '500px' : '')};
 	overflow: ${props => (!props.clicked ? 'hidden' : '')};
-	postiion: relative;
 	img {
 		width: 100%;
 	}
 `;
 
 export const ImagagaInfo = styled.div`
+	position: relative;
 	margin: 20px;
-	postiion: relative;
 `;
 
 export const Button = styled.button`

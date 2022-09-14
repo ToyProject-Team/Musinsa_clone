@@ -23,6 +23,20 @@ export const GetApi = async PATH => {
  * @param body값 params
  * @returns result 데이터
  */
+export const GetTokenApi = async (PATH, params) => {
+	const result = await axios.get(baseUrl + PATH, {
+		headers: { 'Content-Type': 'application/json', Authorization: params },
+	});
+
+	return result;
+};
+
+/**
+ *
+ * @param URL주소 PATH
+ * @param body값 params
+ * @returns result 데이터
+ */
 
 export const PostApi = async (PATH, params) => {
 	const result = await axios.post(baseUrl + PATH, params, {
@@ -77,6 +91,25 @@ export const PostHeaderApi = async (PATH, header, params) => {
 export const PostHeaderBodyApi = async (PATH, data, header, params) => {
 	const result = await axios.post(baseUrl + PATH, data, {
 		headers: { 'Content-Type': 'application/json', [header]: params },
+	});
+
+	return result;
+};
+
+/**
+ *
+ * @param URL주소 PATH
+ * @param header이름 header
+ * @param header값 params
+ * @returns result 데이터
+ */
+export const DeleteHeaderBodyApi = async (PATH, data, header, params) => {
+	const result = await axios.delete(baseUrl + PATH, {
+		headers: {
+			'Content-Type': 'application/json',
+			[header]: `${params}`,
+		},
+		data,
 	});
 
 	return result;

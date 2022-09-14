@@ -23,10 +23,6 @@ const MyPage = loadable(() => import('pages/Mypage'), {
 	fallback: <div>로딩중</div>,
 });
 
-const Order = loadable(() => import('pages/Order'), {
-	fallback: <div>로딩중</div>,
-});
-
 const Agree = loadable(() => import('contract/Agree'), {
 	fallback: <div>로딩중</div>,
 });
@@ -62,7 +58,6 @@ function App() {
 					<Route path="find/*" element={<Find />} /> {/* => 아이디 패스워드 찾기 페이지 */}
 					<Route path="detail/*" element={<Dtail />} /> {/* => 상세페이지 */}
 					<Route path="mypage/*" element={<MyPage />} /> {/* => 마이페이지 */}
-					<Route path="order" element={<Order />} /> {/* => 결제 페이지 */}
 					<Route path="kakao/oauth/callback" element={<Kakao />} /> {/* => 카카오 로그인 페이지 */}
 					{/* 이용 약관 페이지 */}
 					<Route path="signup/agreement/agree" element={<Agree />} />

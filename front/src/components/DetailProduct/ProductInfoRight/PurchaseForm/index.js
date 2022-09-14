@@ -15,11 +15,21 @@ import {
 	Price,
 } from './styles';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
-import Order from 'pages/Order';
-import { useProductDetailState } from 'context/ProductDetailContext';
+import Order from 'components/Order';
+import {
+	LIKES,
+	useProductDetailDispatch,
+	useProductDetailState,
+} from 'context/ProductDetailContext';
 import { thousandComma } from 'utils/thousandComma';
+import { getData } from 'utils/getData';
+import { URLquery } from 'utils/URLquery';
+import { baseUrl, DeleteHeaderBodyApi, GetApi, GetTokenApi, PostHeaderBodyApi } from 'utils/api';
+import axios from 'axios';
+import ConfirmModal from 'components/Modals/ConfirmModal';
+import OrderModal from 'components/Modals/OrderModal';
 
 const ModalStyle = {
 	overlay: {
@@ -44,20 +54,26 @@ const ModalStyle = {
 
 const PurchaseForm = ({ data }) => {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const detail = useProductDetailState();
+	const dispatch = useProductDetailDispatch();
+	const user = getData();
 
-	const [size, setSize] = useState('옵션 선택');
-	const [color, setColor] = useState('옵션 선택');
-	const [selected, setSelected] = useState(false);
 	const [clickedlike, setClickedlike] = useState(true);
 	const [selectedPrice, setSelectedPrice] = useState(0);
-	const [orderAmount, setOrderAmount] = useState(1);
+	// const [orderAmount, setOrderAmount] = useState(1);
 	const [showModal, setShowModal] = useState(false);
 
 	const [option, setOption] = useState({});
 	const [selectList, setSelectList] = useState({});
 	const [selectIdx, setSelectIdx] = useState();
 	const [totalPrice, setTotalPrice] = useState(0);
+
+	const [pay, setPay] = useState('card');
+	const [order, setOrder] = useState(false);
+
+	const [modalOrder, setModalOrder] = useState(false);
+	const [modalBasket, setModalBasket] = useState(false);
 
 	// 새로고침
 	// 선택 List 옵션 초기화
@@ -70,8 +86,26 @@ const PurchaseForm = ({ data }) => {
 		);
 	}, []);
 
+	// 좋아요 표시
+	const userLikes = useCallback(async () => {
+		const token = user.accessToken;
+		const query = URLquery(location);
+		try {
+			const result = await GetTokenApi('/api/mypage/favoriteGoods', token);
+			let likeProduct = result.data.likeProduct.filter(v => `${v.id}` === query.productId);
+			setClickedlike(Object.keys(likeProduct).length > 0 ? true : false);
+		} catch (error) {
+			console.log(error);
+		}
+	}, []);
+
 	useEffect(() => {
 		optionListInit();
+		if (user) userLikes();
+	}, []);
+
+	const changeDispatch = useCallback((type, payload) => {
+		return dispatch({ type, payload });
 	}, []);
 
 	// 옵션 선택
@@ -167,6 +201,22 @@ const PurchaseForm = ({ data }) => {
 		[selectList],
 	);
 
+	const onClickRemove = useCallback(
+		(option_1, option_2) => {
+			setSelectList(prev => {
+				prev = {
+					...prev,
+					[option_1]: prev[option_1].filter(v => !v[option_2]),
+				};
+
+				if (prev[option_1].length === 0) delete prev[option_1];
+
+				return prev;
+			});
+		},
+		[selectList],
+	);
+
 	// const SelectForm = ({ price, size, color }) => {
 	// 	const onIncrease = () => {
 	// 		setOrderAmount(orderAmount + 1);
@@ -215,7 +265,6 @@ const PurchaseForm = ({ data }) => {
 	useEffect(() => {
 		let answer = 0;
 		if (Object.keys(selectList).length > 0) {
-			console.log(123);
 			answer = Object.values(selectList)
 				?.map(v =>
 					v.map(item => {
@@ -236,29 +285,114 @@ const PurchaseForm = ({ data }) => {
 	// 	}
 	// }, [size, color]);
 
-	const onLikeClicked = useCallback(() => {
+	// 좋아요
+	const onLikeClicked = useCallback(async () => {
+		if (!user) {
+			const { pathname, search } = location;
+			navigate(`/login?redirect=${pathname}${search}`);
+		}
+
+		const token = user.accessToken;
+		const query = URLquery(location);
+
 		setClickedlike(prev => !prev);
+		if (clickedlike) {
+			changeDispatch(LIKES, {
+				likes: detail.product.likes - 1,
+			});
+			detail.product.likes -= 1;
+
+			try {
+				const params = {
+					productId: query.productId,
+				};
+				await DeleteHeaderBodyApi('/api/mypage/favoriteGoods/del', params, 'Authorization', token);
+			} catch (error) {
+				setClickedlike(true);
+			}
+		} else {
+			changeDispatch(LIKES, {
+				likes: detail.product.likes + 1,
+			});
+			detail.product.likes += 1;
+
+			try {
+				const params = {
+					productId: query.productId,
+				};
+				PostHeaderBodyApi('/api/product/likeProduct', params, 'Authorization', token);
+			} catch (error) {
+				setClickedlike(false);
+			}
+		}
 	}, [clickedlike]);
 
+	// 장바구니 추가
 	const onClickBasket = useCallback(() => {
-		console.log(1);
+		if (!user) {
+			const { pathname, search } = location;
+			navigate(`/login?redirect=${pathname}${search}`);
+		}
+
+		const token = user.accessToken;
+		const query = URLquery(location);
+
+		try {
+			const params = {
+				productId: query.productId,
+			};
+			PostHeaderBodyApi('/api/product/addCart', params, 'Authorization', token);
+			setModalBasket(true);
+		} catch (error) {}
 	}, []);
 
-	const openModal = () => {
-		setShowModal(showModal => !showModal);
+	const onCloseModal = useCallback(() => {
+		setModalBasket(false);
+		setModalOrder(false);
+		setOrder(false);
+	}, [modalBasket, modalOrder]);
+
+	const onLinkModal = useCallback(() => {
+		setModalBasket(false);
+		navigate('/mypage/cart');
+	}, [modalBasket]);
+
+	// 바로구매
+	const onClickOrderButton = useCallback(() => {
+		if (!user) {
+			const { pathname, search } = location;
+			navigate(`/login?redirect=${pathname}${search}`);
+		}
+
+		setModalOrder(true);
+	}, []);
+
+	// 결제
+	const onClickOrder = useCallback(() => {
+		if (!user) {
+			const { pathname, search } = location;
+			navigate(`/login?redirect=${pathname}${search}`);
+		}
+
+		setModalOrder(false);
+		setOrder(true);
+	}, []);
+
+	const openModal = useCallback(() => {
+		setModalOrder(true);
 		// if (!user.login) {
 		// 	alert('로그인 후 구매가 가능합니다.');
 		// 	navigate('/login');
 		// } else {
-		// 	const payment_data = {
-		// 		price: selectedPrice + data.productPrice,
-		// 		id: data.ProductId,
-		// 		name: data.productTitle,
-		// 		date: new Date(),
-		// 	};
-		// 	dispatch({ payment_data, type: PAYMENT });
+		// const payment_data = {
+		// 	price: selectedPrice + data.productPrice,
+		// 	id: data.ProductId,
+		// 	name: data.productTitle,
+		// 	date: new Date(),
+		// };
+		// dispatch({ payment_data, type: PAYMENT });
 		// }
-	};
+	}, []);
 
 	return (
 		<div>
@@ -288,6 +422,7 @@ const PurchaseForm = ({ data }) => {
 				})}
 			</FormWrapper>
 			{Object.keys(selectList)?.map((option_1, idx) => {
+				// const orderCount = item[option_1];
 				if (typeof selectList[option_1] === 'number') {
 					// 옵션 1개 인경우
 					return (
@@ -296,8 +431,8 @@ const PurchaseForm = ({ data }) => {
 								<Selected>{option_1}</Selected>
 								<Amount>
 									<ul>
-										<Decrease orderAmount={orderAmount}>-</Decrease>
-										<li>{orderAmount}</li>
+										<Decrease orderAmount={1}>-</Decrease>
+										<li>{1}</li>
 										<li>+</li>
 									</ul>
 								</Amount>
@@ -337,7 +472,7 @@ const PurchaseForm = ({ data }) => {
 									</div>
 									<div>
 										<div>{thousandComma(orderCount * detail.product.rookiePrice)}원</div>
-										<p>X</p>
+										<p onClick={() => onClickRemove(option_1, option_2)}>X</p>
 									</div>
 								</SelectedOption>
 							</div>
@@ -350,14 +485,8 @@ const PurchaseForm = ({ data }) => {
 				<div>{thousandComma(totalPrice * detail.product.rookiePrice)}원</div>
 			</TotalPrice>
 			<ButtonWrapper>
-				<ButtonBuy onClick={openModal}>바로구매</ButtonBuy>
-				{showModal ? (
-					<Modal style={ModalStyle} isOpen={true}>
-						<Order openModal={openModal} price={selectedPrice + data.productPrice} />
-					</Modal>
-				) : (
-					<></>
-				)}
+				<ButtonBuy onClick={onClickOrderButton}>바로구매</ButtonBuy>
+				{order && <Order pay={pay} />}
 				<ButtonLike clickedlike={clickedlike} onClick={onLikeClicked}>
 					<Button clickedlike={clickedlike} />
 					<Like clickedlike={clickedlike}>{thousandComma(detail.product.likes)}</Like>
@@ -366,6 +495,24 @@ const PurchaseForm = ({ data }) => {
 					<i>장바구니 아이콘</i>
 				</ButtonCart>
 			</ButtonWrapper>
+
+			{modalOrder && (
+				<OrderModal
+					show={modalOrder}
+					onCloseModal={onCloseModal}
+					onClickConfirm={onClickOrder}
+					price={thousandComma(totalPrice * detail.product.rookiePrice)}
+					pay={pay}
+					setPay={setPay}
+				></OrderModal>
+			)}
+
+			<ConfirmModal
+				show={modalBasket}
+				onCloseModal={onCloseModal}
+				onClickConfirm={onLinkModal}
+				content={'장바구니로 이동하시겠습니까?'}
+			></ConfirmModal>
 		</div>
 	);
 };

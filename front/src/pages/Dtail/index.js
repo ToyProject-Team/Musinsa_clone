@@ -16,7 +16,8 @@ import {
 } from 'context/ProductDetailContext';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import qs from 'qs';
+import { URLquery } from 'utils/URLquery';
+import Footer from 'layouts/Footer';
 
 const dummyProduct = {
 	BigCategoryName: '상의',
@@ -51,13 +52,15 @@ const dummyProduct = {
 
 const DetailProduct = () => {
 	const location = useLocation();
-	const query = qs.parse(location.search, {
-		ignoreQueryPrefix: true,
-	});
+	const query = URLquery(location);
 
 	const [initialProduceDetail, setInitialProduceDetail] = useState({
 		user: {},
 		product: {},
+		order: {
+			pay: 'card',
+			modal: false,
+		},
 	});
 	const [loading, setLoading] = useState(true);
 
@@ -93,6 +96,7 @@ const DetailProduct = () => {
 						</ProductWrapper>
 					</DetailWrapper>
 					<ProductInfo />
+					<Footer></Footer>
 				</ProductDetailProvider>
 			)}
 		</>

@@ -63,3 +63,51 @@ export const StyleLink = styled(Link)`
 	color: #fff;
 	text-decoration: none;
 `;
+
+export const CheckLabel = styled.label`
+	display: inline-flex;
+	position: relative;
+	width: auto;
+	min-height: 20px;
+	padding: 0 0 0 26px;
+	font-size: 14px;
+	color: inherit;
+	text-align: left;
+	white-space: normal;
+	align-items: center;
+	cursor: pointer;
+
+	&::before {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		width: 20px;
+		height: 20px;
+		border: 1px solid #ccc;
+		border-radius: 100%;
+		background-color: #f1f1f1;
+		content: '';
+	}
+
+	&.active {
+		&::before {
+			border-color: #0078ff;
+			background-color: #0078ff;
+		}
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: 12px;
+			left: 9px;
+			width: 4px;
+			height: 8px;
+			border-right: 1px solid #fff;
+			border-bottom: 1px solid #fff;
+			transform: translateY(calc(-50% - 2px)) rotate(45deg);
+			display: block;
+			box-sizing: border-box;
+		}
+	}
+`;
