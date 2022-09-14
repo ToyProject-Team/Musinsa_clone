@@ -284,7 +284,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
             }
         })
         
-        await exUser.addmyOrder({
+        await exUser.addMyOrder({
             id: req.body.ProductId,
             orderPrice: req.body.price,
             state: 1,
