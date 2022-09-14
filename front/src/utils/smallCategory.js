@@ -1,5 +1,4 @@
 export const smallCategory = [
-	[],
 	[
 		'반소매 티셔츠',
 		'긴소매 티셔츠',
