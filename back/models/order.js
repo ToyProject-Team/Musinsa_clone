@@ -18,11 +18,11 @@ module.exports = class Order extends Model {
                     allowNull: false
                 },
                 MerchantUid: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.STRING(40),
                     allowNull: false
                 },
                 ImpUid: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.STRING(40),
                     allowNull: false
                 },
                 cancelableAmount: {
