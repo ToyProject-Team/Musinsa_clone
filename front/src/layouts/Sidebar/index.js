@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { CgClose } from 'react-icons/cg';
 import { SContainer, SDiv } from './styles';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -9,7 +9,21 @@ import { HiOutlinePlusSm, HiOutlineMinusSm } from 'react-icons/hi';
 
 const Sidebar = () => {
 	const [cancel, setCancel] = useState(true);
-	const [plus, setPlus] = useState(true);
+	const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
+	const parentRef = useRef(null);
+	const childRef = useRef(null);
+	const [collpse, setCollpse] = useState(false);
+
+	const onClickCategory = useCallback(idx => {
+		console.log(parentRef.current, childRef.current);
+
+		setOpen(prev => {
+			const newArray = [...prev];
+			newArray[idx] = !newArray[idx];
+
+			return newArray;
+		});
+	}, []);
 
 	return (
 		<SContainer>
@@ -20,35 +34,30 @@ const Sidebar = () => {
 				</Link>
 				<nav>
 					{bigCategory.map((big, idx) => (
-						<div title="MeunContainer">
-							<div title="BigMenu" key={idx}>
+						<div
+							title="MeunContainer"
+							onClick={() => onClickCategory(idx)}
+							aria-expanded={open[idx]}
+						>
+							<div title="BigMenu" key={idx} ref={parentRef}>
 								{big}
 								<span>{alpabet[idx]}</span>
-								<span onClick={() => setPlus(e => !e)}>
-									{plus ? <HiOutlinePlusSm /> : <HiOutlineMinusSm />}
-								</span>
+								<span>{!open[idx] ? <HiOutlinePlusSm /> : <HiOutlineMinusSm />}</span>
 							</div>
 
-							{plus && (
-								<ul title="smallMenu" style={{ display: 'none' }}>
-									{smallCategory[idx].map((small, idex) => (
-										<li key={idex}>
-											{small}
-											<span>{`(${idex})`}</span>
-										</li>
-									))}
-								</ul>
-							)}
-							{!plus && (
-								<ul title="smallMenu">
-									{smallCategory[idx].map((small, idex) => (
-										<li key={idex}>
-											{small}
-											<span>{`(${idex})`}</span>
-										</li>
-									))}
-								</ul>
-							)}
+							<ul
+								title="smallMenu"
+								aria-expanded={!open[idx]}
+								style={!open[idx] ? { paddingTop: '0' } : { paddTop: '20px' }}
+								ref={childRef}
+							>
+								{smallCategory[idx].map((small, idex) => (
+									<li key={idex}>
+										{small}
+										<span>{`(${idex})`}</span>
+									</li>
+								))}
+							</ul>
 						</div>
 					))}
 				</nav>

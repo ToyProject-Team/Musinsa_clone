@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { Filter } from './styles';
+import React, { useState, useCallback, useRef } from 'react';
+import { Btm, Filter } from './styles';
 import { BiShoppingBag, BiHomeCircle, BiHomeHeart } from 'react-icons/bi';
 import { BsShare } from 'react-icons/bs';
 import { TbArrowBigUpLine, TbArrowBigDownLine } from 'react-icons/tb';
@@ -13,6 +13,8 @@ const DialLog = () => {
 	// url 모달
 	const [modalAuth, setModalAuth] = useState(false);
 
+	const btm = useRef();
+
 	const onCloseModal = useCallback(() => {
 		setModalAuth(false);
 	}, []);
@@ -25,11 +27,12 @@ const DialLog = () => {
 	};
 
 	const scrollBtm = () => {
-		window.scrollTo({
-			block: 'center',
-			behavior: 'smooth',
-		});
-		console.log(window.innerHeight);
+		// window.scroll({
+		// 	bottom: document.body.scrollHeight,
+		// 	behavior: 'smooth',
+		// });
+		btm.current.scrollIntoView();
+		console.log(document.body.scrollHeight);
 	};
 
 	return (
@@ -71,7 +74,7 @@ const DialLog = () => {
 					</a>
 				</div>
 			</Filter>
-
+			<Btm ref={btm} />
 			<UrlCopyModal show={modalAuth} onCloseModal={onCloseModal} />
 		</>
 	);
