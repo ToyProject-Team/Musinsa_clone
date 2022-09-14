@@ -5,9 +5,11 @@ const ProductImg = require('../models/productImg')
 const CustomCategory = require('../models/customCategory')
 const Comment = require('../models/comment')
 const ProductSize = require('../models/productSize')
+const ProductMainTag = require('../models/productMainTag')
+const ProductSubTag = require('../models/productSubTag')
 const AWS = require('aws-sdk');
 const fs = require('fs');
-const {sequelize, Op} = require('sequelize')
+const {sequelize, Op, Sequelize} = require('sequelize')
 const authJWT = require('../utils/authJWT')
 const axios = require('axios')
 const router = express.Router()
@@ -121,7 +123,16 @@ router.get('/productDetail', async (req, res, next) => {
                     model: CustomCategory,
                     attributes: ["id"],
                     through: {attributes: []}
-                }
+                },
+                {
+                    model: ProductMainTag,
+                    attributes: ["name"],
+                    include: {
+                        model: ProductSubTag,
+                        attributes: ["name", "amount"]
+                    }
+                    // attributes: ["src"]
+                },
             ],
             where: {
                 id: req.query.productId
@@ -199,6 +210,14 @@ router.post('/likeProduct', authJWT, async (req, res, next) => {
         if (checkLike.length > 0) {
             return res.status(400).send({ message: "이미 좋아요한 상품입니다" })
         }
+
+        await Product.update({
+            likes: Sequelize.literal('likes + 1')
+        }, {
+                where: {
+                id: req.body.productId
+            }
+        })
 
         await exUser.addLikeIt(req.body.productId)
 

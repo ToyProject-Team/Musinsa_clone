@@ -6,7 +6,7 @@ module.exports = class ProductSize extends Model {
         return super.init(
             {
                 size: {
-                    type: DataTypes.INTEGER,
+                    type: DataTypes.STRING(30),
                     allowNull: false,
                 },
                 amount: {

@@ -8,7 +8,8 @@ module.exports = class User extends Model {
                 loginId: {
                     type: DataTypes.STRING(100),
                     allowNull: true,
-                    unique: true
+                    unique: true,
+                    fields: 'email'
                 },
                 email: {
                     type: DataTypes.STRING(100),

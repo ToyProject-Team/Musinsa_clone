@@ -22,7 +22,7 @@ module.exports = {
       questionType: 1,
       questionAnswer: "312321",
     })
-    for (var i = 0; i < 50; i++) {
+    for (var i = 0; i < 70; i++) {
       // console.log(i)
       dummyUser.push({
         loginId: faker.internet.email(),
