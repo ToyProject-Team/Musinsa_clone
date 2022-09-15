@@ -52,20 +52,23 @@ const ModalStyle = {
 	},
 };
 
-const PurchaseForm = ({ data }) => {
+const PurchaseForm = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const detail = useProductDetailState();
 	const dispatch = useProductDetailDispatch();
 	const user = getData();
-	console.log(detail.product.ProductMainTags);
 
 	const [clickedlike, setClickedlike] = useState(true);
-	const [selectedPrice, setSelectedPrice] = useState(0);
-	// const [orderAmount, setOrderAmount] = useState(1);
-	const [showModal, setShowModal] = useState(false);
 
-	const [optionData, setOptionData] = useState(detail.product.ProductMainTags);
+	const [optionData, setOptionData] = useState([
+		{
+			option1: '옵션 선택',
+		},
+		{
+			option2: '옵션 선택',
+		},
+	]);
 	const [option, setOption] = useState({});
 	const [selectList, setSelectList] = useState({});
 	const [selectIdx, setSelectIdx] = useState();
@@ -95,12 +98,13 @@ const PurchaseForm = ({ data }) => {
 	// 선택 List 옵션 초기화
 	const optionListInit = useCallback(() => {
 		const value = Object.keys(optionData);
+
 		setOption(() =>
 			value.map(v => {
 				return { [v]: '옵션 선택' };
 			}),
 		);
-	}, []);
+	}, [optionData]);
 
 	// 좋아요 표시
 	const userLikes = useCallback(async () => {
@@ -117,9 +121,13 @@ const PurchaseForm = ({ data }) => {
 
 	// 첫화면 초기화
 	useEffect(() => {
-		optionDataStructureChange();
-		optionListInit();
-		if (user) userLikes();
+		const asyncFunction = async () => {
+			await optionDataStructureChange();
+			await optionListInit();
+			if (user) await userLikes();
+		};
+
+		asyncFunction();
 	}, []);
 
 	const changeDispatch = useCallback((type, payload) => {
@@ -159,17 +167,6 @@ const PurchaseForm = ({ data }) => {
 							return {
 								...prev,
 								[key]: oldValue ? [...oldValue, { [nowValue]: 1 }] : [{ [nowValue]: 1 }],
-							};
-						});
-						inifFlag = true;
-					} else {
-						// 옵션이 1개인 경우
-						if (selectList[nowValue]) return alert('이미 선택한 상품입니다.');
-
-						setSelectList(prev => {
-							return {
-								...prev,
-								[nowValue]: 1,
 							};
 						});
 						inifFlag = true;
@@ -235,51 +232,6 @@ const PurchaseForm = ({ data }) => {
 		[selectList],
 	);
 
-	// const SelectForm = ({ price, size, color }) => {
-	// 	const onIncrease = () => {
-	// 		setOrderAmount(orderAmount + 1);
-	// 		setSelectedPrice(selectedPrice + price);
-	// 	};
-	// 	const onDecrease = () => {
-	// 		if (orderAmount === 1) {
-	// 			alert('더이상 수량을 줄일 수 없습니다.');
-	// 		} else {
-	// 			setOrderAmount(orderAmount - 1);
-	// 			setSelectedPrice(selectedPrice - price);
-	// 		}
-	// 	};
-	// 	const onCancel = () => {
-	// 		setSelected(!selected);
-	// 		setSelectedPrice(0);
-	// 		setOrderAmount(1);
-	// 		setSize('옵션 선택');
-	// 		setColor('옵션 선택');
-	// 	};
-
-	// 	return (
-	// 		<div>
-	// 			<SelectedOption>
-	// 				<Selected>
-	// 					{size}/{color}
-	// 				</Selected>
-	// 				<Amount>
-	// 					<ul>
-	// 						<Decrease orderAmount={orderAmount} onClick={onDecrease}>
-	// 							-
-	// 						</Decrease>
-	// 						<li>{orderAmount}</li>
-	// 						<li onClick={onIncrease}>+</li>
-	// 					</ul>
-	// 				</Amount>
-	// 				<Price>
-	// 					<div>{selectedPrice + data.productPrice}원</div>
-	// 					<p onClick={onCancel}>X</p>
-	// 				</Price>
-	// 			</SelectedOption>
-	// 		</div>
-	// 	);
-	// };
-
 	useEffect(() => {
 		let answer = 0;
 		if (Object.keys(selectList).length > 0) {
@@ -295,13 +247,6 @@ const PurchaseForm = ({ data }) => {
 
 		setTotalPrice(answer);
 	}, [selectList]);
-
-	// useEffect(() => {
-	// 	if (size !== '옵션 선택' && color !== '옵션 선택') {
-	// 		setSelected(true);
-	// 	} else {
-	// 	}
-	// }, [size, color]);
 
 	// 좋아요
 	const onLikeClicked = useCallback(async () => {
@@ -394,22 +339,6 @@ const PurchaseForm = ({ data }) => {
 
 		setModalOrder(false);
 		setOrder(true);
-	}, []);
-
-	const openModal = useCallback(() => {
-		setModalOrder(true);
-		// if (!user.login) {
-		// 	alert('로그인 후 구매가 가능합니다.');
-		// 	navigate('/login');
-		// } else {
-		// const payment_data = {
-		// 	price: selectedPrice + data.productPrice,
-		// 	id: data.ProductId,
-		// 	name: data.productTitle,
-		// 	date: new Date(),
-		// };
-		// dispatch({ payment_data, type: PAYMENT });
-		// }
 	}, []);
 
 	return (
