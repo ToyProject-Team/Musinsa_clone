@@ -219,7 +219,7 @@
               example: https://kauth.kakao.com/oauth/authorize?client_id=b7ac8922efe0c82210458ea8fcee89a4&redirect_uri=http://localhost/api/auth/kakao/callback&response_type=code&scope=profile_nickname,account_email
 
 /api/auth/kakao/callback:
-  post:
+  get:
     tags:
       - auth
     summary: 소셜 로그인(카카오)

@@ -1,5 +1,4 @@
 export const bigCategory = [
-	'전체',
 	'상의',
 	'아우터',
 	'바지',
@@ -22,4 +21,29 @@ export const bigCategory = [
 	'생활/취미/예술',
 	'책/음악/티켓',
 	'반려동물',
+];
+
+export const alpabet = [
+	'Top',
+	'Outer',
+	'Pants',
+	'Onepiece',
+	'Skirt',
+	'Sneakers',
+	'Shoes',
+	'Bag',
+	"Women'bag",
+	'Sports/Goods',
+	'Headwear',
+	'Socks/Legwear',
+	'Underwear',
+	'Eyewear',
+	'Accessory',
+	'Watch',
+	'Jewelry',
+	'Beauty',
+	'Digital/Tech',
+	'Life',
+	'Culture',
+	'Pet',
 ];

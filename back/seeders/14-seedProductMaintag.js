@@ -30,7 +30,7 @@ module.exports = {
       }
     }
     console.log(dummyProductMainTags)
-    await queryInterface.bulkInsert("productmaintags", dummyProductMainTags);
+    await queryInterface.bulkInsert("ProductMainTags", dummyProductMainTags);
   },
 
   async down (queryInterface, Sequelize) {

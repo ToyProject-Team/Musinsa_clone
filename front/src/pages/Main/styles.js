@@ -11,6 +11,8 @@ export const MainContainer = styled.div`
 	max-width: 100%;
 	// min-width: 1229px;
 	//overflow: hidden;
+	width: calc(100% - 270px);
+	margin-left: auto;
 `;
 
 // 카테고리
