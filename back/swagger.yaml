@@ -108,8 +108,6 @@ paths:
                 type: string
               password:
                 type: string
-              passwordCheck:
-                type: string
       responses:
         '200':
           description: 성공

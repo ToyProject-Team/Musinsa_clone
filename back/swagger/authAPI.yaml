@@ -39,10 +39,10 @@
               example: 01054325612
     responses:
       200:
-        $ref: "./openapi.yaml#/success"
+        $ref: './openapi.yaml#/success'
       400:
         description: 이메일 인증 또는 휴대폰 인증을 진행하지 않고 회원가입을 진행했을 경우
-        schema: 
+        schema:
           properties:
             message:
               type: string
@@ -76,7 +76,7 @@
               type: string
               example: 휴대폰 인증이 완료된 번호를 보내야합니다
       500:
-        $ref: "./openapi.yaml#/serverError"
+        $ref: './openapi.yaml#/serverError'
 
 /api/auth/signin:
   post:
@@ -96,8 +96,6 @@
             loginId:
               type: string
             password:
-              type: string
-            passwordCheck:
               type: string
     responses:
       200:
@@ -130,7 +128,7 @@
           properties:
             message:
               type: string
-              example: 
+              example:
       402:
         description: 비밀번호 일치하지 않음 (로그인 아이디는 맞지만 비밀번호가 틀린 경우)
         schema:
@@ -139,7 +137,7 @@
               type: string
               example: 패스워드가 일치하지 않습니다!
       500:
-        $ref: "./openapi.yaml#/serverError"
+        $ref: './openapi.yaml#/serverError'
 
 /api/auth/logout:
   post:
@@ -152,7 +150,7 @@
         required: true
     responses:
       200:
-        $ref: "./openapi.yaml#/success"
+        $ref: './openapi.yaml#/success'
 /api/auth/refresh:
   get:
     tags:
@@ -178,10 +176,10 @@
               properties:
                 accessToken:
                   type: string
-                  exmaple: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU4MjA4NDQzLCJleHAiOjE2NTgyOTQ4NDN9.xI5ylpNtkeC5wnf4mnqcP3nbFMpm1mKjrHySxLJyN_4"
+                  exmaple: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU4MjA4NDQzLCJleHAiOjE2NTgyOTQ4NDN9.xI5ylpNtkeC5wnf4mnqcP3nbFMpm1mKjrHySxLJyN_4'
                 refreshToken:
                   type: string
-                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU4MjA4NDQzLCJleHAiOjE2NTgyOTQ4NDN9.xI5ylpNtkeC5wnf4mnqcP3nbFMpm1mKjrHySxLJyN_4"
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjU4MjA4NDQzLCJleHAiOjE2NTgyOTQ4NDN9.xI5ylpNtkeC5wnf4mnqcP3nbFMpm1mKjrHySxLJyN_4'
       403:
         description: refresh 토큰 발급 도중 access token, refresh token이 모두 헤더에 없는 경우
         schema:
@@ -204,7 +202,7 @@
               type: string
               example: accessToken이 지급되지 않았습니다
       500:
-        $ref: "./openapi.yaml#/serverError"
+        $ref: './openapi.yaml#/serverError'
 /api/auth/kakao:
   get:
     tags:
@@ -237,7 +235,7 @@
             encryptionCode:
               type: string
               example: U2FsdGVkX18p+20q6O89nafZmNt+VXhqe0hyrqE4SGc=
-            
+
 /api/auth/authEmail:
   post:
     tags:
@@ -255,7 +253,7 @@
               example: sola2014@naver.com
     responses:
       200:
-        $ref: "./openapi.yaml#/success"
+        $ref: './openapi.yaml#/success'
       400:
         description: 네이버 이메일이 조회되지 않음
         schema:
@@ -264,7 +262,7 @@
               type: string
               example: 유효하지 않은 이메일입니다
       500:
-        $ref: "./openapi.yaml#/serverError"
+        $ref: './openapi.yaml#/serverError'
 
 /api/auth/checkEmail:
   post:
@@ -288,7 +286,7 @@
       200:
         schema:
           properties:
-            emailCheck: 
+            emailCheck:
               type: string
               example: 1661019108934
       400:
@@ -306,8 +304,8 @@
               type: string
               example: 이메일 인증 번호가 일치하지 않습니다
       500:
-        $ref: "./openapi.yaml#/serverError"
-        
+        $ref: './openapi.yaml#/serverError'
+
 /api/auth/sendSMS:
   post:
     tags:
@@ -325,9 +323,9 @@
               example: 01062077206
     responses:
       200:
-        $ref: "./openapi.yaml#/success"
+        $ref: './openapi.yaml#/success'
       500:
-        $ref: "./openapi.yaml#/serverError"
+        $ref: './openapi.yaml#/serverError'
 
 /api/auth/checkSMS:
   post:
@@ -369,7 +367,7 @@
               type: string
               example: 인증 번호가 틀리셨습니다
       500:
-        $ref: "./openapi.yaml#/serverError"
+        $ref: './openapi.yaml#/serverError'
 /api/auth/findId:
   post:
     tags:
@@ -413,7 +411,7 @@
               type: string
               example: 해당 이메일을 가진 유저의 조회 결과가 없습니다
       500:
-        $ref: "./openapi.yaml#/serverError"
+        $ref: './openapi.yaml#/serverError'
 
 /api/auth/findPassword:
   post:
@@ -445,7 +443,7 @@
       200:
         schema:
           properties:
-            changePasswordToken: 
+            changePasswordToken:
               type: string
               example: 1661055228577
             userId:
@@ -480,7 +478,7 @@
               type: string
               example: 로그인 아이디로 조회된 유저에 대한 전화번호가 아닙니다
       500:
-        $ref: "./openapi.yaml#/serverError"
+        $ref: './openapi.yaml#/serverError'
 
 /api/auth/changePassword:
   post:
@@ -505,7 +503,7 @@
       200:
         schema:
           properties:
-            changePasswordToken: 
+            changePasswordToken:
               type: string
               example: 1661055228577
       400:
@@ -523,7 +521,7 @@
               type: string
               example: 암호가 전달되지 않았습니다
       500:
-        $ref: "./openapi.yaml#/serverError"
+        $ref: './openapi.yaml#/serverError'
 
 /api/auth/isExistedLoginId:
   post:
@@ -544,7 +542,7 @@
       200:
         schema:
           properties:
-            userData: 
+            userData:
               type: string
               example: sola2014@naver.com
             loginIdCheckToken:
@@ -565,7 +563,7 @@
               type: string
               example: 해당 아이디에 대한 유저 조회 결과가 없습니다
       500:
-        $ref: "./openapi.yaml#/serverError"
+        $ref: './openapi.yaml#/serverError'
 
 /api/auth/checkIsLoginIdCheckUser:
   post:
@@ -581,7 +579,7 @@
       200:
         schema:
           properties:
-            userData: 
+            userData:
               type: string
               example: sola2014@naver.com
       400:
@@ -599,7 +597,7 @@
               type: string
               example: 토큰을 복호화한 결과가 없습니다 입력을 다시 확인해주세요
       500:
-        $ref: "./openapi.yaml#/serverError"
+        $ref: './openapi.yaml#/serverError'
 
 /tokenError:
   post:
@@ -649,6 +647,5 @@
             success:
               type: string
               example: Access token is not expired!
-          
-$ref: "./productAPI.yaml"
 
+$ref: './productAPI.yaml'
