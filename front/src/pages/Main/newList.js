@@ -2,7 +2,23 @@ import React, { useState } from 'react';
 import './styles';
 
 const NewList = props => {
-	return props.newProduct?.map(data => (
+	//옵션 데이터
+	const options = ['S', 'M', 'L', 'XL'];
+	const [arrow, setArrow] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
+	const [selected, setSelected] = useState(Array(props.product.length).fill(false));
+
+	const clickOption = idx => {
+		const newArr = selected;
+		if (selected.includes(true)) {
+			newArr[selected.indexOf(true)] = false;
+		} else {
+			newArr[idx] = true;
+		}
+		setSelected(newArr);
+	};
+
+	return props.newProduct?.map((data, idx) => (
 		<li className="li_outer">
 			<div className="li_inner">
 				<div className="list_img">
@@ -21,7 +37,23 @@ const NewList = props => {
 				</div>
 			</div>
 			<div className="option">
-				<span className="option_btn">OPTION ▼</span>
+				<p
+					className="option_btn"
+					onClick={() => {
+						clickOption(idx);
+						setArrow(!arrow);
+						setIsOpen(!isOpen);
+					}}
+				>
+					{selected[idx] ? 'OPTION ▲' : 'OPTION ▼'}
+				</p>
+				<div className="option_list">
+					<ul>
+						{options.map(size => (
+							<li className={selected[idx] ? 'open' : 'close'}>{size}</li>
+						))}
+					</ul>
+				</div>
 			</div>
 		</li>
 	));

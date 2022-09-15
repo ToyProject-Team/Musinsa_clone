@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './styles';
-// import { PostQueryApi, ApiTest } from 'utils/api';
-// import InfiniteScroll from 'react-infinite-scroll-component';
 
 const ShowList = props => {
 	//옵션 데이터
