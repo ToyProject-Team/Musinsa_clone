@@ -58,12 +58,14 @@ const PurchaseForm = ({ data }) => {
 	const detail = useProductDetailState();
 	const dispatch = useProductDetailDispatch();
 	const user = getData();
+	console.log(detail.product.ProductMainTags);
 
 	const [clickedlike, setClickedlike] = useState(true);
 	const [selectedPrice, setSelectedPrice] = useState(0);
 	// const [orderAmount, setOrderAmount] = useState(1);
 	const [showModal, setShowModal] = useState(false);
 
+	const [optionData, setOptionData] = useState(detail.product.ProductMainTags);
 	const [option, setOption] = useState({});
 	const [selectList, setSelectList] = useState({});
 	const [selectIdx, setSelectIdx] = useState();
@@ -75,10 +77,24 @@ const PurchaseForm = ({ data }) => {
 	const [modalOrder, setModalOrder] = useState(false);
 	const [modalBasket, setModalBasket] = useState(false);
 
-	// 새로고침
+	// 데이터 구조 변경
+	const optionDataStructureChange = useCallback(() => {
+		const option1 = detail.product.ProductMainTags.map(v => v.name);
+		const option2 = detail.product.ProductMainTags.map(v => {
+			const arr = v.ProductSubTags.map(item => item.name);
+			return arr;
+		});
+		const productArr = {
+			option1,
+			option2,
+		};
+
+		setOptionData(productArr);
+	}, []);
+
 	// 선택 List 옵션 초기화
 	const optionListInit = useCallback(() => {
-		const value = Object.keys(data.option);
+		const value = Object.keys(optionData);
 		setOption(() =>
 			value.map(v => {
 				return { [v]: '옵션 선택' };
@@ -99,7 +115,9 @@ const PurchaseForm = ({ data }) => {
 		}
 	}, []);
 
+	// 첫화면 초기화
 	useEffect(() => {
+		optionDataStructureChange();
 		optionListInit();
 		if (user) userLikes();
 	}, []);
@@ -112,14 +130,14 @@ const PurchaseForm = ({ data }) => {
 	const selectOption = useCallback(
 		e => {
 			const { name, value } = e.target;
-			const objData = Object.keys(data.option);
+			const objData = Object.keys(optionData);
 			const index = Number(e.target.getAttribute('data-index'));
 			const lastOptionIndex = objData.includes('add') ? objData.length - 2 : objData.length - 1;
 			let inifFlag = false;
 
 			if (index === 0) {
 				optionListInit();
-				setSelectIdx(data.option[name].indexOf(value));
+				setSelectIdx(optionData[name].indexOf(value));
 			}
 
 			if (index === lastOptionIndex && value !== '옵션 선택') {
@@ -397,7 +415,7 @@ const PurchaseForm = ({ data }) => {
 	return (
 		<div>
 			<FormWrapper style={{ backgroundColor: '#f3f3f3' }}>
-				{Object.keys(data.option).map((item, idx) => {
+				{Object.keys(optionData).map((item, idx) => {
 					return (
 						Array.isArray(option) && (
 							<BuyOption
@@ -408,12 +426,12 @@ const PurchaseForm = ({ data }) => {
 								data-index={idx}
 							>
 								<option>옵션 선택</option>
-								{typeof data.option[item][0] === 'string'
-									? data.option[item].map(itemOption => (
+								{typeof optionData[item][0] === 'string'
+									? optionData[item].map(itemOption => (
 											<option key={itemOption}>{itemOption}</option>
 									  ))
 									: selectIdx >= 0 &&
-									  data.option[item][selectIdx].map(itemOption => (
+									  optionData[item][selectIdx].map(itemOption => (
 											<option key={itemOption}>{itemOption}</option>
 									  ))}
 							</BuyOption>
@@ -421,65 +439,44 @@ const PurchaseForm = ({ data }) => {
 					);
 				})}
 			</FormWrapper>
+
 			{Object.keys(selectList)?.map((option_1, idx) => {
-				// const orderCount = item[option_1];
-				if (typeof selectList[option_1] === 'number') {
-					// 옵션 1개 인경우
+				return selectList[option_1].map(item => {
+					const option_2 = Object.keys(item)[0];
+					const orderCount = item[option_2];
+
 					return (
-						<div key={option_1 + idx}>
+						<div key={option_1 + option_2}>
 							<SelectedOption>
-								<Selected>{option_1}</Selected>
-								<Amount>
+								<div>
+									{option_1}/{option_2}
+								</div>
+								<div>
 									<ul>
-										<Decrease orderAmount={1}>-</Decrease>
-										<li>{1}</li>
-										<li>+</li>
+										<Decrease
+											orderAmount={orderCount}
+											onClick={() =>
+												orderCount > 1
+													? onClickDecrease(option_1, option_2)
+													: alert('더이상 수량을 줄일 수 없습니다.')
+											}
+										>
+											-
+										</Decrease>
+										<li>{orderCount}</li>
+										<li onClick={() => onClickIncrease(option_1, option_2)}>+</li>
 									</ul>
-								</Amount>
-								<Price>
-									<div>{selectedPrice + data.productPrice}원</div>
-									<p>X</p>
-								</Price>
+								</div>
+								<div>
+									<div>{thousandComma(orderCount * detail.product.rookiePrice)}원</div>
+									<p onClick={() => onClickRemove(option_1, option_2)}>X</p>
+								</div>
 							</SelectedOption>
 						</div>
 					);
-				} else {
-					// 옵션 2개 이상
-					return selectList[option_1].map(item => {
-						const option_2 = Object.keys(item)[0];
-						const orderCount = item[option_2];
-						return (
-							<div key={option_1 + option_2}>
-								<SelectedOption>
-									<div>
-										{option_1}/{option_2}
-									</div>
-									<div>
-										<ul>
-											<Decrease
-												orderAmount={orderCount}
-												onClick={() =>
-													orderCount > 1
-														? onClickDecrease(option_1, option_2)
-														: alert('더이상 수량을 줄일 수 없습니다.')
-												}
-											>
-												-
-											</Decrease>
-											<li>{orderCount}</li>
-											<li onClick={() => onClickIncrease(option_1, option_2)}>+</li>
-										</ul>
-									</div>
-									<div>
-										<div>{thousandComma(orderCount * detail.product.rookiePrice)}원</div>
-										<p onClick={() => onClickRemove(option_1, option_2)}>X</p>
-									</div>
-								</SelectedOption>
-							</div>
-						);
-					});
-				}
+				});
 			})}
+
 			<TotalPrice>
 				<p>총 상품 금액</p>
 				<div>{thousandComma(totalPrice * detail.product.rookiePrice)}원</div>
