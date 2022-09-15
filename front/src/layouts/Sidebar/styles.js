@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 export const SContainer = styled.section`
 	position: relative;
 	float: left;
-	background: white;
+	${'' /* background: white; */}
 	width: 270px;
 	border-right: 1px solid #d3d3d3;
 

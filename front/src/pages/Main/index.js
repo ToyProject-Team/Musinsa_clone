@@ -22,6 +22,7 @@ import Header from 'layouts/Header';
 // import NewList from './newList';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Sidebar from 'layouts/Sidebar';
+import DialLog from 'layouts/DialLog';
 
 const Main = () => {
 	const navigate = useNavigate();
@@ -301,6 +302,7 @@ const Main = () => {
 				<ScrollContainer>
 					<Header></Header>
 					<Sidebar></Sidebar>
+					<DialLog />
 					<MainContainer>
 						{/* 카테고리 */}
 						<Category>
