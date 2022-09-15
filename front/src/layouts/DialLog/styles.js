@@ -28,3 +28,10 @@ export const Filter = styled.div`
 		}
 	}
 `;
+
+export const Btm = styled.div`
+	max-width: 1px;
+	max-height: 1px;
+	position: absolute;
+	bottom: 0;
+`;
