@@ -44,7 +44,6 @@ router.delete('/favoriteGoods/del', authJWT, async (req, res, next) => {
             return res.status(400).send({ message: "입력값을 다시 확인해주세요"})
         }
 
-        const delProductLength = req.body.productId.length
         const me = await User.findOne({
             where: {
                 id: req.myId
@@ -54,28 +53,19 @@ router.delete('/favoriteGoods/del', authJWT, async (req, res, next) => {
         if (!me) {
             return res.status(401).send({ message: "유저의 조회 결과가 없습니다"})
         }
-        console.log(me)
-        const checkLength = []
-        for (let i = 0; i < delProductLength; i++) {
-            let checkList = await me.getLikeIt({
-                where: {   
-                    id: req.body.productId[i]
-                }
-            })
-            if (checkList.length == 0) {
-                return res.status(402).send({ message: "좋아요하지 않은 상품을 삭제 시도하셨습니다" })
+        
+        let checkList = await me.getLikeIt({
+            where: {   
+                id: req.body.productId
             }
-            checkLength.push(checkList)
+        })
+        console.log(checkList)
+        if (checkList.length === 0) {
+            return res.status(402).send({ message: "productId에 대한 상품 조회 결과가 없습니다"})
         }
 
-        // if (checkLength.length !== delProductLength) {
-        //     return res.status(402).send({ message: "좋아요하지 않은 상품을 삭제 시도하셨습니다" })
-        // }
+        temp = await me.removeLikeIt(checkList)
 
-
-        for (let i = 0; i < delProductLength; i++) {
-            temp = await me.removeLikeIt(checkLength[i])
-        }
         res.status(200).send({ success: true })
     } catch (e) {
         console.error(e)

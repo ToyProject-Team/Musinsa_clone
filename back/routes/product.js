@@ -289,7 +289,6 @@ router.post('/purchase', authJWT, async (req, res, next) => {
         console.log(req.body)
         await exUser.addMyOrder({
             ProductId: req.body.ProductId,
-            // id: req.body.ProductId,
             orderPrice: req.body.price,
             amount: req.body.amount,
             state: 1,

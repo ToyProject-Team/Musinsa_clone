@@ -1,5 +1,6 @@
 const express = require('express')
-const { User, Product, ProductImg } = require('../models')
+const { Op } = require('sequelize')
+const { User, Product, ProductImg, MyCart, ProductMainTag, ProductSubTag } = require('../models')
 const authJWT = require('../utils/authJWT')
 const router = express.Router()
 
@@ -14,16 +15,28 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
             return res.status(400).send({ message: "유저의 조회 결과가 없습니다"})
         }
         const exCart = await exUser.getMyCart({
-            // joinTableAttributes: [],
+            // where: {
+            //     [Op.eq] : [
+            //         {
+                        
+            //         }
+            //     ]
+            // },
+            joinTableAttributes: ["ProductId", "packingAmount", "packingSize"],
             attributes: ["id", "productTitle", "productPrice", "nonMemberPrice", "deliveryFrom", "deliveryWay","deliveryCompany"],
             include: [
                 {
                     model: ProductImg,
                     attributes: ["src"]  
                 },
-                { 
-                    model: ProductSize,
-                    attributes: ["size", "amount"],
+                {
+                    model: ProductMainTag,
+                    attributes: ["name"],
+                    include: {
+                        model: ProductSubTag,
+                        attributes: ["name", "amount"]
+                    }
+                    // attributes: ["src"]
                 },
             ]
         })
