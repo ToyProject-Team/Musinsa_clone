@@ -19,6 +19,9 @@ import { Router, Route, Routes, useNavigate } from 'react-router-dom';
 import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
 import Header from 'layouts/Header';
+import Sidebar from 'layouts/Sidebar';
+import { bigCategory } from 'utils/bigCategory';
+import { smallCategory } from 'utils/smallCategory';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Main = () => {
@@ -74,26 +77,11 @@ const Main = () => {
 		navigate('/');
 	};
 
-	//가격 전체보기(리셋)
-	const onResetPrice = () => {
-		// const params = {
-		// 	// mainSort,
-		// 	page,
-		// 	// priceMin,
-		// 	// priceMax,
-		// 	bigCategoryId,
-		// 	smallCategoryId,
-		// };
-
-		// PostQueryApi('/api/product/productList', params).then(
-		// 	res => setNewProduct(res.data.productData),
-		// 	navigate(`/products`),
-		// );
-		// // setPage(0);
-		// setPrice();
-		// setMainSort();
-		navigate('/');
-	};
+	// //가격 전체보기(리셋)
+	// const onResetPrice = () => {
+	// 	navigate('/');
+	// };
+	//props.product[0].ProductSizes[0].size
 
 	//검색창 input들 state
 	const [searchInput, setSearchInput] = useState('');
@@ -283,6 +271,7 @@ const Main = () => {
 			<InfiniteScroll
 				dataLength={page}
 				next={getMoreItems}
+				// width={'1200px'}
 				hasMore={page < 38 ? true : false}
 				height={document.documentElement.scrollHeight}
 				loader={<div style={{ textAlign: 'center' }}>Loading...</div>}
@@ -290,8 +279,9 @@ const Main = () => {
 				endMessage={<div style={{ textAlign: 'center' }}>더이상 상품이 없습니다.</div>}
 				// style={{ 'scrollbar-width': 'none' }}
 			>
+				<Header></Header>
 				<ScrollContainer>
-					<Header></Header>
+					<Sidebar></Sidebar>
 					<MainContainer>
 						{/* 카테고리 */}
 						<Category>
@@ -306,10 +296,12 @@ const Main = () => {
 										setMainSort();
 									}}
 								>
-									Bigcategory명
+									{bigCategory[bigCategoryId]}
 								</div>
-								<div className="hash_tag">#smallCategory명</div>
-								<div className="hash_tag">#한국어</div>
+								<div className="hash_tag">#{bigCategory[bigCategoryId]}</div>
+								<div className="hash_tag">
+									#{smallCategory[smallCategoryId][Math.floor(Math.random() * 10)]}
+								</div>
 							</CategoryTitle>
 
 							<MiddleCategory>
@@ -433,11 +425,6 @@ const Main = () => {
 											smallCategoryId,
 										};
 
-										// PostQueryApi('/api/product/productList', params).then(
-										// 	res => setNewProduct(res.data.productData),
-										// 	navigate(`/products`),
-										// );
-
 										{
 											onSortClick
 												? PostQueryApi(`/api/product/productList`, params).then(
@@ -464,7 +451,6 @@ const Main = () => {
 										setSecondSelectBox(false);
 										const params = {
 											page,
-											// price: setPrice(),
 											bigCategoryId,
 											smallCategoryId,
 										};

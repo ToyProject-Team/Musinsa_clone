@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles';
 
 const ShowList = props => {
 	//옵션 데이터
-	const options = ['S', 'M', 'L', 'XL'];
 	const [arrow, setArrow] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
 	const [selected, setSelected] = useState(Array(props.product.length).fill(false));
@@ -18,6 +17,10 @@ const ShowList = props => {
 		setSelected(newArr);
 	};
 
+	// useEffect(() => {
+	// 	console.log(props.product[0].ProductSizes[0].size);
+	// });
+
 	return props.product?.map((data, idx) => (
 		<li className="li_outer" key={idx}>
 			<div className="li_inner">
@@ -29,7 +32,6 @@ const ShowList = props => {
 					</a>
 				</div>
 				<div className="item_info">
-					<p></p>
 					<p>{data.productTitle}</p>
 					<p>{data.productPrice.toLocaleString('ko-KR')}원</p>
 					<p>MEMBERSHIP PRICE</p>
@@ -48,8 +50,11 @@ const ShowList = props => {
 				</p>
 				<div className="option_list">
 					<ul>
-						{options.map(size => (
-							<li className={selected[idx] ? 'open' : 'close'}>{size}</li>
+						{data.ProductSizes.map(data => (
+							<li className={selected[idx] ? 'open' : 'close'}>
+								<span>{data.size}</span>
+								<span>{data.amount}</span>
+							</li>
 						))}
 					</ul>
 				</div>

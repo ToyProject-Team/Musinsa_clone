@@ -1,16 +1,20 @@
 import styled from '@emotion/styled';
 
 export const ScrollContainer = styled.div`
+	display: block;
 	height: 100vh;
-	// scroll-width: none;
+	position: sticky;
 `;
 
 export const MainContainer = styled.div`
-	//height: 100vh;
-	font-size: 12px;
-	max-width: 100%;
-	// min-width: 1229px;
-	//overflow: hidden;
+	font-size: 13px;
+	height: 100vh;
+	position: absolute;
+	left: 270px;
+	top: 0;
+	right: 0;
+	min-width: 1370px;
+	border-left: 1px solid #ddd;
 `;
 
 // 카테고리
@@ -98,7 +102,7 @@ export const MiddleCategory = styled.div`
 
 		& ul {
 			display: inline-block;
-			max-width: 800px;
+			// max-width: 800px;
 
 			& li {
 				float: left;
@@ -111,8 +115,8 @@ export const MiddleCategory = styled.div`
 
 		& ul {
 			display: inline-block;
-			min-width: 600px;
-			max-width: 800px;
+			// min-width: 600px;
+			// max-width: 800px;
 
 			& li {
 				float: left;
@@ -130,27 +134,6 @@ export const MiddleCategory = styled.div`
 		}
 	}
 `;
-
-// // 브랜드 카테고리
-// export const BrandCategory = styled.div`
-// 	display: flex;
-// 	border-bottom: solid 1px;
-// 	border-color: rgb(212, 212, 212);
-// 	padding-left: 15px;
-
-// 	&:hover {
-// 		background-color: #f2f2f2;
-// 		z-index: 1;
-// 	}
-
-// 	& div {
-// 		width: 100%;
-// 	}
-
-// 	& input {
-// 		margin-top: 17px;
-// 	}
-// `;
 
 // 그외 카테고리(색상,가격, 검색)
 export const OtherCategory = styled.div`
@@ -172,7 +155,7 @@ export const OtherCategory = styled.div`
 
 		& ul {
 			display: inline-block;
-			min-width: 1200px;
+			// min-width: 1200px;
 
 			& li {
 				float: left;
@@ -355,11 +338,11 @@ export const CategoryName = styled.div`
 
 // Item List
 export const ItemSection = styled.div`
+	width: 1360px;
 	padding-top: 15px;
-	padding-left: 15px;
-	padding-right: 15px;
-	width: 100%;
-	-webkit-box-sizing: border-box;
+	padding-left: 20px;
+	padding-right: 20px;
+	// -webkit-box-sizing: border-box;
 
 	&:hover {
 		background-color: #f2f2f2;
@@ -395,10 +378,9 @@ export const SelectBox = styled.div`
 `;
 
 export const Items = styled.div`
-	min-width: 933px;
+	// min-width: 933px;
 	background-color: #fff;
 	height: auto;
-	// border-right: 1px solid #ddd;
 `;
 
 export const SortBox = styled.div`
@@ -409,13 +391,9 @@ export const SortBox = styled.div`
 	width: 100%;
 	height: 42px;
 	line-height: 42px;
-	border-top: 1px solid #ddd;
-	border-left: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
+	border: 1px solid #ddd;
 	box-sizing: border-box;
 	background-color: white;
-	// -moz-box-sizing: border-box;
-	// -webkit-box-sizing: border-box;
 
 	.sort {
 		display: block;
@@ -458,27 +436,31 @@ export const ListBox = styled.div`
 
 	.li_outer {
 		position: relative;
-		min-width: 154px;
+		min-width: 150px;
 		float: left;
-		width: 100px;
 		margin: 0;
 		background-color: white;
 		border-left: 1px solid #ddd;
 		// border-right: 1px solid #ddd;
 		border-bottom: 1px solid #ddd;
+
+		&:hover {
+			background-color: #f2f2f2;
+			z-index: 1;
+		}
 	}
 
 	.li_inner {
 		border: 0;
 		vertical-align: top;
 		background: transparent;
-		width: 154px;
-		height: 335px;
+		width: 150px;
+		height: 280px;
 		padding-top: 15px;
-		&:hover {
-			background-color: #f2f2f2;
-			z-index: 1;
-		}
+		// &:hover {
+		// 	background-color: #f2f2f2;
+		// 	z-index: 1;
+		// }
 	}
 
 	.list_img {
@@ -506,40 +488,21 @@ export const ListBox = styled.div`
 		width: 125px;
 		margin: 0 auto;
 		text-align: left;
-
-		&p {
-			display: block;
-			margin-block-start: 1em;
-			margin-block-end: 1em;
-			margin-inline-start: 0px;
-			margin-inline-end: 0px;
-			// color: #000;
-			// line-height: 16px;
-			// text-overflow: ellipsis;
-			// max-height: 30px;
-			// overflow: hidden;
-		}
+	}
 	}
 
 	.option {
-		display: flex;
-		flex-direction: column;
-		text-align: right;
+		display:block;
+		float: right;
+		border-top: 1px solid #ddd;
+		border-left: 1px solid #ddd;
 		position: relative;
-		margin: 0 10px 0 10px;
-		// left: 0;
-		// right: 0;
-		// // top: 100%;
+		background-color: white;
+		z-index: 0;
 
 		.option_btn {
-			height: 20px;
-			// overflow: hidden;
-			// // position: absolute;
-			// right: 20px;
-			// bottom: 0px;
-			// border-top: 1px solid #ddd;
-			// border-left: 1px solid #ddd;
-			// padding: 3px 8px 3px 8px;
+			height: 17px;
+			padding: 3px 8px 0 8px;
 			cursor: pointer;
 		}
 
@@ -550,19 +513,20 @@ export const ListBox = styled.div`
 			ul {
 				right: -1px;
 				position: absolute;
-				width: 80%;
+				width: 100%;
 				color: #000;
 				background: #fff;
 				border: 1px solid #ddd;
 				z-index: 2000;
+
 			}
 
 			.open {
-				display: block;
+				display: flex;
+				justify-content: space-between;
 				color: #000;
 				background: #fff;
-				text-align: right;
-				padding: 6px 8px 6px 8px;
+				padding: 6px 10px 6px 10px;
 			}
 
 			.close {

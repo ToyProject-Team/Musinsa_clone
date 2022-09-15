@@ -3,7 +3,6 @@ import './styles';
 
 const NewList = props => {
 	//옵션 데이터
-	const options = ['S', 'M', 'L', 'XL'];
 	const [arrow, setArrow] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
 	const [selected, setSelected] = useState(Array(props.product.length).fill(false));
@@ -49,8 +48,11 @@ const NewList = props => {
 				</p>
 				<div className="option_list">
 					<ul>
-						{options.map(size => (
-							<li className={selected[idx] ? 'open' : 'close'}>{size}</li>
+						{data.ProductSizes.map(data => (
+							<li className={selected[idx] ? 'open' : 'close'}>
+								<span>{data.size}</span>
+								<span>{data.amount}</span>
+							</li>
 						))}
 					</ul>
 				</div>
