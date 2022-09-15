@@ -368,18 +368,20 @@ export const ItemSection = styled.div`
 `;
 
 export const SelectBox = styled.div`
-	display: inline-block;
-	vertical-align: center;
-	margin-right: 5px;
-	margin-bottom: 15px;
-	margin-bottom: 15px;
-	background: #fff;
-	border: 1px solid #ddd;
-	color: #b2b2b2;
-	padding: 10px 10px 10px 10px;
+	.visible {
+		display: inline-block;
+		vertical-align: center;
+		margin-right: 5px;
+		margin-bottom: 15px;
+		margin-bottom: 15px;
+		background: #fff;
+		border: 1px solid #ddd;
+		color: #b2b2b2;
+		padding: 10px 10px 10px 10px;
+	}
 
-	#hidden {
-		diplay: none;
+	.invisible {
+		display: none;
 	}
 
 	:hover {
@@ -449,12 +451,13 @@ export const ListBox = styled.div`
 	width: 100%;
 	// border-right: 1px solid #ddd;
 
-	& ul {
+	.list_item {
 		display: inline-block;
 		border-right: 1px solid #ddd;
 	}
 
-	& li {
+	.li_outer {
+		position: relative;
 		min-width: 154px;
 		float: left;
 		width: 100px;
@@ -520,14 +523,51 @@ export const ListBox = styled.div`
 
 	.option {
 		display: flex;
-		justify-content: flex-end;
-		// margin: 0 10px 0 10px;
+		flex-direction: column;
+		text-align: right;
+		position: relative;
+		margin: 0 10px 0 10px;
+		// left: 0;
+		// right: 0;
+		// // top: 100%;
 
 		.option_btn {
-			border-top: 1px solid #ddd;
-			border-left: 1px solid #ddd;
-			padding: 3px 8px 3px 8px;
+			height: 20px;
+			// overflow: hidden;
+			// // position: absolute;
+			// right: 20px;
+			// bottom: 0px;
+			// border-top: 1px solid #ddd;
+			// border-left: 1px solid #ddd;
+			// padding: 3px 8px 3px 8px;
 			cursor: pointer;
+		}
+
+		.option_list {
+			display: block;
+			position: relative;
+
+			ul {
+				right: -1px;
+				position: absolute;
+				width: 80%;
+				color: #000;
+				background: #fff;
+				border: 1px solid #ddd;
+				z-index: 2000;
+			}
+
+			.open {
+				display: block;
+				color: #000;
+				background: #fff;
+				text-align: right;
+				padding: 6px 8px 6px 8px;
+			}
+
+			.close {
+				display: none;
+			}
 		}
 	}
 `;
