@@ -580,15 +580,32 @@ router.post('/checkIsLoginIdCheckUser', (req, res, next) => {
   }
 })
 
-router.get('/address', authJWT, async (req, res, next) => {
+router.post('/getUserData', authJWT, async (req, res, next) => {
+  const ALLOWED_KEYS = ['address']
+
   try {
-    const me = await User.findOne({
+    const keys = req.body.keys
+
+    // 모든 키값 중 하나라도 ALLOWED_KEYS 값에 없다면 에러
+    if (
+      keys &&
+      !keys.every(key => {
+        return ALLOWED_KEYS.includes(key)
+      })
+    ) {
+      res.status(400).send({
+        message: `허용되지 않은 key값을 요청할 수 없습니다. 허용되는 키값: [${ALLOWED_KEYS}]`,
+      })
+    }
+
+    const userData = await User.findOne({
       where: {
         id: req.myId,
       },
+      attributes: keys ?? ALLOWED_KEYS,
     })
 
-    res.status(200).send({ address: me.address })
+    res.status(200).send(userData)
   } catch (e) {
     console.error(e)
     next(e)
