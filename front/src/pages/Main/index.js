@@ -19,7 +19,6 @@ import { Router, Route, Routes, useNavigate } from 'react-router-dom';
 import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
 import Header from 'layouts/Header';
-import Sidebar from 'layouts/Sidebar';
 import { bigCategory } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
 import InfiniteScroll from 'react-infinite-scroll-component';
