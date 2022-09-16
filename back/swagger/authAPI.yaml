@@ -594,15 +594,27 @@
       500:
         $ref: './openapi.yaml#/serverError'
 
-/api/auth/address:
-  get:
+/api/auth/getUserData:
+  post:
     tags:
       - auth
-    summary: 토큰의 주소 반환
+    summary: 로그인 된 사용자 데이터 반환
+    description: "허용된 key값만 받습니다. keys값이 없는 경우 가능한 key-value값을 모두 반환합니다. 허용되는 key값 : ['address']"
     parameters:
       - name: Authorization
         in: header
         required: true
+      - name: body
+        in: body
+        schema:
+          type: object
+          properties:
+            keys:
+              type: array
+              items:
+                type: string
+                enum: ['address']
+              example: ['address']
     responses:
       200:
         schema:
@@ -610,6 +622,13 @@
             address:
               type: string
               example: '전라남도 서구 금호동 101동 1001호'
+      400:
+        description: '허용되지 않은 key값을 요청한 경우'
+        schema:
+          properties:
+            success:
+              type: string
+              example: '허용되지 않은 key값을 요청할 수 없습니다. 허용되는 키값:[...]'
       401:
         description: 토큰이 지급되지 않을 경우
         schema:
