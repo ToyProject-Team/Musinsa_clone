@@ -594,6 +594,38 @@ paths:
                 example: 토큰을 복호화한 결과가 없습니다 입력을 다시 확인해주세요
         '500':
           $ref: '#/serverError'
+  /api/auth/address:
+    get:
+      tags:
+        - auth
+      summary: 토큰의 주소 반환
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+      responses:
+        '200':
+          schema:
+            properties:
+              address:
+                type: string
+                example: 전라남도 서구 금호동 101동 1001호
+        '401':
+          description: 토큰이 지급되지 않을 경우
+          schema:
+            properties:
+              success:
+                type: string
+                example: accessToken이 지급되지 않았습니다
+        '402':
+          description: 토큰이 검증에 실패했거나 만료됐을 경우
+          schema:
+            properties:
+              success:
+                type: string
+                example: jwt expired
+        '500':
+          $ref: '#/serverError'
   /tokenError:
     post:
       tags:
