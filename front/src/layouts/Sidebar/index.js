@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import { SContainer, SDiv } from './styles';
 import { Link } from 'react-router-dom';
 import { bigCategory, alpabet } from 'utils/bigCategory';
@@ -19,12 +19,12 @@ const Sidebar = () => {
 
 	return (
 		<SContainer>
-			<div onClick={() => setCancel(e => !e)} className={cancel ? 'toggle' : 'toggle active'}>
+			<div onClick={() => setCancel(e => !e)} className={cancel ? 'toggle active' : 'toggle'}>
 				<span className="line"></span>
 				<span className="line"></span>
 				<span className="line"></span>
 			</div>
-			<SDiv>
+			<SDiv className={cancel ? 'appear' : 'disappear'}>
 				<Link to="/">
 					전체<span>All</span>
 				</Link>

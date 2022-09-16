@@ -26,7 +26,7 @@ export const CategoryTitle = styled.div`
 	flex-shrink: 0;
 	border-bottom: solid 1px;
 	border-color: rgb(212, 212, 212);
-	padding: 10px 10px 10px 15px;
+	padding: 4px 10px 10px 45px;
 
 	.page_title {
 		float: left;

@@ -24,7 +24,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Sidebar from 'layouts/Sidebar';
 import DialLog from 'layouts/DialLog';
 
-const Main = () => {
+const Main = cancel => {
 	const navigate = useNavigate();
 
 	const ShowList = loadable(() => import('./showList'), {
@@ -301,7 +301,7 @@ const Main = () => {
 			>
 				<ScrollContainer>
 					<Header></Header>
-					<Sidebar></Sidebar>
+					<Sidebar cancel={cancel}></Sidebar>
 					<DialLog />
 					<MainContainer>
 						{/* 카테고리 */}
@@ -315,6 +315,7 @@ const Main = () => {
 										setPage(0);
 										setPrice();
 										setMainSort();
+										console.log(cancel);
 									}}
 								>
 									Bigcategory명

@@ -3,8 +3,6 @@ import styled from '@emotion/styled';
 export const SContainer = styled.section`
 	position: relative;
 	float: left;
-	${'' /* background: white; */}
-	width: 270px;
 	border-right: 1px solid #d3d3d3;
 
 	& h1 {
@@ -19,6 +17,14 @@ export const SContainer = styled.section`
 		justify-content: center;
 		align-items: center;
 		cursor: pointer;
+	}
+
+	.disappear {
+		width: 0;
+		display: none;
+	}
+	.appear {
+		color: black;
 	}
 
 	.toggle {
@@ -71,6 +77,7 @@ export const SContainer = styled.section`
 
 export const SDiv = styled.div`
 	text-align: center;
+	width: 270px;
 
 	& a {
 		display: block;
@@ -143,11 +150,11 @@ export const SDiv = styled.div`
 				flex-wrap: wrap;
 				overflow: hidden;
 				max-height: 600px;
-				transition: all 0.5s ease;
+				transition: all 1s ease-in-out;
 
 				&[aria-expanded='true'] {
 					max-height: 0px;
-					transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+					transition: all 1s cubic-bezier(0, 1, 0, 1);
 				}
 
 				& li {
