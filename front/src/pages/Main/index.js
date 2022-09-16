@@ -99,6 +99,7 @@ const Main = () => {
 	//중분류 분류 2
 	//onSort버튼 클릭 -> params 값 전송 -> url에 박아넣기 구현..
 	const [onSortClick, setOnSortClick] = useState(false);
+	const [onSortSecondClick, setOnSortSecondClick] = useState(false);
 
 	const onSort = val => {
 		// 		const params = {
@@ -164,6 +165,7 @@ const Main = () => {
 		});
 		navigate(`/products?price=${params.price}`);
 		priceBox(val);
+		setOnSortSecondClick(true);
 		setSecondSelectBox(true);
 		console.log(product);
 		console.log(newProduct);
@@ -418,28 +420,22 @@ const Main = () => {
 									className={selectBox ? 'visible' : 'invisible'}
 									onClick={() => {
 										setSelectBox(false);
-										const params = {
-											page,
-											//price,
-											bigCategoryId,
-											smallCategoryId,
-										};
 
 										{
-											onSortClick
-												? PostQueryApi(`/api/product/productList`, params).then(
-														res =>
-															setNewProduct(
-																res.data.productData.filter(data => {
-																	return data.productTitle === selectTitle;
-																}),
-															),
-														navigate('/products'),
-												  )
-												: navigate('/');
+											onSortSecondClick
+												? PostQueryApi(`/api/product/productList`, {
+														page,
+														price,
+														bigCategoryId,
+														smallCategoryId,
+												  }).then(res => setNewProduct(res.data.productData))
+												: PostQueryApi(`/api/product/productList`, {
+														page,
+														bigCategoryId,
+														smallCategoryId,
+												  }).then(res => setNewProduct(res.data.productData));
 										}
-
-										console.log(newProduct);
+										setOnSortClick(false);
 									}}
 								>
 									<span className="select-medium">{selectTitle}</span>
@@ -451,19 +447,33 @@ const Main = () => {
 										setSecondSelectBox(false);
 										const params = {
 											page,
+											// price,
 											bigCategoryId,
 											smallCategoryId,
 										};
 
-										PostQueryApi(`/api/product/productList`, params).then(res => {
+										{
 											onSortClick
-												? setNewProduct(
-														res.data.productData.filter(data => {
-															return data.productTitle === selectTitle;
-														}),
+												? PostQueryApi(`/api/product/productList`, params).then(res =>
+														setNewProduct(
+															res.data.productData.filter(data => {
+																return data.productTitle === selectTitle;
+															}),
+														),
 												  )
-												: setNewProduct(res.data.productData);
-										}, navigate('/products'));
+												: navigate('/');
+										}
+
+										// PostQueryApi(`/api/product/productList`, params).then(res => {
+										// 	onSortSecondClick
+										// 		? setNewProduct(
+										// 				res.data.productData.filter(data => {
+										// 					return data.productTitle === selectTitle;
+										// 				}),
+										// 		  )
+										// 		: setNewProduct(res.data.productData);
+										// });
+										setOnSortSecondClick(false);
 									}}
 								>
 									<span className="select-medium">{selectPrice}</span>
