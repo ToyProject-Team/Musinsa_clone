@@ -10,11 +10,22 @@ export const FormWrapper = styled.div`
 `;
 
 export const BuyOption = styled.select`
+	height: 26px;
+	margin-bottom: 3px;
+	padding: 3px 0 4px 2px;
+	font-size: 11px;
+	color: #666;
 	width: 100%;
-	padding: 5px;
-	--swiper-theme-color: #007aff;
-	border: none;
-	margin-bottom: 5px;
+	background: #fff;
+	margin-top: -2px;
+	border: 0;
+	border-radius: 0;
+	vertical-align: middle;
+	cursor: pointer;
+
+	span {
+		text-align: right;
+	}
 `;
 
 export const TotalPrice = styled.div`
@@ -220,7 +231,7 @@ export const Decrease = styled.li`
 	background-color: #eee;
 	border-right: none;
 	cursor: pointer;
-	color: ${props => (props.orderAmount === 1 ? '#ddd' : 'black')};
+	color: ${props => (props.orderAmount === 1 ? '#ddd' : '#777')};
 `;
 
 export const Price = styled.div`

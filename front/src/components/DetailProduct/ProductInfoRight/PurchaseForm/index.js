@@ -52,7 +52,7 @@ const ModalStyle = {
 	},
 };
 
-const PurchaseForm = ({ data }) => {
+const PurchaseForm = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const detail = useProductDetailState();
@@ -60,10 +60,15 @@ const PurchaseForm = ({ data }) => {
 	const user = getData();
 
 	const [clickedlike, setClickedlike] = useState(true);
-	const [selectedPrice, setSelectedPrice] = useState(0);
-	// const [orderAmount, setOrderAmount] = useState(1);
-	const [showModal, setShowModal] = useState(false);
 
+	const [optionData, setOptionData] = useState([
+		{
+			option1: '옵션 선택',
+		},
+		{
+			option2: '옵션 선택',
+		},
+	]);
 	const [option, setOption] = useState({});
 	const [selectList, setSelectList] = useState({});
 	const [selectIdx, setSelectIdx] = useState();
@@ -75,16 +80,31 @@ const PurchaseForm = ({ data }) => {
 	const [modalOrder, setModalOrder] = useState(false);
 	const [modalBasket, setModalBasket] = useState(false);
 
-	// 새로고침
+	// 데이터 구조 변경
+	const optionDataStructureChange = useCallback(() => {
+		const option1 = detail.product.ProductMainTags.map(v => v.name);
+		const option2 = detail.product.ProductMainTags.map(v => {
+			const arr = v.ProductSubTags.map(item => item.name);
+			return arr;
+		});
+		const productArr = {
+			option1,
+			option2,
+		};
+
+		setOptionData(productArr);
+	}, []);
+
 	// 선택 List 옵션 초기화
 	const optionListInit = useCallback(() => {
-		const value = Object.keys(data.option);
+		const value = Object.keys(optionData);
+
 		setOption(() =>
 			value.map(v => {
 				return { [v]: '옵션 선택' };
 			}),
 		);
-	}, []);
+	}, [optionData]);
 
 	// 좋아요 표시
 	const userLikes = useCallback(async () => {
@@ -99,9 +119,15 @@ const PurchaseForm = ({ data }) => {
 		}
 	}, []);
 
+	// 첫화면 초기화
 	useEffect(() => {
-		optionListInit();
-		if (user) userLikes();
+		const asyncFunction = async () => {
+			await optionDataStructureChange();
+			await optionListInit();
+			if (user) await userLikes();
+		};
+
+		asyncFunction();
 	}, []);
 
 	const changeDispatch = useCallback((type, payload) => {
@@ -112,14 +138,14 @@ const PurchaseForm = ({ data }) => {
 	const selectOption = useCallback(
 		e => {
 			const { name, value } = e.target;
-			const objData = Object.keys(data.option);
+			const objData = Object.keys(optionData);
 			const index = Number(e.target.getAttribute('data-index'));
 			const lastOptionIndex = objData.includes('add') ? objData.length - 2 : objData.length - 1;
 			let inifFlag = false;
 
 			if (index === 0) {
 				optionListInit();
-				setSelectIdx(data.option[name].indexOf(value));
+				setSelectIdx(optionData[name].indexOf(value));
 			}
 
 			if (index === lastOptionIndex && value !== '옵션 선택') {
@@ -141,17 +167,6 @@ const PurchaseForm = ({ data }) => {
 							return {
 								...prev,
 								[key]: oldValue ? [...oldValue, { [nowValue]: 1 }] : [{ [nowValue]: 1 }],
-							};
-						});
-						inifFlag = true;
-					} else {
-						// 옵션이 1개인 경우
-						if (selectList[nowValue]) return alert('이미 선택한 상품입니다.');
-
-						setSelectList(prev => {
-							return {
-								...prev,
-								[nowValue]: 1,
 							};
 						});
 						inifFlag = true;
@@ -217,51 +232,6 @@ const PurchaseForm = ({ data }) => {
 		[selectList],
 	);
 
-	// const SelectForm = ({ price, size, color }) => {
-	// 	const onIncrease = () => {
-	// 		setOrderAmount(orderAmount + 1);
-	// 		setSelectedPrice(selectedPrice + price);
-	// 	};
-	// 	const onDecrease = () => {
-	// 		if (orderAmount === 1) {
-	// 			alert('더이상 수량을 줄일 수 없습니다.');
-	// 		} else {
-	// 			setOrderAmount(orderAmount - 1);
-	// 			setSelectedPrice(selectedPrice - price);
-	// 		}
-	// 	};
-	// 	const onCancel = () => {
-	// 		setSelected(!selected);
-	// 		setSelectedPrice(0);
-	// 		setOrderAmount(1);
-	// 		setSize('옵션 선택');
-	// 		setColor('옵션 선택');
-	// 	};
-
-	// 	return (
-	// 		<div>
-	// 			<SelectedOption>
-	// 				<Selected>
-	// 					{size}/{color}
-	// 				</Selected>
-	// 				<Amount>
-	// 					<ul>
-	// 						<Decrease orderAmount={orderAmount} onClick={onDecrease}>
-	// 							-
-	// 						</Decrease>
-	// 						<li>{orderAmount}</li>
-	// 						<li onClick={onIncrease}>+</li>
-	// 					</ul>
-	// 				</Amount>
-	// 				<Price>
-	// 					<div>{selectedPrice + data.productPrice}원</div>
-	// 					<p onClick={onCancel}>X</p>
-	// 				</Price>
-	// 			</SelectedOption>
-	// 		</div>
-	// 	);
-	// };
-
 	useEffect(() => {
 		let answer = 0;
 		if (Object.keys(selectList).length > 0) {
@@ -277,13 +247,6 @@ const PurchaseForm = ({ data }) => {
 
 		setTotalPrice(answer);
 	}, [selectList]);
-
-	// useEffect(() => {
-	// 	if (size !== '옵션 선택' && color !== '옵션 선택') {
-	// 		setSelected(true);
-	// 	} else {
-	// 	}
-	// }, [size, color]);
 
 	// 좋아요
 	const onLikeClicked = useCallback(async () => {
@@ -378,26 +341,10 @@ const PurchaseForm = ({ data }) => {
 		setOrder(true);
 	}, []);
 
-	const openModal = useCallback(() => {
-		setModalOrder(true);
-		// if (!user.login) {
-		// 	alert('로그인 후 구매가 가능합니다.');
-		// 	navigate('/login');
-		// } else {
-		// const payment_data = {
-		// 	price: selectedPrice + data.productPrice,
-		// 	id: data.ProductId,
-		// 	name: data.productTitle,
-		// 	date: new Date(),
-		// };
-		// dispatch({ payment_data, type: PAYMENT });
-		// }
-	}, []);
-
 	return (
 		<div>
 			<FormWrapper style={{ backgroundColor: '#f3f3f3' }}>
-				{Object.keys(data.option).map((item, idx) => {
+				{Object.keys(optionData).map((item, idx) => {
 					return (
 						Array.isArray(option) && (
 							<BuyOption
@@ -408,12 +355,12 @@ const PurchaseForm = ({ data }) => {
 								data-index={idx}
 							>
 								<option>옵션 선택</option>
-								{typeof data.option[item][0] === 'string'
-									? data.option[item].map(itemOption => (
+								{typeof optionData[item][0] === 'string'
+									? optionData[item].map(itemOption => (
 											<option key={itemOption}>{itemOption}</option>
 									  ))
 									: selectIdx >= 0 &&
-									  data.option[item][selectIdx].map(itemOption => (
+									  optionData[item][selectIdx].map(itemOption => (
 											<option key={itemOption}>{itemOption}</option>
 									  ))}
 							</BuyOption>
@@ -421,65 +368,44 @@ const PurchaseForm = ({ data }) => {
 					);
 				})}
 			</FormWrapper>
+
 			{Object.keys(selectList)?.map((option_1, idx) => {
-				// const orderCount = item[option_1];
-				if (typeof selectList[option_1] === 'number') {
-					// 옵션 1개 인경우
+				return selectList[option_1].map(item => {
+					const option_2 = Object.keys(item)[0];
+					const orderCount = item[option_2];
+
 					return (
-						<div key={option_1 + idx}>
+						<div key={option_1 + option_2}>
 							<SelectedOption>
-								<Selected>{option_1}</Selected>
-								<Amount>
+								<div>
+									{option_1}/{option_2}
+								</div>
+								<div>
 									<ul>
-										<Decrease orderAmount={1}>-</Decrease>
-										<li>{1}</li>
-										<li>+</li>
+										<Decrease
+											orderAmount={orderCount}
+											onClick={() =>
+												orderCount > 1
+													? onClickDecrease(option_1, option_2)
+													: alert('더이상 수량을 줄일 수 없습니다.')
+											}
+										>
+											-
+										</Decrease>
+										<li>{orderCount}</li>
+										<li onClick={() => onClickIncrease(option_1, option_2)}>+</li>
 									</ul>
-								</Amount>
-								<Price>
-									<div>{selectedPrice + data.productPrice}원</div>
-									<p>X</p>
-								</Price>
+								</div>
+								<div>
+									<div>{thousandComma(orderCount * detail.product.rookiePrice)}원</div>
+									<p onClick={() => onClickRemove(option_1, option_2)}>X</p>
+								</div>
 							</SelectedOption>
 						</div>
 					);
-				} else {
-					// 옵션 2개 이상
-					return selectList[option_1].map(item => {
-						const option_2 = Object.keys(item)[0];
-						const orderCount = item[option_2];
-						return (
-							<div key={option_1 + option_2}>
-								<SelectedOption>
-									<div>
-										{option_1}/{option_2}
-									</div>
-									<div>
-										<ul>
-											<Decrease
-												orderAmount={orderCount}
-												onClick={() =>
-													orderCount > 1
-														? onClickDecrease(option_1, option_2)
-														: alert('더이상 수량을 줄일 수 없습니다.')
-												}
-											>
-												-
-											</Decrease>
-											<li>{orderCount}</li>
-											<li onClick={() => onClickIncrease(option_1, option_2)}>+</li>
-										</ul>
-									</div>
-									<div>
-										<div>{thousandComma(orderCount * detail.product.rookiePrice)}원</div>
-										<p onClick={() => onClickRemove(option_1, option_2)}>X</p>
-									</div>
-								</SelectedOption>
-							</div>
-						);
-					});
-				}
+				});
 			})}
+
 			<TotalPrice>
 				<p>총 상품 금액</p>
 				<div>{thousandComma(totalPrice * detail.product.rookiePrice)}원</div>
