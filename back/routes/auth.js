@@ -144,10 +144,9 @@ router.post('/signin', async (req, res, next) => {
   redisClient.set(user.id, refreshToken)
   const userData = await User.findOne({
     where: { email: user.email },
-    attributes: {
-        exclude: ["password", "createdAt", "updatedAt", "deletedAt"],
-    },
-    });
+    attributes: ['id', 'loginId', 'email', 'nickname'],
+  })
+
   return res.status(200).send({
     userData,
     refreshToken,
