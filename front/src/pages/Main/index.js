@@ -19,10 +19,10 @@ import { Router, Route, Routes, useNavigate } from 'react-router-dom';
 import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
 import Header from 'layouts/Header';
-import Sidebar from 'layouts/Sidebar';
 import { bigCategory } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Sidebar from 'layouts/Sidebar';
 
 const Main = () => {
 	const navigate = useNavigate();
@@ -282,8 +282,8 @@ const Main = () => {
 				// style={{ 'scrollbar-width': 'none' }}
 			>
 				<Header></Header>
+				<Sidebar></Sidebar>
 				<ScrollContainer>
-					<Sidebar></Sidebar>
 					<MainContainer>
 						{/* 카테고리 */}
 						<Category>

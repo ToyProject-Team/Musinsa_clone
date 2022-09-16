@@ -12,6 +12,7 @@ const ProductSize = require('./productSize')
 const CategoryColor = require('./categoryColor')
 const ProductMainTag = require('./productMainTag')
 const ProductSubTag = require('./productSubTag')
+const MyCart = require('./myCart')
 
 const db = {};
 db.User = user;
@@ -26,6 +27,7 @@ db.ProductSize = ProductSize
 db.CategoryColor = CategoryColor
 db.ProductMainTag = ProductMainTag
 db.ProductSubTag = ProductSubTag
+db.MyCart = MyCart
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];

@@ -1,22 +1,24 @@
 const DataTypes = require('sequelize');
 const { Model } = DataTypes
 
-module.exports = class ProductSize extends Model {
+module.exports = class MyCart extends Model {
     static init(sequelize) {
         return super.init(
             {
-                size: {
-                    type: DataTypes.STRING(30),
-                    allowNull: false,
-                },
-                amount: {
+                packingAmount: {
                     type: DataTypes.INTEGER,
+                    defaultValue: 2,
                     allowNull: false,
-                }
+                },  
+                packingSize: {
+                    defaultValue: "S",
+                    type: DataTypes.STRING(30),
+                    allowNull: false
+                },  
             },
             {
-                modelName: 'ProductSize',
-                tableName: 'ProductSizes',
+                modelName: 'MyCart',
+                tableName: 'MyCarts',
                 paranoid: true,
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
@@ -25,6 +27,5 @@ module.exports = class ProductSize extends Model {
         )
     }
     static associate(db) {
-        db.ProductImg.belongsTo(db.Product)
     }
 }

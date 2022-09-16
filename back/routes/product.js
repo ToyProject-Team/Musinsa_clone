@@ -5,9 +5,11 @@ const ProductImg = require('../models/productImg')
 const CustomCategory = require('../models/customCategory')
 const Comment = require('../models/comment')
 const ProductSize = require('../models/productSize')
+const ProductMainTag = require('../models/productMainTag')
+const ProductSubTag = require('../models/productSubTag')
 const AWS = require('aws-sdk');
 const fs = require('fs');
-const {sequelize, Op} = require('sequelize')
+const {sequelize, Op, Sequelize} = require('sequelize')
 const authJWT = require('../utils/authJWT')
 const axios = require('axios')
 const router = express.Router()
@@ -76,6 +78,15 @@ router.get('/productList', async (req, res, next) => {
                     model: ProductSize,
                     attributes: ["size", "amount"],
                 },
+                {
+                    model: ProductMainTag,
+                    attributes: ["name"],
+                    include: {
+                        model: ProductSubTag,
+                        attributes: ["name", "amount"]
+                    }
+                    // attributes: ["src"]
+                },
                 
             ],
             order: [
@@ -113,11 +124,24 @@ router.get('/productDetail', async (req, res, next) => {
                     model: ProductImg,
                     attributes: ["src"]
                 },
+                { 
+                    model: ProductSize,
+                    attributes: ["size", "amount"],
+                },
                 {
                     model: CustomCategory,
                     attributes: ["id"],
                     through: {attributes: []}
-                }
+                },
+                {
+                    model: ProductMainTag,
+                    attributes: ["name"],
+                    include: {
+                        model: ProductSubTag,
+                        attributes: ["name", "amount"]
+                    }
+                    // attributes: ["src"]
+                },
             ],
             where: {
                 id: req.query.productId
@@ -196,6 +220,14 @@ router.post('/likeProduct', authJWT, async (req, res, next) => {
             return res.status(400).send({ message: "이미 좋아요한 상품입니다" })
         }
 
+        await Product.update({
+            likes: Sequelize.literal('likes + 1')
+        }, {
+                where: {
+                id: req.body.productId
+            }
+        })
+
         await exUser.addLikeIt(req.body.productId)
 
         res.status(200).send({ success: true })
@@ -206,30 +238,34 @@ router.post('/likeProduct', authJWT, async (req, res, next) => {
     }
 })
 
-router.post('/purchase', authJWT, async (req, res) => {
+router.post('/purchase', authJWT, async (req, res, next) => {
     try {
+        console.log(req.body)
         if (!req.body.ProductId) {
             return res.status(400).send({ message: '상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요' })
         }
-        if (!req.body.MerchantUid) {
+        if (!req.body.Merchant_uid) {
             return res.status(401).send({ message: '주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요' })
         }
         if (!req.body.imp_uid) {
             return res.status(402).send({ message: 'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요' })
         }
-        if (req.body.price) {
+        if (!req.body.price) {
             return res.status(403).send({ message: '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
         }
+        if (!req.body.amount) {
+            return res.status(405).send({ message: '구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
+        }
 
-        const { imp_uid, merchant_uid } = req.body; // req의 query에서 imp_uid, merchant_uid 추출
+        const { imp_uid, Merchant_uid } = req.body; // req의 query에서 imp_uid, Merchant_uid 추출
           // 액세스 토큰(access token) 발급 받기
         const getToken = await axios({
         url: "https://api.iamport.kr/users/getToken",
         method: "post", // POST method
         headers: { "Content-Type": "application/json" }, // "Content-Type": "application/json"
         data: {
-            imp_key: "7886282210238108", // REST API 키
-            imp_secret: "lNItGvMSCUT2kTs0QiIha0fzoOgE3VgRFC2ykVwmEuCnoOpd2VTkLy4LHohY2ZZpyxhxP5uEhs9QyFPC" // REST API Secret
+            imp_key: "3360868424546062", // REST API 키
+            imp_secret: "R0poOeLPunhouN0YaMFSRKJh1ACv6C9Atijr0BHTBUB2DWk3sc7Fv3s3qvlqpZprvqli25IWWG7brjXq" // REST API Secret
         }
         });
         const { access_token } = getToken.data.response; // 인증 토큰
@@ -250,12 +286,13 @@ router.post('/purchase', authJWT, async (req, res) => {
                 id: req.myId
             }
         })
-        
-        await exUser.addmyOrder({
-            id: req.body.ProductId,
+        console.log(req.body, Merchant_uid, imp_uid)
+        await exUser.addMyOrder({
+            ProductId: req.body.ProductId,
             orderPrice: req.body.price,
+            amount: req.body.amount,
             state: 1,
-            MerchantUid: merchant_uid,
+            MerchantUid: Merchant_uid,
             cancelableAmount: req.body.price,
             ImpUid: imp_uid
         })

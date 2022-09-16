@@ -57,9 +57,10 @@ const Order = ({ modal, pay }) => {
 					// 결제 성공 시 로직,
 					const data = {
 						imp_uid: rsp.imp_uid,
-						merchant_uid: rsp.merchant_uid,
+						Merchant_uid: rsp.merchant_uid,
 						ProductId: productId,
 						price,
+						amount: 2,
 					};
 
 					PostHeaderBodyApi('/api/product/purchase', data, 'Authorization', accessToken).then(

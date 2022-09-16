@@ -489,10 +489,9 @@ export const ListBox = styled.div`
 		margin: 0 auto;
 		text-align: left;
 	}
-	}
 
 	.option {
-		display:block;
+		display: block;
 		float: right;
 		border-top: 1px solid #ddd;
 		border-left: 1px solid #ddd;
@@ -518,7 +517,6 @@ export const ListBox = styled.div`
 				background: #fff;
 				border: 1px solid #ddd;
 				z-index: 2000;
-
 			}
 
 			.open {

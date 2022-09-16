@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { ImgSpan, LikeLi, LikeUl } from '../styles';
 import { FaHeart } from 'react-icons/fa';
 import { FiX } from 'react-icons/fi';
+import { thousandComma } from 'utils/thousandComma';
 
-function Likelist({ img, brand, model, price, like, onRemove }) {
+function Likelist({ img, brand, model, price, like, onRemove, id }) {
 	
 	return (
 		<LikeUl>
@@ -16,13 +17,13 @@ function Likelist({ img, brand, model, price, like, onRemove }) {
 					<li className="name">
 						<a href="#">{model}</a>
 					</li>
-					<li className="price">{price}원</li>
+					<li className="price">{thousandComma(price)}원</li>
 					<li className="like">
 						<FaHeart /> {like}
 					</li>
 				</ul>
 
-				<button onClick={onRemove()}>
+				<button onClick={(e) => onRemove(id)}>
 					<FiX />
 				</button>
 			</LikeLi>

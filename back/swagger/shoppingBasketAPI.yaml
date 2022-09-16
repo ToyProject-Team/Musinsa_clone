@@ -38,6 +38,41 @@
                   deliveryCompany:
                     type: string
                     example: CJ대한통운
+                  ProductImg:
+                    type: object
+                    properties:
+                      src:
+                        type: string
+                        example: Accessory/Accessory2
+                  ProductMainTags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: XL
+                        ProductSubTags:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                example: 딥레드
+                                amount: 3
+                  MyCart:
+                    type: object
+                    properties:
+                      ProductId:
+                        type: number
+                        example: 17
+                      packingAmount:
+                        type: number
+                        example: 2
+                      packingSize: 
+                        type: string
+                        example: S
       400:
         description: 유저의 조회 결과가 없습니다 - 토큰에 대한 사용자 정보가 데이터베이스에 존재하지 않습니다
         schema:
