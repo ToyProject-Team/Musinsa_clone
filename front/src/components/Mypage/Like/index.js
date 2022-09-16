@@ -21,7 +21,7 @@ function Mainlike() {
 
 	// 좋아요 리스트 서버에서 가져오기
 	const loginToken = getData();
-	// console.log(loginToken);
+	console.log(loginToken);
 
 	useEffect(() => {
 		// const params = {
@@ -76,9 +76,12 @@ function Mainlike() {
 				// 		break;
 				// }
 				console.log('실패');
-				// 안지워졌을지 필터했던 아이템 다시 추가 
+				// 안지워졌을시 필터했던 아이템 다시 추가 
+
 
 			});
+			
+
 	});
 
 	return (

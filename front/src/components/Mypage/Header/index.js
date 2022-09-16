@@ -18,7 +18,7 @@ function Mypage_header() {
 		<Header>
 			<MypageTitle>My Page</MypageTitle>
 			<Profile>
-				<dt><Avatar color='gray' name={nickname} round={true} size="160" textSizeRatio={1} /></dt>
+				<dt><Avatar color='gray' name={nickname} round={true} size="160" textSizeRatio={1.5} /></dt>
 				<NickName>{nickname}</NickName>
 			</Profile>
 		</Header>
