@@ -244,7 +244,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
         if (!req.body.ProductId) {
             return res.status(400).send({ message: '상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요' })
         }
-        if (!req.body.MerchantUid) {
+        if (!req.body.Merchant_uid) {
             return res.status(401).send({ message: '주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요' })
         }
         if (!req.body.imp_uid) {
@@ -257,7 +257,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
             return res.status(405).send({ message: '구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
         }
 
-        const { imp_uid, merchant_uid } = req.body; // req의 query에서 imp_uid, merchant_uid 추출
+        const { imp_uid, Merchant_uid } = req.body; // req의 query에서 imp_uid, Merchant_uid 추출
           // 액세스 토큰(access token) 발급 받기
         const getToken = await axios({
         url: "https://api.iamport.kr/users/getToken",
@@ -292,7 +292,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
             orderPrice: req.body.price,
             amount: req.body.amount,
             state: 1,
-            MerchantUid: merchant_uid,
+            MerchantUid: Merchant_uid,
             cancelableAmount: req.body.price,
             ImpUid: imp_uid
         })

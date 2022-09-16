@@ -40,6 +40,7 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
                 },
             ]
         })
+        
         res.status(200).send({ exCart })
     } catch(e) {
         console.error(e)
