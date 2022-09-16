@@ -8,11 +8,11 @@ module.exports = class User extends Model {
                 loginId: {
                     type: DataTypes.STRING(100),
                     allowNull: true,
-                    unique: true,
-                    fields: 'email'
+                    unique: 'loginId',
+                    fields: 'loginId'
                 },
                 email: {
-                    type: DataTypes.STRING(100),
+                    type: DataTypes.STRING(200),
                     allowNull: true,
                     unique: true
                 },

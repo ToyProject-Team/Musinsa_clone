@@ -12,6 +12,7 @@ const fs = require('fs');
 const {sequelize, Op, Sequelize} = require('sequelize')
 const authJWT = require('../utils/authJWT')
 const axios = require('axios')
+const { Order } = require('../models')
 const router = express.Router()
 
 function checkParams (bigCategory, price) {
@@ -254,7 +255,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
             return res.status(403).send({ message: '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
         }
         if (!req.body.amount) {
-            return res.status(405).send({ message: '구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
+            return res.status(406).send({ message: '구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요' })
         }
 
         const { imp_uid, Merchant_uid } = req.body; // req의 query에서 imp_uid, Merchant_uid 추출
@@ -278,6 +279,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
         const paymentData = getPaymentData.data.response; // 조회한 결제 정보
         // 결제 검증하기
         const { amount, status } = paymentData;
+        console.log(amount, req.body.price)
         if (amount != req.body.price) {
             return res.status(405).send({ message: "위조된 결제 시도입니다" })
         }
@@ -286,10 +288,21 @@ router.post('/purchase', authJWT, async (req, res, next) => {
                 id: req.myId
             }
         })
-        console.log(req.body, Merchant_uid, imp_uid)
-        await exUser.addMyOrder({
+        // console.log(req.body, Merchant_uid, imp_uid, exUser)
+        const isExistedOrder = await Order.findOne({
+            where: {
+                UserId: req.myId,
+                ProductId: req.body.ProductId
+            }
+        })
+        // console.log(isExistedOrder)
+        if (isExistedOrder) {
+            return res.status(407).send({ message: "이미 접수된 주문입니다"})
+        }
+        await Order.create({
+            UserId: req.myId,
             ProductId: req.body.ProductId,
-            orderPrice: req.body.price,
+            orderPrice: req.body.price ,
             amount: req.body.amount,
             state: 1,
             MerchantUid: Merchant_uid,

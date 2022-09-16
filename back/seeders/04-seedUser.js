@@ -24,11 +24,12 @@ module.exports = {
     })
     for (var i = 0; i < 70; i++) {
       // console.log(i)
+      let name = faker.name.findName();
       dummyUser.push({
         loginId: faker.internet.email(),
-        email: faker.internet.email(),
+        email: faker.internet.email(name),
         password: await bcrypt.hash(faker.random.alpha(10), 10),
-        nickname: faker.name.findName(),
+        nickname: name,
         phoneNumber: i,
         address: rand(10000, 300000),
         createdAt: new Date(),

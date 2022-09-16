@@ -34,7 +34,7 @@ const app = express();
 db.sequelize
   // .sync()
   .sync(
-    // { force: true }
+    { alter: false }
     )
   .then(() => {
     console.log("db 연결 성공");
@@ -81,7 +81,7 @@ app.use(
 );
 app.use(function(err, req, res, next) {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  res.status(500).send(err);
 });
 
 
