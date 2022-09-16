@@ -142,6 +142,9 @@ function Cart() {
 
 	const [modalOrder, setModalOrder] = useState(false);
 
+	//
+
+
 	// 체크
 	const checkItem = useCallback(() => {
 		setCheckBox(check => !check);
@@ -163,6 +166,22 @@ function Cart() {
 		setModalOrder(false);
 		setOrder(true);
 	}, []);
+
+	//장바구니 리스트 가져오기 
+	useEffect(() => {
+		fetch('http://141.164.48.244/api/shoppingBasket/shoppingList', {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: loginToken.accessToken,
+			},
+		})
+			.then(res => res.json())
+			.then(res => {
+				setCartList(res.exCart);
+			});
+	},[]);
+
+	console.log(cartList);
 
 	// 모두 체크 확인 및 총상품 금액
 	useEffect(() => {
