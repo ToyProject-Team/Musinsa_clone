@@ -580,4 +580,19 @@ router.post('/checkIsLoginIdCheckUser', (req, res, next) => {
   }
 })
 
+router.get('/address', authJWT, async (req, res, next) => {
+  try {
+    const me = await User.findOne({
+      where: {
+        id: req.myId,
+      },
+    })
+
+    res.status(200).send({ address: me.address })
+  } catch (e) {
+    console.error(e)
+    next(e)
+  }
+})
+
 module.exports = router
