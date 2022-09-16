@@ -106,7 +106,7 @@ module.exports = class Product extends Model {
             as: 'sellThis'
         })
         db.Product.belongsToMany(db.User, {
-            through: 'Cart',
+            through: 'MyCart',
             as: 'buyer'
         })
         db.Product.belongsToMany(db.User, {

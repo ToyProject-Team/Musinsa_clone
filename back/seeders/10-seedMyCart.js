@@ -31,7 +31,7 @@ module.exports = {
             })
         }
         
-        await queryInterface.bulkInsert("Cart", Cart);
+        await queryInterface.bulkInsert("MyCarts", Cart);
     },
 
   async down (queryInterface, Sequelize) {
