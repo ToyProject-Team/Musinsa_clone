@@ -53,11 +53,16 @@ export const LikeLi = styled.li`
 	font-size: 14px;
 	text-align: left;
 	position: relative;
+	transition: ease-in  background-color 0.2s;
+	&:hover{
+			background-color: #EAEAEA;
+		}
 	ul {
 		width: 100%;
 		display: table-cell;
 		padding-left: 10px;
 		vertical-align: middle;
+		
 		li {
 			font-size: 14px;
 			line-height: 22px;
@@ -86,10 +91,14 @@ export const LikeLi = styled.li`
 			line-height: 16px;
 			padding-top: 5px;
 			color: red;
+			svg{
+				vertical-align: -2px;
+			}
 		}
 	}
 	button {
 		position: absolute;
+		top: 10px;
 		right: 10px;
 		border: none;
 		background: none;
