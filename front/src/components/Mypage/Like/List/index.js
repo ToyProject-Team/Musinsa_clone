@@ -3,7 +3,7 @@ import { ImgSpan, LikeLi, LikeUl } from '../styles';
 import { FaHeart } from 'react-icons/fa';
 import { FiX } from 'react-icons/fi';
 
-function Likelist({ img, brand, model, price, like, onRemove }) {
+function Likelist({ img, brand, model, price, like, onRemove, id }) {
 	
 	return (
 		<LikeUl>
@@ -22,7 +22,7 @@ function Likelist({ img, brand, model, price, like, onRemove }) {
 					</li>
 				</ul>
 
-				<button onClick={onRemove()}>
+				<button onClick={(e) => onRemove(id)}>
 					<FiX />
 				</button>
 			</LikeLi>

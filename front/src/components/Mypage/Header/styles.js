@@ -15,17 +15,13 @@ export const MypageTitle = styled.h2`
 `;
 
 export const Profile = styled.dl`
+	display: flex;
 	padding-left: 45px;
-	&::after {
-		display: block;
-		content: '';
-		clear: both;
-	}
+	
 `;
 
 
 export const NickName = styled.dd`
-	display: inline-block;
 	padding-left: 50px;
 	padding-top: 30px;
 	color: white;

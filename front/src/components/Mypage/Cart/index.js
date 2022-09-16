@@ -3,14 +3,12 @@ import { MypageMain } from 'pages/Mypage/styles.js';
 import CartTable from 'components/Mypage/Cart/Table';
 import { OrderTable, CartPayment, OrderBtn, ModalStyle } from 'components/Mypage/Cart/styles';
 import { FaPlus, FaEquals } from 'react-icons/fa';
-import dummy from 'components/Mypage/data.json';
-import Modal from 'react-modal';
 import Order from 'components/Order';
 import OrderModal from 'components/Modals/OrderModal';
 import { useNavigate } from 'react-router';
 import { thousandComma } from 'utils/thousandComma';
-import { data } from 'jquery';
 import { CheckLabel } from './Table/styles';
+import { getData } from 'utils/getData';
 
 const dummyCart = {
 	exCart: [
@@ -27,7 +25,7 @@ const dummyCart = {
 			smallCategory: 2,
 			option_1: 'Gray',
 			option_2: '95',
-			img: 'https://mblogthumb-phinf.pstatic.net/MjAxODAxMDNfNDAg/MDAxNTE0OTYyNTA5NjU0.u5cU9gnAdMHK4uAmf54gNGbKZig0WoIiCKAD2qCaDf0g.yzxNuwFxteMsF9wX7Q0M4QqucBCF6INyczLsjoKyCDwg.JPEG.yg11398/0.jpg?type=w800',
+			img: 'https://image.msscdn.net/images/goods_img/20211207/2260272/2260272_1_500.jpg?t=20211207211906',
 			check: false,
 		},
 		{
@@ -135,6 +133,9 @@ function Cart() {
 	const [data, setData] = useState(dummyCart.exCart);
 	const [checkBox, setCheckBox] = useState(false);
 	const [sum, setSum] = useState(0);
+	const [cartList, setCartList] = useState([]);
+	const loginToken = getData();
+	console.log(loginToken);
 
 	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);

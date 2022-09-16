@@ -47,6 +47,9 @@ export const OrderTable = styled.table`
 				text-align: center;
 				vertical-align: middle;
 				word-break: break-all;
+				strong{
+					font-weight: bold;
+				}
 			}
 		}
 	}
@@ -65,18 +68,21 @@ export const OrderTable = styled.table`
 			svg {
 				width: 22px;
 				height: 22px;
+				font-size: 22px;
+				vertical-align: middle;
+				line-height: 1;
 			}
 		}
 		input[type='text'] {
-			width: 32px;
-			height: 30px;
+			width: 30px;
+			height: 28px;
 			border: 1px solid #eee;
 			text-align: center;
 			font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif !important;
 			color: #000000;
 			float: left;
 			vertical-align: middle;
-			text-indent: 3px;
+			text-indent: 0;
 		}
 	}
 	.btn {
@@ -89,7 +95,6 @@ export const OrderTable = styled.table`
 		background-color: #000000;
 		height: 32px;
 		line-height: 30px;
-		font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif !important;
 		color: #ffffff;
 		box-sizing: border-box;
 		font-size: 14px;
