@@ -19,7 +19,9 @@ import { Router, Route, Routes, useNavigate } from 'react-router-dom';
 import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
 import Header from 'layouts/Header';
-// import NewList from './newList';
+import Sidebar from 'layouts/Sidebar';
+import { bigCategory } from 'utils/bigCategory';
+import { smallCategory } from 'utils/smallCategory';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Sidebar from 'layouts/Sidebar';
 
@@ -36,7 +38,6 @@ const Main = () => {
 
 	//데이터 저장할 state(원본 담을 state/조건추가시 필터된 데이터 담을 state)
 	const [product, setProduct] = useState([]);
-
 	const [newProduct, setNewProduct] = useState([]);
 
 	//params
@@ -52,56 +53,36 @@ const Main = () => {
 	//첫화면은 mainSort, price 적용안해야 랜덤으로 데이터 받음
 	const getMoreItems = () => {
 		const params = {
-			page: page === 0 ? page : page + 1,
+			page,
 			bigCategoryId,
 			smallCategoryId,
 		};
 		//setPage(page+1) 했었는데 prev가 반영안됐으
 		//페이지 + 1하고  나머지 params들은 리셋
-		PostQueryApi('/api/product/productList', params).then(res =>
-			setProduct(prev => [...prev, ...res.data.productData]),
+		PostQueryApi('/api/product/productList', params).then(
+			res => setProduct(prev => [...prev, ...res.data.productData]),
+
+			// navigate('/'),
 		);
-		navigate('/');
-		console.log(product);
+		setPage(page + 1);
 	};
 
 	useEffect(() => {
-		// const params = {
-		// 	page,
-		// 	bigCategoryId,
-		// 	smallCategoryId,
-		// };
-
-		// PostQueryApi('/api/product/productList', params).then(res => setProduct(res.data.productData));
-		// console.log(product);
 		getMoreItems();
-	}, [page]);
+	}, []);
+
+	//스크롤
 
 	//중분류 전체보기(리셋)
 	const onReset = () => {
 		navigate('/');
 	};
 
-	//가격 전체보기(리셋)
-	const onResetPrice = () => {
-		const params = {
-			// mainSort,
-			page,
-			// priceMin,
-			// priceMax,
-			bigCategoryId,
-			smallCategoryId,
-		};
-
-		PostQueryApi('/api/product/productList', params).then(
-			res => setNewProduct(res.data.productData),
-			navigate(`/products`),
-		);
-		// // setPage(0);
-		// setPrice();
-		// setMainSort();
-		// navigate('/products');
-	};
+	// //가격 전체보기(리셋)
+	// const onResetPrice = () => {
+	// 	navigate('/');
+	// };
+	//props.product[0].ProductSizes[0].size
 
 	//검색창 input들 state
 	const [searchInput, setSearchInput] = useState('');
@@ -243,7 +224,7 @@ const Main = () => {
 	const onSortPriceDown = () => {
 		const params = {
 			page,
-			price,
+			// price,
 			mainSort: 2,
 			bigCategoryId,
 			smallCategoryId,
@@ -259,7 +240,7 @@ const Main = () => {
 	const onSortPriceUp = () => {
 		const params = {
 			page,
-			price,
+			// price,
 			mainSort: 1,
 			bigCategoryId,
 			smallCategoryId,
@@ -291,16 +272,17 @@ const Main = () => {
 			<InfiniteScroll
 				dataLength={page}
 				next={getMoreItems}
+				// width={'1200px'}
 				hasMore={page < 38 ? true : false}
 				height={document.documentElement.scrollHeight}
 				loader={<div style={{ textAlign: 'center' }}>Loading...</div>}
-				scrollThreshold="10px" // 뷰포트가 스크롤영역 하단에서 0px 미만일때 이벤트를 트리거
+				scrollThreshold="0px" // 뷰포트가 스크롤영역 하단에서 0px 미만일때 이벤트를 트리거
 				endMessage={<div style={{ textAlign: 'center' }}>더이상 상품이 없습니다.</div>}
-				// style={{ scrollbarWidth: 'none' }}
+				// style={{ 'scrollbar-width': 'none' }}
 			>
+				<Header></Header>
+				<Sidebar></Sidebar>
 				<ScrollContainer>
-					<Header></Header>
-					<Sidebar></Sidebar>
 					<MainContainer>
 						{/* 카테고리 */}
 						<Category>
@@ -315,12 +297,12 @@ const Main = () => {
 										setMainSort();
 									}}
 								>
-									Bigcategory명
+									{bigCategory[bigCategoryId]}
 								</div>
-								<div className="hash_tag" onClick={() => getMoreItems()}>
-									#smallCategory명
+								<div className="hash_tag">#{bigCategory[bigCategoryId]}</div>
+								<div className="hash_tag">
+									#{smallCategory[smallCategoryId][Math.floor(Math.random() * 10)]}
 								</div>
-								<div className="hash_tag">#한국어</div>
 							</CategoryTitle>
 
 							<MiddleCategory>
@@ -373,7 +355,7 @@ const Main = () => {
 									<ul>
 										<li
 											onClick={() => {
-												onResetPrice();
+												onReset();
 											}}
 											style={{ color: 'black', fontWeight: 'bold' }}
 										>
@@ -437,18 +419,12 @@ const Main = () => {
 									className={selectBox ? 'visible' : 'invisible'}
 									onClick={() => {
 										setSelectBox(false);
-										setOnSortClick(false);
 										const params = {
 											page,
 											//price,
 											bigCategoryId,
 											smallCategoryId,
 										};
-
-										// PostQueryApi('/api/product/productList', params).then(
-										// 	res => setNewProduct(res.data.productData),
-										// 	navigate(`/products`),
-										// );
 
 										{
 											onSortClick
@@ -459,7 +435,6 @@ const Main = () => {
 																	return data.productTitle === selectTitle;
 																}),
 															),
-
 														navigate('/products'),
 												  )
 												: navigate('/');
@@ -477,7 +452,6 @@ const Main = () => {
 										setSecondSelectBox(false);
 										const params = {
 											page,
-											// price: setPrice(),
 											bigCategoryId,
 											smallCategoryId,
 										};
@@ -511,7 +485,6 @@ const Main = () => {
 											후기순
 										</span>
 									</div>
-									<div className="page">{page}</div>
 								</SortBox>
 
 								<ListBox>
