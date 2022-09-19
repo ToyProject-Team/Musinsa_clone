@@ -134,7 +134,7 @@ export const SelectedOption = styled.div`
 	margin-top: -1px;
 
 	& > div:nth-of-type(1) {
-		flex: 1;
+		flex: 1.5;
 		padding-right: 10px;
 		color: #777;
 		font-size: 12px;
