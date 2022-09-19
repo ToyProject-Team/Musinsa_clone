@@ -5,7 +5,7 @@ import ProductInfoRight from 'components/DetailProduct/ProductInfoRight/InfoRigh
 import ProductInfoLeft from 'components/DetailProduct/ProductInfoLeft';
 import HeaderInfo from 'components/DetailProduct/ProductInfoRight/HeaderInfo';
 import ProductInfo from 'components/DetailProduct/ProductInfo';
-import { GetApi } from 'utils/api';
+import { GetApi, PostHeaderBodyApi } from 'utils/api';
 import { useEffect } from 'react';
 import {
 	initialProduceDetail,
@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { URLquery } from 'utils/URLquery';
 import Footer from 'layouts/Footer';
+import { getData } from 'utils/getData';
 
 const dummyProduct = {
 	BigCategoryName: '상의',
@@ -99,6 +100,22 @@ const DetailProduct = () => {
 					...prev,
 					product: result.data.product,
 				}));
+
+				const { accessToken } = getData();
+				const data = {
+					keys: ['address'],
+				};
+				const user = await PostHeaderBodyApi(
+					`/api/auth/getUserData`,
+					data,
+					'Authorization',
+					accessToken,
+				);
+				console.log(user);
+				// setInitialProduceDetail(prev => ({
+				// 	...prev,
+				// 	user: result.data.product,
+				// }));
 
 				setLoading(false);
 			} catch (error) {

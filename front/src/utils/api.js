@@ -89,6 +89,7 @@ export const PostHeaderApi = async (PATH, header, params) => {
  * @returns result 데이터
  */
 export const PostHeaderBodyApi = async (PATH, data, header, params) => {
+	console.log(123, params);
 	const result = await axios.post(baseUrl + PATH, data, {
 		headers: { 'Content-Type': 'application/json', [header]: params },
 	});

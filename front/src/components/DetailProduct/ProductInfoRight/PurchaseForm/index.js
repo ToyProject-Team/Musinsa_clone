@@ -260,9 +260,12 @@ const PurchaseForm = () => {
 
 		setClickedlike(prev => !prev);
 		if (clickedlike) {
+			console.log(detail.product);
+
 			changeDispatch(LIKES, {
 				likes: detail.product.likes - 1,
 			});
+
 			detail.product.likes -= 1;
 
 			try {
@@ -278,7 +281,6 @@ const PurchaseForm = () => {
 				likes: detail.product.likes + 1,
 			});
 			detail.product.likes += 1;
-
 			try {
 				const params = {
 					productId: query.productId,
