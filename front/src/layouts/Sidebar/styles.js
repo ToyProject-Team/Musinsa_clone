@@ -19,12 +19,14 @@ export const SContainer = styled.section`
 		cursor: pointer;
 	}
 
-	.disappear {
-		width: 0;
-		display: none;
+	.appear{
+		transition: all 0.4s;
 	}
-	.appear {
-		color: black;
+
+	.disappear{
+		width: 0px;
+		transform: translateX(-270px);
+		transition: all 0.4s;
 	}
 
 	.toggle {
@@ -78,6 +80,7 @@ export const SContainer = styled.section`
 export const SDiv = styled.div`
 	text-align: center;
 	width: 270px;
+
 
 	& a {
 		display: block;
