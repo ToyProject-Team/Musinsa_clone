@@ -30,7 +30,7 @@ const s3 = new AWS.S3({
 
 router.get('/productList', async (req, res, next) => {
     try {
-        const startIndx = req.query.page == undefined ? 0 : Number(req.query.page)*100
+        const startIndx = req.query.page == undefined ? 0 : Number(req.query.page-1)*100
         console.log(req.query)
         const productData = await Product.findAll({
             
@@ -60,14 +60,22 @@ router.get('/productList', async (req, res, next) => {
                     },
                     {
                         bigCategoryId: {
-                            [Op.gt]: [req.query.bigCategoryId ? Number(req.query.bigCategoryId)-1 : 0 ]
-                        }
+                            // [Op.or]: 
+                            // [
+                            //     {
+                                    [Op.eq]: Number(req.query.bigCategoryId),
+                                //     [Op.gt]: 1
+                            //     }
+                            // ]
+                        },
                     },
                     {
                         smallCategoryId: {
-                            [Op.gt]: [req.query.smallCategoryId ? Number(req.query.smallCategoryId)-1 : 0 ]
-                        }
-                    }
+                          [Op.eq]: req.query.smallCategoryId
+                            ? Number(req.query.smallCategoryId) 
+                            : 0,
+                        },
+                    },
                 ]
             },
             include: [

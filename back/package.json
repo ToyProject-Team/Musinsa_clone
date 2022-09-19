@@ -8,7 +8,8 @@
     "start": "cross-env NODE_ENV=production nodemon apps",
     "db:create": "cross-env NODE_ENV=production npx sequelize db:create",
     "db:seed:all": "cross-env NODE_ENV=production npx sequelize db:seed:all",
-    "production": "cross-env NODE_ENV=production pm2 start app.js"
+    "production": "cross-env NODE_ENV=production pm2 start app.js",
+    "test": "jest"
   },
   "author": "",
   "license": "MIT",
@@ -49,6 +50,7 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "jest": "^29.0.3"
   }
 }

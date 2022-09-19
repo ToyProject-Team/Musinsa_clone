@@ -1011,6 +1011,13 @@ paths:
               message:
                 type: string
                 example: 위조된 결제 시도입니다
+        '407':
+          description: 해당 유저가 이미 주문한 상품일 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 이미 접수된 주문입니다
         '500':
           $ref: '#/serverError'
   /api/product/addCart:
@@ -1223,18 +1230,6 @@ paths:
                                   type: string
                                   example: 딥레드
                                   amount: 3
-                    MyCart:
-                      type: object
-                      properties:
-                        ProductId:
-                          type: number
-                          example: 17
-                        packingAmount:
-                          type: number
-                          example: 2
-                        packingSize:
-                          type: string
-                          example: S
         '400':
           description: 유저의 조회 결과가 없습니다 - 토큰에 대한 사용자 정보가 데이터베이스에 존재하지 않습니다
           schema:
@@ -1253,19 +1248,15 @@ paths:
         - name: Authorization
           in: header
           required: true
-        - name: productId
+        - name: body
           in: body
-          type: object
-          properties:
-            productId:
-              type: array
-              items:
-                type: integer
-                format: int64
-              example:
-                - 1
-                - 2
-                - 3
+          required: true
+          schema:
+            type: object
+            properties:
+              productId:
+                type: string
+                example: 1
       responses:
         '200':
           $ref: '#/success'

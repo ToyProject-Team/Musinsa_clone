@@ -22,7 +22,7 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
             //         }
             //     ]
             // },
-            joinTableAttributes: ["ProductId", "packingAmount", "packingSize"],
+            joinTableAttributes: [],
             attributes: ["id", "productTitle", "productPrice", "nonMemberPrice", "deliveryFrom", "deliveryWay","deliveryCompany"],
             include: [
                 {
@@ -108,7 +108,7 @@ router.post('/shoppingCartPurchase', authJWT, async (req, res, next) => {
             }, { transaction: t })
 
             await exUser.removeMyCart(exProduct)
-        res.status(200).send({message: "일반 결제 성공" });
+            res.status(200).send({message: "일반 결제 성공" });
         })
     } catch (e) {
         console.error(e)
