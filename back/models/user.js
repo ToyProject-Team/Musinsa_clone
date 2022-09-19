@@ -8,6 +8,7 @@ module.exports = class User extends Model {
                 loginId: {
                     type: DataTypes.STRING(100),
                     allowNull: true,
+                    using: 'gin',
                     unique: 'loginId',
                     fields: 'loginId'
                 },

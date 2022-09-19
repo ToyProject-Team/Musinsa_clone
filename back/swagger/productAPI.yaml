@@ -318,6 +318,13 @@
             message:
               type: string
               example: 위조된 결제 시도입니다 
+      407:
+        description: 해당 유저가 이미 주문한 상품일 경우
+        schema:
+          properties:
+            message:
+              type: string
+              example: 이미 접수된 주문입니다
       500:
         $ref: "./openapi.yaml#/serverError"
 
