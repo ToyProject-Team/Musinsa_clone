@@ -24,19 +24,19 @@ function Mainlike() {
 	console.log(loginToken);
 
 	useEffect(() => {
-		// const params = {
+		// const headers = {
 		// 	Authorization: loginToken.accessToken
 		// }
-		// GetApi('/api/mypage/favoriteGoods', params ).then(res => {setlikeList(res.likeProduct)});
-		fetch('http://141.164.48.244/api/mypage/favoriteGoods', {
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: loginToken.accessToken,
-			},
-		})
-			.then(res => res.json())
+		// GetApi('/api/mypage/favoriteGoods', headers ).then(res => {setlikeList(res.data.likeProduct)});
+		axios
+			.get('http://141.164.48.244/api/mypage/favoriteGoods', {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: loginToken.accessToken,
+				},
+			})
 			.then(res => {
-				setlikeList(res.likeProduct);
+				setlikeList(res.data.likeProduct);
 			});
 	}, []);
 
@@ -45,6 +45,7 @@ function Mainlike() {
 	// 좋아요리스트 삭제
 	const onRemove = useCallback(id => {
 		// front 에서 먼저 리스트 삭제
+		const originList = setlikeList(likeLists);
 		const deleteList = likeLists.filter(likeList => likeList.id !== id);
 		setlikeList(deleteList);
 		axios
@@ -58,30 +59,28 @@ function Mainlike() {
 				},
 			})
 			.then(res => {
-				console.log(res);
+				const deleteList = likeLists.filter(likeList => likeList.id !== id);
+				setlikeList(deleteList);
 			})
 			.catch(err => {
-				// switch (err) {
-				// 	case 400:
-				// 		console.log('입력값을 다시 확인해주세요');
-				// 		break;
-				// 	case 401:
-				// 		console.log("유저의 조회 결과가 없습니다");
-				// 		break;
-				// 	case 402:
-				// 		console.log("좋아요하지 않은 상품을 삭제 시도하셨습니다");
-				// 		break;
-				// 	case 500:
-				// 		console.log("서버 에러");
-				// 		break;
-				// }
+				switch (err) {
+					case 400:
+						console.log('입력값을 다시 확인해주세요');
+						break;
+					case 401:
+						console.log('유저의 조회 결과가 없습니다');
+						break;
+					case 402:
+						console.log('좋아요하지 않은 상품을 삭제 시도하셨습니다');
+						break;
+					case 500:
+						console.log('서버 에러');
+						break;
+				}
 				console.log('실패');
-				// 안지워졌을시 필터했던 아이템 다시 추가 
-
-
+				// 안지워졌을시 필터했던 아이템 다시 추가
+				setlikeList(originList);
 			});
-			
-
 	});
 
 	return (
@@ -94,7 +93,7 @@ function Mainlike() {
 					</header>
 					{likeLists.slice(items * (page - 1), items * (page - 1) + items).map((data, index) => (
 						<Ul
-							key={data.id}
+							key={index}
 							id={data.id}
 							img={data.ProductImg.src}
 							model={data.productTitle}
