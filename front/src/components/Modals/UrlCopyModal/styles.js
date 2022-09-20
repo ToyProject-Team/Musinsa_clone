@@ -53,10 +53,60 @@ export const BoxLayout = styled.div`
 	& p {
 		text-align: left;
 		color: #b2b2b2;
-		padding-left: 6px;
+		padding-left: 26px;
 		margin-top: 14px;
-		font-size: 1.2em;
+		font-size: 14px;
 		font-family: 'Arial', 'sans-serif';
 		font-weight: 600;
+	}
+
+	& section {
+		padding-top: 20px;
+		max-height: 100px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		& p:first-of-type {
+			cursor: pointer;
+			text-align: center;
+			min-width: 50%;
+			padding: 0;
+			margin: 0;
+			& svg {
+				width: 60px;
+				height: 60px;
+				color: #3b5998;
+			}
+		}
+
+		& p:last-of-type {
+			cursor: pointer;
+			text-align: center;
+			min-width: 50%;
+			padding: 0;
+			margin: 0;
+			& svg {
+				width: 70px;
+				height: 70px;
+				color: #00acee;
+			}
+		}
+	}
+
+	& .last {
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		text-align: center;
+		& span {
+			color: #b2b2b2;
+			font-size: 12px;
+			display: inline-block;
+			width: 50%;
+			padding: 0;
+			margin: 0;
+			border: none;
+		}
 	}
 `;

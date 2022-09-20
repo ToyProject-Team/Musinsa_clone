@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { CreateModal, BoxLayout } from './styles';
 import { CgClose } from 'react-icons/cg';
-import { GrFacebook } from 'react-icons/gr';
+import { BsFacebook } from 'react-icons/bs';
 import { AiFillTwitterCircle } from 'react-icons/ai';
 import TextModal from 'components/Modals/TextModal';
 
@@ -53,10 +53,18 @@ const UrlCopyModal = ({ show, onCloseModal }) => {
 							<span onClick={() => copyURL(window.location.href)}>URL 복사</span>
 						</div>
 						<p>- 현재 보고 있는 페이지를 공유합니다.</p>
-						<div>
-							<GrFacebook />
-							<AiFillTwitterCircle />
-						</div>
+						<section>
+							<p>
+								<BsFacebook />
+							</p>
+							<p>
+								<AiFillTwitterCircle />
+							</p>
+						</section>
+						<p className="last">
+							<span>페이스북</span>
+							<span>트위터</span>
+						</p>
 					</div>
 				</BoxLayout>
 			</CreateModal>
