@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router';
 import { thousandComma } from 'utils/thousandComma';
 import { CheckLabel } from './Table/styles';
 import { getData } from 'utils/getData';
+import axios from 'axios';
 
 const dummyCart = {
 	exCart: [
@@ -128,14 +129,30 @@ const dummyCart = {
 };
 
 function Cart() {
-	const navigate = useNavigate();
+	const [cartList, setCartList] = useState([]);
+	//장바구니 리스트 가져오기
+	useEffect(() => {
+		axios
+			.get('http://141.164.48.244/api/shoppingBasket/shoppingList', {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: loginToken.accessToken,
+				},
+			})
+			.then(res => {
+				setCartList(res.data.exCart);
+			});
+	}, []);
 
-	const [data, setData] = useState(dummyCart.exCart);
+	console.log('cart', cartList);
+
+	const navigate = useNavigate();
+	const [data, setData] = useState(cartList);
+	console.log('data', data);
 	const [checkBox, setCheckBox] = useState(false);
 	const [sum, setSum] = useState(0);
-	const [cartList, setCartList] = useState([]);
 	const loginToken = getData();
-	console.log(loginToken);
+	// console.log(loginToken);
 
 	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);
@@ -143,7 +160,6 @@ function Cart() {
 	const [modalOrder, setModalOrder] = useState(false);
 
 	//
-
 
 	// 체크
 	const checkItem = useCallback(() => {
@@ -166,22 +182,6 @@ function Cart() {
 		setModalOrder(false);
 		setOrder(true);
 	}, []);
-
-	//장바구니 리스트 가져오기 
-	useEffect(() => {
-		fetch('http://141.164.48.244/api/shoppingBasket/shoppingList', {
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: loginToken.accessToken,
-			},
-		})
-			.then(res => res.json())
-			.then(res => {
-				setCartList(res.exCart);
-			});
-	},[]);
-
-	console.log(cartList);
 
 	// 모두 체크 확인 및 총상품 금액
 	useEffect(() => {
@@ -233,9 +233,23 @@ function Cart() {
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
-						{data.map((item, index) => (
-							<CartTable data={data} setData={setData} item={item} index={index} />
-						))}
+						{cartList.map(list =>
+							list.ProductMainTags.map(Mainitem =>
+								Mainitem.ProductSubTags.map((item, index) => (
+									<CartTable
+										key={index}
+										data={data}
+										setData={setData}
+										item={item}
+										list={list}
+										Mainitem={Mainitem}
+									/>
+								)),
+							),
+						)}
+						{/* {cartList.map((item, index) => (
+							<CartTable key={index} data={data} setData={setData} item={item} />
+						))} */}
 					</OrderTable>
 					<CartPayment>
 						<li>

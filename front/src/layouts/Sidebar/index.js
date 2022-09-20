@@ -1,21 +1,38 @@
-import { useState, useCallback, useRef } from 'react';
-import { CgClose } from 'react-icons/cg';
+import { useState, useCallback } from 'react';
 import { SContainer, SDiv } from './styles';
-import { GiHamburgerMenu } from 'react-icons/gi';
 import { Link } from 'react-router-dom';
 import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
 import { HiOutlinePlusSm, HiOutlineMinusSm } from 'react-icons/hi';
 
-const Sidebar = () => {
+const Sidebar = props => {
 	const [cancel, setCancel] = useState(true);
 	const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
-	const parentRef = useRef();
-	const childRef = useRef();
+	const [xPosition, setX] = useState();
+
+	const toggleMenu = () => {
+		if (xPosition > 0) {
+			setX(0);
+			setCancel(true);
+		} else {
+			setX();
+			setCancel(false);
+		}
+	};
+
+	//Main으로 idx값 보내는 함수1
+	const sendBigCate = idx => {
+		props.setBigCategoryId(idx + 1);
+		//다른 params 1로 리셋
+		props.setSmallCategoryId(1);
+		props.setPage(1);
+	};
+	//Main으로 idx값 보내는 함수2
+	const sendSmallCate = idx => {
+		props.setSmallCategoryId(idx + 1);
+	};
 
 	const onClickCategory = useCallback(idx => {
-		console.log(parentRef.current, childRef.current);
-
 		setOpen(prev => {
 			const newArray = [...prev];
 			newArray[idx] = !newArray[idx];
@@ -25,12 +42,12 @@ const Sidebar = () => {
 
 	return (
 		<SContainer>
-			<div onClick={() => setCancel(e => !e)} className={cancel ? 'toggle' : 'toggle active'}>
+			<div onClick={() => setCancel(e => !e)} className={cancel ? 'toggle active' : 'toggle'}>
 				<span className="line"></span>
 				<span className="line"></span>
 				<span className="line"></span>
 			</div>
-			<SDiv>
+			<SDiv className={cancel ? 'appear' : 'disappear'}>
 				<Link to="/">
 					전체<span>All</span>
 				</Link>
@@ -41,7 +58,7 @@ const Sidebar = () => {
 							onClick={() => onClickCategory(idx)}
 							aria-expanded={open[idx]}
 						>
-							<div title="BigMenu" key={idx}>
+							<div title="BigMenu" key={idx} onClick={() => sendBigCate(idx)}>
 								{big}
 								<span>{alpabet[idx]}</span>
 								<span>{!open[idx] ? <HiOutlinePlusSm /> : <HiOutlineMinusSm />}</span>
@@ -54,7 +71,12 @@ const Sidebar = () => {
 								onClick={e => e.stopPropagation()}
 							>
 								{smallCategory[idx].map((small, idex) => (
-									<li key={idex}>
+									<li
+										key={idex}
+										onClick={() => {
+											sendSmallCate(idex);
+										}}
+									>
 										{small}
 										<span>{`(${idex})`}</span>
 									</li>

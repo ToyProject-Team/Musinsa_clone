@@ -4,18 +4,19 @@ import { FaHeart } from 'react-icons/fa';
 import { FiX } from 'react-icons/fi';
 import { thousandComma } from 'utils/thousandComma';
 
-function Likelist({ img, brand, model, price, like, onRemove, id }) {
-	
+function Likelist({ img, model, price, like, onRemove, id }) {
 	return (
 		<LikeUl>
 			<LikeLi>
 				<ImgSpan>
-					<img src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${img}`} alt="더미데이터" />
+					<img
+						src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${img}`}
+						alt="더미데이터"
+					/>
 				</ImgSpan>
 				<ul>
-					<li className="brand">{brand}</li>
 					<li className="name">
-						<a href="#">{model}</a>
+						<a href="/detail">{model}</a>
 					</li>
 					<li className="price">{thousandComma(price)}원</li>
 					<li className="like">
@@ -23,7 +24,7 @@ function Likelist({ img, brand, model, price, like, onRemove, id }) {
 					</li>
 				</ul>
 
-				<button onClick={(e) => onRemove(id)}>
+				<button onClick={e => onRemove(id)}>
 					<FiX />
 				</button>
 			</LikeLi>
