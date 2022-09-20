@@ -22,7 +22,7 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
             //         }
             //     ]
             // },
-            joinTableAttributes: ["ProductId", "packingAmount", "packingSize"],
+            joinTableAttributes: [],
             attributes: ["id", "productTitle", "productPrice", "nonMemberPrice", "deliveryFrom", "deliveryWay","deliveryCompany"],
             include: [
                 {
