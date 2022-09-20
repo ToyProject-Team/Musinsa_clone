@@ -59,7 +59,7 @@ const PurchaseForm = () => {
 	const dispatch = useProductDetailDispatch();
 	const user = getData();
 
-	const [clickedlike, setClickedlike] = useState(true);
+	const [clickedlike, setClickedlike] = useState(false);
 
 	const [optionData, setOptionData] = useState([
 		{
@@ -264,7 +264,6 @@ const PurchaseForm = () => {
 				likes: detail.product.likes - 1,
 			});
 			detail.product.likes -= 1;
-
 			try {
 				const params = {
 					productId: query.productId,
@@ -278,7 +277,6 @@ const PurchaseForm = () => {
 				likes: detail.product.likes + 1,
 			});
 			detail.product.likes += 1;
-
 			try {
 				const params = {
 					productId: query.productId,
