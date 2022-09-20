@@ -6,7 +6,6 @@ export const ListOuter = styled.li`
 	float: left;
 	margin: 0;
 	background-color: white;
-	// border-left: 1px solid #ddd;
 	border-right: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
 
@@ -22,10 +21,6 @@ export const ListOuter = styled.li`
 		width: 150px;
 		height: 280px;
 		padding-top: 15px;
-		// &:hover {
-		// 	background-color: #f2f2f2;
-		// 	z-index: 1;
-		// }
 	}
 
 	.list_img {

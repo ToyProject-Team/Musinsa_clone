@@ -107,21 +107,7 @@ export const MiddleCategory = styled.div`
 
 			& li {
 				float: left;
-				width: 100px;
-				padding: 0 0 15px;
-				margin: 0;
-				color: #b2b2b2;
-			}
-		}
-
-		& ul {
-			display: inline-block;
-			// min-width: 600px;
-			// max-width: 800px;
-
-			& li {
-				float: left;
-				width: 100px;
+				width: 145px;
 				padding: 0 0 15px;
 				margin: 0;
 				color: #b2b2b2;

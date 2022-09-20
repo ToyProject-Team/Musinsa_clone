@@ -16,15 +16,13 @@ const Sidebar = props => {
 	//Main으로 idx값 보내는 함수1
 	const sendBigCate = idx => {
 		props.setBigCategoryId(idx + 1);
+		//다른 params 1로 리셋
 		props.setSmallCategoryId(1);
-		props.setMainSort();
-		props.setPage(0);
-		props.setPrice();
+		props.setPage(1);
 	};
 	//Main으로 idx값 보내는 함수2
 	const sendSmallCate = idx => {
 		props.setSmallCategoryId(idx + 1);
-		console.log(props.smallCategoryId);
 	};
 
 	const onClickCategory = useCallback(idx => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './styles';
+import { ListOuter } from './styles';
 
 const NewList = props => {
 	//옵션 데이터
@@ -21,8 +21,8 @@ const NewList = props => {
 		<div style={{ 'font-size': '20px', padding: '15px' }}>해당하는 상품이 없습니다.</div>
 	) : (
 		props.newProduct?.map((data, idx) => (
-			<li className="li_outer">
-				<div className="li_inner">
+			<ListOuter>
+				<div className="li_inner" key={idx}>
 					<div className="list_img">
 						<a href={`/detail?productId=${data.id}`}>
 							<img
@@ -60,7 +60,7 @@ const NewList = props => {
 						</ul>
 					</div>
 				</div>
-			</li>
+			</ListOuter>
 		))
 	);
 };
