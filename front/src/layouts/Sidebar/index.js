@@ -7,11 +7,23 @@ import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
 import { HiOutlinePlusSm, HiOutlineMinusSm } from 'react-icons/hi';
 
-const Sidebar = () => {
+const Sidebar = props => {
 	const [cancel, setCancel] = useState(true);
 	const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
 	const parentRef = useRef();
 	const childRef = useRef();
+
+	//Main으로 idx값 보내는 함수1
+	const sendBigCate = idx => {
+		props.setBigCategoryId(idx + 1);
+		//다른 params 1로 리셋
+		props.setSmallCategoryId(1);
+		props.setPage(1);
+	};
+	//Main으로 idx값 보내는 함수2
+	const sendSmallCate = idx => {
+		props.setSmallCategoryId(idx + 1);
+	};
 
 	const onClickCategory = useCallback(idx => {
 		console.log(parentRef.current, childRef.current);
@@ -41,7 +53,7 @@ const Sidebar = () => {
 							onClick={() => onClickCategory(idx)}
 							aria-expanded={open[idx]}
 						>
-							<div title="BigMenu" key={idx}>
+							<div title="BigMenu" key={idx} onClick={() => sendBigCate(idx)}>
 								{big}
 								<span>{alpabet[idx]}</span>
 								<span>{!open[idx] ? <HiOutlinePlusSm /> : <HiOutlineMinusSm />}</span>
@@ -54,7 +66,12 @@ const Sidebar = () => {
 								onClick={e => e.stopPropagation()}
 							>
 								{smallCategory[idx].map((small, idex) => (
-									<li key={idex}>
+									<li
+										key={idex}
+										onClick={() => {
+											sendSmallCate(idex);
+										}}
+									>
 										{small}
 										<span>{`(${idex})`}</span>
 									</li>
