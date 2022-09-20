@@ -32,7 +32,6 @@ module.exports = {
         categoryName: temp[i],
         createdAt: new Date(),
         updatedAt: new Date(),
-        Produ
       })
     }
 
