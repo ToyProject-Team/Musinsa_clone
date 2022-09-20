@@ -289,7 +289,7 @@ const PurchaseForm = () => {
 	}, [clickedlike]);
 
 	// 장바구니 추가
-	const onClickBasket = useCallback(() => {
+	const onClickBasket = useCallback(async () => {
 		if (!user) {
 			const { pathname, search } = location;
 			navigate(`/login?redirect=${pathname}${search}`);
@@ -302,9 +302,12 @@ const PurchaseForm = () => {
 			const params = {
 				productId: query.productId,
 			};
-			PostHeaderBodyApi('/api/product/addCart', params, 'Authorization', token);
+			await PostHeaderBodyApi('/api/product/addCart', params, 'Authorization', token);
 			setModalBasket(true);
-		} catch (error) {}
+			console.log(123123);
+		} catch (error) {
+			console.error(error);
+		}
 	}, []);
 
 	const onCloseModal = useCallback(() => {
