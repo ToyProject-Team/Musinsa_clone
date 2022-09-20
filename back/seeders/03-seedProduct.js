@@ -64,9 +64,6 @@ module.exports = {
         ImgSmallIdx = 0
         sum = 0 
       }
-      if (sum % dividedCount == 0 && i != 0) {
-        ImgSmallIdx +=1
-      }
       // console.log(sum, ImgSmallIdx, dividedCount)
       sum +=1
       let nonMemberPriceValue = randPrices[i]
@@ -97,6 +94,9 @@ module.exports = {
         BigCategoryId: Idx+1,
         SmallCategoryId: ImgSmallIdx +1, 
       });
+      if (sum % dividedCount == 0 && i != 0) {
+        ImgSmallIdx +=1
+      }
     }
 
     await queryInterface.bulkInsert("Products", dummyProduct);
