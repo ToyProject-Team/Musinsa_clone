@@ -24,8 +24,9 @@ import { smallCategory } from 'utils/smallCategory';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Sidebar from 'layouts/Sidebar';
 import { GiConsoleController } from 'react-icons/gi';
+import DialLog from 'layouts/DialLog';
 
-const Main = () => {
+const Main = cancel => {
 	const navigate = useNavigate();
 
 	const ShowList = loadable(() => import('components/ProductList'), {

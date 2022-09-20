@@ -1,7 +1,5 @@
-import { useState, useCallback, useRef } from 'react';
-import { CgClose } from 'react-icons/cg';
+import { useState, useCallback } from 'react';
 import { SContainer, SDiv } from './styles';
-import { GiHamburgerMenu } from 'react-icons/gi';
 import { Link } from 'react-router-dom';
 import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
@@ -10,8 +8,17 @@ import { HiOutlinePlusSm, HiOutlineMinusSm } from 'react-icons/hi';
 const Sidebar = props => {
 	const [cancel, setCancel] = useState(true);
 	const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
-	const parentRef = useRef();
-	const childRef = useRef();
+	const [xPosition, setX] = useState(width);
+
+	const toggleMenu = () => {
+		if (xPosition > 0) {
+			setX(0);
+			setCancel(true);
+		} else {
+			setX(width);
+			setCancel(false);
+		}
+	};
 
 	//Main으로 idx값 보내는 함수1
 	const sendBigCate = idx => {
@@ -26,8 +33,6 @@ const Sidebar = props => {
 	};
 
 	const onClickCategory = useCallback(idx => {
-		console.log(parentRef.current, childRef.current);
-
 		setOpen(prev => {
 			const newArray = [...prev];
 			newArray[idx] = !newArray[idx];
@@ -37,12 +42,12 @@ const Sidebar = props => {
 
 	return (
 		<SContainer>
-			<div onClick={() => setCancel(e => !e)} className={cancel ? 'toggle' : 'toggle active'}>
+			<div onClick={() => setCancel(e => !e)} className={cancel ? 'toggle active' : 'toggle'}>
 				<span className="line"></span>
 				<span className="line"></span>
 				<span className="line"></span>
 			</div>
-			<SDiv>
+			<SDiv className={cancel ? 'appear' : 'disappear'}>
 				<Link to="/">
 					전체<span>All</span>
 				</Link>
