@@ -30,7 +30,7 @@ const s3 = new AWS.S3({
 router.get('/productList', async (req, res, next) => {
   try {
     const startIndx =
-      req.query.page == undefined ? 0 : (Number(req.query.page) - 1) * 100
+      req.query.page == undefined || req.query.page <= 0 ? 0 : (Number(req.query.page) - 1) * 100
     console.log(req.query)
 
     let whereStatement = {
