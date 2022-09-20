@@ -16,7 +16,7 @@ function Likelist({ img, model, price, like, onRemove, id }) {
 				</ImgSpan>
 				<ul>
 					<li className="name">
-						<a href="/detail">{model}</a>
+						<a href={`/detail?productId=${id}`}>{model}</a>
 					</li>
 					<li className="price">{thousandComma(price)}원</li>
 					<li className="like">
