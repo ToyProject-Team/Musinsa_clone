@@ -320,7 +320,6 @@ export const CategoryName = styled.div`
 
 // Item List
 export const ItemSection = styled.div`
-	width: 1360px;
 	padding-top: 15px;
 	padding-left: 20px;
 	padding-right: 20px;
