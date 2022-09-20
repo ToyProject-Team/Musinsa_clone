@@ -114,24 +114,24 @@ function CartTable({ data, setData, item, list, Mainitem }) {
 								<td> {thousandComma(list.productPrice)}원</td>
 								<td>
 									<div className="input_amount">
-										<button value={list.MyCart.packingAmount} onClick={minusCount}>
+										<button value={1} onClick={minusCount}>
 											<FiMinus style={item.count === 1 ? { color: '#ddd' } : { color: '#777' }} />
 										</button>
 										<input
 											type="text"
-											value={list.MyCart.packingAmount}
+											value={1}
 											onChange={handleChange}
 										></input>
-										<button value={list.packingAmount} onClick={plusCount}>
+										<button value={1} onClick={plusCount}>
 											<FiPlus style={{ color: '#777' }} />
 										</button>
 									</div>
 								</td>
-								<td>{thousandComma(list.productPrice * list.MyCart.packingAmount)}원</td>
+								<td>{thousandComma(list.productPrice * 1)}원</td>
 								<td>
 									택배배송 <br />
 									<strong>
-										{list.productPrice * list.MyCart.packingAmount > 30000
+										{list.productPrice * 1 > 30000
 											? '배송비 무료'
 											: `${dlvChr}원`}
 									</strong>
