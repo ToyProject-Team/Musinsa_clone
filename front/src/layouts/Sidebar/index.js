@@ -8,17 +8,6 @@ import { HiOutlinePlusSm, HiOutlineMinusSm } from 'react-icons/hi';
 const Sidebar = props => {
 	const [cancel, setCancel] = useState(true);
 	const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
-	const [xPosition, setX] = useState();
-
-	const toggleMenu = () => {
-		if (xPosition > 0) {
-			setX(0);
-			setCancel(true);
-		} else {
-			setX();
-			setCancel(false);
-		}
-	};
 
 	//Main으로 idx값 보내는 함수1
 	const sendBigCate = idx => {
