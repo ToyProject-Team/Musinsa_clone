@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const ScrollContainer = styled.div`
-	display: block;
+	display: flex;
 	height: 100vh;
 	position: sticky;
 `;
@@ -9,11 +9,6 @@ export const ScrollContainer = styled.div`
 export const MainContainer = styled.div`
 	font-size: 13px;
 	height: 100vh;
-	position: absolute;
-	top: 45px;
-	left: 270px;
-	right: 0;
-	min-width: 1370px;
 	border-left: 1px solid #ddd;
 `;
 

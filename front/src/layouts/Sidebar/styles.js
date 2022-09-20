@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 export const SContainer = styled.section`
 	position: relative;
 	float: left;
-	border-right: 1px solid #d3d3d3;
 
 	& h1 {
 		position: absolute;
