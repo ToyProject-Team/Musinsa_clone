@@ -54,7 +54,7 @@ module.exports = {
 
     let sum = 0
     let Idx = 0
-    let dividedCount = 0 
+    let dividedCount = 20
     let ImgSmallIdx = 0
     // console.log(categoryImgCOunt.reduce((a,b) => a + b))
     for (var i = 0; i < categoryImgCOunt.reduce((a,b) => a + b); i++) {
@@ -64,10 +64,10 @@ module.exports = {
         ImgSmallIdx = 0
         sum = 0 
       }
-      // console.log(sum, ImgSmallIdx, dividedCount)
-      if (sum % dividedCount == 0) {
+      if (sum % dividedCount == 0 && i != 0) {
         ImgSmallIdx +=1
       }
+      // console.log(sum, ImgSmallIdx, dividedCount)
       sum +=1
       let nonMemberPriceValue = randPrices[i]
       dummyProduct.push({
