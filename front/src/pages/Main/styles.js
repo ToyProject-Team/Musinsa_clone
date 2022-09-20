@@ -10,8 +10,8 @@ export const MainContainer = styled.div`
 	font-size: 13px;
 	height: 100vh;
 	position: absolute;
+	top: 45px;
 	left: 270px;
-	top: 0;
 	right: 0;
 	min-width: 1370px;
 	border-left: 1px solid #ddd;
@@ -28,10 +28,11 @@ export const CategoryTitle = styled.div`
 	flex-shrink: 0;
 	border-bottom: solid 1px;
 	border-color: rgb(212, 212, 212);
-	padding: 10px 10px 10px 15px;
+	padding: 4px 10px 10px 45px;
 
 	.page_title {
 		float: left;
+		text-justify: center;
 		padding-right: 20px;
 		font-size: 24px;
 
@@ -43,7 +44,7 @@ export const CategoryTitle = styled.div`
 	.hash_tag {
 		display: inline-block;
 		min-width: 45px;
-		height: 28px;
+		// height: 28px;
 		line-height: 31px;
 		margin-right: 1px;
 		padding: 0 10px 0 9px;
@@ -106,21 +107,7 @@ export const MiddleCategory = styled.div`
 
 			& li {
 				float: left;
-				width: 100px;
-				padding: 0 0 15px;
-				margin: 0;
-				color: #b2b2b2;
-			}
-		}
-
-		& ul {
-			display: inline-block;
-			// min-width: 600px;
-			// max-width: 800px;
-
-			& li {
-				float: left;
-				width: 100px;
+				width: 145px;
 				padding: 0 0 15px;
 				margin: 0;
 				color: #b2b2b2;
@@ -380,7 +367,10 @@ export const SelectBox = styled.div`
 export const Items = styled.div`
 	// min-width: 933px;
 	background-color: #fff;
-	height: auto;
+	height: 100vh;
+	//border-right: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
 `;
 
 export const SortBox = styled.div`
@@ -427,109 +417,111 @@ export const SortBox = styled.div`
 
 export const ListBox = styled.div`
 	width: 100%;
+	height: 317px;
+	// text-align: center;
 	// border-right: 1px solid #ddd;
 
 	.list_item {
 		display: inline-block;
-		border-right: 1px solid #ddd;
-	}
 
-	.li_outer {
-		position: relative;
-		min-width: 150px;
-		float: left;
-		margin: 0;
-		background-color: white;
-		border-left: 1px solid #ddd;
 		// border-right: 1px solid #ddd;
-		border-bottom: 1px solid #ddd;
-
-		&:hover {
-			background-color: #f2f2f2;
-			z-index: 1;
-		}
-	}
-
-	.li_inner {
-		border: 0;
-		vertical-align: top;
-		background: transparent;
-		width: 150px;
-		height: 280px;
-		padding-top: 15px;
-		// &:hover {
-		// 	background-color: #f2f2f2;
-		// 	z-index: 1;
-		// }
-	}
-
-	.list_img {
-		position: relative;
-		width: 125px;
-		height: 150px;
-		margin: 0 auto 10px;
-		text-align: center;
-		overflow: hidden;
-		background-color: white;
-
-		:hover {
-			opacity: 0.5;
-		}
-
-		img {
-			width: 120px;
-			height: 145px;
-			object-fit: cover;
-		}
-	}
-
-	.item_info {
-		position: relative;
-		width: 125px;
-		margin: 0 auto;
-		text-align: left;
-	}
-
-	.option {
-		display: block;
-		float: right;
-		border-top: 1px solid #ddd;
-		border-left: 1px solid #ddd;
-		position: relative;
-		background-color: white;
-		z-index: 0;
-
-		.option_btn {
-			height: 17px;
-			padding: 3px 8px 0 8px;
-			cursor: pointer;
-		}
-
-		.option_list {
-			display: block;
-			position: relative;
-
-			ul {
-				right: -1px;
-				position: absolute;
-				width: 100%;
-				color: #000;
-				background: #fff;
-				border: 1px solid #ddd;
-				z-index: 2000;
-			}
-
-			.open {
-				display: flex;
-				justify-content: space-between;
-				color: #000;
-				background: #fff;
-				padding: 6px 10px 6px 10px;
-			}
-
-			.close {
-				display: none;
-			}
-		}
 	}
 `;
+
+// 	.li_outer {
+// 		position: relative;
+// 		min-width: 150px;
+// 		float: left;
+// 		margin: 0;
+// 		background-color: white;
+// 		// border-left: 1px solid #ddd;
+// 		border-right: 1px solid #ddd;
+// 		border-bottom: 1px solid #ddd;
+
+// 		&:hover {
+// 			background-color: #f2f2f2;
+// 			z-index: 1;
+// 		}
+// 	}
+
+// 	.li_inner {
+// 		border: 0;
+// 		vertical-align: top;
+// 		background: transparent;
+// 		width: 150px;
+// 		height: 280px;
+// 		padding-top: 15px;
+// 		// &:hover {
+// 		// 	background-color: #f2f2f2;
+// 		// 	z-index: 1;
+// 		// }
+// 	}
+
+// 	.list_img {
+// 		position: relative;
+// 		width: 125px;
+// 		height: 150px;
+// 		margin: 0 auto 10px;
+// 		text-align: center;
+// 		overflow: hidden;
+// 		background-color: white;
+
+// 		:hover {
+// 			opacity: 0.5;
+// 		}
+
+// 		img {
+// 			width: 120px;
+// 			height: 145px;
+// 			object-fit: cover;
+// 		}
+// 	}
+
+// 	.item_info {
+// 		position: relative;
+// 		width: 125px;
+// 		margin: 0 auto;
+// 		text-align: left;
+// 	}
+
+// 	.option {
+// 		display: block;
+// 		float: right;
+// 		border-top: 1px solid #ddd;
+// 		border-left: 1px solid #ddd;
+// 		position: relative;
+// 		background-color: white;
+// 		z-index: 100;
+
+// 		.option_btn {
+// 			height: 17px;
+// 			padding: 3px 8px 0 8px;
+// 			cursor: pointer;
+// 		}
+
+// 		.option_list {
+// 			display: block;
+// 			position: relative;
+
+// 			ul {
+// 				right: -1;
+// 				position: absolute;
+// 				width: 100%;
+// 				color: #000;
+// 				background: #fff;
+// 				border: 1px solid #ddd;
+// 			}
+
+// 			.open {
+// 				display: flex;
+// 				justify-content: space-between;
+// 				color: #000;
+// 				background: #fff;
+// 				padding: 6px 10px 6px 10px;
+// 			}
+// 			.close {
+// 				display: none;
+// 			}
+// 		}
+// 	}
+// `;
