@@ -1,6 +1,6 @@
 'use strict';
-const { faker } = require('@faker-js/faker');
-const { Comment } = require('../models');
+
+const { truncateSync } = require('fs');
 const { truncateForce } = require('../utils/seeder-helper');
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        let dummyComment = [];
+        let dummyProductThumbsUp = [];
         for (var j = 0; j < 100; j++) {
             let temp = rand(0, 6);
             let randNumbers = [];
@@ -23,21 +23,9 @@ module.exports = {
                     randNumbers.push(randNumber);
                     idx++;
                 }
-                // console.log(j, randNumbers)
             }
-            // console.log(temp)
-            // console.log(randNumbers)
             for (var k = 0; k < temp; k++)
-                dummyComment.push({
-                    content: faker.lorem.sentence(5),
-                    valueSize: rand(0, 9),
-                    ValueBrightness: rand(0, 9),
-                    ValueColorSense: rand(0, 9),
-                    ValueStorageSpace: rand(0, 9),
-                    DateTIme: faker.date.between(
-                        '2020-01-01T00:00:00.000Z',
-                        '2022-08-01T00:00:00.000Z',
-                    ),
+                dummyProductThumbsUp.push({
                     createdAt: new Date(),
                     updatedAt: new Date(),
                     UserId: randNumbers[k],
@@ -45,10 +33,13 @@ module.exports = {
                 });
         }
 
-        await queryInterface.bulkInsert('Comments', dummyComment);
+        await queryInterface.bulkInsert(
+            'ProductThumbsUp',
+            dummyProductThumbsUp,
+        );
     },
 
     async down(queryInterface, Sequelize) {
-        await truncateForce(queryInterface, 'Comments');
+        await truncateForce(queryInterface, 'ProductThumbsup');
     },
 };

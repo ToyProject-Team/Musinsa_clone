@@ -27,12 +27,14 @@ export const ProductImgContainer = styled.div`
 	width: 500px;
 	height: 600px;
 	position: relative;
+	cursor: ${props => {
+		return props.show
+			? `url('https://image.msscdn.net/skin/musinsa/images/img/cursor-zoomOut.png'), crosshair`
+			: `url('https://image.msscdn.net/skin/musinsa/images/img/cursor-zoom.png'), crosshair`;
+	}};
 `;
 
 export const ProductImg = styled.div`
-	opacity: ${props => (props.show ? 0 : 1)};
-	visibility: ${props => (props.show ? 'hidden' : 'visible')};
-
 	img: {
 		width: '100%';
 	}
@@ -64,38 +66,17 @@ export const ProductImgZoom = styled.div`
 	transition: 0.3s;
 	transition-delay: '${props => (props.show ? '0' : '0.2s')}';
 	overflow: hidden;
-
-	& > img {
-		position: absolute;
-		width: 100%;
-		height: 200%;
-	}
-`;
-
-export const Cursor = styled.div`
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 25px;
-	height: 25px;
-	/* background-color: rgba(255, 255, 255, 0.5); */
-	z-index: 999;
 	cursor: ${props => {
 		return props.show
 			? `url('https://image.msscdn.net/skin/musinsa/images/img/cursor-zoomOut.png'), crosshair`
 			: `url('https://image.msscdn.net/skin/musinsa/images/img/cursor-zoom.png'), crosshair`;
 	}};
 
-	/* &::before {
-		content: '${props => (props.show ? '-' : '+')}';
+	& > img {
 		position: absolute;
-		top: 40%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		font-weight: 900;
-		font-size: 30px;
-		color: #828282;
-	} */
+		width: 100%;
+		height: 200%;
+	}
 `;
 
 export const Close = styled.div`

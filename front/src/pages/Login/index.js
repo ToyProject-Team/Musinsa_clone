@@ -62,7 +62,6 @@ const LogIn = () => {
 			const params = {
 				loginId: email,
 				password: password,
-				passwordCheck: password,
 			};
 			await PostApi('/api/auth/signin', params)
 				.then(result => {

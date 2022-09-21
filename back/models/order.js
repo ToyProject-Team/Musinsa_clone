@@ -28,7 +28,14 @@ module.exports = class Order extends Model {
                 cancelableAmount: {
                     type: DataTypes.INTEGER,
                     allowNull: false
-                }
+                },
+                // orderSize: {
+
+                // },
+                // orderColor: {
+
+                // },
+                
             },
             {
                 modelName: 'Order',
