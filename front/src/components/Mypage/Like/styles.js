@@ -38,6 +38,7 @@ export const ImgSpan = styled.span`
 
 export const LikeUl = styled.ul`
 	vertical-align: top;
+	
 `;
 
 export const LikeLi = styled.li`
@@ -53,16 +54,23 @@ export const LikeLi = styled.li`
 	font-size: 14px;
 	text-align: left;
 	position: relative;
-	transition: ease-in  background-color 0.2s;
-	&:hover{
-			background-color: #EAEAEA;
+	transition: ease-in background-color 0.2s;
+	&:hover {
+		background-color: #eaeaea;
+	}
+	a{
+		text-decoration: none;
+		color: black;
+		div{
+			
 		}
+	}
 	ul {
 		width: 100%;
 		display: table-cell;
 		padding-left: 10px;
 		vertical-align: middle;
-		
+
 		li {
 			font-size: 14px;
 			line-height: 22px;
@@ -78,10 +86,6 @@ export const LikeLi = styled.li`
 			max-height: 22px;
 			font-weight: bold;
 			overflow: hidden;
-			a {
-				text-decoration: none;
-				color: black;
-			}
 		}
 		.price {
 			margin-top: 6px;
@@ -91,20 +95,21 @@ export const LikeLi = styled.li`
 			line-height: 16px;
 			padding-top: 5px;
 			color: red;
-			svg{
+			svg {
 				vertical-align: -2px;
 			}
 		}
 	}
 	button {
+		z-index: 10;
 		position: absolute;
 		top: 10px;
 		right: 10px;
 		border: none;
 		background: none;
 		svg {
-			width: 15px;
-			height: 15px;
+			width: 20px;
+			height: 20px;
 			cursor: pointer;
 		}
 	}

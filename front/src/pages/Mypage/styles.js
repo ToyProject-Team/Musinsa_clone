@@ -4,15 +4,20 @@ import styled from '@emotion/styled';
 export const MypageLayout = styled.div`
 	min-width: 1560px;
 	width: auto;
-	padding: 0px 40px;
 	margin: 0px auto;
 	box-sizing: border-box;
-	background: #000;
+	&::after{
+		content: "";
+		display: block;
+		clear: both;
+	}
+	
 `;
 
 export const Header = styled.div`
 	background: black;
 	padding: 20px 20px 40px;
+	width: 100%;
 `;
 
 export const MypageTitle = styled.h2`
@@ -52,13 +57,12 @@ export const NickName = styled.dd`
 export const StyleLink = styled(Link)`
 	color: #fff;
 	text-decoration: none;
-
 `;
 
 export const StyleNav = styled.nav`
 	width: 170px;
 	float: left;
-	margin: 54px 40px 0px 0px;
+	margin: 54px 40px 0px 40px;
 	font-size: 14px;
 	h3 {
 		padding: 13px 0px 2px;
@@ -84,7 +88,7 @@ export const StyleNav = styled.nav`
 `;
 
 export const MypageMain = styled.section`
-	width: calc(100% - 210px);
+	width: calc(100% - 250px);
 	padding: 0;
 	float: right;
 	margin-top: 80px;
@@ -97,4 +101,5 @@ export const MypageMain = styled.section`
 		line-height: 1.5;
 		position: relative;
 	}
+	
 `;

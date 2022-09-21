@@ -14,6 +14,7 @@ function Likelist({ img, model, price, like, onRemove, id }) {
 						alt="더미데이터"
 					/>
 				</ImgSpan>
+
 				<ul>
 					<li className="name">
 						<a href={`/detail?productId=${id}`}>{model}</a>
@@ -23,7 +24,6 @@ function Likelist({ img, model, price, like, onRemove, id }) {
 						<FaHeart /> {like}
 					</li>
 				</ul>
-
 				<button onClick={e => onRemove(id)}>
 					<FiX />
 				</button>
