@@ -130,6 +130,17 @@ const dummyCart = {
 
 function Cart() {
 	const [cartList, setCartList] = useState([]);
+	const [data, setData] = useState([]);
+	console.log('cart', cartList);
+	// console.log('data', data);
+
+	const [addData, setAddData] = useState([
+		{
+			check: false,
+			count: 1
+		}
+	]);
+
 	//장바구니 리스트 가져오기
 	useEffect(() => {
 		axios
@@ -142,13 +153,22 @@ function Cart() {
 			.then(res => {
 				setCartList(res.data.exCart);
 			});
+		const dataArr = [];
+		cartList.map(list =>
+			list.ProductMainTags.map(Mainitem => Mainitem.ProductSubTags.map(item => dataArr.push(item))),
+		);
+		setData(dataArr);
+		
+			
 	}, []);
 
-	console.log('cart', cartList);
+	//데이터 구조 변경
+	
 
-	const navigate = useNavigate();
-	const [data, setData] = useState(cartList);
-	console.log('data', data);
+	const chageData = useCallback(() => {
+		cartList.ProductMainTags.ProductSubTags.push(addData);
+	})
+
 	const [checkBox, setCheckBox] = useState(false);
 	const [sum, setSum] = useState(0);
 	const loginToken = getData();
@@ -159,13 +179,42 @@ function Cart() {
 
 	const [modalOrder, setModalOrder] = useState(false);
 
+	const [checkedList, setCheckedList] = useState([]);
 	//
 
 	// 체크
-	const checkItem = useCallback(() => {
-		setCheckBox(check => !check);
-		setData(data => data.map(v => ({ ...v, check: !checkBox })));
-	}, [data, checkBox]);
+
+	// const checkItem = useCallback(() => {
+	// 	setCheckBox(check => !check);
+	// 	setCheckedList(
+	// 		cartList.map(v =>
+	// 			v.ProductMainTags.map(Mainitem =>
+	// 				Mainitem.ProductSubTags.map(item => ({ ...item, check: !checkBox })),
+	// 			),
+	// 		),
+	// 	);
+	// }, [cartList, checkBox]);
+
+	// console.log('checklist', checkedList);
+
+	const checkItem = useCallback(
+		checked => {
+			if (checked) {
+				const checklistArr = [];
+				cartList.map(list =>
+					list.ProductMainTags.map(Mainitem =>
+						Mainitem.ProductSubTags.map(item => checklistArr.push(item)),
+					),
+				);
+				setCheckedList(checklistArr);
+			} else {
+				setCheckedList([]);
+			}
+		},
+		[cartList],
+	);
+
+	console.log('chlist', checkedList);
 
 	const onCloseModal = useCallback(() => {
 		setModalOrder(false);
@@ -186,9 +235,9 @@ function Cart() {
 	// 모두 체크 확인 및 총상품 금액
 	useEffect(() => {
 		let arrId = [];
-		data.map(v => (v.check ? arrId.push(v.id) : arrId.filter(f => f !== v.id)));
+		cartList.map(v => (v.check ? arrId.push(v.id) : arrId.filter(f => f !== v.id)));
 
-		if (data.length === arrId.length) setCheckBox(true);
+		if (cartList.length === arrId.length) setCheckBox(true);
 		else setCheckBox(false);
 
 		// 총 상품 금액
@@ -197,13 +246,13 @@ function Cart() {
 				arrId
 					.map(v => {
 						let total = 0;
-						data.map(m => m.id === v && (total += m.count * m.productPrice));
+						cartList.map(m => m.id === v && (total += m.count * m.productPrice));
 						return total;
 					})
 					?.reduce((a, b) => a + b),
 			);
 		} else setSum(0);
-	}, [data]);
+	}, [cartList]);
 
 	return (
 		<>
@@ -223,7 +272,21 @@ function Cart() {
 						<thead>
 							<tr>
 								<th scope="col">
-									<CheckLabel onClick={checkItem} className={checkBox ? 'active' : ''}></CheckLabel>
+									<label>
+										<input
+											type="checkbox"
+											id="check_all"
+											onChange={e => checkItem(e.target.checked)}
+											checked={
+												checkedList.length === 0
+													? false
+													: checkedList.length === data.length
+													? true
+													: false
+											}
+										/>
+									</label>
+									{/* <CheckLabel onClick={checkItem} className={checkBox ? 'active' : ''}></CheckLabel> */}
 								</th>
 								<th scope="col">상품정보</th>
 								<th scope="col">상품금액</th>
@@ -243,6 +306,8 @@ function Cart() {
 										item={item}
 										list={list}
 										Mainitem={Mainitem}
+										checkedList={checkedList}
+										setCheckedList={setCheckedList}
 									/>
 								)),
 							),

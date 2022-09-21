@@ -8,10 +8,13 @@ import OrderModal from 'components/Modals/OrderModal';
 import Order from 'components/Order';
 import { Link } from 'react-router-dom';
 
-function CartTable({ data, setData, item, list, Mainitem }) {
+function CartTable({ data, setData, item, list, Mainitem, checkedList, setCheckedList }) {
 	const [modalOrder, setModalOrder] = useState(false);
 	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);
+
+	const id = data.index;
+
 
 	// 수량 기입
 	const handleChange = useCallback(
@@ -37,13 +40,23 @@ function CartTable({ data, setData, item, list, Mainitem }) {
 
 	// 체크
 	const checkItem = useCallback(() => {
-		setData(prev => prev.map(v => (v.id === item.id ? { ...v, check: !v.check } : v)));
-		console.log(data);
+		setCheckedList(prev => prev.map(v => (v.id === list.id ? { ...v, check: !v.check } : v)));
 	}, [data]);
+
+	const onChecked = useCallback(
+		(checked, id) => {
+			if (checked) {
+				setCheckedList([...checkedList, id]);
+			} else {
+				setCheckedList(checkedList.filter(el => el !== id));
+			}
+		},
+		[checkedList],
+	);
 
 	// 삭제
 	const removeItem = useCallback(() => {
-		setData(prev => prev.filter(v => v.id !== item.id));
+		setData(prev => prev.filter(v => v.id !== list.id));
 	}, [data]);
 
 	// 결제 모달창
@@ -82,10 +95,18 @@ function CartTable({ data, setData, item, list, Mainitem }) {
 						<tbody>
 							<tr>
 								<td>
-									<CheckLabel
+									<label key={id}>
+										<input
+											name="oncheck"
+											type="checkbox"
+											checked={checkedList.includes(id) ? true : false}
+											onChange={e => onChecked(e.target.checked, id)}
+										/>
+									</label>
+									{/* <CheckLabel
 										onClick={checkItem}
 										className={item.check ? 'active' : ''}
-									></CheckLabel>
+									></CheckLabel> */}
 								</td>
 								<td className="top">
 									<div>
@@ -106,7 +127,7 @@ function CartTable({ data, setData, item, list, Mainitem }) {
 												</a>
 											</li>
 											<li>
-												{Mainitem.name} / {item.name}
+												{Mainitem.name} / {item.name} / {item.amount}개
 											</li>
 										</ItemUl>
 									</div>
@@ -117,11 +138,7 @@ function CartTable({ data, setData, item, list, Mainitem }) {
 										<button value={1} onClick={minusCount}>
 											<FiMinus style={item.count === 1 ? { color: '#ddd' } : { color: '#777' }} />
 										</button>
-										<input
-											type="text"
-											value={1}
-											onChange={handleChange}
-										></input>
+										<input type="text" value={1} onChange={handleChange}></input>
 										<button value={1} onClick={plusCount}>
 											<FiPlus style={{ color: '#777' }} />
 										</button>
@@ -130,11 +147,7 @@ function CartTable({ data, setData, item, list, Mainitem }) {
 								<td>{thousandComma(list.productPrice * 1)}원</td>
 								<td>
 									택배배송 <br />
-									<strong>
-										{list.productPrice * 1 > 30000
-											? '배송비 무료'
-											: `${dlvChr}원`}
-									</strong>
+									<strong>{list.productPrice * 1 > 30000 ? '배송비 무료' : `${dlvChr}원`}</strong>
 								</td>
 								<td>
 									<div>

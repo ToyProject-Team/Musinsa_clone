@@ -21,7 +21,7 @@ function Mainlike() {
 
 	// 좋아요 리스트 서버에서 가져오기
 	const loginToken = getData();
-	console.log(loginToken);
+	// console.log(loginToken);
 
 	useEffect(() => {
 		// const headers = {
@@ -40,7 +40,7 @@ function Mainlike() {
 			});
 	}, []);
 
-	// console.log('like', likeList);
+	console.log('like', likeLists);
 
 	// 좋아요리스트 삭제
 	const onRemove = useCallback(id => {

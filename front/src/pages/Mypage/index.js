@@ -4,6 +4,9 @@ import { StyleNav, MypageLayout, MypageMain } from './styles';
 import { Routes, Route, NavLink, useParams, Navigate } from 'react-router-dom';
 import loadable from '@loadable/component';
 import { getData } from 'utils/getData';
+import MainHeader from 'layouts/Header';
+import MainFooter from 'layouts/Footer';
+import DialLog from 'layouts/DialLog';
 
 const OrderList = loadable(() => import('components/Mypage/OrderList'), {
 	fallback: <div>로딩중</div>,
@@ -27,6 +30,8 @@ const Mypage = () => {
 	}
 
 	return (
+		<>
+		<MainHeader />
 		<MypageLayout>
 			<MyHeader />
 			<StyleNav>
@@ -67,6 +72,9 @@ const Mypage = () => {
 				</Routes>
 			</div>
 		</MypageLayout>
+		<DialLog />
+		<MainFooter />
+		</>
 	);
 };
 
