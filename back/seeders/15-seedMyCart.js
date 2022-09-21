@@ -1,6 +1,6 @@
 'use strict';
 
-const { Product, ProductSize } = require('../models');
+const { Product, ProductMainTag, ProductSubTag } = require('../models');
 
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -14,13 +14,17 @@ module.exports = {
                 where: { id: productId },
                 include: [
                     {
-                        model: ProductSize,
-                        attributes: ['size', 'amount'],
+                        model: ProductMainTag,
+                        attributes: ['name'],
+                        include: {
+                            model: ProductSubTag,
+                            attributes: ['name', 'amount'],
+                        },
                     },
                 ],
             });
 
-            if (product.ProductSizes.length == 0) continue;
+            if (product.ProductMainTags.length == 0) continue;
 
             let temp = rand(0, 6);
             let randNumbers = [];
@@ -37,10 +41,19 @@ module.exports = {
             }
 
             for (var k = 0; k < temp; k++) {
-                const { size, amount } =
-                    product.ProductSizes[
-                        rand(0, product.ProductSizes.length - 1)
+                const productMainTag =
+                    product.ProductMainTags[
+                        rand(0, product.ProductMainTags.length - 1)
                     ];
+
+                const productSubTag =
+                    productMainTag.ProductSubTags[
+                        rand(0, ProductMainTag.ProductSubTags.length - 1)
+                    ];
+
+                const size = productMainTag.name;
+                const color = roductSubTag.name;
+                const amount = productSubTag.amount;
 
                 Cart.push({
                     createdAt: new Date(),
@@ -49,6 +62,7 @@ module.exports = {
                     ProductId: productId,
                     packingAmount: rand(1, amount),
                     packingSize: size,
+                    packingColor: color,
                 });
             }
         }
@@ -57,11 +71,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        /**
-         * Add commands to revert seed here.
-         *
-         * Example:
-         * await queryInterface.bulkDelete('People', null, {});
-         */
+        await queryInterface.bulkDelete('MyCarts', null, {});
     },
 };

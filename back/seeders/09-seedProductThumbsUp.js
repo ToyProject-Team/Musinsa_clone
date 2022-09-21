@@ -6,8 +6,8 @@ module.exports = {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        var dummyMatch = [];
-        for (var i = 1; i < 3651; i++) {
+        let dummyProductThumbsUp = [];
+        for (var j = 0; j < 100; j++) {
             let temp = rand(0, 6);
             let randNumbers = [];
             let idx = 0;
@@ -15,29 +15,28 @@ module.exports = {
                 if (idx == temp) {
                     break;
                 }
-                let randNumber = rand(1, 15);
+                let randNumber = rand(1, 50);
                 if (!randNumbers.includes(randNumber)) {
                     randNumbers.push(randNumber);
                     idx++;
                 }
-                // console.log(randNumbers)
             }
-            for (var k = 0; k < temp; k++) {
-                dummyMatch.push({
-                    CustomCategoryId: randNumbers[k],
-                    ProductId: i,
+            for (var k = 0; k < temp; k++)
+                dummyProductThumbsUp.push({
                     createdAt: new Date(),
                     updatedAt: new Date(),
+                    UserId: randNumbers[k],
+                    ProductId: j + 1,
                 });
-                // console.log(dummyMatch)
-            }
-            // console.log(i)
         }
 
-        await queryInterface.bulkInsert('CustomCategoryMatch', dummyMatch);
+        await queryInterface.bulkInsert(
+            'ProductThumbsUp',
+            dummyProductThumbsUp,
+        );
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('CustomCategoryMatch', null, {});
+        await queryInterface.bulkDelete('ProductThumbsUp', null, {});
     },
 };
