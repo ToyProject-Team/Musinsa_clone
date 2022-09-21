@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { SContainer, SDiv } from './styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
 import { HiOutlinePlusSm, HiOutlineMinusSm } from 'react-icons/hi';
@@ -9,16 +9,23 @@ const Sidebar = props => {
 	const [cancel, setCancel] = useState(true);
 	const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
 
-	//Main으로 idx값 보내는 함수1
-	const sendBigCate = idx => {
-		props.setBigCategoryId(idx + 1);
-		//다른 params 1로 리셋
-		props.setSmallCategoryId(1);
-		props.setPage(1);
-	};
-	//Main으로 idx값 보내는 함수2
+	const navigate = useNavigate();
+
+	//Main으로 idx값 보내고, url에 쿼리스트링 추가하는 함수
+	// const sendBigCate = idx => {
+	// 	props.setBigCategoryId(idx + 1);
+	// 	// navigate({
+	// 	// 	pathname: `/products`,
+	// 	// 	search: `bigCategoryId=${idx + 1}`,
+	// 	// });
+	// };
+
 	const sendSmallCate = idx => {
 		props.setSmallCategoryId(idx + 1);
+		navigate({
+			pathname: `/products`,
+			search: `bigCategoryId=${props.bigCategoryId}&smallCategoryId=${idx}`,
+		});
 	};
 
 	const onClickCategory = useCallback(idx => {
@@ -27,6 +34,8 @@ const Sidebar = props => {
 			newArray[idx] = !newArray[idx];
 			return newArray;
 		});
+		//Category클릭시 Main에 Category Id전달
+		props.setBigCategoryId(idx + 1);
 	}, []);
 
 	return (
@@ -47,7 +56,7 @@ const Sidebar = props => {
 							onClick={() => onClickCategory(idx)}
 							aria-expanded={open[idx]}
 						>
-							<div title="BigMenu" key={idx} onClick={() => sendBigCate(idx)}>
+							<div title="BigMenu" key={idx}>
 								{big}
 								<span>{alpabet[idx]}</span>
 								<span>{!open[idx] ? <HiOutlinePlusSm /> : <HiOutlineMinusSm />}</span>
