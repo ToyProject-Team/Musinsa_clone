@@ -13,6 +13,8 @@ import { URLquery } from 'utils/URLquery';
 import { useLocation } from 'react-router';
 import axios from 'axios';
 
+const impNumber = process.env.REACT_APP_PAYMENT;
+
 const Order = ({ modal, pay }) => {
 	const data = getData();
 	const { accessToken } = data;
@@ -36,7 +38,7 @@ const Order = ({ modal, pay }) => {
 		else pay_method = 'card';
 
 		var { IMP } = window; // 생략가능
-		IMP.init('imp64782340'); // <-- 본인 가맹점 식별코드 삽입
+		IMP.init(impNumber); // <-- 본인 가맹점 식별코드 삽입
 		IMP.request_pay(
 			{
 				pg,

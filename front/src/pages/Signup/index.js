@@ -18,10 +18,11 @@ import {
 } from './styles';
 import { baseUrl, PostApi } from 'utils/api';
 import {
-	EMAIL,
-	EMAILCHECK,
-	PHONECHECK,
-	PHONENUMBER,
+	AUTHEMAIL,
+	AUTHEMAILCHECK,
+	AUTHINIT,
+	AUTHPHONECHECK,
+	AUTHPHONENUMBER,
 	useUserDispatch,
 	useUserState,
 } from 'context/UserContext';
@@ -112,14 +113,18 @@ const Signup = () => {
 
 	const onChangeRadio = useCallback(
 		e => {
-			setAuth(e.target.value);
+			const { value } = e.target;
+			setAuth(value);
 			setauthNumber('');
 			setauthNumberReg(true);
 			setAuthStage(1);
 			setauthNumberBtnReg(false);
+
+			dispatch({ type: AUTHINIT });
 		},
 		[auth],
 	);
+	console.log(user);
 
 	// 본인인증
 	const onClickAuth = useCallback(
@@ -134,10 +139,10 @@ const Signup = () => {
 					PostApi('/api/auth/authEmail', params)
 						.then(() => {
 							const payload = {
-								email: authNumber,
+								authEmail: authNumber,
 							};
 
-							dispatch({ type: EMAIL, payload });
+							dispatch({ type: AUTHEMAIL, payload });
 							setModalAuth(true);
 						})
 						.catch(err => {
@@ -147,10 +152,10 @@ const Signup = () => {
 
 				// 이메일 2차인증
 				else if (auth === 'emailAuth' && authStage === 2) {
-					const { email } = user;
+					const { authEmail } = user;
 
 					const params = {
-						email,
+						email: authEmail,
 						number: authNumber,
 					};
 
@@ -160,9 +165,9 @@ const Signup = () => {
 							setModalAuthConfirm(true);
 
 							const payload = {
-								emailCheck: res.data.emailCheck,
+								authEmailCheck: res.data.emailCheck,
 							};
-							dispatch({ type: EMAILCHECK, payload });
+							dispatch({ type: AUTHEMAILCHECK, payload });
 						})
 						.catch(err => {
 							setauthNumberBtnReg(true);
@@ -179,10 +184,10 @@ const Signup = () => {
 					PostApi('/api/auth/sendSMS', params)
 						.then(() => {
 							const payload = {
-								phoneNumber: authNumber.replaceAll('-', ''),
+								authPhoneNumber: authNumber.replaceAll('-', ''),
 							};
 
-							dispatch({ type: PHONENUMBER, payload });
+							dispatch({ type: AUTHPHONENUMBER, payload });
 							setModalAuth(true);
 						})
 						.catch(err => {
@@ -192,10 +197,10 @@ const Signup = () => {
 
 				// 휴대폰 2차인증
 				else if (auth === 'phoneAuth' && authStage === 2) {
-					const { phoneNumber } = user;
+					const { authPhoneNumber } = user;
 
 					const params = {
-						phoneNumber,
+						phoneNumber: authPhoneNumber,
 						code: authNumber,
 					};
 
@@ -204,9 +209,9 @@ const Signup = () => {
 							setModalAuthConfirm(true);
 
 							const payload = {
-								phoneCheck: res.data.phoneCheck,
+								authPhoneCheck: res.data.phoneCheck,
 							};
-							dispatch({ type: PHONECHECK, payload });
+							dispatch({ type: AUTHPHONECHECK, payload });
 						})
 						.catch(err => {
 							setauthNumberBtnReg(true);
@@ -257,25 +262,23 @@ const Signup = () => {
 		async e => {
 			e.preventDefault();
 
-			const { email, emailCheck, phoneNumber, phoneCheck } = user;
+			const { authEmail, authEmailCheck, authPhoneNumber, authPhoneCheck } = user;
 
 			const params = {
 				loginId: email,
 				password: password,
 				agreement: checkValue.checkSns ? '1' : '0',
-				questionType: '1',
-				questionAnswer: 'none',
 				address: `(${deliveryInfo.address1})${deliveryInfo.address2}${deliveryInfo.address3}`,
-				email: email,
-				phoneNumber: phoneNumber,
+				email: authEmail,
+				phoneNumber: authPhoneNumber,
 			};
 
 			axios
 				.post(`${baseUrl}/api/auth/signup`, params, {
 					headers: {
 						'Content-Type': 'application/json',
-						emailCheck,
-						phoneCheck,
+						emailCheck: authEmailCheck,
+						phoneCheck: authPhoneCheck,
 					},
 				})
 				.then(res => {

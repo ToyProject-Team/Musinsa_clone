@@ -1,59 +1,46 @@
 import React, { useReducer, createContext, useContext } from 'react';
 
 const initialUser = {
-	login: false,
-	token: '',
-	email: '',
-	emailCheck: '',
-	phoneNumber: '',
-	phoneCheck: '',
-	userFindId: '',
+	authEmail: '',
+	authEmailCheck: '',
+	authPhoneNumber: '',
+	authPhoneCheck: '',
 };
 
-export const LOGIN = 'LOGIN';
-export const PHONENUMBER = 'PHONENUMBER';
-export const PHONECHECK = 'PHONECHECK';
-export const EMAIL = 'EMAIL';
-export const EMAILCHECK = 'EMAILCHECK';
-export const USERFINDID = 'USERFINDID';
+export const AUTHINIT = 'AUTHINIT';
+export const AUTHPHONENUMBER = 'AUTHPHONENUMBER';
+export const AUTHPHONECHECK = 'AUTHPHONECHECK';
+export const AUTHEMAIL = 'AUTHEMAIL';
+export const AUTHEMAILCHECK = 'AUTHEMAILCHECK';
 
 function userReducer(state, action) {
 	switch (action.type) {
-		case LOGIN:
+		case AUTHINIT:
+			return initialUser;
+
+		case AUTHPHONENUMBER:
+			console.log(123);
 			return {
 				...state,
-				login: action.payload.login,
-				token: action.payload.token,
+				authPhoneNumber: action.payload.authPhoneNumber,
 			};
 
-		case PHONENUMBER:
+		case AUTHPHONECHECK:
 			return {
 				...state,
-				phoneNumber: action.payload.phoneNumber,
+				authPhoneCheck: action.payload.authPhoneCheck,
 			};
 
-		case PHONECHECK:
+		case AUTHEMAIL:
 			return {
 				...state,
-				phoneCheck: action.payload.phoneCheck,
+				authEmail: action.payload.authEmail,
 			};
 
-		case EMAIL:
+		case AUTHEMAILCHECK:
 			return {
 				...state,
-				email: action.payload.email,
-			};
-
-		case EMAILCHECK:
-			return {
-				...state,
-				emailCheck: action.payload.emailCheck,
-			};
-
-		case USERFINDID:
-			return {
-				...state,
-				userFindId: action.payload.userFindId,
+				authEmailCheck: action.payload.authEmailCheck,
 			};
 
 		default:
