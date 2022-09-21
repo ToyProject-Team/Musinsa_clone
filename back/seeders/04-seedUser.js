@@ -2,7 +2,6 @@
 
 const { faker } = require('@faker-js/faker');
 const bcrypt = require('bcrypt');
-const { User } = require('../models');
 const { truncateForce } = require('../utils/seeder-helper');
 
 module.exports = {
@@ -27,6 +26,7 @@ module.exports = {
         for (var i = 0; i < 70; i++) {
             // console.log(i)
             let name = faker.name.findName();
+            let randPhoneNumber = faker.phone.phoneNumber('010-####-####');
             dummyUser.push({
                 loginId: faker.internet.email(),
                 email: faker.internet.email(name),
@@ -39,6 +39,9 @@ module.exports = {
                 agreement: rand(0, 1),
                 questionType: rand(1, 6),
                 questionAnswer: faker.commerce.productName(),
+                recipientNumber: randPhoneNumber,
+                recipient: name,
+                addressNumber: randPhoneNumber,
             });
         }
 

@@ -80,6 +80,9 @@ router.post('/signup', async (req, res, next) => {
       address: req.body.address,
       phoneNumber: checkSMS ? checkSMS : null,
       socialEmail: checkSocialEmail ? checkSocialEmail : null,
+      recipientNumber: req.body.recipientNumber,
+      recipient: req.body.recipient,
+      addressNumber: req.body.addressNumber
     })
 
     return res.status(200).send({ success: true })

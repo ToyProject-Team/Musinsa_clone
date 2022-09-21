@@ -17,9 +17,9 @@ module.exports = {
 
         for (let i = 1; i < 50; i++) {
             let ranNumber = [];
-            let amount = rand(0, 6);
-            let randPrice = rand(10000, 200000);
+            let amount = rand(1, 6);
             for (let j = 0; j < amount; j++) {
+                let randPrice = rand(10000, 200000);
                 let temp = rand(1, 1500);
                 if (!ranNumber.includes(temp)) {
                     ranNumber.push(temp);

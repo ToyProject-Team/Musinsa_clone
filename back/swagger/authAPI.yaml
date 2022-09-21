@@ -37,6 +37,15 @@
             phoneNumber:
               type: string
               example: 01054325612
+            recipientNumber:
+              type: string
+              example: 01062077206
+            recipient:
+              type: string
+              example: peter
+            addressNumber:
+              type: string
+              example: 01062077206
     responses:
       200:
         $ref: './openapi.yaml#/success'
