@@ -14,19 +14,19 @@ import {
 	ListBox,
 } from './styles';
 
-import { Router, Route, Routes, useNavigate } from 'react-router-dom';
-// import qs from 'qs';
+import { Router, Route, Routes, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
 import Header from 'layouts/Header';
 import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
-import InfiniteScroll from 'react-infinite-scroll-component';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 import Sidebar from 'layouts/Sidebar';
 import { GiConsoleController } from 'react-icons/gi';
 import DialLog from 'layouts/DialLog';
+import qs from 'qs';
 
-const Main = cancel => {
+const Main = () => {
 	const navigate = useNavigate();
 
 	const ShowList = loadable(() => import('components/ProductList'), {
@@ -41,12 +41,20 @@ const Main = cancel => {
 	const [product, setProduct] = useState([]);
 	const [newProduct, setNewProduct] = useState([]);
 
+	//처음 아무 조건없이 한번만 데이터 받아오기
+	useEffect(() => {
+		PostQueryApi('/api/product/productList').then(
+			res => setProduct(res.data.productData),
+			navigate('/'),
+		);
+	}, []);
+
 	//params
-	const [mainSort, setMainSort] = useState(0);
+	// const [mainSort, setMainSort] = useState(0);
 	const [page, setPage] = useState(1);
 	const [price, setPrice] = useState(0);
-	const [priceMin, setPriceMin] = useState(0);
-	const [priceMax, setPriceMax] = useState(100000000);
+	// const [priceMin, setPriceMin] = useState(0);
+	// const [priceMax, setPriceMax] = useState(100000000);
 	const [bigCategoryId, setBigCategoryId] = useState(1);
 	const [smallCategoryId, setSmallCategoryId] = useState(1);
 
@@ -54,39 +62,51 @@ const Main = cancel => {
 
 	//데이터 처음으로 받아오기
 	//첫화면은 mainSort, price 적용안해야 랜덤으로 데이터 받음
-	const getItems = () => {
-		const params = {
-			bigCategoryId,
-			smallCategoryId,
-		};
+	// const getItems = () => {
+	//  const params = {
+	//  	bigCategoryId,
+	//  	smallCategoryId,
+	//  };
 
-		PostQueryApi('/api/product/productList', params).then(
-			res => setProduct(res.data.productData),
-			navigate('/'),
-		);
-	};
+	// 	PostQueryApi('/api/product/productList', params).then(
+	// 		res => setProduct(res.data.productData),
+	// 		navigate('/'),
+	// 	);
+	// };
 
-	//처음, bigCate클릭, smallCate클릭할 때 데이터 받아오기
-	useEffect(() => {
-		getItems();
-	}, [bigCategoryId, smallCategoryId]);
-
-	//페이지 넘길때(무한스크롤) 데이터 더 불러오기
-	const getMoreItems = () => {
-		const params = {
-			page,
-			bigCategoryId,
-			smallCategoryId,
-		};
-		PostQueryApi('/api/product/productList', params).then(res =>
-			setProduct(prev => [...prev, ...res.data.productData]),
-		);
-		setPage(page + 1);
-	};
-
-	//중분류 전체보기(리셋)
+	//중분류 전체보기 - bigCate만 적용
 	const onReset = () => {
-		navigate('/');
+		//셀렉박스 없애기, smallCate선택 여부 false로
+		setSelectBox(false);
+		setOnSortClick(false);
+
+		//가격이 선택돼 있을때/없을때
+		onSortSecondClick
+			? PostQueryApi('/api/product/productList', { bigCategoryId, price }).then(
+					res => setNewProduct(res.data.productData),
+					navigate(`/products?bigCategoryId=${bigCategoryId}&price=${price}`),
+			  )
+			: PostQueryApi('/api/product/productList', { bigCategoryId }).then(
+					res => setNewProduct(res.data.productData),
+					navigate(`/products?bigCategoryId=${bigCategoryId}`),
+			  );
+
+		setBigCategoryId(bigCategoryId);
+	};
+
+	//가격 전체보기
+	const onSecondReset = () => {
+		//SmallCate선택되어 있을때 / 아닐때
+		onSortClick
+			? PostQueryApi('/api/product/productList', { bigCategoryId, smallCategoryId }).then(
+					res => setNewProduct(res.data.productData),
+					navigate(`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}`),
+			  )
+			: PostQueryApi('/api/product/productList', { bigCategoryId }).then(
+					res => setNewProduct(res.data.productData),
+					navigate(`/products?bigCategoryId=${bigCategoryId}`),
+			  );
+		console.log(bigCategoryId, smallCategoryId);
 	};
 
 	//검색창 input들 state
@@ -108,20 +128,23 @@ const Main = cancel => {
 	const [onSortSecondClick, setOnSortSecondClick] = useState(false);
 
 	const onSort = val => {
-		const params = {
-			page: 1,
-			// mainSort,
-			// price,
-			// priceMin,
-			// priceMax,
-			bigCategoryId,
-			smallCategoryId: val,
-		};
+		setSmallCategoryId(val);
 
-		PostQueryApi('/api/product/productList', params).then(
-			res => setNewProduct(res.data.productData),
-			navigate(`/products`),
-		);
+		onSortSecondClick
+			? PostQueryApi('/api/product/productList', {
+					bigCategoryId,
+					smallCategoryId: val,
+					price,
+			  }).then(
+					res => setNewProduct(res.data.productData),
+					navigate(
+						`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${val}&price=${price}`,
+					),
+			  )
+			: PostQueryApi('/api/product/productList', { bigCategoryId, smallCategoryId: val }).then(
+					res => setNewProduct(res.data.productData),
+					navigate(`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${val}`),
+			  );
 
 		// setNewProduct(
 		// 	product.filter(data => {
@@ -134,7 +157,7 @@ const Main = cancel => {
 		setSelectBox(true);
 		setOnSortClick(true);
 		setSelectSmallCateId(val);
-		console.log(newProduct);
+		console.log(smallCategoryId);
 	};
 
 	//가격별로 분류 3
@@ -155,24 +178,23 @@ const Main = cancel => {
 	const onFilterPrice = val => {
 		setPrice(val);
 		const params = {
-			page,
-			// mainSort,
 			price: val,
 			bigCategoryId,
 			smallCategoryId,
 		};
 
+		//smallCate 선택된 경우/ 안된 경우
 		{
 			onSortClick
 				? PostQueryApi(`/api/product/productList`, params).then(res => {
 						setNewProduct(res.data.productData);
-						navigate(`/products?price=${params.price}`);
-						console.log('중분류 선택');
+						navigate(
+							`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&price=${params.price}`,
+						);
 				  })
-				: PostQueryApi(`/api/product/productList`, params).then(res => {
+				: PostQueryApi(`/api/product/productList`, { bigCategoryId, price: val }).then(res => {
 						setNewProduct(res.data.productData);
-						navigate(`/products?price=${params.price}`);
-						console.log('선택안함');
+						navigate(`/products?bigCategoryId=${bigCategoryId}&price=${val}`);
 				  });
 		}
 
@@ -184,122 +206,151 @@ const Main = cancel => {
 
 	//가격별로 분류 4
 	const onFilterPriceRange = (val1, val2) => {
-		setPriceMin(val1);
-		setPriceMax(val2);
+		// setPriceMin(val1);
+		// setPriceMax(val2);
 		setMinPriceInput('');
 		setMaxPriceInput('');
 
 		const params = {
-			// mainSort,
-			page,
-			priceMin: val1,
-			priceMax: val2,
 			bigCategoryId,
 			smallCategoryId,
+			priceMin: val1,
+			priceMax: val2,
 		};
 
-		PostQueryApi('/api/product/productList', params).then(
-			res => setNewProduct(res.data.productData),
-			navigate(`/products?priceMin=${params.priceMin}&&priceMax=${params.priceMax}`),
-		);
+		//smallCate 선택된경우 /안된경우
+		{
+			onSortClick
+				? PostQueryApi('/api/product/productList', params).then(
+						res => setNewProduct(res.data.productData),
+						navigate(
+							`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&priceMin=${params.priceMin}&priceMax=${params.priceMax}`,
+						),
+				  )
+				: PostQueryApi('/api/product/productList', {
+						bigCategoryId,
+						priceMin: val1,
+						priceMax: val2,
+				  }).then(
+						res => setNewProduct(res.data.productData),
+						navigate(`/products?bigCategoryId=${bigCategoryId}&priceMin=${val1}&priceMax=${val2}`),
+				  );
+		}
 	};
 
 	//검색창 5
 	const onSearch = () => {
 		const params = {
-			// mainSort,
-			page,
-			// price,
 			bigCategoryId,
 			smallCategoryId,
 		};
 
-		PostQueryApi('/api/product/productList', params).then(
-			res =>
-				setNewProduct(
-					res.data.productData.filter(data =>
-						data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
+		//smallCate 선택된 경우 / 안된경우
+		onSortClick
+			? PostQueryApi('/api/product/productList', params).then(
+					res =>
+						setNewProduct(
+							res.data.productData.filter(data =>
+								data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
+							),
+						),
+					navigate(
+						`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&search=${searchTerm}`,
 					),
-				),
-			navigate(`/products?search=${searchTerm}`),
-		);
+			  )
+			: PostQueryApi('/api/product/productList', { bigCategoryId }).then(
+					res =>
+						setNewProduct(
+							res.data.productData.filter(data =>
+								data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
+							),
+						),
+					navigate(`/products?bigCategoryId=${bigCategoryId}&search=${searchTerm}`),
+			  );
 		setSearchTerm('');
-		// return (
-		// 	setNewProduct(
-		// 		product.filter(data => data.productTitle.toLowerCase().includes(searchTerm.toLowerCase())),
-		// 	),
-		// 	navigate(`/products?search=${searchTerm}`),
-		// 	setSearchTerm('')
-		// );
 	};
 
 	//가격순 정렬
 	//내림차순 6
 	const onSortPriceDown = () => {
-		setMainSort(2);
-		const params = {
-			page,
-			// price,
-			mainSort: 2,
-			bigCategoryId,
-			smallCategoryId,
-		};
-		//정렬 - 백엔
-		PostQueryApi('/api/product/productList', params).then(
-			res => setNewProduct(res.data.productData),
-			navigate(`/products?mainSort=${params.mainSort}`),
-		);
+		// setMainSort(2);
+		//smallCate 선택된 경우 / 안된 경우
+		onSortClick
+			? PostQueryApi('/api/product/productList', {
+					mainSort: 2,
+					bigCategoryId,
+					smallCategoryId,
+			  }).then(
+					res => setNewProduct(res.data.productData),
+					navigate(
+						`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&mainSort=${2}`,
+					),
+			  )
+			: PostQueryApi('/api/product/productList', { mainSort: 2, bigCategoryId }).then(
+					res => setNewProduct(res.data.productData),
+					navigate(`/products?bigCategoryId=${bigCategoryId}&mainSort=${2}`),
+			  );
 	};
 
 	//오름차순 7
 	const onSortPriceUp = () => {
-		setMainSort(1);
-		const params = {
-			page,
-			// price,
-			mainSort: 1,
-			bigCategoryId,
-			smallCategoryId,
-		};
-		PostQueryApi('/api/product/productList', params).then(
-			res => setNewProduct(res.data.productData),
-			navigate(`/products?mainSort=${params.mainSort}`),
-		);
+		// setMainSort(1);
+		//smallCate 선택된 경우 / 안된 경우
+		onSortClick
+			? PostQueryApi('/api/product/productList', {
+					mainSort: 1,
+					bigCategoryId,
+					smallCategoryId,
+			  }).then(
+					res => setNewProduct(res.data.productData),
+					navigate(
+						`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&mainSort=${1}`,
+					),
+			  )
+			: PostQueryApi('/api/product/productList', { mainSort: 1, bigCategoryId }).then(
+					res => setNewProduct(res.data.productData),
+					navigate(`/products?bigCategoryId=${bigCategoryId}&mainSort=${1}`),
+			  );
 	};
 
 	//후기순 정렬 sort함수사용 8
 	const onSortComments = () => {
-		setMainSort(3);
-		const params = {
-			page,
-			// price,
-			mainSort: 3,
-			bigCategoryId,
-			smallCategoryId,
-		};
-
-		PostQueryApi('/api/product/productList', params).then(
-			res => setNewProduct(res.data.productData),
-			navigate(`/products?mainSort=${params.mainSort}`),
-		);
+		// setMainSort(3);
+		onSortClick
+			? PostQueryApi('/api/product/productList', {
+					mainSort: 3,
+					bigCategoryId,
+					smallCategoryId,
+			  }).then(
+					res => setNewProduct(res.data.productData),
+					navigate(
+						`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&mainSort=${3}`,
+					),
+			  )
+			: PostQueryApi('/api/product/productList', { mainSort: 3, bigCategoryId }).then(
+					res => setNewProduct(res.data.productData),
+					navigate(`/products?bigCategoryId=${bigCategoryId}&mainSort=${3}`),
+			  );
 	};
 
 	return (
-		<InfiniteScroll
-			dataLength={page}
-			next={getMoreItems}
-			// width={'1200px'}
-			hasMore={page < 38 ? true : false}
-			height={document.documentElement.scrollHeight}
-			loader={<div style={{ textAlign: 'center' }}>Loading...</div>}
-			scrollThreshold="1px" // 뷰포트가 스크롤영역 하단에서 0px 미만일때 이벤트를 트리거
-			endMessage={<div style={{ textAlign: 'center' }}>더이상 상품이 없습니다.</div>}
-			// style={{
-			// 	'::-webkit-scrollbar': {
-			// 		display: 'none',
-			// 	},
-			// }}
-		>
+		//<InfiniteScroll
+		// 	dataLength={page}
+		// 	next={getMoreItems}
+		// 	// width={'1200px'}
+		// 	hasMore={page < 38 ? true : false}
+		// 	height={document.documentElement.scrollHeight}
+		// 	loader={<div style={{ textAlign: 'center' }}>Loading...</div>}
+		// 	scrollThreshold="1px" // 뷰포트가 스크롤영역 하단에서 0px 미만일때 이벤트를 트리거
+		// 	endMessage={<div style={{ textAlign: 'center' }}>더이상 상품이 없습니다.</div>}
+		// 	// style={{
+		// 	// 	'::-webkit-scrollbar': {
+		// 	// 		display: 'none',
+		// 	// 	},
+		// 	// }}
+		// >
+		<>
+			{/* <div style={{ height: '100px', 'font-size': '20px' }}>{query.path}</div> */}
 			<Header></Header>
 			<DialLog></DialLog>
 			<ScrollContainer>
@@ -308,7 +359,6 @@ const Main = cancel => {
 					smallCategoryId={smallCategoryId}
 					setBigCategoryId={setBigCategoryId}
 					setSmallCategoryId={setSmallCategoryId}
-					setPage={setPage}
 				></Sidebar>
 				<MainContainer>
 					{/* 카테고리 */}
@@ -329,8 +379,8 @@ const Main = cancel => {
 							<div className="hash_tag">
 								#
 								{
-									smallCategory[bigCategoryId - 1][
-										Math.floor(Math.random() * smallCategory[bigCategoryId - 1].length)
+									smallCategory[bigCategoryId][
+										Math.floor(Math.random() * smallCategory[bigCategoryId].length)
 									]
 								}
 							</div>
@@ -364,13 +414,13 @@ const Main = cancel => {
 							</div>
 							<div className="all_item_list">
 								<ul>
-									{smallCategory[bigCategoryId]
+									{smallCategory[bigCategoryId - 1]
 										.filter(val => {
 											if (searchInput === '') return val;
 											else if (val.toLowerCase().includes(searchInput)) return val;
 										})
 										.map((data, idx) => (
-											<li onClick={() => onSort(idx)}>{data}</li>
+											<li onClick={() => onSort(idx + 1)}>{data}</li>
 										))}
 								</ul>
 							</div>
@@ -398,7 +448,7 @@ const Main = cancel => {
 								<ul>
 									<li
 										onClick={() => {
-											onReset();
+											onSecondReset();
 										}}
 										style={{ color: 'black', fontWeight: 'bold' }}
 									>
@@ -481,7 +531,7 @@ const Main = cancel => {
 								}}
 							>
 								<span className="select-medium">
-									{smallCategory[bigCategoryId][selectSmallCateId]}
+									{smallCategory[bigCategoryId - 1][selectSmallCateId - 1]}
 								</span>
 								<span className="select-medium-button">&#160;X</span>
 							</div>
@@ -562,7 +612,7 @@ const Main = cancel => {
 					</ItemSection>
 				</MainContainer>
 			</ScrollContainer>
-		</InfiniteScroll>
+		</>
 	);
 };
 
