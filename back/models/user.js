@@ -51,7 +51,17 @@ module.exports = class User extends Model {
                 rank: {
                     type: DataTypes.INTEGER(11),
                     allowNull: true
+                },
+                recipientNumber: {
+                    type: DataTypes.STRING(50)
+                },
+                recipient: {
+                    type: DataTypes.STRING(50)
+                },
+                addressNumber: {
+                    type: DataTypes.STRING(50)
                 }
+
             },
             {
                 modelName: 'User',
