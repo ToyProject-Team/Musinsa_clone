@@ -59,16 +59,12 @@ const PurchaseForm = () => {
 	const dispatch = useProductDetailDispatch();
 	const user = getData();
 
-	const [clickedlike, setClickedlike] = useState(true);
+	const [clickedlike, setClickedlike] = useState(false);
 
-	const [optionData, setOptionData] = useState([
-		{
-			option1: '옵션 선택',
-		},
-		{
-			option2: '옵션 선택',
-		},
-	]);
+	const [optionData, setOptionData] = useState({
+		option1: '옵션 선택',
+		option2: '옵션 선택',
+	});
 	const [option, setOption] = useState({});
 	const [selectList, setSelectList] = useState({});
 	const [selectIdx, setSelectIdx] = useState();
@@ -83,10 +79,9 @@ const PurchaseForm = () => {
 	// 데이터 구조 변경
 	const optionDataStructureChange = useCallback(() => {
 		const option1 = detail.product.ProductMainTags.map(v => v.name);
-		const option2 = detail.product.ProductMainTags.map(v => {
-			const arr = v.ProductSubTags.map(item => item.name);
-			return arr;
-		});
+		const option2 = detail.product.ProductMainTags.map(v =>
+			v.ProductSubTags.map(item => `${item.name}/${item.amount}`),
+		);
 		const productArr = {
 			option1,
 			option2,
@@ -155,6 +150,8 @@ const PurchaseForm = () => {
 					const nowValue = value;
 					const oldValue = selectList[key];
 					let flag = false;
+
+					if (value.includes('품절')) return alert('이미 품절된 상품입니다.');
 
 					if (objData.length > 1) {
 						// 옵션이 2개 이상일 경우
@@ -264,7 +261,6 @@ const PurchaseForm = () => {
 				likes: detail.product.likes - 1,
 			});
 			detail.product.likes -= 1;
-
 			try {
 				const params = {
 					productId: query.productId,
@@ -278,7 +274,6 @@ const PurchaseForm = () => {
 				likes: detail.product.likes + 1,
 			});
 			detail.product.likes += 1;
-
 			try {
 				const params = {
 					productId: query.productId,
@@ -291,7 +286,7 @@ const PurchaseForm = () => {
 	}, [clickedlike]);
 
 	// 장바구니 추가
-	const onClickBasket = useCallback(() => {
+	const onClickBasket = useCallback(async () => {
 		if (!user) {
 			const { pathname, search } = location;
 			navigate(`/login?redirect=${pathname}${search}`);
@@ -304,9 +299,12 @@ const PurchaseForm = () => {
 			const params = {
 				productId: query.productId,
 			};
-			PostHeaderBodyApi('/api/product/addCart', params, 'Authorization', token);
+			await PostHeaderBodyApi('/api/product/addCart', params, 'Authorization', token);
 			setModalBasket(true);
-		} catch (error) {}
+			console.log(123123);
+		} catch (error) {
+			console.error(error);
+		}
 	}, []);
 
 	const onCloseModal = useCallback(() => {
@@ -327,8 +325,10 @@ const PurchaseForm = () => {
 			navigate(`/login?redirect=${pathname}${search}`);
 		}
 
+		if (Object.keys(selectList).length === 0) return alert('구매하실 상품이 없습니다.');
+
 		setModalOrder(true);
-	}, []);
+	}, [selectList]);
 
 	// 결제
 	const onClickOrder = useCallback(() => {
@@ -360,9 +360,15 @@ const PurchaseForm = () => {
 											<option key={itemOption}>{itemOption}</option>
 									  ))
 									: selectIdx >= 0 &&
-									  optionData[item][selectIdx].map(itemOption => (
-											<option key={itemOption}>{itemOption}</option>
-									  ))}
+									  optionData[item][selectIdx].map(itemOption => {
+											const itemName = itemOption.split('/')[0];
+											const itemAmount = itemOption.split('/')[1];
+											return (
+												<option key={itemOption}>
+													{itemName}({itemAmount === '0' ? '품절' : `${itemAmount}개남음`})
+												</option>
+											);
+									  })}
 							</BuyOption>
 						)
 					);

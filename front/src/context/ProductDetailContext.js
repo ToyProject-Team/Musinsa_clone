@@ -35,7 +35,7 @@ function productDetailReducer(state, action) {
 			return {
 				...state,
 				product: {
-					...state.order,
+					...state.product,
 					likes: action.payload.likes,
 				},
 			};

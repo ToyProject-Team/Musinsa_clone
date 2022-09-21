@@ -6,7 +6,6 @@ import {
 	ProductImg,
 	ProductImgZoomContainer,
 	ProductImgZoom,
-	Cursor,
 	Close,
 } from './styles';
 
@@ -27,28 +26,23 @@ const ImageZoom = ({ img, alt }) => {
 	}, [show]);
 
 	const onMoseMoveZoom = useCallback(e => {
+		// 사이드바 활성화 시
 		setMousePosition({
-			left: -e.pageX + 20 + 'px',
-			top: -e.pageY + 105 + 'px',
+			left: -e.pageX + 290 + 'px',
+			top: -e.pageY + 210 + 'px',
 		});
-		setMouseCursor({ x: e.pageX - 35, y: e.pageY - 120 });
+
+		// 사이드바 비활성화 시
+		// setMousePosition({
+		// 	left: -e.pageX + 20 + 'px',
+		// 	top: -e.pageY + 210 + 'px',
+		// });
+		setMouseCursor({ x: e.pageX - 35, y: e.pageY - 20 });
 	}, []);
 
 	return (
 		<ProductImgContainer>
-			<ProductImg onMouseMove={onMoseMoveZoom}>
-				{!show &&
-					mouseCursor.x < 486 &&
-					mouseCursor.y < 580 &&
-					mouseCursor.x > -18 &&
-					mouseCursor.y > -8 && (
-						<Cursor
-							onClick={onClickZoomIn}
-							show={show}
-							className="cursor"
-							style={{ position: 'absolute', left: mouseCursor.x, top: mouseCursor.y }}
-						></Cursor>
-					)}
+			<ProductImg show={show} onMouseMove={onMoseMoveZoom} onClick={onClickZoomIn}>
 				<img src={img} alt={alt} />
 			</ProductImg>
 
@@ -56,13 +50,6 @@ const ImageZoom = ({ img, alt }) => {
 				<ProductImgZoom show={show}>
 					<img src={img} alt={alt} style={{ left: mousePosition.left, top: mousePosition.top }} />
 				</ProductImgZoom>
-				{show && (
-					<Cursor
-						show={show}
-						className="cursor"
-						style={{ position: 'absolute', left: mouseCursor.x, top: mouseCursor.y }}
-					></Cursor>
-				)}
 			</ProductImgZoomContainer>
 			<Close show={show} onClick={onClickZoomOut}>
 				close
