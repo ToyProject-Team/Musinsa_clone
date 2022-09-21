@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export const Filter = styled.div`
 	position: fixed;
-	right: 0;
+	right: 2%;
 	bottom: 100px;
 	height: 260px;
 	cursor: pointer;
