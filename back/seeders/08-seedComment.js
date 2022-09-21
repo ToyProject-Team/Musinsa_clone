@@ -1,5 +1,7 @@
 'use strict';
 const { faker } = require('@faker-js/faker');
+const { Comment } = require('../models');
+const { truncateForce } = require('../utils/seeder-helper');
 
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -47,6 +49,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('Comments', null, {});
+        await truncateForce(queryInterface, 'Comments');
     },
 };

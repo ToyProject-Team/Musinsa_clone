@@ -1,7 +1,8 @@
 'use strict';
 
 const { Op } = require('sequelize');
-const { ProductMainTag } = require('../models');
+const { ProductMainTag, ProductSubTag } = require('../models');
+const { truncateForce } = require('../utils/seeder-helper');
 
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -112,6 +113,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('ProductSubTags', null, {});
+        await truncateForce(queryInterface, 'ProductSubTags');
     },
 };

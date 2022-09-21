@@ -1,5 +1,8 @@
 'use strict';
 
+const { BigCategory } = require('../models');
+const { truncateForce } = require('../utils/seeder-helper');
+
 module.exports = {
     async up(queryInterface, Sequelize) {
         var temp = [
@@ -39,6 +42,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('BigCategories', null, {});
+        await truncateForce(queryInterface, 'BigCategories');
     },
 };

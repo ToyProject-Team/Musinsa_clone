@@ -1,6 +1,8 @@
 'use strict';
 
 const { faker } = require('@faker-js/faker');
+const { CustomCategory } = require('../models');
+const { truncateForce } = require('../utils/seeder-helper');
 
 const categoryName = [
     '데일리',
@@ -43,6 +45,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('CustomCategories', null, {});
+        await truncateForce(queryInterface, 'CustomCategories');
     },
 };

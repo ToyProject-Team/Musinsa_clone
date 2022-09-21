@@ -1,5 +1,7 @@
 'use strict';
 
+const { truncateForce } = require('../utils/seeder-helper');
+
 module.exports = {
     async up(queryInterface, Sequelize) {
         function rand(min, max) {
@@ -38,6 +40,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('CustomCategoryMatch', null, {});
+        await truncateForce(queryInterface, 'CustomCategoryMatch');
     },
 };

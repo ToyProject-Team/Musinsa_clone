@@ -1,5 +1,9 @@
 'use strict';
 
+const { truncateSync } = require('fs');
+const { ProductSize } = require('../models');
+const { truncateForce } = require('../utils/seeder-helper');
+
 module.exports = {
     async up(queryInterface, Sequelize) {
         function rand(min, max) {
@@ -30,6 +34,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('ProductSizes', null, {});
+        await truncateForce(queryInterface, 'ProductSizes');
     },
 };

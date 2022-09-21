@@ -2,6 +2,8 @@
 
 const { faker } = require('@faker-js/faker');
 const bcrypt = require('bcrypt');
+const { User } = require('../models');
+const { truncateForce } = require('../utils/seeder-helper');
 
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -44,6 +46,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('Users', null, {});
+        await truncateForce(queryInterface, 'Users');
     },
 };

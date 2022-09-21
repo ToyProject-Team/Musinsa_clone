@@ -1,6 +1,7 @@
 'use strict';
 
-const { Product, ProductMainTag, ProductSubTag } = require('../models');
+const { Product, ProductMainTag, ProductSubTag, MyCart } = require('../models');
+const { truncateForce } = require('../utils/seeder-helper');
 
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -24,7 +25,8 @@ module.exports = {
                 ],
             });
 
-            if (product.ProductMainTags.length == 0) continue;
+            if (product.ProductMainTags || product.ProductMainTags.length == 0)
+                continue;
 
             let temp = rand(0, 6);
             let randNumbers = [];
@@ -71,6 +73,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('MyCarts', null, {});
+        await truncateForce(queryInterface, 'MyCarts');
     },
 };

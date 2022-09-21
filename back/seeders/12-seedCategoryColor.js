@@ -1,5 +1,7 @@
 'use strict';
 
+const { CategoryColor } = require('../models');
+
 module.exports = {
     async up(queryInterface, Sequelize) {
         // const categoryCount = [9, 12, 8, 3, 3, 3, 11, 13, 9, 13, 7, 2, 5, 3, 8, 5, 7, 12, 11, 11, 2, 2]
@@ -17,7 +19,5 @@ module.exports = {
         // await queryInterface.bulkInsert("categorycolors", dummyCategoryColors);
     },
 
-    async down(queryInterface, Sequelize) {
-        // await queryInterface.bulkDelete('categorycolors', null, {});
-    },
+    async down(queryInterface, Sequelize) {},
 };

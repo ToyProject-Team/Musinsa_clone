@@ -1,5 +1,8 @@
 'use strict';
 
+const { SmallCategory } = require('../models');
+const { truncateForce } = require('../utils/seeder-helper');
+
 module.exports = {
     async up(queryInterface, Sequelize) {
         const categoryCount = [
@@ -23,6 +26,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('SmallCategories', null, {});
+        await truncateForce(queryInterface, 'SmallCategories');
     },
 };

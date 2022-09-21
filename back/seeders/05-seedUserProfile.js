@@ -1,5 +1,8 @@
 'use strict';
 
+const { ProductImg } = require('../models');
+const { truncateForce } = require('../utils/seeder-helper');
+
 module.exports = {
     async up(queryInterface, Sequelize) {
         const dummyProductImg = [];
@@ -251,6 +254,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('ProductImgs', null, {});
+        await truncateForce(queryInterface, 'ProductImgs');
     },
 };
