@@ -335,7 +335,6 @@ const Main = () => {
 	return (
 		<>
 			<Header></Header>
-			<DialLog></DialLog>
 			<ScrollContainer>
 				<Sidebar
 					bigCategoryId={bigCategoryId}

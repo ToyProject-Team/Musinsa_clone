@@ -52,7 +52,7 @@ export const ImageInfo = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 50px;
-	margin: ${props => (!props.clicked ? '20px' : '100px')};
+	margin: 20px;
 	height: ${props => (!props.clicked ? '500px' : '')};
 	overflow: ${props => (!props.clicked ? 'hidden' : '')};
 	img {
