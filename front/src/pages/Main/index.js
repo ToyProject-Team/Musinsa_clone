@@ -46,22 +46,6 @@ const Main = () => {
 	const query = URLquery(location);
 	const selectBigCate = Object.values(query)[0] * 1;
 	const selectSmallCate = Object.values(query)[1] * 1;
-	const [count, setCount] = useState(0);
-
-	//처음 아무 조건없이 한번만 데이터 받아오기
-	useEffect(() => {
-		selectBigCate >= 1
-			? PostQueryApi('/api/product/productList', { bigCategoryId, smallCategoryId }).then(
-					res => setProduct(res.data.productData),
-					navigate('/'),
-			  )
-			: PostQueryApi('/api/product/productList').then(
-					res => setProduct(res.data.productData),
-					navigate('/'),
-			  );
-
-		console.log(NaN >= 1);
-	}, [selectBigCate]);
 
 	//params
 	// const [mainSort, setMainSort] = useState(0);
@@ -71,6 +55,23 @@ const Main = () => {
 	// const [priceMax, setPriceMax] = useState(100000000);
 	const [bigCategoryId, setBigCategoryId] = useState(1);
 	const [smallCategoryId, setSmallCategoryId] = useState(1);
+
+	//처음 아무 조건없이 한번만 데이터 받아오기
+	useEffect(() => {
+		PostQueryApi('/api/product/productList').then(
+			res => setProduct(res.data.productData),
+			navigate('/'),
+		);
+	}, []);
+
+	//Sidebar에서 카테고리 선택했을 때 데이터 받아오기
+	useEffect(() => {
+		if (selectBigCate >= 1)
+			PostQueryApi('/api/product/productList', {
+				bigCategoryId,
+				smallCategoryId: selectSmallCate,
+			}).then(res => setNewProduct(res.data.productData));
+	}, [selectBigCate, selectSmallCate]);
 
 	//중분류 전체보기 - bigCate만 적용
 	const onReset = () => {
@@ -352,7 +353,6 @@ const Main = () => {
 								onClick={() => {
 									// pageTest();
 									navigate(`/`);
-									setPage(1);
 								}}
 							>
 								{bigCategory[bigCategoryId - 1]}
@@ -371,7 +371,7 @@ const Main = () => {
 											type="text"
 											title="검색"
 											onChange={e => {
-												setSearchInput(e.target.value.toLowerCase());
+												setSearchInput(e.target.value);
 											}}
 											value={searchInput}
 										></input>
@@ -393,29 +393,13 @@ const Main = () => {
 									{smallCategory[bigCategoryId - 1]
 										.filter(val => {
 											if (searchInput === '') return val;
-											else if (val.toLowerCase().includes(searchInput)) return val;
+											else if (val.includes(searchInput)) return val;
 										})
 										.map((data, idx) =>
 											idx === 0 ? null : <li onClick={() => onSort(idx)}>{data}</li>,
 										)}
 								</ul>
 							</div>
-							{/* <div className="all_item_list">
-								<ul>
-									{product
-										?.map(data => data.productTitle)
-										.filter(
-											(val, idx) => product?.map(data => data.productTitle).indexOf(val) === idx,
-										)
-										.filter(val => {
-											if (searchInput === '') return val;
-											else if (val.toLowerCase().includes(searchInput)) return val;
-										})
-										.map((data, idx) => {
-											return <li onClick={e => onSort(e.target.textContent)}>{data}</li>;
-										})}
-								</ul>
-							</div> */}
 						</MiddleCategory>
 
 						<OtherCategory>
