@@ -302,7 +302,6 @@ const Main = cancel => {
 		>
 			<DialLog/>
 			<Header></Header>
-			<DialLog></DialLog>
 			<ScrollContainer>
 				<Sidebar
 					bigCategoryId={bigCategoryId}

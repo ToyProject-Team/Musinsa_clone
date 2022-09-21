@@ -47,7 +47,7 @@ const Sidebar = props => {
 							onClick={() => onClickCategory(idx)}
 							aria-expanded={open[idx]}
 						>
-							<div title="BigMenu" key={idx} onClick={() => sendBigCate(idx)}>
+							<div title="BigMenu" key={idx} >
 								{big}
 								<span>{alpabet[idx]}</span>
 								<span>{!open[idx] ? <HiOutlinePlusSm /> : <HiOutlineMinusSm />}</span>
@@ -66,8 +66,8 @@ const Sidebar = props => {
 											sendSmallCate(idex);
 										}}
 									>
-										{small}
-										<span>{`(${idex})`}</span>
+										<span onClick={() => sendBigCate(idx)}>{small}</span>
+										<span>{`(${idex+1})`}</span>
 									</li>
 								))}
 							</ul>

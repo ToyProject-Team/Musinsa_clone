@@ -63,7 +63,7 @@ const Header = () => {
 						<div>
 							<a>주문배송조회</a>
 						</div>
-						<div onClick={deleteLogout}>로그아웃</div>
+						<div onClick={deleteLogout} className="logOut">로그아웃</div>
 					</HUser>
 				)}
 				{!login && (

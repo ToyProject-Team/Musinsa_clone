@@ -103,6 +103,7 @@ export const HUser = styled.div`
 		position: relative;
 		border-radius: 4px;
 		font-weight: 900;
+		border: none;
 	}
 
 	.notLogin {
@@ -258,24 +259,53 @@ export const HUser = styled.div`
 		}
 	}
 
-	& div:nth-of-type(2) {
-		& a {
-			color: #ff0000;
-		}
+	& div:last-of-type:hover {
+			background: linear-gradient(to right, #6666ff, #0099ff, #00ff00, #ff3399, #6666ff);
+			-webkit-background-clip: text;
+			background-clip: text;
+			color: transparent;
+			animation: rainbow 6s ease-in-out infinite;
+			background-size: 400% 100%;
+			&::after {
+				content: '';
+				position: absolute;
+				top: -3px;
+				left: -2px;
+				right: -3px;
+				bottom: -3px;
+				border-radius: 4px;
+				background: linear-gradient(120deg, #00f260, #0575e6, #00f260);
+				background-size: 300% 300%;
+				clip-path: polygon(
+					0% 100%,
+					3px 100%,
+					3px 3px,
+					calc(100% - 3px) 3px,
+					calc(100% - 3px) calc(100% - 3px),
+					3px calc(100% - 3px),
+					3px 100%,
+					100% 100%,
+					100% 0%,
+					0% 0%
+				);
+				animation: rainbow_frame 1s forwards ease-in-out reverse
+			}
 	}
+	
+	${'' /* &.logOut */}
 `;
 
 export const CountNum = styled.span`
 	display: inline-block;
 	min-width: 18px;
-	height: 18px;
-	padding: 1px 0 0 0;
+	height: 16px;
 	border-radius: 10px;
 	background-color: #0078ff;
 	font-size: 12px;
 	font-family: 'Arial', 'sans-serif';
 	line-height: normal;
 	color: white;
-	vertical-align: top;
+	vertical-align: text-top;
 	margin-left: 2px;
+	padding-top: 3px;
 `;
