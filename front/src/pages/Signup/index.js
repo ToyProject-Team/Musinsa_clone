@@ -54,9 +54,9 @@ const Signup = () => {
 	const passwordConfirmRef = useRef();
 
 	const [auth, setAuth] = useState('emailAuth');
-	const [authNumber, setauthNumber] = useState('');
-	const [authNumberReg, setauthNumberReg] = useState(false);
-	const [authNumberBtnReg, setauthNumberBtnReg] = useState(false);
+	const [authNumber, setAuthNumber] = useState('');
+	const [authNumberReg, setAuthNumberReg] = useState(false);
+	const [authNumberBtnReg, setAuthNumberBtnReg] = useState(false);
 	const [authStage, setAuthStage] = useState(1);
 
 	const [authKakao, setAuthKakao] = useState(false);
@@ -110,8 +110,8 @@ const Signup = () => {
 			});
 
 			// 사용자 정보 변수에 저장
-			setauthNumber(data.kakao_account.email);
-			setauthNumberReg(true);
+			setAuthNumber(data.kakao_account.email);
+			setAuthNumberReg(true);
 			setAuthKakao(true);
 
 			changeDispatch(AUTHKAKAO, { authKakao: true });
@@ -126,17 +126,17 @@ const Signup = () => {
 	}, []);
 
 	const onClickClear = useCallback(() => {
-		setauthNumber('');
+		setAuthNumber('');
 	}, [authNumber]);
 
 	const onChangeRadio = useCallback(
 		e => {
 			const { value } = e.target;
 			setAuth(value);
-			setauthNumber('');
-			setauthNumberReg(true);
+			setAuthNumber('');
+			setAuthNumberReg(true);
 			setAuthStage(1);
-			setauthNumberBtnReg(false);
+			setAuthNumberBtnReg(false);
 
 			dispatch({ type: AUTHINIT });
 		},
@@ -178,7 +178,6 @@ const Signup = () => {
 
 					PostApi('/api/auth/checkEmail', params)
 						.then(res => {
-							console.log(res);
 							setModalAuthConfirm(true);
 
 							const payload = {
@@ -187,7 +186,7 @@ const Signup = () => {
 							dispatch({ type: AUTHEMAILCHECK, payload });
 						})
 						.catch(err => {
-							setauthNumberBtnReg(true);
+							setAuthNumberBtnReg(true);
 							console.error('error', err);
 						});
 				}
@@ -231,7 +230,7 @@ const Signup = () => {
 							dispatch({ type: AUTHPHONECHECK, payload });
 						})
 						.catch(err => {
-							setauthNumberBtnReg(true);
+							setAuthNumberBtnReg(true);
 							console.error('error', err);
 						});
 				}
@@ -337,12 +336,17 @@ const Signup = () => {
 
 		if (authStage === 1) {
 			setAuthStage(2);
-			setauthNumber('');
+			setAuthNumber('');
 		} else if (authStage === 2) {
 			setAuthStage(3);
-			setauthNumber('');
+
+			if (auth === 'emailAuth') {
+				setAuthNumber(user.authEmail);
+			} else {
+				setAuthNumber(user.authPhoneNumber);
+			}
 		}
-	}, [authStage]);
+	}, [authStage, auth, user]);
 
 	const onCloseLinkModal = useCallback(() => {
 		setModalSignUp(false);
@@ -393,7 +397,7 @@ const Signup = () => {
 
 	const onChangeauthNumber = useCallback(
 		e => {
-			setauthNumber(e.target.value);
+			setAuthNumber(e.target.value);
 
 			let regExp;
 
@@ -406,8 +410,8 @@ const Signup = () => {
 				regExp = /\d{6}/g;
 			}
 
-			if (regExp.test(e.target.value.replaceAll('-', ''))) setauthNumberReg(true);
-			else setauthNumberReg(false);
+			if (regExp.test(e.target.value.replaceAll('-', ''))) setAuthNumberReg(true);
+			else setAuthNumberReg(false);
 		},
 		[auth, authStage],
 	);
@@ -440,10 +444,10 @@ const Signup = () => {
 	useEffect(() => {
 		if (auth === 'phoneAuth') {
 			if (authNumber.length === 10) {
-				setauthNumber(authNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
+				setAuthNumber(authNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
 			}
 			if (authNumber.length === 13) {
-				setauthNumber(authNumber.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
+				setAuthNumber(authNumber.replace(/-/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3'));
 			}
 		}
 	}, [auth, authNumber]);
@@ -563,14 +567,22 @@ const Signup = () => {
 								<span>필수 입력</span>
 							</label>
 
-							<div className="email-check">
+							<div
+								className="email-check"
+								style={
+									authStage === 3 ? { backgroundColor: '#e5e5e5' } : { backgroundColor: '#fff' }
+								}
+							>
 								<input
 									className={auth}
 									type={auth === 'phoneAuth' ? 'tel' : 'email'}
 									value={authNumber}
+									style={
+										authStage === 3 ? { backgroundColor: '#e5e5e5' } : { backgroundColor: '#fff' }
+									}
 									onChange={onChangeauthNumber}
 									maxLength={authStage === 2 ? 6 : auth === 'phoneAuth' && 13}
-									disabled={authStage === 3 ? true : false}
+									disabled={(authKakao && authStage === 1) || authStage === 3 ? true : false}
 								/>
 								{!authKakao && authNumber?.length > 0 && (
 									<button type="button" onClick={() => onClickClear()}>
@@ -632,8 +644,6 @@ const Signup = () => {
 								<a target="_blank" onClick={() => openPop('agree')}>
 									자세히
 								</a>
-
-								{/* <a href="signup/agreement/privacy-usage" target="_blank"></a> */}
 							</div>
 							<div className="check">
 								<label htmlFor="checkTerms">
