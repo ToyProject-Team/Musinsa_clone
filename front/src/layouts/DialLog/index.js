@@ -3,42 +3,27 @@ import { Btm, Filter } from './styles';
 import { BiShoppingBag, BiHomeCircle, BiHomeHeart } from 'react-icons/bi';
 import { BsShare } from 'react-icons/bs';
 import { TbArrowBigUpLine, TbArrowBigDownLine } from 'react-icons/tb';
-import { Link, useParams, useLocation} from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import UrlCopyModal from 'components/Modals/UrlCopyModal';
 
 const DialLog = () => {
+	const saveUrl = useLocation();
+
 	// 다이얼 로그
-	const [basic, setBasic] = useState
-	({
+	const [basic, setBasic] = useState({
 		home: true,
 		cart: true,
 	});
 
-	const saveUrl = useLocation();
-	const PATH_URL = saveUrl.pathname;
-
-	const activeBtn = () =>{
-		if(PATH_URL == "/" ? setBasic(data => data) : setBasic(data => !data))
-			
-		
-
-		if(PATH_URL == "/mypage/cart"){
-			// basic.cart = false;
-			// setBasic(!basic.cart)
-			// console.log("cart")
-		}else{
-			// basic.cart = true;
-			// setBasic(basic.cart)
-			// console.log("not carts")
-		}
-	
-	}
-		
 	useEffect(() => {
-		activeBtn();
-	},[basic])
-	
-	
+		const { pathname } = saveUrl;
+		if (pathname === '/') setBasic(pre => ({ ...pre, home: false }));
+		else setBasic(pre => ({ ...pre, home: true }));
+
+		if (pathname === '/mypage/cart') {
+		}
+	}, []);
+
 	// url 모달
 	const [modalAuth, setModalAuth] = useState(false);
 
@@ -75,21 +60,21 @@ const DialLog = () => {
 					}
 				>
 					<Link to="/">
-						<button type="button" onClick={() => activeBtn()}>
+						<button type="button">
 							{basic.home ? <BiHomeCircle /> : <BiHomeHeart style={{ color: 'blue' }} />}
 						</button>
 					</Link>
 				</div>
 				<div
 					style={
-						basic.cart 
-							? {backgroundColor: "white"} 
-							: {boxShadow: 'inset 0px 0px 4px 1px rgba(0,0,255,0.5)' }
+						basic.cart
+							? { backgroundColor: 'white' }
+							: { boxShadow: 'inset 0px 0px 4px 1px rgba(0,0,255,0.5)' }
 					}
 				>
 					<Link to="/mypage/cart">
-						<button type="button" onClick={() => activeBtn()}>
-							{basic.cart ? <BiShoppingBag /> : <BiShoppingBag style={{color: 'blue'}}/>}
+						<button type="button">
+							{basic.cart ? <BiShoppingBag /> : <BiShoppingBag style={{ color: 'blue' }} />}
 						</button>
 					</Link>
 				</div>
