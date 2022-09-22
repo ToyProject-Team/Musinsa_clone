@@ -11,13 +11,13 @@ const Sidebar = props => {
 
 	const navigate = useNavigate();
 
-	//Main으로 idx값 보내고, url에 쿼리스트링 추가하는 함수
+	// Main으로 idx값 보내고, url에 쿼리스트링 추가하는 함수
 	// const sendBigCate = idx => {
 	// 	props.setBigCategoryId(idx + 1);
-	// 	// navigate({
-	// 	// 	pathname: `/products`,
-	// 	// 	search: `bigCategoryId=${idx + 1}`,
-	// 	// });
+	// 	navigate({
+	// 		pathname: `/products`,
+	// 		search: `bigCategoryId=${idx + 1}`,
+	// 	});
 	// };
 
 	const sendSmallCate = idx => {
@@ -75,7 +75,7 @@ const Sidebar = props => {
 											sendSmallCate(idex);
 										}}
 									>
-										<span>{small}</span>
+										<span >{small}</span>
 										<span>{`(${idex + 1})`}</span>
 									</li>
 								))}

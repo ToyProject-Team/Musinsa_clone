@@ -14,7 +14,7 @@ import {
 	ListBox,
 } from './styles';
 
-import { Router, Route, Routes, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { Router, Route, Routes, useNavigate, useLocation, useSearchParams, useParams } from 'react-router-dom';
 import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
 import Header from 'layouts/Header';
@@ -28,8 +28,11 @@ import qs from 'qs';
 import { URLquery } from 'utils/URLquery';
 
 const Main = () => {
-	const navigate = useNavigate();
 
+	
+
+	const navigate = useNavigate();
+	
 	const ShowList = loadable(() => import('components/ProductList'), {
 		fallback: <div>로딩중</div>,
 	});
@@ -334,6 +337,7 @@ const Main = () => {
 
 	return (
 		<>
+			<DialLog/>
 			<Header></Header>
 			<ScrollContainer>
 				<Sidebar
