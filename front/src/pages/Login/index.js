@@ -22,8 +22,9 @@ import Kakao from 'pages/Kakao';
 import { URLquery } from 'utils/URLquery';
 
 const LogIn = () => {
-	const REST_API_KEY = '4046f853b8826bbb808cfe399ce9b3f6';
-	const REDIRECT_URI = 'http://localhost:3000/kakao/oauth/callback';
+	const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API;
+	const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
+	console.log(REST_API_KEY, REDIRECT_URI);
 	const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
 	const navigate = useNavigate();

@@ -34,6 +34,20 @@ export const GetTokenApi = async (PATH, params) => {
 /**
  *
  * @param URL주소 PATH
+ * @param query params
+ * @returns result 데이터
+ */
+export const GetQueryApi = async (PATH, params) => {
+	const result = await axios.get(`${PATH}?${params}`, {
+		headers: { 'Content-Type': 'application/json' },
+	});
+
+	return result;
+};
+
+/**
+ *
+ * @param URL주소 PATH
  * @param body값 params
  * @returns result 데이터
  */

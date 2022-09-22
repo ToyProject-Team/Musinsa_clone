@@ -15,24 +15,29 @@ import {
 	SignupContainer,
 	SignupCheckBox,
 	SignupButton,
+	KakaoKeyframes,
 } from './styles';
 import { baseUrl, PostApi } from 'utils/api';
 import {
 	AUTHEMAIL,
 	AUTHEMAILCHECK,
 	AUTHINIT,
+	AUTHKAKAO,
 	AUTHPHONECHECK,
 	AUTHPHONENUMBER,
 	useUserDispatch,
 	useUserState,
 } from 'context/UserContext';
 import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router';
+import { Navigate, useLocation, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
+import { URLquery } from 'utils/URLquery';
 
 const Signup = () => {
 	const user = useUserState();
 	const dispatch = useUserDispatch();
+	const location = useLocation();
+	const url = URLquery(location);
 	const navigate = useNavigate();
 
 	const [email, setEmail] = useState('');
@@ -85,26 +90,39 @@ const Signup = () => {
 
 	const [signUpBtn, setSignUpBtn] = useState(false);
 
+	const changeDispatch = useCallback((type, payload) => {
+		return dispatch({ type, payload });
+	}, []);
+
 	// 카카오 가입
 	const kakaoSignUp = async () => {
+		const { token } = url;
+		const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API;
+
 		try {
+			// Kakao Javascript SDK 초기화
+			await window.Kakao.init(REST_API_KEY);
+			// access token 설정
+			await window.Kakao.Auth.setAccessToken(token);
 			// Kakao SDK API를 이용해 사용자 정보 획득
 			let data = await window.Kakao.API.request({
 				url: '/v2/user/me',
 			});
-			console.log(data);
 
 			// 사용자 정보 변수에 저장
 			setauthNumber(data.kakao_account.email);
-			setAuthStage(3);
+			setauthNumberReg(true);
 			setAuthKakao(true);
+
+			changeDispatch(AUTHKAKAO, { authKakao: true });
 		} catch (err) {
 			console.log(err);
 		}
 	};
 
 	useEffect(() => {
-		kakaoSignUp();
+		const { kakao } = url;
+		if (kakao) kakaoSignUp();
 	}, []);
 
 	const onClickClear = useCallback(() => {
@@ -124,7 +142,6 @@ const Signup = () => {
 		},
 		[auth],
 	);
-	console.log(user);
 
 	// 본인인증
 	const onClickAuth = useCallback(
@@ -273,12 +290,14 @@ const Signup = () => {
 				phoneNumber: authPhoneNumber,
 			};
 
+			const { kakao } = url;
 			axios
 				.post(`${baseUrl}/api/auth/signup`, params, {
 					headers: {
 						'Content-Type': 'application/json',
 						emailCheck: authEmailCheck,
 						phoneCheck: authPhoneCheck,
+						encryptioncode: kakao,
 					},
 				})
 				.then(res => {
@@ -566,6 +585,7 @@ const Signup = () => {
 								>
 									{authStage === 1 ? '본인인증' : authStage === 2 ? '번호확인' : '인증완료'}
 								</button>
+								{authKakao && <KakaoKeyframes></KakaoKeyframes>}
 							</div>
 
 							{authStage === 1 &&

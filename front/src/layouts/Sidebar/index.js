@@ -75,7 +75,7 @@ const Sidebar = props => {
 											sendSmallCate(idex);
 										}}
 									>
-										<span onClick={() => sendBigCate(idx)}>{small}</span>
+										<span>{small}</span>
 										<span>{`(${idex + 1})`}</span>
 									</li>
 								))}
