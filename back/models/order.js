@@ -29,12 +29,14 @@ module.exports = class Order extends Model {
                     type: DataTypes.INTEGER,
                     allowNull: false
                 },
-                // orderSize: {
-
-                // },
-                // orderColor: {
-
-                // },
+                orderSize: {
+                    type: DataTypes.STRING(50),
+                    allowNull: false
+                },
+                orderColor: {
+                    type: DataTypes.STRING(50),
+                    allowNull: false
+                }
                 
             },
             {
