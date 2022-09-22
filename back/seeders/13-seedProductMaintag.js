@@ -15,7 +15,7 @@ module.exports = {
             let amount = rand(1, 5);
             for (j = 0; j < amount; j++) {
                 let ran = rand(0, 4);
-                if (!randNums.includes(ran)) {
+                if (!randNums.includes(option[ran])) {
                     randNums.push(option[ran]);
                 }
             }
@@ -23,7 +23,7 @@ module.exports = {
                 randNums.push(option[0]);
             }
             console.log(randNums);
-            for (var j = 0; j < amount; j++) {
+            for (var j = 0; j < randNums.length; j++) {
                 dummyProductMainTags.push({
                     name: randNums[j],
                     createdAt: new Date(),

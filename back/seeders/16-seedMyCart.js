@@ -54,7 +54,7 @@ module.exports = {
                     ];
 
                 const size = productMainTag.name;
-                const color = roductSubTag.name;
+                const color = productSubTag.name;
                 const amount = productSubTag.amount;
 
                 Cart.push({
