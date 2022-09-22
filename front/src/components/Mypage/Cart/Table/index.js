@@ -13,9 +13,6 @@ function CartTable({ data, setData, item, list, Mainitem, checkedList, setChecke
 	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);
 
-	const id = data.index;
-
-
 	// 수량 기입
 	const handleChange = useCallback(
 		({ target: { value } }) => {
@@ -95,24 +92,25 @@ function CartTable({ data, setData, item, list, Mainitem, checkedList, setChecke
 						<tbody>
 							<tr>
 								<td>
-									<label key={id}>
+									{/* <label key={id}>
 										<input
 											name="oncheck"
 											type="checkbox"
 											checked={checkedList.includes(id) ? true : false}
 											onChange={e => onChecked(e.target.checked, id)}
 										/>
-									</label>
-									{/* <CheckLabel
+									</label> */}
+									<CheckLabel
 										onClick={checkItem}
 										className={item.check ? 'active' : ''}
-									></CheckLabel> */}
+									></CheckLabel>
 								</td>
 								<td className="top">
 									<div>
 										<ImgSpan>
 											<img
-												src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${list.ProductImg.src}`}
+											src={list.productImg.src}
+												// src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${list.ProductImg.src}`}
 												alt="더미데이터"
 											/>
 										</ImgSpan>
