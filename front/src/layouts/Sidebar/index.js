@@ -12,19 +12,20 @@ const Sidebar = props => {
 	const navigate = useNavigate();
 
 	//Main으로 idx값 보내고, url에 쿼리스트링 추가하는 함수
-	// const sendBigCate = idx => {
-	// 	props.setBigCategoryId(idx + 1);
-	// 	// navigate({
-	// 	// 	pathname: `/products`,
-	// 	// 	search: `bigCategoryId=${idx + 1}`,
-	// 	// });
-	// };
-
 	const sendSmallCate = idx => {
 		props.setSmallCategoryId(idx + 1);
+		props.setOnSortClick(true);
+		props.setSelectBox(true);
 		navigate({
 			pathname: `/products`,
 			search: `bigCategoryId=${props.bigCategoryId}&smallCategoryId=${idx}`,
+		});
+	};
+
+	const sendBigCate = idx => {
+		navigate({
+			pathname: `/products`,
+			search: `bigCategoryId=${props.bigCategoryId}`,
 		});
 	};
 
@@ -35,6 +36,8 @@ const Sidebar = props => {
 			return newArray;
 		});
 		//Category클릭시 Main에 Category Id전달
+		props.setOnSortClick(false);
+		props.setSelectBox(false);
 		props.setBigCategoryId(idx + 1);
 	}, []);
 
@@ -72,7 +75,7 @@ const Sidebar = props => {
 									<li
 										key={idex}
 										onClick={() => {
-											sendSmallCate(idex);
+											idex === 0 ? sendBigCate() : sendSmallCate(idex);
 										}}
 									>
 										{small}
