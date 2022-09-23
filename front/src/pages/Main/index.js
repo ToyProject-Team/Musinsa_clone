@@ -14,7 +14,15 @@ import {
 	ListBox,
 } from './styles';
 
-import { Router, Route, Routes, useNavigate, useLocation, useSearchParams, useParams } from 'react-router-dom';
+import {
+	Router,
+	Route,
+	Routes,
+	useNavigate,
+	useLocation,
+	useSearchParams,
+	useParams,
+} from 'react-router-dom';
 import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
 import { bigCategory, alpabet } from 'utils/bigCategory';
@@ -29,11 +37,8 @@ import qs from 'qs';
 import { URLquery } from 'utils/URLquery';
 
 const Main = () => {
-
-	
-
 	const navigate = useNavigate();
-	
+
 	const ShowList = loadable(() => import('components/ProductList'), {
 		fallback: <div>로딩중</div>,
 	});
@@ -314,7 +319,7 @@ const Main = () => {
 
 	return (
 		<>
-			<DialLog/>
+			<DialLog />
 			<Header></Header>
 			<ScrollContainer>
 				<Sidebar
