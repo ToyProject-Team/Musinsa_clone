@@ -30,5 +30,8 @@ module.exports = class MyCart extends Model {
             },
         );
     }
-    static associate(db) {}
+    static associate(db) {
+        db.MyCart.belongsTo(db.Product, { foreignKey: 'ProductId' });
+        db.MyCart.belongsTo(db.User, { foreignKey: 'UserId' });
+    }
 };

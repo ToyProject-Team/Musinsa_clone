@@ -23,11 +23,36 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
                 .status(400)
                 .send({ message: '유저의 조회 결과가 없습니다' });
         }
-        const exCart = await exUser.getMyCart({
-            attributes: [],
+        const carts = await MyCart.findAll({
+            where: {
+                UserId: exUser.id,
+            },
+
+            attributes: ['packingAmount', 'packingSize', 'packingColor'],
+
+            include: [
+                {
+                    model: Product,
+                    attributes: [
+                        'id',
+                        'productTitle',
+                        'productInfo',
+                        'productPrice',
+                        'likes',
+                        'comments',
+                    ],
+
+                    include: [
+                        {
+                            model: ProductImg,
+                            attributes: ['src'],
+                        },
+                    ],
+                },
+            ],
         });
 
-        res.status(200).send({ exCart });
+        res.status(200).send(carts);
     } catch (e) {
         console.error(e);
         next(e);
