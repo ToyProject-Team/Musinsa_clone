@@ -266,30 +266,7 @@ export const HUser = styled.div`
 			color: transparent;
 			animation: rainbow 6s ease-in-out infinite;
 			background-size: 400% 100%;
-			&::after {
-				content: '';
-				position: absolute;
-				top: -3px;
-				left: -2px;
-				right: -3px;
-				bottom: -3px;
-				border-radius: 4px;
-				background: linear-gradient(120deg, #FEAC5E, #C779D0, #fcb045);
-				background-size: 300% 300%;
-				clip-path: polygon(
-					0% 100%,
-					3px 100%,
-					3px 3px,
-					calc(100% - 3px) 3px,
-					calc(100% - 3px) calc(100% - 3px),
-					3px calc(100% - 3px),
-					3px 100%,
-					100% 100%,
-					100% 0%,
-					0% 0%
-				);
-				animation: rainbow_frame 1s forwards ease-in-out reverse
-			}
+			
 	}
 	
 `;

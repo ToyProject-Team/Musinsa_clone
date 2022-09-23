@@ -14,8 +14,8 @@ function layOutReducer(state, action) {
 		case LOGIN:
 			return {
 				...state,
-				login: action.payload.login,
-				token: action.payload.token,
+				x: action.payload.x,
+				y: action.payload.y,
 			};
 
 		default:

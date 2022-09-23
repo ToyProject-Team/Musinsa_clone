@@ -33,7 +33,15 @@ const Sidebar = props => {
 	const onClickCategory = useCallback(idx => {
 		setOpen(prev => {
 			const newArray = [...prev];
-			newArray[idx] = !newArray[idx];
+			// console.log(newArray[3], idx)
+			// else
+			newArray.map((e, idx) => {
+				let data = e;
+				console.log(data);
+			});
+			// newArray[idx] = !newArray[idx];
+			// console.log(1234, 1234,newArray)
+
 			return newArray;
 		});
 		//Category클릭시 Main에 Category Id전달
