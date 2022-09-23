@@ -25,8 +25,15 @@ module.exports = {
                 ],
             });
 
-            if (product.ProductMainTags || product.ProductMainTags.length == 0)
+            if (
+                product.ProductMainTags == undefined ||
+                product.ProductMainTags.length == 0
+            ) {
+                console.warn(
+                    `product [id: ${product.id}]에 ProductMainTags가 없습니다!\n오류 방지를 위헤 MyCart 테이블에 넣지 않습니다`,
+                );
                 continue;
+            }
 
             let temp = rand(0, 6);
             let randNumbers = [];
@@ -48,9 +55,19 @@ module.exports = {
                         rand(0, product.ProductMainTags.length - 1)
                     ];
 
+                if (
+                    productMainTag.ProductSubTags == undefined ||
+                    productMainTag.ProductSubTags.length == 0
+                ) {
+                    console.warn(
+                        `product[id: ${product.id}].ProductMainTags[${productMainTag}]에 ProductSubTags가 없습니다!\n오류 방지를 위헤 MyCart 테이블에 넣지 않습니다`,
+                    );
+                    continue;
+                }
+
                 const productSubTag =
                     productMainTag.ProductSubTags[
-                        rand(0, ProductMainTag.ProductSubTags.length - 1)
+                        rand(0, productMainTag.ProductSubTags.length - 1)
                     ];
 
                 const size = productMainTag.name;
