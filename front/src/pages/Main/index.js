@@ -14,25 +14,31 @@ import {
 	ListBox,
 } from './styles';
 
-import { Router, Route, Routes, useNavigate, useLocation, useSearchParams, useParams } from 'react-router-dom';
+import {
+	Router,
+	Route,
+	Routes,
+	useNavigate,
+	useLocation,
+	useSearchParams,
+	useParams,
+} from 'react-router-dom';
 import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
-import Header from 'layouts/Header';
 import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
 // import InfiniteScroll from 'react-infinite-scroll-component';
+import Header from 'layouts/Header';
 import Sidebar from 'layouts/Sidebar';
-import { GiConsoleController } from 'react-icons/gi';
+import Footer from 'layouts/Footer';
 import DialLog from 'layouts/DialLog';
+
 import qs from 'qs';
 import { URLquery } from 'utils/URLquery';
 
 const Main = () => {
-
-	
-
 	const navigate = useNavigate();
-	
+
 	const ShowList = loadable(() => import('components/ProductList'), {
 		fallback: <div>로딩중</div>,
 	});
@@ -47,33 +53,47 @@ const Main = () => {
 
 	const location = useLocation();
 	const query = URLquery(location);
+
+	//쿼리스트링
 	const selectBigCate = Object.values(query)[0] * 1;
 	const selectSmallCate = Object.values(query)[1] * 1;
-	const [count, setCount] = useState(0);
 
-	//처음 아무 조건없이 한번만 데이터 받아오기
-	useEffect(() => {
-		selectBigCate >= 1
-			? PostQueryApi('/api/product/productList', { bigCategoryId, smallCategoryId }).then(
-					res => setProduct(res.data.productData),
-					navigate('/'),
-			  )
-			: PostQueryApi('/api/product/productList').then(
-					res => setProduct(res.data.productData),
-					navigate('/'),
-			  );
-
-		console.log(NaN >= 1);
-	}, [selectBigCate]);
+	//페이지네이션
 
 	//params
 	// const [mainSort, setMainSort] = useState(0);
-	const [page, setPage] = useState(1);
 	const [price, setPrice] = useState(0);
 	// const [priceMin, setPriceMin] = useState(0);
 	// const [priceMax, setPriceMax] = useState(100000000);
 	const [bigCategoryId, setBigCategoryId] = useState(1);
 	const [smallCategoryId, setSmallCategoryId] = useState(1);
+
+	//처음 아무 조건없이 한번만 데이터 받아오기
+	useEffect(() => {
+		PostQueryApi('/api/product/productList').then(
+			res => setProduct(res.data.productData),
+			navigate('/'),
+		);
+	}, []);
+
+	const [detect, setDetect] = useState(true);
+
+	//Sidebar에서 카테고리 선택했을 때 데이터 받아오기
+	//url스트링 반영하면 다른 요소에 영향줘서 bigCate로 바꿈(mainSort에)
+	useEffect(() => {
+		if (selectBigCate >= 1)
+			PostQueryApi('/api/product/productList', {
+				bigCategoryId: selectBigCate,
+			}).then(res => setNewProduct(res.data.productData));
+	}, [bigCategoryId, detect]);
+
+	useEffect(() => {
+		if (selectSmallCate >= 1)
+			PostQueryApi('/api/product/productList', {
+				bigCategoryId: selectBigCate,
+				smallCategoryId: selectSmallCate,
+			}).then(res => setNewProduct(res.data.productData));
+	}, [smallCategoryId]);
 
 	//중분류 전체보기 - bigCate만 적용
 	const onReset = () => {
@@ -161,7 +181,7 @@ const Main = () => {
 		setOnSortClick(true);
 		setSelectSmallCateId(val);
 
-		console.log(selectBigCate, selectSmallCate);
+		// console.log(selectBigCate, selectSmallCate);
 	};
 
 	//가격별로 분류 3
@@ -205,7 +225,7 @@ const Main = () => {
 		priceBox(val);
 		setOnSortSecondClick(true);
 		setSecondSelectBox(true);
-		console.log(newProduct);
+		// console.log(newProduct);
 	};
 
 	//가격별로 분류 4
@@ -274,70 +294,32 @@ const Main = () => {
 
 	//가격순 정렬
 	//내림차순 6
-	const onSortPriceDown = () => {
-		// setMainSort(2);
+	const onMainSort = val => {
 		//smallCate 선택된 경우 / 안된 경우
 		onSortClick
 			? PostQueryApi('/api/product/productList', {
-					mainSort: 2,
 					bigCategoryId,
 					smallCategoryId,
+					mainSort: val,
 			  }).then(
 					res => setNewProduct(res.data.productData),
-					navigate(
-						`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&mainSort=${2}`,
-					),
+					navigate({
+						pathname: `/products`,
+						search: `bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&mainSort=${val}`,
+					}),
 			  )
-			: PostQueryApi('/api/product/productList', { mainSort: 2, bigCategoryId }).then(
+			: PostQueryApi('/api/product/productList', { bigCategoryId, mainSort: val }).then(
 					res => setNewProduct(res.data.productData),
-					navigate(`/products?bigCategoryId=${bigCategoryId}&mainSort=${2}`),
-			  );
-	};
-
-	//오름차순 7
-	const onSortPriceUp = () => {
-		// setMainSort(1);
-		//smallCate 선택된 경우 / 안된 경우
-		onSortClick
-			? PostQueryApi('/api/product/productList', {
-					mainSort: 1,
-					bigCategoryId,
-					smallCategoryId,
-			  }).then(
-					res => setNewProduct(res.data.productData),
-					navigate(
-						`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&mainSort=${1}`,
-					),
-			  )
-			: PostQueryApi('/api/product/productList', { mainSort: 1, bigCategoryId }).then(
-					res => setNewProduct(res.data.productData),
-					navigate(`/products?bigCategoryId=${bigCategoryId}&mainSort=${1}`),
-			  );
-	};
-
-	//후기순 정렬 sort함수사용 8
-	const onSortComments = () => {
-		// setMainSort(3);
-		onSortClick
-			? PostQueryApi('/api/product/productList', {
-					mainSort: 3,
-					bigCategoryId,
-					smallCategoryId,
-			  }).then(
-					res => setNewProduct(res.data.productData),
-					navigate(
-						`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&mainSort=${3}`,
-					),
-			  )
-			: PostQueryApi('/api/product/productList', { mainSort: 3, bigCategoryId }).then(
-					res => setNewProduct(res.data.productData),
-					navigate(`/products?bigCategoryId=${bigCategoryId}&mainSort=${3}`),
+					navigate({
+						pathname: `/products`,
+						search: `bigCategoryId=${bigCategoryId}&mainSort=${val}`,
+					}),
 			  );
 	};
 
 	return (
 		<>
-			<DialLog/>
+			<DialLog />
 			<Header></Header>
 			<ScrollContainer>
 				<Sidebar
@@ -345,6 +327,10 @@ const Main = () => {
 					smallCategoryId={smallCategoryId}
 					setBigCategoryId={setBigCategoryId}
 					setSmallCategoryId={setSmallCategoryId}
+					setOnSortClick={setOnSortClick}
+					setSelectBox={setSelectBox}
+					detect={detect}
+					setDetect={setDetect}
 				></Sidebar>
 				<MainContainer>
 					{/* 카테고리 */}
@@ -355,7 +341,6 @@ const Main = () => {
 								onClick={() => {
 									// pageTest();
 									navigate(`/`);
-									setPage(1);
 								}}
 							>
 								{bigCategory[bigCategoryId - 1]}
@@ -374,7 +359,7 @@ const Main = () => {
 											type="text"
 											title="검색"
 											onChange={e => {
-												setSearchInput(e.target.value.toLowerCase());
+												setSearchInput(e.target.value);
 											}}
 											value={searchInput}
 										></input>
@@ -396,29 +381,13 @@ const Main = () => {
 									{smallCategory[bigCategoryId - 1]
 										.filter(val => {
 											if (searchInput === '') return val;
-											else if (val.toLowerCase().includes(searchInput)) return val;
+											else if (val.includes(searchInput)) return val;
 										})
 										.map((data, idx) =>
 											idx === 0 ? null : <li onClick={() => onSort(idx)}>{data}</li>,
 										)}
 								</ul>
 							</div>
-							{/* <div className="all_item_list">
-								<ul>
-									{product
-										?.map(data => data.productTitle)
-										.filter(
-											(val, idx) => product?.map(data => data.productTitle).indexOf(val) === idx,
-										)
-										.filter(val => {
-											if (searchInput === '') return val;
-											else if (val.toLowerCase().includes(searchInput)) return val;
-										})
-										.map((data, idx) => {
-											return <li onClick={e => onSort(e.target.textContent)}>{data}</li>;
-										})}
-								</ul>
-							</div> */}
 						</MiddleCategory>
 
 						<OtherCategory>
@@ -487,51 +456,70 @@ const Main = () => {
 
 					<ItemSection>
 						<SelectBox>
-							<div
-								className={selectBox ? 'visible' : 'invisible'}
-								onClick={() => {
-									setSelectBox(false);
+							{selectSmallCate >= 1 ? (
+								<div
+									className={selectBox ? 'visible' : 'invisible'}
+									onClick={() => {
+										setSelectBox(false);
 
-									{
-										onSortSecondClick
-											? PostQueryApi(`/api/product/productList`, {
-													page,
-													price,
-													bigCategoryId,
-													smallCategoryId,
-											  }).then(res => setNewProduct(res.data.productData))
-											: PostQueryApi(`/api/product/productList`, {
-													page,
-													bigCategoryId,
-													smallCategoryId,
-											  }).then(res => setNewProduct(res.data.productData));
-									}
-									setOnSortClick(false);
-								}}
-							>
-								<span className="select-medium">
-									{smallCategory[bigCategoryId - 1][selectSmallCateId]}
-								</span>
-								<span className="select-medium-button">&#160;X</span>
-							</div>
+										{
+											//params price가 적용돼 있다면
+											onSortSecondClick
+												? PostQueryApi(`/api/product/productList`, {
+														price,
+														bigCategoryId,
+												  }).then(
+														res => setNewProduct(res.data.productData),
+														navigate({
+															pathname: `/products`,
+															search: `bigCategoryId=${bigCategoryId}&price=${price}`,
+														}),
+												  )
+												: PostQueryApi(`/api/product/productList`, {
+														bigCategoryId,
+												  }).then(
+														res => setNewProduct(res.data.productData),
+														navigate({
+															pathname: `/products`,
+															search: `bigCategoryId=${bigCategoryId}`,
+														}),
+												  );
+										}
+										setOnSortClick(false);
+									}}
+								>
+									<span className="select-medium">
+										{smallCategory[bigCategoryId - 1][selectSmallCate]}
+									</span>
+									<span className="select-medium-button">&#160;X</span>
+								</div>
+							) : null}
+
 							<div
 								className={secondSelectBox ? 'visible' : 'invisible'}
 								onClick={() => {
 									setSecondSelectBox(false);
-									const params = {
-										page,
-										// price,
-										bigCategoryId,
-										smallCategoryId,
-									};
 
-									{
-										onSortClick
-											? PostQueryApi(`/api/product/productList`, params).then(res =>
-													setNewProduct(res.data.productData),
-											  )
-											: navigate('/');
-									}
+									//smallCate가 선택되어 있다면
+									onSortClick
+										? PostQueryApi(`/api/product/productList`, {
+												bigCategoryId,
+												smallCategoryId,
+										  }).then(
+												res => setNewProduct(res.data.productData),
+												navigate({
+													pathname: `/products`,
+													search: `bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}`,
+												}),
+										  )
+										: PostQueryApi(`/api/product/productList`, { bigCategoryId }).then(
+												res => setNewProduct(res.data.productData),
+												navigate({
+													pathname: `/products`,
+													search: `bigCategoryId=${bigCategoryId}`,
+												}),
+										  );
+
 									setOnSortSecondClick(false);
 								}}
 							>
@@ -543,13 +531,13 @@ const Main = () => {
 						<Items>
 							<SortBox>
 								<div>
-									<span className="sort" onClick={() => onSortPriceUp()}>
+									<span className="sort" onClick={() => onMainSort(1)}>
 										낮은 가격순
 									</span>
-									<span className="sort" onClick={() => onSortPriceDown()}>
+									<span className="sort" onClick={() => onMainSort(2)}>
 										높은 가격순
 									</span>
-									<span className="sort" onClick={() => onSortComments()}>
+									<span className="sort" onClick={() => onMainSort(3)}>
 										후기순
 									</span>
 								</div>
@@ -558,18 +546,7 @@ const Main = () => {
 							<ListBox>
 								<ul className="list_item">
 									<Routes>
-										<Route
-											exact
-											path="/"
-											element={
-												<ShowList
-													product={product}
-													// page={page}
-													// bigCategoryId={bigCategoryId}
-													// smallCategoryId={smallCategoryId}
-												/>
-											}
-										></Route>
+										<Route exact path="/" element={<ShowList product={product} />}></Route>
 										<Route
 											path="/products"
 											element={<NewList product={product} newProduct={newProduct} />}
@@ -579,6 +556,7 @@ const Main = () => {
 							</ListBox>
 						</Items>
 					</ItemSection>
+					<Footer></Footer>
 				</MainContainer>
 			</ScrollContainer>
 		</>
