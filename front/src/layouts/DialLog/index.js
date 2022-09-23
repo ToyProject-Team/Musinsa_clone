@@ -1,14 +1,28 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Btm, Filter } from './styles';
 import { BiShoppingBag, BiHomeCircle, BiHomeHeart } from 'react-icons/bi';
 import { BsShare } from 'react-icons/bs';
 import { TbArrowBigUpLine, TbArrowBigDownLine } from 'react-icons/tb';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import UrlCopyModal from 'components/Modals/UrlCopyModal';
 
 const DialLog = () => {
+	const saveUrl = useLocation();
+
 	// 다이얼 로그
-	const [basic, setBasic] = useState(true);
+	const [basic, setBasic] = useState({
+		home: true,
+		cart: true,
+	});
+
+	useEffect(() => {
+		const { pathname } = saveUrl;
+		if (pathname === '/') setBasic(pre => ({ ...pre, home: false }));
+		else setBasic(pre => ({ ...pre, home: true }));
+
+		if (pathname === '/mypage/cart') {
+		}
+	}, []);
 
 	// url 모달
 	const [modalAuth, setModalAuth] = useState(false);
@@ -40,21 +54,27 @@ const DialLog = () => {
 			<Filter>
 				<div
 					style={
-						basic
+						basic.home
 							? { backgroundColor: 'white' }
 							: { boxShadow: 'inset 0px 0px 4px 1px rgba(0,0,255,0.5)' }
 					}
 				>
 					<Link to="/">
-						<button type="button" onClick={() => setBasic(e => !e)}>
-							{basic ? <BiHomeCircle /> : <BiHomeHeart style={{ color: 'blue' }} />}
+						<button type="button">
+							{basic.home ? <BiHomeCircle /> : <BiHomeHeart style={{ color: 'blue' }} />}
 						</button>
 					</Link>
 				</div>
-				<div>
+				<div
+					style={
+						basic.cart
+							? { backgroundColor: 'white' }
+							: { boxShadow: 'inset 0px 0px 4px 1px rgba(0,0,255,0.5)' }
+					}
+				>
 					<Link to="/mypage/cart">
 						<button type="button">
-							<BiShoppingBag />
+							{basic.cart ? <BiShoppingBag /> : <BiShoppingBag style={{ color: 'blue' }} />}
 						</button>
 					</Link>
 				</div>

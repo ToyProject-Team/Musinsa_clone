@@ -58,7 +58,7 @@ function App() {
 					<Route path="find/*" element={<Find />} /> {/* => 아이디 패스워드 찾기 페이지 */}
 					<Route path="detail/*" element={<Dtail />} /> {/* => 상세페이지 */}
 					<Route path="mypage/*" element={<MyPage />} /> {/* => 마이페이지 */}
-					<Route path="kakao/oauth/callback" element={<Kakao />} /> {/* => 카카오 로그인 페이지 */}
+					<Route path="auth/kakao/callback" element={<Kakao />} /> {/* => 카카오 로그인 페이지 */}
 					{/* 이용 약관 페이지 */}
 					<Route path="signup/agreement/agree" element={<Agree />} />
 					<Route path="signup/agreement/terms" element={<Terms />} />
