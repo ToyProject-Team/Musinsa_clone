@@ -259,8 +259,8 @@ export const HUser = styled.div`
 		}
 	}
 
-	& div:last-of-type:hover {
-			background: linear-gradient(to right, #6666ff, #0099ff, #00ff00, #ff3399, #6666ff);
+	& .logOut:hover {
+			background: linear-gradient(to right, #833ab4, #fd1d1d, #fcb045, #B3FFAB, #12FFF7);
 			-webkit-background-clip: text;
 			background-clip: text;
 			color: transparent;
@@ -274,7 +274,7 @@ export const HUser = styled.div`
 				right: -3px;
 				bottom: -3px;
 				border-radius: 4px;
-				background: linear-gradient(120deg, #00f260, #0575e6, #00f260);
+				background: linear-gradient(120deg, #FEAC5E, #C779D0, #fcb045);
 				background-size: 300% 300%;
 				clip-path: polygon(
 					0% 100%,
@@ -292,7 +292,6 @@ export const HUser = styled.div`
 			}
 	}
 	
-	${'' /* &.logOut */}
 `;
 
 export const CountNum = styled.span`

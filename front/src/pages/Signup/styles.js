@@ -1,4 +1,56 @@
 import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
+
+/* Keyframes */
+const boxShadow = keyframes`
+  25%, 50%, 75% {
+	box-shadow: 0 0 0px 0px #0078ff;
+	border: 0;
+  }
+  15%, 35%, 65%, 100% {
+	border: 1px solid #0078ff;
+    box-shadow: 0 0 3px 1px #0078ff;
+  }
+`;
+const boxShadow_delay = keyframes`
+  0% {
+	border: 1px solid #0078ff;
+    box-shadow: 0 0 3px 1px #0078ff;
+  }
+  100% {
+	box-shadow: 0 0 0px 0px #0078ff;
+	border: 0;
+	visibility: hidden;
+  }
+`;
+
+const tooltip = keyframes`
+  25%, 75% {
+    transform: translate3d(0, -8px, 0);
+  }
+  0%, 50%, 100% {
+    transform: translate3d(0,0,0);
+  }
+`;
+
+const tooltip2 = keyframes`
+  25%, 75% {
+    transform: rotate(45deg) translateZ(0) translate3d(-6px,-6px,0);
+  }
+  0%, 50%, 100% {
+    transform: rotate(45deg) translateZ(0) translate3d(0,0,0);
+  }
+`;
+
+const tooltip_delay = keyframes`
+  0% {
+    opacity: 1;
+  }
+  100% {
+	opacity: 0;
+	visibility: hidden;
+  }
+`;
 
 /* Styled */
 export const Container = styled.div`
@@ -199,6 +251,7 @@ export const SignupContainer = styled.div`
 	}
 
 	& > div {
+		position: relative;
 		display: flex;
 		box-sizing: border-box;
 		height: 50px;
@@ -325,6 +378,7 @@ export const SignupContainer = styled.div`
 		background-color: #e5e5e5;
 		color: #fff;
 		transition: 0.2s;
+		z-index: 10;
 		cursor: pointer;
 
 		&:hover {
@@ -474,5 +528,44 @@ export const SignupButton = styled.div`
 			color: #fff;
 			cursor: pointer;
 		}
+	}
+`;
+
+export const KakaoKeyframes = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border: 1px solid #0078ff;
+	border-radius: 5px;
+	box-shadow: 0 0 3px 1px #0078ff;
+	-webkit-animation: ${boxShadow} 1.5s ease-in-out forwards,
+		${boxShadow_delay} 1s 3s ease-in-out forwards;
+
+	&::before {
+		content: '본인인증을 진행해주시길 바랍니다.';
+		position: absolute;
+		bottom: 110%;
+		right: -15%;
+		background-color: #0078ff;
+		padding: 10px;
+		color: #fff;
+		border-radius: 5px;
+		transform: translate3d(0, -8px, 0);
+		-webkit-animation: ${tooltip} 1.5s ease forwards, ${tooltip_delay} 1s 3s ease-in-out forwards;
+		z-index: 1;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: 95%;
+		right: 8%;
+		width: 15px;
+		height: 15px;
+		background: #0078ff;
+		transform: rotate(45deg) translateZ(0) translate3d(-6px, -6px, 0);
+		-webkit-animation: ${tooltip2} 1.5s ease forwards, ${tooltip_delay} 1s 3s ease-in-out forwards;
 	}
 `;

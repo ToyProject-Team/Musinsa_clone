@@ -1,15 +1,13 @@
 import React, { useReducer, createContext, useContext } from 'react';
 
-const initialUser = {
-	login: false,
-	token: '',
-	email: '',
+const initialOffset = {
+	x: 0,
+	y: 0,
 	
 };
 
-export const LOGIN = 'LOGIN';
-export const EMAIL = 'EMAIL';
-export const USERFINDID = 'USERFINDID';
+export const posX = '';
+export const posY = '';
 
 function layOutReducer(state, action) {
 	switch (action.type) {
@@ -18,36 +16,6 @@ function layOutReducer(state, action) {
 				...state,
 				login: action.payload.login,
 				token: action.payload.token,
-			};
-
-		case PHONENUMBER:
-			return {
-				...state,
-				phoneNumber: action.payload.phoneNumber,
-			};
-
-		case PHONECHECK:
-			return {
-				...state,
-				phoneCheck: action.payload.phoneCheck,
-			};
-
-		case EMAIL:
-			return {
-				...state,
-				email: action.payload.email,
-			};
-
-		case EMAILCHECK:
-			return {
-				...state,
-				emailCheck: action.payload.emailCheck,
-			};
-
-		case USERFINDID:
-			return {
-				...state,
-				userFindId: action.payload.userFindId,
 			};
 
 		default:
