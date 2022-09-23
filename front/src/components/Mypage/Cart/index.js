@@ -10,6 +10,7 @@ import { thousandComma } from 'utils/thousandComma';
 import { CheckLabel } from './Table/styles';
 import { getData } from 'utils/getData';
 import axios from 'axios';
+import { GetTokenApi } from 'utils/api';
 
 const dummyCart = {
 	exCart: [
@@ -21,29 +22,29 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
-			productImg : {
-				src: "https://image.msscdn.net/images/goods_img/20220314/2417166/2417166_2_500.jpg?t=20220721110015"
+			productImg: {
+				src: 'https://image.msscdn.net/images/goods_img/20220314/2417166/2417166_2_500.jpg?t=20220721110015',
 			},
-			ProductMainTags : [
+			ProductMainTags: [
 				{
-					name: "XL",
-					ProductSubTags : [
-						{
-							name: "딥레드",
-							amount: 4
-						}
-					]
-				},{
-					name: "L",
+					name: 'XL',
 					ProductSubTags: [
 						{
-							name: "블루",
-							amount: 1
-						}
-					]
-				}
-			]
-			
+							name: '딥레드',
+							amount: 4,
+						},
+					],
+				},
+				{
+					name: 'L',
+					ProductSubTags: [
+						{
+							name: '블루',
+							amount: 1,
+						},
+					],
+				},
+			],
 		},
 		{
 			id: '5',
@@ -53,32 +54,33 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
-			productImg : {
-				src: "https://image.msscdn.net/images/goods_img/20191115/1226331/1226331_1_500.jpg?t=20191115100755"
+			productImg: {
+				src: 'https://image.msscdn.net/images/goods_img/20191115/1226331/1226331_1_500.jpg?t=20191115100755',
 			},
-			ProductMainTags : [
+			ProductMainTags: [
 				{
-					name: "S",
-					ProductSubTags : [
+					name: 'S',
+					ProductSubTags: [
 						{
-							name: "딥레드",
-							amount: 4
+							name: '딥레드',
+							amount: 4,
 						},
 						{
-							name: "오렌지",
-							amount: 0
-						}
-					]
-				},{
-					name: "L",
-					ProductSubTags : [
+							name: '오렌지',
+							amount: 0,
+						},
+					],
+				},
+				{
+					name: 'L',
+					ProductSubTags: [
 						{
-							name: "카키",
-							amount: 2
-						}
-					]
-				}
-			]
+							name: '카키',
+							amount: 2,
+						},
+					],
+				},
+			],
 		},
 		{
 			id: '6',
@@ -88,32 +90,33 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
-			productImg : {
-				src: "https://image.msscdn.net/images/goods_img/20220511/2552036/2552036_2_500.jpg?t=20220721135347"
+			productImg: {
+				src: 'https://image.msscdn.net/images/goods_img/20220511/2552036/2552036_2_500.jpg?t=20220721135347',
 			},
-			ProductMainTags : [
+			ProductMainTags: [
 				{
-					name: "XL",
-					ProductSubTags : [
+					name: 'XL',
+					ProductSubTags: [
 						{
-							name: "핑크",
-							amount: 4
+							name: '핑크',
+							amount: 4,
 						},
 						{
-							name: "오렌지",
-							amount: 2
-						}
-					]
-				},{
-					name: "L",
-					ProductSubTags : [
+							name: '오렌지',
+							amount: 2,
+						},
+					],
+				},
+				{
+					name: 'L',
+					ProductSubTags: [
 						{
-							name: "오렌지레드",
-							amount: 3
-						}
-					]
-				}
-			]
+							name: '오렌지레드',
+							amount: 3,
+						},
+					],
+				},
+			],
 		},
 		{
 			id: '7',
@@ -123,32 +126,33 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
-			productImg : {
-				src: "https://image.msscdn.net/images/goods_img/20211210/2265537/2265537_1_500.jpg?t=20211210172639"
+			productImg: {
+				src: 'https://image.msscdn.net/images/goods_img/20211210/2265537/2265537_1_500.jpg?t=20211210172639',
 			},
-			ProductMainTags : [
+			ProductMainTags: [
 				{
-					name: "L",
-					ProductSubTags : [
+					name: 'L',
+					ProductSubTags: [
 						{
-							name: "딥레드",
-							amount: 4
+							name: '딥레드',
+							amount: 4,
 						},
 						{
-							name: "오렌지",
-							amount: 2
-						}
-					]
-				},{
-					name: "XL",
-					ProductSubTags : [
+							name: '오렌지',
+							amount: 2,
+						},
+					],
+				},
+				{
+					name: 'XL',
+					ProductSubTags: [
 						{
-							name: "카키",
-							amount: 2
-						}
-					]
-				}
-			]
+							name: '카키',
+							amount: 2,
+						},
+					],
+				},
+			],
 		},
 		{
 			id: '8',
@@ -158,32 +162,33 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
-			productImg : {
-				src: "https://image.msscdn.net/images/goods_img/20211223/2280117/2280117_1_500.jpg?t=20211223113028"
+			productImg: {
+				src: 'https://image.msscdn.net/images/goods_img/20211223/2280117/2280117_1_500.jpg?t=20211223113028',
 			},
-			ProductMainTags : [
+			ProductMainTags: [
 				{
-					name: "XL",
-					ProductSubTags : [
+					name: 'XL',
+					ProductSubTags: [
 						{
-							name: "레드",
-							amount: 4
+							name: '레드',
+							amount: 4,
 						},
 						{
-							name: "레몬",
-							amount: 2
-						}
-					]
-				},{
-					name: "XXL",
-					ProductSubTags : [
+							name: '레몬',
+							amount: 2,
+						},
+					],
+				},
+				{
+					name: 'XXL',
+					ProductSubTags: [
 						{
-							name: "브라운",
-							amount: 2
-						}
-					]
-				}
-			]
+							name: '브라운',
+							amount: 2,
+						},
+					],
+				},
+			],
 		},
 		{
 			id: '9',
@@ -193,32 +198,33 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
-			productImg : {
-				src: "https://image.msscdn.net/images/goods_img/20220207/2343665/2343665_1_500.jpg"
+			productImg: {
+				src: 'https://image.msscdn.net/images/goods_img/20220207/2343665/2343665_1_500.jpg',
 			},
-			ProductMainTags : [
+			ProductMainTags: [
 				{
-					name: "L",
-					ProductSubTags : [
+					name: 'L',
+					ProductSubTags: [
 						{
-							name: "브라운",
-							amount: 4
+							name: '브라운',
+							amount: 4,
 						},
 						{
-							name: "올리브",
-							amount: 2
-						}
-					]
-				},{
-					name: "L",
-					ProductSubTags : [
+							name: '올리브',
+							amount: 2,
+						},
+					],
+				},
+				{
+					name: 'L',
+					ProductSubTags: [
 						{
-							name: "블랙",
-							amount: 2
-						}
-					]
-				}
-			]
+							name: '블랙',
+							amount: 2,
+						},
+					],
+				},
+			],
 		},
 		{
 			id: '10',
@@ -228,32 +234,33 @@ const dummyCart = {
 			deliveryFrom: true,
 			deliveryWay: false,
 			deliveryCompany: 'CJ대한통운',
-			productImg : {
-				src: "https://image.msscdn.net/images/goods_img/20220727/2684483/2684483_1_500.jpg?t=20220727135217"
+			productImg: {
+				src: 'https://image.msscdn.net/images/goods_img/20220727/2684483/2684483_1_500.jpg?t=20220727135217',
 			},
-			ProductMainTags : [
+			ProductMainTags: [
 				{
-					name: "S",
-					ProductSubTags : [
+					name: 'S',
+					ProductSubTags: [
 						{
-							name: "딥레드",
-							amount: 4
+							name: '딥레드',
+							amount: 4,
 						},
 						{
-							name: "오렌지",
-							amount: 2
-						}
-					]
-				},{
-					name: "L",
-					ProductSubTags : [
+							name: '오렌지',
+							amount: 2,
+						},
+					],
+				},
+				{
+					name: 'L',
+					ProductSubTags: [
 						{
-							name: "카키",
-							amount: 2
-						}
-					]
-				}
-			]
+							name: '카키',
+							amount: 2,
+						},
+					],
+				},
+			],
 		},
 	],
 };
@@ -261,30 +268,33 @@ const dummyCart = {
 function Cart() {
 	const [cartList, setCartList] = useState([]);
 	const [data, setData] = useState([]);
-	console.log('cart', cartList);
 	// console.log('data', data);
 
 	const addData = [
 		{
 			check: false,
-			count: 1
-		}
+			count: 1,
+		},
 	];
 
 	const [changeData, setChangeData] = useState(dummyCart.exCart);
 
 	//장바구니 리스트 가져오기
 	useEffect(() => {
-		axios
-			.get('http://141.164.48.244/api/shoppingBasket/shoppingList', {
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: loginToken.accessToken,
-				},
-			})
-			.then(res => {
-				setCartList(res.data.exCart);
-			});
+		GetTokenApi('/api/shoppingBasket/shoppingList', loginToken.accessToken).then(res => {
+			setCartList(res.data);
+		});
+		// axios
+		// 	.get('http://141.164.48.244/api/shoppingBasket/shoppingList', {
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 			Authorization: loginToken.accessToken,
+		// 		},
+		// 	})
+		// 	.then(res => {
+		// 		setCartList(res.data);
+		// 		console.log('res', res);
+		// 	});
 		const dataArr = [];
 		cartList.map(list =>
 			list.ProductMainTags.map(Mainitem => Mainitem.ProductSubTags.map(item => dataArr.push(item))),
@@ -292,15 +302,13 @@ function Cart() {
 		setData(dataArr);
 		// dummyCart.ProductMainTags.ProductSubTags.concat(addData);
 		// setChangeData(changeData.map(i => i.ProductMainTags.map(v => v.ProductSubTags.concat(addData))));
-		
+
 		// setChangeData([changeData.concat(a.concat(addData))]);
 	}, []);
-
 	const a = changeData.map(i => i.ProductMainTags.map(v => v.ProductSubTags.concat(addData)));
-	console.log('a',a);
-
-	console.log(changeData);
-
+	// console.log('a',a);
+	console.log('cart', cartList);
+	// console.log(changeData);
 
 	const [checkBox, setCheckBox] = useState(false);
 	const [sum, setSum] = useState(0);
@@ -330,9 +338,7 @@ function Cart() {
 
 	const checkItem = useCallback(() => {
 		setCheckBox(check => !check);
-		setCheckedList(
-			a.map(item => ({ ...item, check: !checkBox }))
-		);
+		setCheckedList(a.map(item => ({ ...item, check: !checkBox })));
 	}, [cartList, checkBox]);
 
 	console.log('checklist', checkedList);
@@ -434,25 +440,16 @@ function Cart() {
 								<th>&nbsp;</th>
 							</tr>
 						</thead>
-						{dummyCart.exCart.map(list =>
-							list.ProductMainTags.map(Mainitem =>
-								Mainitem.ProductSubTags.map((item, index) => (
-									<CartTable
-										key={index}
-										data={data}
-										setData={setData}
-										item={item}
-										list={list}
-										Mainitem={Mainitem}
-										checkedList={checkedList}
-										setCheckedList={setCheckedList}
-									/>
-								)),
-							),
-						)}
-						{/* {cartList.map((item, index) => (
-							<CartTable key={index} data={data} setData={setData} item={item} />
-						))} */}
+						{cartList.map((item, index) => (
+							<CartTable
+								key={index}
+								data={data}
+								setData={setData}
+								item={item}
+								checkedList={checkedList}
+								setCheckedList={setCheckedList}
+							/>
+						))}
 					</OrderTable>
 					<CartPayment>
 						<li>
