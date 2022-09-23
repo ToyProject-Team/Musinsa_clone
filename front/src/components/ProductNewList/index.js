@@ -72,10 +72,9 @@ const NewList = props => {
 								</p>
 								<div className="option_list">
 									<ul style={selected[idx] ? { display: 'block' } : { display: 'none' }}>
-										{data.ProductSizes.map(data => (
+										{data.ProductMainTags.map(data => (
 											<li className={selected[idx] ? 'open' : 'close'}>
-												<span>{data.size}</span>
-												<span>{data.amount}</span>
+												<span>{data.name}</span>
 											</li>
 										))}
 									</ul>

@@ -339,8 +339,7 @@ const Main = () => {
 							<div
 								className="page_title"
 								onClick={() => {
-									// pageTest();
-									navigate(`/`);
+									navigate('/');
 								}}
 							>
 								{bigCategory[bigCategoryId - 1]}
