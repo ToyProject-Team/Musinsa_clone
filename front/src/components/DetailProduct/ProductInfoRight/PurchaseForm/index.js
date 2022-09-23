@@ -189,7 +189,16 @@ const PurchaseForm = () => {
 				prev = {
 					...prev,
 					[option_1]: prev[option_1].map(v =>
-						v[option_2] ? { ...v, [option_2]: v[option_2] + 1 } : v,
+						v[option_2]
+							? {
+									...v,
+									[option_2]:
+										v[option_2] ===
+										Number(option_2.slice(option_2.indexOf('(') + 1, option_2.indexOf('개남음')))
+											? (alert('상품을 추가하실수 없습니다.'), v[option_2])
+											: v[option_2] + 1,
+							  }
+							: v,
 					),
 				};
 				return prev;
