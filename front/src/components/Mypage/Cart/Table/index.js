@@ -8,7 +8,7 @@ import OrderModal from 'components/Modals/OrderModal';
 import Order from 'components/Order';
 import { Link } from 'react-router-dom';
 
-function CartTable({ data, setData, item, checkedList, setCheckedList }) {
+function CartTable({ data, setData, item, setCartList, cartList }) {
 	const [modalOrder, setModalOrder] = useState(false);
 	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);
@@ -16,45 +16,72 @@ function CartTable({ data, setData, item, checkedList, setCheckedList }) {
 	// 수량 기입
 	const handleChange = useCallback(
 		({ target: { value } }) => {
-			setData(prev => prev.map(v => (v.id === item.id ? { ...v, count: Number(value) } : v)));
+			setCartList(prev =>
+				prev.map(v =>
+					v.Product.id === item.Product.id ? { ...v, packingAmount: Number(value) } : v,
+				),
+			);
 		},
-		[data],
+		[cartList],
 	);
 
 	// 수량 증가
 	const plusCount = useCallback(() => {
-		setData(prev => prev.map(v => (v.id === item.id ? { ...v, count: v.count + 1 } : v)));
-	}, [data]);
+		setCartList(prev =>
+			prev.map(v =>
+				v.Product.id === item.Product.id ? { ...v, packingAmount: v.packingAmount + 1 } : v,
+			),
+		);
+	}, [cartList]);
 
 	// 수량 감소
 	const minusCount = useCallback(() => {
 		if (item.count === 1) {
 			alert('수량을 줄일 수 없습니다.');
 		} else {
-			setData(prev => prev.map(v => (v.id === item.Product.id ? { ...v, count: v.count - 1 } : v)));
+			setCartList(prev =>
+				prev.map(v =>
+					v.id === item.Product.id ? { ...v, packingAmount: v.packingAmount - 1 } : v,
+				),
+			);
 		}
-	}, [data]);
+	}, [cartList]);
 
 	// 체크
 	const checkItem = useCallback(() => {
-		setCheckedList(prev => prev.map(v => (v.id === item.Product.id ? { ...v, check: !v.check } : v)));
-	}, [data]);
+		setCartList(prev =>
+			prev.map(v =>
+				// v.Product.id === item.Product.id &&
+				// v.packingSize === item.packingSize &&
+				// v.packingColor === item.packingColor
+				// 	? { ...v, check: !v.check }
+				// 	: v,
+				v.Product.id === item.Product.id
+					? v.packingSize === item.packingSize
+						? v.packingColor === item.packingColor
+							? { ...v, check: !v.check }
+							: v
+						: v
+					: v,
+			),
+		);
+	}, [cartList]);
 
-	const onChecked = useCallback(
-		(checked, id) => {
-			if (checked) {
-				setCheckedList([...checkedList, id]);
-			} else {
-				setCheckedList(checkedList.filter(el => el !== id));
-			}
-		},
-		[checkedList],
-	);
+	// const onChecked = useCallback(
+	// 	(checked, id) => {
+	// 		if (checked) {
+	// 			setCheckedList([...checkedList, id]);
+	// 		} else {
+	// 			setCheckedList(checkedList.filter(el => el !== id));
+	// 		}
+	// 	},
+	// 	[checkedList],
+	// );
 
 	// 삭제
 	const removeItem = useCallback(() => {
-		setData(prev => prev.filter(v => v.id !== item.Product.id));
-	}, [data]);
+		setCartList(prev => prev.filter(v => v.Product.id !== item.Product.id));
+	}, [cartList]);
 
 	// 결제 모달창
 	const onCloseModal = useCallback(() => {
@@ -133,7 +160,9 @@ function CartTable({ data, setData, item, checkedList, setCheckedList }) {
 								<td>
 									<div className="input_amount">
 										<button value={1} onClick={minusCount}>
-											<FiMinus style={item.packingAmount === 1 ? { color: '#ddd' } : { color: '#777' }} />
+											<FiMinus
+												style={item.packingAmount === 1 ? { color: '#ddd' } : { color: '#777' }}
+											/>
 										</button>
 										<input type="text" value={item.packingAmount} onChange={handleChange}></input>
 										<button value={1} onClick={plusCount}>
@@ -144,7 +173,11 @@ function CartTable({ data, setData, item, checkedList, setCheckedList }) {
 								<td>{thousandComma(item.Product.productPrice * item.packingAmount)}원</td>
 								<td>
 									택배배송 <br />
-									<strong>{item.Product.productPrice * item.packingAmount > 30000 ? '배송비 무료' : `${dlvChr}원`}</strong>
+									<strong>
+										{item.Product.productPrice * item.packingAmount > 30000
+											? '배송비 무료'
+											: `${dlvChr}원`}
+									</strong>
 								</td>
 								<td>
 									<div>
@@ -169,7 +202,8 @@ function CartTable({ data, setData, item, checkedList, setCheckedList }) {
 					onCloseModal={onCloseModal}
 					onClickConfirm={onClickOrder}
 					price={thousandComma(
-						item.Product.productPrice * item.packingAmount + (item.Product.productPrice * item.packingAmount > 30000 ? 0 : 3000),
+						item.Product.productPrice * item.packingAmount +
+							(item.Product.productPrice * item.packingAmount > 30000 ? 0 : 3000),
 					)}
 					pay={pay}
 					setPay={setPay}
