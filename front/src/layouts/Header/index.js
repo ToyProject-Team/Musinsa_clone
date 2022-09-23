@@ -9,7 +9,10 @@ import { PostHeaderApi } from 'utils/api';
 const Header = () => {
 	const [login, setLogin] = useState(getData());
 	const [cartNum, setCartNum] = useState(0);
-
+	const [search, setSearch] = useState("");
+	const onChange = (e) => {
+			setSearch(e.target.value)
+		}
 	const deleteLogout = useCallback(() => {
 		PostHeaderApi('/api/auth/logout', 'Authorization', login.accessToken)
 			.then(() => {
@@ -90,7 +93,13 @@ const Header = () => {
 						</div>
 					</HUser>
 				)}
+				
 			</HDiv>
+			<article style={{width: "200px", height: "200px", backgroundColor: "white"}}>
+					<dl>
+						<dd></dd>
+					</dl>
+				</article>
 		</HContainer>
 	);
 };

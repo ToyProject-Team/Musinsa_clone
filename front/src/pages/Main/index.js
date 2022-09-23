@@ -29,8 +29,6 @@ import { URLquery } from 'utils/URLquery';
 
 const Main = () => {
 
-	
-
 	const navigate = useNavigate();
 	
 	const ShowList = loadable(() => import('components/ProductList'), {

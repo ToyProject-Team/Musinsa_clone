@@ -11,15 +11,6 @@ const Sidebar = props => {
 
 	const navigate = useNavigate();
 
-	// Main으로 idx값 보내고, url에 쿼리스트링 추가하는 함수
-	// const sendBigCate = idx => {
-	// 	props.setBigCategoryId(idx + 1);
-	// 	navigate({
-	// 		pathname: `/products`,
-	// 		search: `bigCategoryId=${idx + 1}`,
-	// 	});
-	// };
-
 	const sendSmallCate = idx => {
 		props.setSmallCategoryId(idx + 1);
 		navigate({
@@ -31,8 +22,17 @@ const Sidebar = props => {
 	const onClickCategory = useCallback(idx => {
 		setOpen(prev => {
 			const newArray = [...prev];
-			newArray[idx] = !newArray[idx];
+			// console.log(newArray[3], idx)
+			// else
+			newArray.map((e,idx) => {
+				let data = e
+				console.log(data)
+			})
+			// newArray[idx] = !newArray[idx];
+			// console.log(1234, 1234,newArray)
+
 			return newArray;
+			
 		});
 		//Category클릭시 Main에 Category Id전달
 		props.setBigCategoryId(idx + 1);

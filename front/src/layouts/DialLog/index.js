@@ -20,8 +20,8 @@ const DialLog = () => {
 		if (pathname === '/') setBasic(pre => ({ ...pre, home: false }));
 		else setBasic(pre => ({ ...pre, home: true }));
 
-		if (pathname === '/mypage/cart') {
-		}
+		if (pathname === '/mypage/cart') setBasic(e => ({...e, cart: false}));
+		else setBasic(e => ({...e, cart: true})); 
 	}, []);
 
 	// url 모달
