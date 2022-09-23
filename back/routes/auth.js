@@ -196,6 +196,7 @@ router.post('/kakao', (req, res) => {
 
 router.get('/kakao/callback', async (req, res, next) => {
     try {
+        console.log(req.query)
         const user = await axios({
             method: 'get',
             url: 'https://kapi.kakao.com/v2/user/me',
@@ -210,12 +211,14 @@ router.get('/kakao/callback', async (req, res, next) => {
             JSON.stringify(randNum),
             'secret key 123',
         ).toString();
+        console.log(user.data.kakao_account.email)
 
         let userInfo = await User.findOne({
             where: {
                 socialEmail: user.data.kakao_account.email,
             },
         });
+        console.log(userInfo)
         if (userInfo) {
             res.status(200).send({ alreadyMember: true, encryptionCode });
         } else {
