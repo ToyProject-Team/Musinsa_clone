@@ -1,5 +1,5 @@
 /api/order/orderList:
-  post:
+  get:
     tags:
       - order
     summary: 주문 리스트
