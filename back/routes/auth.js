@@ -72,6 +72,7 @@ router.post('/signup', async (req, res, next) => {
       }
     }
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
+  
     const newUser = await User.create({
       loginId: req.body.loginId,
       password: hashedPassword,
@@ -207,6 +208,7 @@ router.get('/kakao/callback', async (req, res, next) => {
       }, //헤더에 내용을 보고 보내주겠다.
     })
     const randNum = Math.floor(Math.random() * (10000 - 1 + 1)) + 1
+    console.log(user.data.kakao_account.email)
     await redisClient.set(randNum, user.data.kakao_account.email)
     await redisClient.expire(randNum, 1200)
     const encryptionCode = await CryptoJS.AES.encrypt(
