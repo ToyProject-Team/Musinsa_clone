@@ -35,7 +35,7 @@
                                         example: 'Car'
                                     productInfo:
                                         type: string
-                                        exmaple: 'navigate mobile firewall'
+                                        example: 'navigate mobile firewall'
                                     productPrice:
                                         type: number
                                         example: 251680
