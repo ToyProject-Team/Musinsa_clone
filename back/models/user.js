@@ -1,5 +1,5 @@
 const DataTypes = require('sequelize');
-const { Model } = DataTypes
+const { Model } = DataTypes;
 
 module.exports = class User extends Model {
     static init(sequelize) {
@@ -9,24 +9,24 @@ module.exports = class User extends Model {
                     type: DataTypes.STRING(100),
                     allowNull: true,
                     unique: 'loginId',
-                    fields: 'loginId'
+                    fields: 'loginId',
                 },
                 email: {
                     type: DataTypes.STRING(200),
                     allowNull: true,
-                    unique: true
+                    unique: true,
                 },
                 password: {
                     type: DataTypes.STRING(200),
-                    allowNull: true
+                    allowNull: true,
                 },
                 nickname: {
                     type: DataTypes.STRING(30),
-                    unique: true
+                    unique: true,
                 },
                 phoneNumber: {
                     type: DataTypes.STRING(30),
-                    allowNull: true
+                    allowNull: true,
                 },
                 address: {
                     type: DataTypes.STRING(100),
@@ -38,30 +38,29 @@ module.exports = class User extends Model {
                 },
                 agreement: {
                     type: DataTypes.BOOLEAN,
-                    allowNull: true, 
+                    allowNull: true,
                 },
                 questionType: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: true, 
+                    allowNull: true,
                 },
                 questionAnswer: {
                     type: DataTypes.STRING(100),
-                    allowNull: true, 
+                    allowNull: true,
                 },
                 rank: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: true
+                    allowNull: true,
                 },
                 recipientNumber: {
-                    type: DataTypes.STRING(50)
+                    type: DataTypes.STRING(50),
                 },
                 recipient: {
-                    type: DataTypes.STRING(50)
+                    type: DataTypes.STRING(50),
                 },
                 addressNumber: {
-                    type: DataTypes.STRING(50)
-                }
-
+                    type: DataTypes.STRING(50),
+                },
             },
             {
                 modelName: 'User',
@@ -69,33 +68,33 @@ module.exports = class User extends Model {
                 paranoid: true,
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
-                sequelize
-            }
-        )
+                sequelize,
+            },
+        );
     }
     static associate(db) {
         db.User.belongsToMany(db.Product, {
             through: db.Order,
-            as: 'myOrder'
-        })
+            as: 'myOrder',
+        });
         db.User.belongsToMany(db.Product, {
-            through: 'MyCart',
-            as: 'myCart'
-        })
+            through: db.MyCart,
+            as: 'myCart',
+        });
         db.User.belongsToMany(db.Product, {
             through: db.Comment,
-            as: "commented"
-        })
+            as: 'commented',
+        });
         db.User.belongsToMany(db.Product, {
             through: 'ProductThumbsUp',
-            as: 'likeIt'
-        })
+            as: 'likeIt',
+        });
         db.User.belongsToMany(db.Product, {
             through: 'Views',
-            as: 'Viewer'
-        })
+            as: 'Viewer',
+        });
         db.User.belongsToMany(db.Product, {
-            through: 'isLikes'
-        })
+            through: 'isLikes',
+        });
     }
-}
+};
