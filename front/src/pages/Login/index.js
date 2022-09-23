@@ -24,7 +24,6 @@ import { URLquery } from 'utils/URLquery';
 const LogIn = () => {
 	const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API;
 	const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
-	console.log(REST_API_KEY, REDIRECT_URI);
 	const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
 	const navigate = useNavigate();
@@ -109,12 +108,6 @@ const LogIn = () => {
 		[email, password, autoLoginCheck],
 	);
 
-	const KakaoLogin = useCallback(async () => {
-		// const KAKAO_AUTH_URL = await GetApi('/api/auth/kakao');
-
-		window.location.href = KAKAO_AUTH_URL;
-	}, []);
-
 	if (login) {
 		return <Navigate to="/" />;
 	}
@@ -174,7 +167,6 @@ const LogIn = () => {
 					<div>
 						<KakaoLogIn
 							className="login-button__item login-button__item--kakao"
-							// onClick={KakaoLogin}
 							href={KAKAO_AUTH_URL}
 						>
 							<KakaoIcon />
