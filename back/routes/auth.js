@@ -196,7 +196,7 @@ router.post('/kakao', (req, res) => {
 
 router.get('/kakao/callback', async (req, res, next) => {
     try {
-        console.log("DASdasdasd")
+        console.log(req.query)
         const user = await axios({
             method: 'get',
             url: 'https://kapi.kakao.com/v2/user/me',
