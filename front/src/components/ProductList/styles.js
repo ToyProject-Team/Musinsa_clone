@@ -1,5 +1,42 @@
 import styled from '@emotion/styled';
 
+export const PaginationWapper = styled.div`
+	text-align: center;
+	// height: 0;
+
+	.pagination {
+		display: flex;
+		position: relative;
+		// top: -41px;
+		height: 40px;
+		justify-content: flex-end;
+
+		li {
+			display: inline-block;
+			width: 30px;
+			justify-content: center;
+			align-items: center;
+			padding-top: 12px;
+			border-left: 1px solid #ddd;
+			font-size: 1rem;
+			&:hover {
+				background-color: #f2f2f2;
+			}
+			a {
+				text-decoration: none;
+				color: gray;
+				font-size: 1rem;
+				font-weight: bold;
+			}
+		}
+		.active {
+			a {
+				color: black;
+			}
+		}
+	}
+`;
+
 export const ListOuter = styled.li`
 	position: relative;
 	min-width: 150px;

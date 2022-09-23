@@ -22,7 +22,8 @@ const Sidebar = props => {
 		});
 	};
 
-	const sendBigCate = idx => {
+	const sendBigCate = () => {
+		props.setDetect(!props.detect);
 		navigate({
 			pathname: `/products`,
 			search: `bigCategoryId=${props.bigCategoryId}`,

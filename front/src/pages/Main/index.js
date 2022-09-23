@@ -17,14 +17,14 @@ import {
 import { Router, Route, Routes, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
-import Header from 'layouts/Header';
 import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
 // import InfiniteScroll from 'react-infinite-scroll-component';
+import Header from 'layouts/Header';
 import Sidebar from 'layouts/Sidebar';
 import Footer from 'layouts/Footer';
-import { GiConsoleController } from 'react-icons/gi';
 import DialLog from 'layouts/DialLog';
+
 import qs from 'qs';
 import { URLquery } from 'utils/URLquery';
 
@@ -50,9 +50,10 @@ const Main = () => {
 	const selectBigCate = Object.values(query)[0] * 1;
 	const selectSmallCate = Object.values(query)[1] * 1;
 
+	//페이지네이션
+
 	//params
 	// const [mainSort, setMainSort] = useState(0);
-	// const [page, setPage] = useState(1);
 	const [price, setPrice] = useState(0);
 	// const [priceMin, setPriceMin] = useState(0);
 	// const [priceMax, setPriceMax] = useState(100000000);
@@ -67,13 +68,16 @@ const Main = () => {
 		);
 	}, []);
 
+	const [detect, setDetect] = useState(true);
+
 	//Sidebar에서 카테고리 선택했을 때 데이터 받아오기
+	//url스트링 반영하면 다른 요소에 영향줘서 bigCate로 바꿈(mainSort에)
 	useEffect(() => {
 		if (selectBigCate >= 1)
 			PostQueryApi('/api/product/productList', {
 				bigCategoryId: selectBigCate,
 			}).then(res => setNewProduct(res.data.productData));
-	}, [selectBigCate]);
+	}, [bigCategoryId, detect]);
 
 	useEffect(() => {
 		if (selectSmallCate >= 1)
@@ -81,7 +85,7 @@ const Main = () => {
 				bigCategoryId: selectBigCate,
 				smallCategoryId: selectSmallCate,
 			}).then(res => setNewProduct(res.data.productData));
-	}, [selectSmallCate]);
+	}, [smallCategoryId]);
 
 	//중분류 전체보기 - bigCate만 적용
 	const onReset = () => {
@@ -317,6 +321,8 @@ const Main = () => {
 					setSmallCategoryId={setSmallCategoryId}
 					setOnSortClick={setOnSortClick}
 					setSelectBox={setSelectBox}
+					detect={detect}
+					setDetect={setDetect}
 				></Sidebar>
 				<MainContainer>
 					{/* 카테고리 */}
@@ -442,42 +448,45 @@ const Main = () => {
 
 					<ItemSection>
 						<SelectBox>
-							<div
-								className={selectBox ? 'visible' : 'invisible'}
-								onClick={() => {
-									setSelectBox(false);
+							{selectSmallCate >= 1 ? (
+								<div
+									className={selectBox ? 'visible' : 'invisible'}
+									onClick={() => {
+										setSelectBox(false);
 
-									{
-										//params price가 적용돼 있다면
-										onSortSecondClick
-											? PostQueryApi(`/api/product/productList`, {
-													price,
-													bigCategoryId,
-											  }).then(
-													res => setNewProduct(res.data.productData),
-													navigate({
-														pathname: `/products`,
-														search: `bigCategoryId=${bigCategoryId}&price=${price}`,
-													}),
-											  )
-											: PostQueryApi(`/api/product/productList`, {
-													bigCategoryId,
-											  }).then(
-													res => setNewProduct(res.data.productData),
-													navigate({
-														pathname: `/products`,
-														search: `bigCategoryId=${bigCategoryId}`,
-													}),
-											  );
-									}
-									setOnSortClick(false);
-								}}
-							>
-								<span className="select-medium">
-									{smallCategory[bigCategoryId - 1][selectSmallCate]}
-								</span>
-								<span className="select-medium-button">&#160;X</span>
-							</div>
+										{
+											//params price가 적용돼 있다면
+											onSortSecondClick
+												? PostQueryApi(`/api/product/productList`, {
+														price,
+														bigCategoryId,
+												  }).then(
+														res => setNewProduct(res.data.productData),
+														navigate({
+															pathname: `/products`,
+															search: `bigCategoryId=${bigCategoryId}&price=${price}`,
+														}),
+												  )
+												: PostQueryApi(`/api/product/productList`, {
+														bigCategoryId,
+												  }).then(
+														res => setNewProduct(res.data.productData),
+														navigate({
+															pathname: `/products`,
+															search: `bigCategoryId=${bigCategoryId}`,
+														}),
+												  );
+										}
+										setOnSortClick(false);
+									}}
+								>
+									<span className="select-medium">
+										{smallCategory[bigCategoryId - 1][selectSmallCate]}
+									</span>
+									<span className="select-medium-button">&#160;X</span>
+								</div>
+							) : null}
+
 							<div
 								className={secondSelectBox ? 'visible' : 'invisible'}
 								onClick={() => {
@@ -539,9 +548,9 @@ const Main = () => {
 							</ListBox>
 						</Items>
 					</ItemSection>
+					<Footer></Footer>
 				</MainContainer>
 			</ScrollContainer>
-			<Footer></Footer>
 		</>
 	);
 };
