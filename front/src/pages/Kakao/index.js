@@ -5,6 +5,8 @@ import qs from 'qs';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GetQueryApi, KakaoGetQueryApi, PostHeaderApi } from 'utils/api';
 import { URLquery } from 'utils/URLquery';
+import { useGlobalState } from 'context/GlobalContext';
+import { getCookie } from 'utils/cookies';
 
 const Kakao = () => {
 	const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API;
@@ -15,6 +17,10 @@ const Kakao = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { code } = URLquery(location);
+
+	const autoLogin = getCookie('autoLogin');
+	console.log(autoLogin);
+
 	const getToken = async () => {
 		const payload = qs.stringify({
 			grant_type: 'authorization_code',
@@ -24,7 +30,6 @@ const Kakao = () => {
 			client_secret: CLIENT_SECRET,
 		});
 		try {
-			console.log(REDIRECT_URI);
 			// access token 가져오기
 			const res = await axios.post('https://kauth.kakao.com/oauth/token', payload);
 			const token = res.data.access_token;
@@ -41,15 +46,17 @@ const Kakao = () => {
 					.then(result => {
 						switch (result.status) {
 							case 200:
-								localStorage.setItem('data', JSON.stringify(result.data));
-								sessionStorage.removeItem('data');
+								if (autoLogin === 'true') {
+									localStorage.setItem('data', JSON.stringify(result.data));
+									sessionStorage.removeItem('data');
+								} else {
+									sessionStorage.setItem('data', JSON.stringify(result.data));
+									localStorage.removeItem('data');
+								}
 
-								const query = URLquery(location);
-								console.log(query.redirect);
-							// if (query.redirect) return navigate(query.redirect);
-
-							// return navigate('/');
-
+								// const query = URLquery(location);
+								// if (query.redirect) return navigate(query.redirect);
+								return navigate('/');
 							default:
 								break;
 						}
@@ -79,9 +86,10 @@ const Kakao = () => {
 			console.log(err);
 		}
 	};
+
 	useEffect(() => {
 		getToken();
-	}, []);
+	}, [global]);
 
 	return null;
 };

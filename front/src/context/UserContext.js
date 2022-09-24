@@ -1,7 +1,6 @@
 import React, { useReducer, createContext, useContext } from 'react';
 
 const initialUser = {
-	autoKakao: false,
 	authEmail: '',
 	authEmailCheck: '',
 	authPhoneNumber: '',
@@ -9,7 +8,6 @@ const initialUser = {
 };
 
 export const AUTHINIT = 'AUTHINIT';
-export const AUTOKAKAO = 'AUTOKAKAO';
 export const AUTHPHONENUMBER = 'AUTHPHONENUMBER';
 export const AUTHPHONECHECK = 'AUTHPHONECHECK';
 export const AUTHEMAIL = 'AUTHEMAIL';
@@ -19,12 +17,6 @@ function userReducer(state, action) {
 	switch (action.type) {
 		case AUTHINIT:
 			return initialUser;
-
-		case AUTOKAKAO:
-			return {
-				...state,
-				autoKakao: action.payload.autoKakao,
-			};
 
 		case AUTHPHONENUMBER:
 			return {

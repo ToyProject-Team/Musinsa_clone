@@ -1,6 +1,7 @@
 import React, { useReducer, createContext, useContext } from 'react';
 
 const initialGlobal = {
+	hello: false,
 	autoLogin: false,
 };
 
@@ -11,7 +12,7 @@ function GlobalReducer(state, action) {
 		case AUTOLOGIN:
 			return {
 				...state,
-				autoLogin: !state.autoLogin,
+				autoLogin: action.payload.autoLogin,
 			};
 
 		default:
