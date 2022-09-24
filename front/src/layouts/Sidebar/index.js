@@ -4,12 +4,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
 import { HiOutlinePlusSm, HiOutlineMinusSm } from 'react-icons/hi';
+import Cookies from 'js-cookie';
 
 const Sidebar = props => {
-	const [cancel, setCancel] = useState(true);
+	// const [cancel, setCancel] = useState(true);
+	const [cancel, setCancel] = useState(Cookies.get('sideBarToggle') === 'false' ? false : true);
 	const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
 
 	const navigate = useNavigate();
+
+	const onClickToggle = useCallback(() => {
+		setCancel(e => !e);
+		Cookies.set('sideBarToggle', !cancel);
+	}, [cancel]);
 
 	//Main으로 idx값 보내고, url에 쿼리스트링 추가하는 함수
 	const sendSmallCate = idx => {
@@ -41,7 +48,7 @@ const Sidebar = props => {
 
 	return (
 		<SContainer>
-			<div onClick={() => setCancel(e => !e)} className={cancel ? 'toggle active' : 'toggle'}>
+			<div onClick={onClickToggle} className={cancel ? 'toggle active' : 'toggle'}>
 				<span className="line"></span>
 				<span className="line"></span>
 				<span className="line"></span>
