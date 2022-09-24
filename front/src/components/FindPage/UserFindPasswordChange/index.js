@@ -43,7 +43,7 @@ const UserFindPasswordChange = () => {
 			const { value } = e.target;
 			setPassword(value);
 
-			const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,25}$/;
+			const regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
 			if (regExp.test(value)) setPasswordReg(true);
 			else setPasswordReg(false);
 
