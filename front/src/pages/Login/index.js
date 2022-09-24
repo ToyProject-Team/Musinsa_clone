@@ -20,12 +20,16 @@ import {
 import { ReactComponent as KakaoIcon } from 'assets/svg/Kakao.svg';
 import Kakao from 'pages/Kakao';
 import { URLquery } from 'utils/URLquery';
+import { AUTOLOGIN, useGlobalDispatch, useGlobalState } from 'context/GlobalContext';
 
 const LogIn = () => {
 	const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API;
 	const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
 	const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
+	const global = useGlobalState();
+	const { autoLogin } = global;
+	const dispatch = useGlobalDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -36,19 +40,18 @@ const LogIn = () => {
 	const [passwordLookButton, setPasswordLookButton] = useState(false);
 	const passwordRef = useRef();
 
-	const [autoLoginCheck, setAutoLoginCheck] = useState(false);
 	const [keyframesClass, setKeyframesClass] = useState('');
 
 	// auto Login Toggle button
 	const toggleAutoLogin = useCallback(
 		e => {
 			const value = e.target.className;
-			setAutoLoginCheck(v => !v);
+			dispatch({ type: AUTOLOGIN });
 
 			if (value === 'hide') setKeyframesClass('active');
 			else setKeyframesClass('hide');
 		},
-		[setAutoLoginCheck, setKeyframesClass],
+		[autoLogin, setKeyframesClass],
 	);
 
 	// onClick login button event
@@ -67,7 +70,7 @@ const LogIn = () => {
 				.then(result => {
 					switch (result.status) {
 						case 200:
-							if (autoLoginCheck) {
+							if (autoLogin) {
 								localStorage.setItem('data', JSON.stringify(result.data));
 								sessionStorage.removeItem('data');
 							} else {
@@ -77,7 +80,6 @@ const LogIn = () => {
 
 							setLogin(true);
 							const query = URLquery(location);
-							console.log(query.redirect);
 							if (query.redirect) return navigate(query.redirect);
 
 							return navigate('/');
@@ -105,7 +107,7 @@ const LogIn = () => {
 					}
 				});
 		},
-		[email, password, autoLoginCheck],
+		[email, password, autoLogin],
 	);
 
 	if (login) {
@@ -144,10 +146,7 @@ const LogIn = () => {
 						</LoginButton>
 						<LoginMember>
 							<LoginCheck>
-								<label
-									onClick={e => toggleAutoLogin(e)}
-									className={autoLoginCheck ? 'active' : 'hide'}
-								>
+								<label onClick={e => toggleAutoLogin(e)} className={autoLogin ? 'active' : 'hide'}>
 									자동로그인
 								</label>
 								<div className={keyframesClass}>

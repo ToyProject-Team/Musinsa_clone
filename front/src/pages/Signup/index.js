@@ -22,7 +22,6 @@ import {
 	AUTHEMAIL,
 	AUTHEMAILCHECK,
 	AUTHINIT,
-	AUTHKAKAO,
 	AUTHPHONECHECK,
 	AUTHPHONENUMBER,
 	useUserDispatch,
@@ -113,8 +112,6 @@ const Signup = () => {
 			setAuthNumber(data.kakao_account.email);
 			setAuthNumberReg(true);
 			setAuthKakao(true);
-
-			changeDispatch(AUTHKAKAO, { authKakao: true });
 		} catch (err) {
 			console.log(err);
 		}
