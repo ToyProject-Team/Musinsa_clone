@@ -20,7 +20,7 @@ import {
 import { ReactComponent as KakaoIcon } from 'assets/svg/Kakao.svg';
 import Kakao from 'pages/Kakao';
 import { URLquery } from 'utils/URLquery';
-import { getCookie, setCookie } from 'utils/cookies';
+import Cookies from 'js-cookie';
 
 const LogIn = () => {
 	const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API;
@@ -38,7 +38,7 @@ const LogIn = () => {
 	const passwordRef = useRef();
 
 	const [autoLoginCheck, setAutoLoginCheck] = useState(
-		getCookie('autoLogin') === 'false' || getCookie('autoLogin') === undefined ? false : true,
+		Cookies.get('autoLogin') === 'false' || Cookies.get('autoLogin') === undefined ? false : true,
 	);
 	const [keyframesClass, setKeyframesClass] = useState('');
 
@@ -78,10 +78,14 @@ const LogIn = () => {
 								localStorage.removeItem('data');
 							}
 
-							setCookie('autoLogin', autoLoginCheck, { secure: true });
+							Cookies.set('autoLogin', autoLoginCheck);
 							setLogin(true);
-							const query = URLquery(location);
-							if (query.redirect) return navigate(query.redirect);
+
+							const redirect = Cookies.get('redirect');
+							if (redirect) {
+								navigate(redirect);
+								return Cookies.remove('redirect');
+							}
 
 							return navigate('/');
 
@@ -112,7 +116,7 @@ const LogIn = () => {
 	);
 
 	const kakaoLoginButton = useCallback(() => {
-		setCookie('autoLogin', autoLoginCheck, { secure: true });
+		Cookies.set('autoLogin', autoLoginCheck);
 		window.location.href = KAKAO_AUTH_URL;
 	}, [autoLoginCheck]);
 

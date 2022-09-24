@@ -1,12 +1,10 @@
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import qs from 'qs';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { GetQueryApi, KakaoGetQueryApi, PostHeaderApi } from 'utils/api';
+import { KakaoGetQueryApi, PostHeaderApi } from 'utils/api';
 import { URLquery } from 'utils/URLquery';
-import { useGlobalState } from 'context/GlobalContext';
-import { getCookie } from 'utils/cookies';
+import Cookies from 'js-cookie';
 
 const Kakao = () => {
 	const REST_API_KEY = process.env.REACT_APP_KAKAO_REST_API;
@@ -18,7 +16,8 @@ const Kakao = () => {
 	const location = useLocation();
 	const { code } = URLquery(location);
 
-	const autoLogin = getCookie('autoLogin');
+	const autoLogin = Cookies.get('autoLogin');
+
 	console.log(autoLogin);
 
 	const getToken = async () => {
@@ -54,8 +53,12 @@ const Kakao = () => {
 									localStorage.removeItem('data');
 								}
 
-								// const query = URLquery(location);
-								// if (query.redirect) return navigate(query.redirect);
+								const redirect = Cookies.get('redirect');
+								if (redirect) {
+									navigate(redirect);
+									return Cookies.remove('redirect');
+								}
+
 								return navigate('/');
 							default:
 								break;
