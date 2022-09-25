@@ -22,7 +22,7 @@ const DialLog = () => {
 
 		if (pathname === '/mypage/cart') setBasic(e => ({...e, cart: false}));
 		else setBasic(e => ({...e, cart: true})); 
-	}, []);
+	}, [saveUrl]);
 
 	// url 모달
 	const [modalAuth, setModalAuth] = useState(false);

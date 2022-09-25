@@ -31,19 +31,8 @@ const Sidebar = props => {
 	};
 
 	const onClickCategory = useCallback(idx => {
-		setOpen(prev => {
-			const newArray = [...prev];
-			// console.log(newArray[3], idx)
-			// else
-			newArray.map((e, idx) => {
-				let data = e;
-				console.log(data);
-			});
-			// newArray[idx] = !newArray[idx];
-			// console.log(1234, 1234,newArray)
-
-			return newArray;
-		});
+		setOpen(prev => [...prev].map((v, index) => (idx === index ? (v ? false : true) : false)));
+		
 		//Category클릭시 Main에 Category Id전달
 		props.setOnSortClick(false);
 		props.setSelectBox(false);

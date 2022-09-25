@@ -3,15 +3,16 @@ import styled from '@emotion/styled';
 export const HContainer = styled.div`
 	border-bottom: 1px solid #dddddd;
 	max-width: 100%;
+	
 `;
 
 export const HDiv = styled.div`
+	display: flex;
 	min-height: 32px;
 	height: auto;
 	width: 100%;
 	padding: 23px 0 23px 0;
 	background-color: black;
-	display: flex;
 `;
 
 export const HLogo = styled.h1`
@@ -29,6 +30,52 @@ export const HLogo = styled.h1`
 export const HSearch = styled.div`
 	margin-left: 20px;
 	margin-right: auto;
+
+	& article{
+		width: 260px;
+		height: 466px;
+		position: absolute;
+		background-color: beige;
+		z-index: 999;
+		
+		& dl{
+			& dt{
+				display: flex;
+				justify-content: space-between;
+				background-color: #f3f3f3;
+				line-height: 30px;
+				border-bottom: 1px solid #ddd;
+
+				& h3{
+					font-size: 14px;
+					font-weight: 900;
+					padding: 8px;
+				}
+
+				& button{
+					border: none;
+					font-size: 12px;
+					background-color: transparent;
+					text-decoration: underline;
+					padding: 0;
+					color: #b2b2b2;
+					font-weight: 600;
+					margin-right: 8px;
+				}
+			}
+
+			& dd{
+				& ul{
+					& li{
+						padding: 50px 0;
+						text-align: center;
+						font-size: 12px;
+					}
+				}
+			}
+		}
+		
+	}
 
 	& div {
 		width: 260px;

@@ -44,6 +44,19 @@ const Header = () => {
 							</span>
 						</form>
 					</div>
+					<article >
+						<dl>
+							<dt>
+								<h3>최근 검색어</h3>
+								<button type="button">전체 삭제</button>
+							</dt>
+							<dd>
+								<ul>
+									<li>최근 검색어 내용이 없습니다.</li>
+								</ul>
+							</dd>
+						</dl>
+					</article>
 				</HSearch>
 
 				{login && (
@@ -95,11 +108,7 @@ const Header = () => {
 				)}
 				
 			</HDiv>
-			<article style={{width: "200px", height: "200px", backgroundColor: "white"}}>
-					<dl>
-						<dd></dd>
-					</dl>
-				</article>
+			
 		</HContainer>
 	);
 };
