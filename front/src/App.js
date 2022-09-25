@@ -2,6 +2,7 @@ import './App.css';
 import { BrowserRouter, Routes, Redirect, Route } from 'react-router-dom';
 import loadable from '@loadable/component';
 import { UserProvider } from 'context/UserContext';
+import { GlobalProvider } from 'context/GlobalContext';
 
 const Main = loadable(() => import('pages/Main'), {
 	fallback: <div>로딩중</div>,
@@ -49,27 +50,29 @@ const Declar = loadable(() => import('contract/Footer/Declar'), {
 
 function App() {
 	return (
-		<UserProvider>
-			<BrowserRouter>
-				<Routes>
-					<Route exact path="/*" element={<Main />} /> {/* => 메인페이지 */}
-					<Route path="login/*" element={<LogIn />} /> {/* => 로그인페이지 */}
-					<Route path="signup" element={<SignUp />} /> {/* => 회원가입 페이지 */}
-					<Route path="find/*" element={<Find />} /> {/* => 아이디 패스워드 찾기 페이지 */}
-					<Route path="detail/*" element={<Dtail />} /> {/* => 상세페이지 */}
-					<Route path="mypage/*" element={<MyPage />} /> {/* => 마이페이지 */}
-					<Route path="api/auth/kakao/callback" element={<Kakao />} />{' '}
-					{/* => 카카오 로그인 페이지 */}
-					{/* 이용 약관 페이지 */}
-					<Route path="signup/agreement/agree" element={<Agree />} />
-					<Route path="signup/agreement/terms" element={<Terms />} />
-					<Route path="signup/agreement/sns" element={<Sns />} />
-					{/* 공용 컴포넌트 */}
-					<Route path="footer/notice" element={<Notice />} />
-					<Route path="footer/declar" element={<Declar />} />
-				</Routes>
-			</BrowserRouter>
-		</UserProvider>
+		<GlobalProvider>
+			<UserProvider>
+				<BrowserRouter>
+					<Routes>
+						<Route exact path="/*" element={<Main />} /> {/* => 메인페이지 */}
+						<Route path="login/*" element={<LogIn />} /> {/* => 로그인페이지 */}
+						<Route path="signup" element={<SignUp />} /> {/* => 회원가입 페이지 */}
+						<Route path="find/*" element={<Find />} /> {/* => 아이디 패스워드 찾기 페이지 */}
+						<Route path="detail/*" element={<Dtail />} /> {/* => 상세페이지 */}
+						<Route path="mypage/*" element={<MyPage />} /> {/* => 마이페이지 */}
+						<Route path="api/auth/kakao/callback" element={<Kakao />} />{' '}
+						{/* => 카카오 로그인 페이지 */}
+						{/* 이용 약관 페이지 */}
+						<Route path="signup/agreement/agree" element={<Agree />} />
+						<Route path="signup/agreement/terms" element={<Terms />} />
+						<Route path="signup/agreement/sns" element={<Sns />} />
+						{/* 공용 컴포넌트 */}
+						<Route path="footer/notice" element={<Notice />} />
+						<Route path="footer/declar" element={<Declar />} />
+					</Routes>
+				</BrowserRouter>
+			</UserProvider>
+		</GlobalProvider>
 	);
 }
 
