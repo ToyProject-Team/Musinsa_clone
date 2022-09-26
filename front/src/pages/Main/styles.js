@@ -102,12 +102,21 @@ export const MiddleCategory = styled.div`
 			display: inline-block;
 			// max-width: 800px;
 
-			& li {
+			.inactive {
 				float: left;
 				width: 145px;
 				padding: 0 0 15px;
 				margin: 0;
 				color: #b2b2b2;
+			}
+
+			.active {
+				float: left;
+				width: 145px;
+				padding: 0 0 15px;
+				margin: 0;
+				color: black;
+				font-weight: bold;
 			}
 		}
 
@@ -132,7 +141,6 @@ export const OtherCategory = styled.div`
 		z-index: 1;
 	}
 
-	.color,
 	.price {
 		padding-top: 15px;
 		padding-bottom: 15px;
@@ -141,13 +149,27 @@ export const OtherCategory = styled.div`
 			display: inline-block;
 			// min-width: 1200px;
 
-			& li {
+			.inactive {
 				float: left;
 				line-height: 20px;
 				vertical-align: center;
 				padding-right: 17px;
 				margin: 0;
 				color: #b2b2b2;
+
+				input {
+					padding: 5px 7px 4px 4px;
+				}
+			}
+
+			.active {
+				float: left;
+				line-height: 20px;
+				vertical-align: center;
+				padding-right: 17px;
+				margin: 0;
+				color: black;
+				font-weight: bold;
 
 				input {
 					padding: 5px 7px 4px 4px;
@@ -381,33 +403,48 @@ export const SortBox = styled.div`
 	box-sizing: border-box;
 	background-color: white;
 
+	.active {
+		display: block;
+		line-height: 40px;
+		height: 40px;
+		float: left;
+		font-weight: bold;
+		padding-right: 10px;
+
+		// &::after {
+		// 	//content: '|';
+		// 	padding-left: 10px;
+		// 	padding-right: 10px;
+		// }
+
+		&:hover {
+			cursor: pointer;
+			font-weight: bold;
+			text-decoration: underline;
+			color: black;
+		}
+	}
+
 	.sort {
 		display: block;
 		line-height: 40px;
 		height: 40px;
 		float: left;
-	}
-
-	.sort::after {
-		content: '|';
-		padding-left: 10px;
+		// padding-left: 5px;
 		padding-right: 10px;
 	}
+
+	// .sort::after {
+	// 	//content: '|';
+	// 	padding-left: 10px;
+	// 	padding-right: 10px;
+	// }
 
 	.sort:hover {
 		cursor: pointer;
 		font-weight: bold;
 		text-decoration: underline;
 		color: black;
-	}
-
-	.page {
-		border-left: 1px solid #ddd;
-		border-right: 1px solid #ddd;
-		height: 42px;
-		padding-left: 15px;
-		padding-right: 15px;
-		font-weight: bold;
 	}
 `;
 

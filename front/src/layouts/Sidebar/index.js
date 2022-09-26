@@ -13,10 +13,6 @@ const Sidebar = props => {
 
 	//Main에 쿼리스트링 보내기
 	const sendSmallCate = (big, small) => {
-		// props.setSmallCategoryId(idx + 1);
-		// props.setOnSortClick(true);
-		props.setSelectBox(true);
-
 		// smallCate index가 0인 경우(전체) / 아닌경우
 		// smallCate index가 1이상인 경우에는 bigCateId가 이미 있는경우/없는경우
 		//이중 삼항연산자

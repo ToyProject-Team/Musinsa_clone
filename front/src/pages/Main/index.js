@@ -14,15 +14,7 @@ import {
 	ListBox,
 } from './styles';
 
-import {
-	Router,
-	Route,
-	Routes,
-	useNavigate,
-	useLocation,
-	useSearchParams,
-	useParams,
-} from 'react-router-dom';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
 import { bigCategory, alpabet } from 'utils/bigCategory';
@@ -32,8 +24,7 @@ import Header from 'layouts/Header';
 import Sidebar from 'layouts/Sidebar';
 import Footer from 'layouts/Footer';
 import DialLog from 'layouts/DialLog';
-
-import { URLquery } from 'utils/URLquery';
+// import { URLquery } from 'utils/URLquery';
 
 const Main = () => {
 	const navigate = useNavigate();
@@ -50,34 +41,71 @@ const Main = () => {
 	const [product, setProduct] = useState([]);
 	const [newProduct, setNewProduct] = useState([]);
 
-	//쿼리스트링
+	//쿼리스트링 활용
 	const location = useLocation();
-	const query = URLquery(location);
-	const selectBigCate = Object.values(query)[0] * 1;
-	const selectSmallCate = Object.values(query)[1] * 1;
 
-	//params
-	// // const [mainSort, setMainSort] = useState(0);
-	// const [price, setPrice] = useState(0);
-	// // const [priceMin, setPriceMin] = useState(0);
-	// // const [priceMax, setPriceMax] = useState(100000000);
-	// const [bigCategoryId, setBigCategoryId] = useState(1);
-	// const [smallCategoryId, setSmallCategoryId] = useState(1);
-
-	//쿼리스트링 먼저!!!!!!받아와보기
+	//parameter관리할 state - object로 한번에 관리
 	const [filterVal, setFilterVal] = useState({});
 
+	//가격 배열
+	const priceArr = [
+		'~ 50,000원',
+		'50,000원 ~ 100,000원',
+		'100,000원 ~ 200,000원',
+		'200,000원 ~ 300,000원',
+		'300,000원 ~',
+	];
+
+	//parameter 추가
 	const handleFilter = (val, name) => {
 		setFilterVal(prev => {
 			return { ...prev, [name]: val };
 		});
 	};
 
-	const resetFilter = () => {
+	//smallCateId 삭제 함수(중분류 - 전체)
+	const onReset = () => {
 		delete filterVal.smallCategoryId;
 		//setFilterVal(filterVal)는 작동X useEffect 감지안되나바
 		setFilterVal({ ...filterVal });
+
+		const newArr = clickCate;
+		if (newArr.includes(true)) {
+			newArr[clickCate.indexOf(true)] = false;
+		}
+		setClickCate(newArr);
 	};
+
+	//Price 삭제 함수(가격 - 전체보기)
+	const onResetPrice = () => {
+		delete filterVal.price;
+		setFilterVal({ ...filterVal });
+
+		const newArr = clickPrice;
+		if (newArr.includes(true)) {
+			newArr[clickPrice.indexOf(true)] = false;
+		}
+		setClickPrice(newArr);
+	};
+
+	//클릭된 요소 style
+	const [clickCate, setClickCate] = useState(
+		Array.from({
+			length: smallCategory[filterVal.bigCategoryId ? filterVal.bigCategoryId - 1 : 0].length,
+		}).fill(false),
+	);
+
+	const [clickPrice, setClickPrice] = useState(
+		Array.from({
+			length: 5,
+		}).fill(false),
+	);
+
+	const [clickMainSort, setClickMainSort] = useState(
+		Array.from({
+			length: 3,
+		}).fill(false),
+	);
 
 	//맨처음 데이터 받아오기(parameter 없이)
 	useEffect(() => {
@@ -101,13 +129,13 @@ const Main = () => {
 		PostQueryApi(`/api/product/productList${location.search}`).then(res =>
 			setNewProduct(res.data.productData),
 		);
-		console.log(location.search);
 	}, [location.search]);
 
-	//bigCategoryId 반영(중분류 전체보기)
-	// const onReset = val => {
-	// 	resetFilter(val, 'bigCategoryId');
-	// };
+	useEffect(() => {
+		setClickCate(clickCate.fill(false));
+		setClickMainSort(clickMainSort.fill(false));
+		setClickPrice(clickPrice.fill(false));
+	}, [filterVal.bigCategoryId]);
 
 	//handleFilter함수 사용해서 쿼리문 추가
 	//smallCategoryId추가(중분류)
@@ -119,16 +147,34 @@ const Main = () => {
 						return { bigCategoryId: 1, smallCategoryId: val };
 				  });
 		}
+
+		const newArr = clickCate;
+		if (newArr.includes(true)) newArr[clickCate.indexOf(true)] = false;
+
+		newArr[val] = true;
+		setClickCate(newArr);
 	};
 
 	//price추가
 	const onFilterPrice = val => {
 		handleFilter(val, 'price');
+
+		const newArr = clickPrice;
+		if (newArr.includes(true)) newArr[clickPrice.indexOf(true)] = false;
+
+		newArr[val - 1] = true;
+		setClickPrice(newArr);
 	};
 
 	//mainSort 추가
 	const onMainSort = val => {
 		handleFilter(val, 'mainSort');
+
+		const newArr = clickMainSort;
+		if (newArr.includes(true)) newArr[clickMainSort.indexOf(true)] = false;
+
+		newArr[val - 1] = true;
+		setClickMainSort(newArr);
 	};
 
 	//검색창 input들 state
@@ -137,12 +183,26 @@ const Main = () => {
 	const [maxPriceInput, setMaxPriceInput] = useState();
 	const [searchTerm, setSearchTerm] = useState('');
 
-	//sort박스 토글
-	// const [choice, setChoice] = useState(false);
-	const [selectBox, setSelectBox] = useState(false);
-	const [secondSelectBox, setSecondSelectBox] = useState(false);
-	const [selectSmallCateId, setSelectSmallCateId] = useState();
-	const [selectPrice, setSelectPrice] = useState();
+	//select박스 상태
+	const [search, setSearch] = useState(false);
+	const [selectBox, setSelectBox] = useState(true);
+
+	//검색창 함수
+	const onSearch = () => {
+		setSearch(true);
+		setNewProduct(
+			newProduct.filter(data => data.productTitle.toLowerCase().includes(searchTerm.toLowerCase())),
+		);
+	};
+
+	//검색창 select박스 reset
+	const onResetSearch = () => {
+		setSearch(false);
+		PostQueryApi(`/api/product/productList${location.search}`).then(res =>
+			setNewProduct(res.data.productData),
+		);
+		setSearchTerm('');
+	};
 
 	return (
 		<>
@@ -152,7 +212,7 @@ const Main = () => {
 				<Sidebar
 					filterVal={filterVal}
 					setFilterVal={setFilterVal}
-					setSelectBox={setSelectBox}
+					// setSelectBox={setSelectBox}
 				></Sidebar>
 				<MainContainer>
 					{/* 카테고리 */}
@@ -205,8 +265,7 @@ const Main = () => {
 							<div
 								className="all_item"
 								onClick={() => {
-									resetFilter();
-									// setFilterVal({ bigCategoryId: filterVal.bigCategoryId });
+									onReset();
 								}}
 								style={{ color: 'black', 'font-weight': 'bold' }}
 							>
@@ -214,13 +273,20 @@ const Main = () => {
 							</div>
 							<div className="all_item_list">
 								<ul>
-									{smallCategory[1]
+									{smallCategory[filterVal.bigCategoryId ? filterVal.bigCategoryId - 1 : 0]
 										.filter(val => {
 											if (searchInput === '') return val;
 											else if (val.includes(searchInput)) return val;
 										})
 										.map((data, idx) =>
-											idx === 0 ? null : <li onClick={() => onSort(idx)}>{data}</li>,
+											idx === 0 ? null : (
+												<li
+													className={clickCate[idx] ? 'active' : 'inactive'}
+													onClick={() => onSort(idx)}
+												>
+													{data}
+												</li>
+											),
 										)}
 								</ul>
 							</div>
@@ -232,17 +298,42 @@ const Main = () => {
 								<ul>
 									<li
 										onClick={() => {
-											// onSecondReset();
+											onResetPrice();
 										}}
 										style={{ color: 'black', fontWeight: 'bold' }}
 									>
 										전체보기
 									</li>
-									<li onClick={() => onFilterPrice(1)}>~ 50,000원</li>
-									<li onClick={() => onFilterPrice(2)}>50,000원 ~ 100,000원</li>
-									<li onClick={() => onFilterPrice(3)}>100,000원 ~ 200,000원</li>
-									<li onClick={() => onFilterPrice(4)}>200,000원 ~ 300,000원</li>
-									<li onClick={() => onFilterPrice(5)}>300,000원 ~</li>
+									<li
+										className={clickPrice[0] ? 'active' : 'inactive'}
+										onClick={() => onFilterPrice(1)}
+									>
+										~ 50,000원
+									</li>
+									<li
+										className={clickPrice[1] ? 'active' : 'inactive'}
+										onClick={() => onFilterPrice(2)}
+									>
+										50,000원 ~ 100,000원
+									</li>
+									<li
+										className={clickPrice[2] ? 'active' : 'inactive'}
+										onClick={() => onFilterPrice(3)}
+									>
+										100,000원 ~ 200,000원
+									</li>
+									<li
+										className={clickPrice[3] ? 'active' : 'inactive'}
+										onClick={() => onFilterPrice(4)}
+									>
+										200,000원 ~ 300,000원
+									</li>
+									<li
+										className={clickPrice[4] ? 'active' : 'inactive'}
+										onClick={() => onFilterPrice(5)}
+									>
+										300,000원 ~
+									</li>
 									<li style={{ width: '248px' }}>
 										<input
 											className="minPrice"
@@ -283,59 +374,46 @@ const Main = () => {
 									value={searchTerm}
 									onChange={e => setSearchTerm(e.target.value)}
 								/>
-								{/* <span type="submit" className="search_btn" onClick={() => onSearch()}> */}
-								<span>검색</span>
+								<span type="submit" className="search_btn" onClick={() => onSearch()}>
+									검색
+								</span>
 							</div>
 						</OtherCategory>
 					</Category>
 
 					<ItemSection>
 						<SelectBox>
-							{selectSmallCate >= 1 ? (
-								<div
-									className={selectBox ? 'visible' : 'invisible'}
-									onClick={() => {
-										setSelectBox(false);
-
-										{
-											//params price가 적용돼 있다면
-											// 	onSortSecondClick
-											// 		? PostQueryApi(`/api/product/productList`, {
-											// 				price,
-											// 				bigCategoryId,
-											// 		  }).then(
-											// 				res => setNewProduct(res.data.productData),
-											// 				navigate({
-											// 					pathname: `/products`,
-											// 					search: `bigCategoryId=${bigCategoryId}&price=${price}`,
-											// 				}),
-											// 		  )
-											// 		: PostQueryApi(`/api/product/productList`, {
-											// 				bigCategoryId,
-											// 		  }).then(
-											// 				res => setNewProduct(res.data.productData),
-											// 				navigate({
-											// 					pathname: `/products`,
-											// 					search: `bigCategoryId=${bigCategoryId}`,
-											// 				}),
-											// 		  );
-											// }
-											// setOnSortClick(false);
-										}
-									}}
-								>
-									<span className="select-medium">{smallCategory[1][selectSmallCate]}</span>
-									<span className="select-medium-button">&#160;X</span>
-								</div>
-							) : null}
-
 							<div
-								className={secondSelectBox ? 'visible' : 'invisible'}
+								className={filterVal.smallCategoryId ? 'visible' : 'invisible'}
 								onClick={() => {
-									setSecondSelectBox(false);
+									onReset();
 								}}
 							>
-								<span className="select-medium">{selectPrice}</span>
+								<span className="select-medium">
+									{
+										smallCategory[filterVal.bigCategoryId ? filterVal.bigCategoryId - 1 : 0][
+											filterVal.smallCategoryId
+										]
+									}
+								</span>
+								<span className="select-medium-button">&#160;X</span>
+							</div>
+							<div
+								className={filterVal.price ? 'visible' : 'invisible'}
+								onClick={() => {
+									onResetPrice();
+								}}
+							>
+								<span className="select-medium">{priceArr[filterVal.price]}</span>
+								<span className="select-medium-button">&#160;X</span>
+							</div>
+							<div
+								className={search ? 'visible' : 'invisible'}
+								onClick={() => {
+									onResetSearch();
+								}}
+							>
+								<span className="select-medium">{searchTerm}</span>
 								<span className="select-medium-button">&#160;X</span>
 							</div>
 						</SelectBox>
@@ -343,13 +421,24 @@ const Main = () => {
 						<Items>
 							<SortBox>
 								<div>
-									<span className="sort" onClick={() => onMainSort(1)}>
+									<span
+										className={clickMainSort[0] ? 'active' : 'sort'}
+										onClick={() => onMainSort(1)}
+									>
 										낮은 가격순
 									</span>
-									<span className="sort" onClick={() => onMainSort(2)}>
+									<span className="sort">|</span>
+									<span
+										className={clickMainSort[1] ? 'active' : 'sort'}
+										onClick={() => onMainSort(2)}
+									>
 										높은 가격순
 									</span>
-									<span className="sort" onClick={() => onMainSort(3)}>
+									<span className="sort">|</span>
+									<span
+										className={clickMainSort[2] ? 'active' : 'sort'}
+										onClick={() => onMainSort(3)}
+									>
 										후기순
 									</span>
 								</div>
