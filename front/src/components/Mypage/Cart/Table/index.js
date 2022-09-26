@@ -8,7 +8,7 @@ import OrderModal from 'components/Modals/OrderModal';
 import Order from 'components/Order';
 import { Link } from 'react-router-dom';
 
-function CartTable({ data, setData, item, setCartList, cartList }) {
+function CartTable({ item, setCartList, cartList }) {
 	const [modalOrder, setModalOrder] = useState(false);
 	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);
@@ -41,7 +41,7 @@ function CartTable({ data, setData, item, setCartList, cartList }) {
 		} else {
 			setCartList(prev =>
 				prev.map(v =>
-					v.id === item.Product.id ? { ...v, packingAmount: v.packingAmount - 1 } : v,
+					v.Product.id === item.Product.id ? { ...v, packingAmount: v.packingAmount - 1 } : v,
 				),
 			);
 		}
@@ -66,17 +66,6 @@ function CartTable({ data, setData, item, setCartList, cartList }) {
 			),
 		);
 	}, [cartList]);
-
-	// const onChecked = useCallback(
-	// 	(checked, id) => {
-	// 		if (checked) {
-	// 			setCheckedList([...checkedList, id]);
-	// 		} else {
-	// 			setCheckedList(checkedList.filter(el => el !== id));
-	// 		}
-	// 	},
-	// 	[checkedList],
-	// );
 
 	// 삭제
 	const removeItem = useCallback(() => {
@@ -119,14 +108,6 @@ function CartTable({ data, setData, item, setCartList, cartList }) {
 						<tbody>
 							<tr>
 								<td>
-									{/* <label key={id}>
-										<input
-											name="oncheck"
-											type="checkbox"
-											checked={checkedList.includes(id) ? true : false}
-											onChange={e => onChecked(e.target.checked, id)}
-										/>
-									</label> */}
 									<CheckLabel
 										onClick={checkItem}
 										className={item.check ? 'active' : ''}

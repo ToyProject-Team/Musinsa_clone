@@ -22,7 +22,6 @@ import {
 	AUTHEMAIL,
 	AUTHEMAILCHECK,
 	AUTHINIT,
-	AUTHKAKAO,
 	AUTHPHONECHECK,
 	AUTHPHONENUMBER,
 	useUserDispatch,
@@ -113,8 +112,6 @@ const Signup = () => {
 			setAuthNumber(data.kakao_account.email);
 			setAuthNumberReg(true);
 			setAuthKakao(true);
-
-			changeDispatch(AUTHKAKAO, { authKakao: true });
 		} catch (err) {
 			console.log(err);
 		}
@@ -380,7 +377,7 @@ const Signup = () => {
 	const onChangePassword = useCallback(e => {
 		setPassword(e.target.value);
 
-		const regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,25}$/;
+		const regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
 		if (regExp.test(e.target.value)) setPasswordReg(true);
 		else setPasswordReg(false);
 	}, []);

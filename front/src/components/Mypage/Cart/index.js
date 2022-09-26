@@ -18,13 +18,11 @@ function Cart() {
 	//장바구니 리스트 가져오기
 	useEffect(() => {
 		GetTokenApi('/api/shoppingBasket/shoppingList', loginToken.accessToken).then(res => {
-			setCartList(res.data);
-			setData(res.data);
+			setCartList(res.data.map(item => Object.assign(item, { check: false })));
 		});
 	}, []);
 
-	const [data, setData] = useState([]);
-	console.log('cart', cartList);
+	// const [data, setData] = useState([]);
 
 	const [checkBox, setCheckBox] = useState(false);
 	const [sum, setSum] = useState(0);
@@ -41,23 +39,6 @@ function Cart() {
 		setCheckBox(check => !check);
 		setCartList(cartList => cartList.map(item => ({ ...item, check: !checkBox })));
 	}, [cartList, checkBox]);
-
-	// const checkItem = useCallback(
-	// 	checked => {
-	// 		if (checked) {
-	// 			const checklistArr = [];
-	// 			cartList.map(list =>
-	// 				list.ProductMainTags.map(Mainitem =>
-	// 					Mainitem.ProductSubTags.map(item => checklistArr.push(item)),
-	// 				),
-	// 			);
-	// 			setCheckedList(checklistArr);
-	// 		} else {
-	// 			setCheckedList([]);
-	// 		}
-	// 	},
-	// 	[cartList],
-	// );
 
 	const onCloseModal = useCallback(() => {
 		setModalOrder(false);
@@ -77,15 +58,11 @@ function Cart() {
 
 	// 모두 체크 확인 및 총상품 금액
 	useEffect(() => {
-		cartList.map(item => Object.assign(item, { check: false }));
 		let arrId = [];
 		cartList.map(v => (v.check ? arrId.push(v.Product.id) : arrId.filter(f => f !== v.Product.id)));
 
-		if (cartList.length === arrId.length) setCheckBox(true);
+		if (cartList.length === arrId.length && cartList.length != 0) setCheckBox(true);
 		else setCheckBox(false);
-
-		console.log(cartList.length);
-		console.log(arrId.length);
 
 		// 총 상품 금액
 		if (arrId.length > 0) {
@@ -93,15 +70,19 @@ function Cart() {
 				arrId
 					.map(v => {
 						let total = 0;
-						cartList.map(m => m.id === v && (total += m.packingAmount * m.Product.productPrice));
+						cartList.map(
+							m => m.Product.id === v && (total += m.packingAmount * m.Product.productPrice),
+						);
 						return total;
 					})
 					?.reduce((a, b) => a + b),
 			);
 		} else setSum(0);
-	}, []);
+	}, [cartList]);
 
-	console.log('data', data);
+	console.log('cart', cartList);
+	// console.log('data', data);
+	// console.log(arrId);
 
 	return (
 		<>
@@ -121,20 +102,6 @@ function Cart() {
 						<thead>
 							<tr>
 								<th scope="col">
-									{/* <label>
-										<input
-											type="checkbox"
-											id="check_all"
-											onChange={e => checkItem(e.target.checked)}
-											checked={
-												checkedList.length === 0
-													? false
-													: checkedList.length === data.length
-													? true
-													: false
-											}
-										/>
-									</label> */}
 									<CheckLabel onClick={checkItem} className={checkBox ? 'active' : ''}></CheckLabel>
 								</th>
 								<th scope="col">상품정보</th>
@@ -146,14 +113,7 @@ function Cart() {
 							</tr>
 						</thead>
 						{cartList.map((item, index) => (
-							<CartTable
-								key={index}
-								data={data}
-								setData={setData}
-								item={item}
-								setCartList={setCartList}
-								cartList={cartList}
-							/>
+							<CartTable key={index} item={item} setCartList={setCartList} cartList={cartList} />
 						))}
 					</OrderTable>
 					<CartPayment>

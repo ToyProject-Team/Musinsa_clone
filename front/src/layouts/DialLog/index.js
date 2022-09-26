@@ -17,12 +17,13 @@ const DialLog = () => {
 
 	useEffect(() => {
 		const { pathname } = saveUrl;
+
 		if (pathname === '/') setBasic(pre => ({ ...pre, home: false }));
 		else setBasic(pre => ({ ...pre, home: true }));
 
-		if (pathname === '/mypage/cart') setBasic(e => ({...e, cart: false}));
-		else setBasic(e => ({...e, cart: true})); 
-	}, []);
+		if (pathname === '/mypage/cart') setBasic(e => ({ ...e, cart: false }));
+		else setBasic(e => ({ ...e, cart: true }));
+	}, [saveUrl]);
 
 	// url 모달
 	const [modalAuth, setModalAuth] = useState(false);
