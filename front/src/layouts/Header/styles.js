@@ -31,11 +31,19 @@ export const HSearch = styled.div`
 	margin-left: 20px;
 	margin-right: auto;
 
+	.none{
+		display: none;
+	}
+
+	.block{
+		display: block;
+	}
+
 	& article{
 		width: 260px;
 		height: 466px;
 		position: absolute;
-		background-color: beige;
+		background-color: white;
 		z-index: 999;
 		
 		& dl{

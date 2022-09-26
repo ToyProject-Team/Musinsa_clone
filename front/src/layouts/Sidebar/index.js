@@ -55,9 +55,7 @@ const Sidebar = props => {
 				<span className="line"></span>
 			</div>
 			<SDiv className={cancel ? 'appear' : 'disappear'}>
-				<Link to="/">
-					전체<span>All</span>
-				</Link>
+
 				<nav>
 					{bigCategory.map((big, idx) => (
 						<div
