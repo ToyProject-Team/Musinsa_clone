@@ -9,45 +9,32 @@ const Sidebar = props => {
 	const [cancel, setCancel] = useState(true);
 	const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
 
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
-	//Main으로 idx값 보내고, url에 쿼리스트링 추가하는 함수
-	const sendSmallCate = idx => {
-		props.setSmallCategoryId(idx + 1);
-		props.setOnSortClick(true);
+	//Main에 쿼리스트링 보내기
+	const sendSmallCate = (big, small) => {
+		// props.setSmallCategoryId(idx + 1);
+		// props.setOnSortClick(true);
 		props.setSelectBox(true);
-		navigate({
-			pathname: `/products`,
-			search: `bigCategoryId=${props.bigCategoryId}&smallCategoryId=${idx}`,
-		});
-	};
 
-	const sendBigCate = () => {
-		props.setDetect(!props.detect);
-		navigate({
-			pathname: `/products`,
-			search: `bigCategoryId=${props.bigCategoryId}`,
-		});
+		// smallCate index가 0인 경우(전체) / 아닌경우
+		// smallCate index가 1이상인 경우에는 bigCateId가 이미 있는경우/없는경우
+		//이중 삼항연산자
+		small === 0
+			? props.setFilterVal(() => {
+					return { bigCategoryId: big + 1 };
+			  })
+			: props.filterVal.bigCategoryId - 1 === big
+			? props.setFilterVal(prev => {
+					return { ...prev, smallCategoryId: small };
+			  })
+			: props.setFilterVal(() => {
+					return { bigCategoryId: big + 1, smallCategoryId: small };
+			  });
 	};
 
 	const onClickCategory = useCallback(idx => {
-		setOpen(prev => {
-			const newArray = [...prev];
-			// console.log(newArray[3], idx)
-			// else
-			newArray.map((e, idx) => {
-				let data = e;
-				console.log(data);
-			});
-			// newArray[idx] = !newArray[idx];
-			// console.log(1234, 1234,newArray)
-
-			return newArray;
-		});
-		//Category클릭시 Main에 Category Id전달
-		props.setOnSortClick(false);
-		props.setSelectBox(false);
-		props.setBigCategoryId(idx + 1);
+		setOpen(prev => [...prev].map((v, index) => (idx === index ? (v ? false : true) : false)));
 	}, []);
 
 	return (
@@ -84,7 +71,7 @@ const Sidebar = props => {
 									<li
 										key={idex}
 										onClick={() => {
-											idex === 0 ? sendBigCate() : sendSmallCate(idex);
+											sendSmallCate(idx, idex);
 										}}
 									>
 										<span>{small}</span>

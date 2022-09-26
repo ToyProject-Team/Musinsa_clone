@@ -33,7 +33,6 @@ import Sidebar from 'layouts/Sidebar';
 import Footer from 'layouts/Footer';
 import DialLog from 'layouts/DialLog';
 
-import qs from 'qs';
 import { URLquery } from 'utils/URLquery';
 
 const Main = () => {
@@ -51,88 +50,85 @@ const Main = () => {
 	const [product, setProduct] = useState([]);
 	const [newProduct, setNewProduct] = useState([]);
 
+	//쿼리스트링
 	const location = useLocation();
 	const query = URLquery(location);
-
-	//쿼리스트링
 	const selectBigCate = Object.values(query)[0] * 1;
 	const selectSmallCate = Object.values(query)[1] * 1;
 
-	//페이지네이션
-
 	//params
-	// const [mainSort, setMainSort] = useState(0);
-	const [price, setPrice] = useState(0);
-	// const [priceMin, setPriceMin] = useState(0);
-	// const [priceMax, setPriceMax] = useState(100000000);
-	const [bigCategoryId, setBigCategoryId] = useState(1);
-	const [smallCategoryId, setSmallCategoryId] = useState(1);
+	// // const [mainSort, setMainSort] = useState(0);
+	// const [price, setPrice] = useState(0);
+	// // const [priceMin, setPriceMin] = useState(0);
+	// // const [priceMax, setPriceMax] = useState(100000000);
+	// const [bigCategoryId, setBigCategoryId] = useState(1);
+	// const [smallCategoryId, setSmallCategoryId] = useState(1);
 
-	//처음 아무 조건없이 한번만 데이터 받아오기
-	useEffect(() => {
-		PostQueryApi('/api/product/productList').then(
-			res => setProduct(res.data.productData),
-			navigate('/'),
-		);
-	}, []);
+	//쿼리스트링 먼저!!!!!!받아와보기
+	const [filterVal, setFilterVal] = useState({});
 
-	const [detect, setDetect] = useState(true);
-
-	//Sidebar에서 카테고리 선택했을 때 데이터 받아오기
-	//url스트링 반영하면 다른 요소에 영향줘서 bigCate로 바꿈(mainSort에)
-	useEffect(() => {
-		if (selectBigCate >= 1)
-			PostQueryApi('/api/product/productList', {
-				bigCategoryId: selectBigCate,
-			}).then(res => setNewProduct(res.data.productData));
-	}, [bigCategoryId, detect]);
-
-	useEffect(() => {
-		if (selectSmallCate >= 1)
-			PostQueryApi('/api/product/productList', {
-				bigCategoryId: selectBigCate,
-				smallCategoryId: selectSmallCate,
-			}).then(res => setNewProduct(res.data.productData));
-	}, [smallCategoryId]);
-
-	//중분류 전체보기 - bigCate만 적용
-	const onReset = () => {
-		//셀렉박스 없애기, smallCate선택 여부 false로
-		setSelectBox(false);
-		setOnSortClick(false);
-
-		//가격이 선택돼 있을때/없을때
-		onSortSecondClick
-			? PostQueryApi('/api/product/productList', { bigCategoryId, price }).then(
-					res => setNewProduct(res.data.productData),
-					navigate({
-						pathname: `/products`,
-						search: `bigCategoryId=${bigCategoryId}&price=${price}`,
-					}),
-			  )
-			: PostQueryApi('/api/product/productList', { bigCategoryId }).then(
-					res => setNewProduct(res.data.productData),
-					navigate({ pathname: `/products`, search: `bigCategoryId=${bigCategoryId}` }),
-			  );
-
-		setBigCategoryId(bigCategoryId);
+	const handleFilter = (val, name) => {
+		setFilterVal(prev => {
+			return { ...prev, [name]: val };
+		});
 	};
 
-	//가격 전체보기
-	const onSecondReset = () => {
-		//SmallCate선택되어 있을때 / 아닐때
-		onSortClick
-			? PostQueryApi('/api/product/productList', { bigCategoryId, smallCategoryId }).then(
-					res => setNewProduct(res.data.productData),
-					navigate({
-						pathname: `/products`,
-						search: `bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}`,
-					}),
-			  )
-			: PostQueryApi('/api/product/productList', { bigCategoryId }).then(
-					res => setNewProduct(res.data.productData),
-					navigate({ pathname: `/products`, search: `bigCategoryId=${bigCategoryId}` }),
-			  );
+	const resetFilter = () => {
+		delete filterVal.smallCategoryId;
+		//setFilterVal(filterVal)는 작동X useEffect 감지안되나바
+		setFilterVal({ ...filterVal });
+	};
+
+	//맨처음 데이터 받아오기(parameter 없이)
+	useEffect(() => {
+		PostQueryApi(`/api/product/productList`).then(res => setProduct(res.data.productData));
+	}, []);
+
+	//parameter 바뀔때마다 새로운 queryString 적용 후 axios
+	useEffect(() => {
+		const queryString = `?${
+			filterVal.bigCategoryId ? `bigCategoryId=${filterVal.bigCategoryId}` : ''
+		}${filterVal.smallCategoryId ? `&smallCategoryId=${filterVal.smallCategoryId}` : ''}${
+			filterVal.price ? `&price=${filterVal.price}` : ''
+		}${filterVal.priceMin ? `&priceMin=${filterVal.priceMin}` : ''}${
+			filterVal.priceMax ? `&priceMax=${filterVal.priceMax}` : ''
+		}${filterVal.mainSort ? `&mainSort=${filterVal.mainSort}` : ''}`;
+
+		navigate({ pathname: `/products`, search: queryString });
+	}, [filterVal]);
+
+	useEffect(() => {
+		PostQueryApi(`/api/product/productList${location.search}`).then(res =>
+			setNewProduct(res.data.productData),
+		);
+		console.log(location.search);
+	}, [location.search]);
+
+	//bigCategoryId 반영(중분류 전체보기)
+	// const onReset = val => {
+	// 	resetFilter(val, 'bigCategoryId');
+	// };
+
+	//handleFilter함수 사용해서 쿼리문 추가
+	//smallCategoryId추가(중분류)
+	const onSort = val => {
+		{
+			filterVal.bigCategoryId
+				? handleFilter(val, 'smallCategoryId')
+				: setFilterVal(() => {
+						return { bigCategoryId: 1, smallCategoryId: val };
+				  });
+		}
+	};
+
+	//price추가
+	const onFilterPrice = val => {
+		handleFilter(val, 'price');
+	};
+
+	//mainSort 추가
+	const onMainSort = val => {
+		handleFilter(val, 'mainSort');
 	};
 
 	//검색창 input들 state
@@ -148,189 +144,15 @@ const Main = () => {
 	const [selectSmallCateId, setSelectSmallCateId] = useState();
 	const [selectPrice, setSelectPrice] = useState();
 
-	//중분류 분류 2
-	//onSort버튼 클릭 -> params 값 전송 -> url에 박아넣기 구현..
-	const [onSortClick, setOnSortClick] = useState(false);
-	const [onSortSecondClick, setOnSortSecondClick] = useState(false);
-
-	const onSort = val => {
-		setSmallCategoryId(val);
-
-		onSortSecondClick
-			? PostQueryApi('/api/product/productList', {
-					bigCategoryId,
-					smallCategoryId: val,
-					price,
-			  }).then(
-					res => setNewProduct(res.data.productData),
-					navigate({
-						pathname: `/products`,
-						search: `bigCategoryId=${bigCategoryId}&smallCategoryId=${val}&price=${price}`,
-					}),
-			  )
-			: PostQueryApi('/api/product/productList', { bigCategoryId, smallCategoryId: val }).then(
-					res => setNewProduct(res.data.productData),
-					navigate({
-						pathname: `/products`,
-						search: `bigCategoryId=${bigCategoryId}&smallCategoryId=${val}`,
-					}),
-			  );
-
-		setSearchInput('');
-		setSelectBox(true);
-		setOnSortClick(true);
-		setSelectSmallCateId(val);
-
-		// console.log(selectBigCate, selectSmallCate);
-	};
-
-	//가격별로 분류 3
-	const priceBox = val => {
-		return val === 1
-			? setSelectPrice('~ 50,000원')
-			: val === 2
-			? setSelectPrice('50,000원 ~ 100,000원')
-			: val === 3
-			? setSelectPrice('100,000원 ~ 200,000원')
-			: val === 4
-			? setSelectPrice('200,000원 ~ 300,000원')
-			: val === 5
-			? setSelectPrice('300,000원 ~')
-			: null;
-	};
-
-	const onFilterPrice = val => {
-		setPrice(val);
-		const params = {
-			price: val,
-			bigCategoryId,
-			smallCategoryId,
-		};
-
-		//smallCate 선택된 경우/ 안된 경우
-		{
-			onSortClick
-				? PostQueryApi(`/api/product/productList`, params).then(res => {
-						setNewProduct(res.data.productData);
-						navigate(
-							`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&price=${params.price}`,
-						);
-				  })
-				: PostQueryApi(`/api/product/productList`, { bigCategoryId, price: val }).then(res => {
-						setNewProduct(res.data.productData);
-						navigate(`/products?bigCategoryId=${bigCategoryId}&price=${val}`);
-				  });
-		}
-
-		priceBox(val);
-		setOnSortSecondClick(true);
-		setSecondSelectBox(true);
-		// console.log(newProduct);
-	};
-
-	//가격별로 분류 4
-	const onFilterPriceRange = (val1, val2) => {
-		setMinPriceInput('');
-		setMaxPriceInput('');
-
-		const params = {
-			bigCategoryId,
-			smallCategoryId,
-			priceMin: val1,
-			priceMax: val2,
-		};
-
-		//smallCate 선택된경우 /안된경우
-		{
-			onSortClick
-				? PostQueryApi('/api/product/productList', params).then(
-						res => setNewProduct(res.data.productData),
-						navigate(
-							`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&priceMin=${params.priceMin}&priceMax=${params.priceMax}`,
-						),
-				  )
-				: PostQueryApi('/api/product/productList', {
-						bigCategoryId,
-						priceMin: val1,
-						priceMax: val2,
-				  }).then(
-						res => setNewProduct(res.data.productData),
-						navigate(`/products?bigCategoryId=${bigCategoryId}&priceMin=${val1}&priceMax=${val2}`),
-				  );
-		}
-	};
-
-	//검색창 5
-	const onSearch = () => {
-		const params = {
-			bigCategoryId,
-			smallCategoryId,
-		};
-
-		//smallCate 선택된 경우 / 안된경우
-		onSortClick
-			? PostQueryApi('/api/product/productList', params).then(
-					res =>
-						setNewProduct(
-							res.data.productData.filter(data =>
-								data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
-							),
-						),
-					navigate(
-						`/products?bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&search=${searchTerm}`,
-					),
-			  )
-			: PostQueryApi('/api/product/productList', { bigCategoryId }).then(
-					res =>
-						setNewProduct(
-							res.data.productData.filter(data =>
-								data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
-							),
-						),
-					navigate(`/products?bigCategoryId=${bigCategoryId}&search=${searchTerm}`),
-			  );
-		setSearchTerm('');
-	};
-
-	//가격순 정렬
-	//내림차순 6
-	const onMainSort = val => {
-		//smallCate 선택된 경우 / 안된 경우
-		onSortClick
-			? PostQueryApi('/api/product/productList', {
-					bigCategoryId,
-					smallCategoryId,
-					mainSort: val,
-			  }).then(
-					res => setNewProduct(res.data.productData),
-					navigate({
-						pathname: `/products`,
-						search: `bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}&mainSort=${val}`,
-					}),
-			  )
-			: PostQueryApi('/api/product/productList', { bigCategoryId, mainSort: val }).then(
-					res => setNewProduct(res.data.productData),
-					navigate({
-						pathname: `/products`,
-						search: `bigCategoryId=${bigCategoryId}&mainSort=${val}`,
-					}),
-			  );
-	};
-
 	return (
 		<>
 			<DialLog />
 			<Header></Header>
 			<ScrollContainer>
 				<Sidebar
-					bigCategoryId={bigCategoryId}
-					smallCategoryId={smallCategoryId}
-					setBigCategoryId={setBigCategoryId}
-					setSmallCategoryId={setSmallCategoryId}
-					setOnSortClick={setOnSortClick}
+					filterVal={filterVal}
+					setFilterVal={setFilterVal}
 					setSelectBox={setSelectBox}
-					detect={detect}
-					setDetect={setDetect}
 				></Sidebar>
 				<MainContainer>
 					{/* 카테고리 */}
@@ -342,11 +164,25 @@ const Main = () => {
 									navigate('/');
 								}}
 							>
-								{bigCategory[bigCategoryId - 1]}
+								{filterVal.bigCategoryId
+									? bigCategory[filterVal.bigCategoryId - 1]
+									: bigCategory[0]}
 							</div>
-							<div className="hash_tag">#{bigCategory[bigCategoryId - 1]}</div>
-							<div className="hash_tag">#{alpabet[bigCategoryId - 1]}</div>
-							<div className="hash_tag">#{smallCategory[bigCategoryId][1]}</div>
+							<div className="hash_tag">
+								#
+								{filterVal.bigCategoryId
+									? bigCategory[filterVal.bigCategoryId - 1]
+									: bigCategory[0]}
+							</div>
+							<div className="hash_tag">
+								#{filterVal.bigCategoryId ? alpabet[filterVal.bigCategoryId - 1] : alpabet[0]}
+							</div>
+							<div className="hash_tag">
+								#
+								{filterVal.bigCategoryId
+									? smallCategory[filterVal.bigCategoryId][1]
+									: smallCategory[0][1]}
+							</div>
 						</CategoryTitle>
 
 						<MiddleCategory>
@@ -369,7 +205,8 @@ const Main = () => {
 							<div
 								className="all_item"
 								onClick={() => {
-									onReset();
+									resetFilter();
+									// setFilterVal({ bigCategoryId: filterVal.bigCategoryId });
 								}}
 								style={{ color: 'black', 'font-weight': 'bold' }}
 							>
@@ -377,7 +214,7 @@ const Main = () => {
 							</div>
 							<div className="all_item_list">
 								<ul>
-									{smallCategory[bigCategoryId - 1]
+									{smallCategory[1]
 										.filter(val => {
 											if (searchInput === '') return val;
 											else if (val.includes(searchInput)) return val;
@@ -395,7 +232,7 @@ const Main = () => {
 								<ul>
 									<li
 										onClick={() => {
-											onSecondReset();
+											// onSecondReset();
 										}}
 										style={{ color: 'black', fontWeight: 'bold' }}
 									>
@@ -427,7 +264,7 @@ const Main = () => {
 											type="submit"
 											className="search_btn"
 											onClick={() => {
-												onFilterPriceRange(minPriceInput, maxPriceInput);
+												//onFilterPriceRange(minPriceInput, maxPriceInput);
 											}}
 										>
 											검색
@@ -446,9 +283,8 @@ const Main = () => {
 									value={searchTerm}
 									onChange={e => setSearchTerm(e.target.value)}
 								/>
-								<span type="submit" className="search_btn" onClick={() => onSearch()}>
-									검색
-								</span>
+								{/* <span type="submit" className="search_btn" onClick={() => onSearch()}> */}
+								<span>검색</span>
 							</div>
 						</OtherCategory>
 					</Category>
@@ -463,33 +299,32 @@ const Main = () => {
 
 										{
 											//params price가 적용돼 있다면
-											onSortSecondClick
-												? PostQueryApi(`/api/product/productList`, {
-														price,
-														bigCategoryId,
-												  }).then(
-														res => setNewProduct(res.data.productData),
-														navigate({
-															pathname: `/products`,
-															search: `bigCategoryId=${bigCategoryId}&price=${price}`,
-														}),
-												  )
-												: PostQueryApi(`/api/product/productList`, {
-														bigCategoryId,
-												  }).then(
-														res => setNewProduct(res.data.productData),
-														navigate({
-															pathname: `/products`,
-															search: `bigCategoryId=${bigCategoryId}`,
-														}),
-												  );
+											// 	onSortSecondClick
+											// 		? PostQueryApi(`/api/product/productList`, {
+											// 				price,
+											// 				bigCategoryId,
+											// 		  }).then(
+											// 				res => setNewProduct(res.data.productData),
+											// 				navigate({
+											// 					pathname: `/products`,
+											// 					search: `bigCategoryId=${bigCategoryId}&price=${price}`,
+											// 				}),
+											// 		  )
+											// 		: PostQueryApi(`/api/product/productList`, {
+											// 				bigCategoryId,
+											// 		  }).then(
+											// 				res => setNewProduct(res.data.productData),
+											// 				navigate({
+											// 					pathname: `/products`,
+											// 					search: `bigCategoryId=${bigCategoryId}`,
+											// 				}),
+											// 		  );
+											// }
+											// setOnSortClick(false);
 										}
-										setOnSortClick(false);
 									}}
 								>
-									<span className="select-medium">
-										{smallCategory[bigCategoryId - 1][selectSmallCate]}
-									</span>
+									<span className="select-medium">{smallCategory[1][selectSmallCate]}</span>
 									<span className="select-medium-button">&#160;X</span>
 								</div>
 							) : null}
@@ -498,28 +333,6 @@ const Main = () => {
 								className={secondSelectBox ? 'visible' : 'invisible'}
 								onClick={() => {
 									setSecondSelectBox(false);
-
-									//smallCate가 선택되어 있다면
-									onSortClick
-										? PostQueryApi(`/api/product/productList`, {
-												bigCategoryId,
-												smallCategoryId,
-										  }).then(
-												res => setNewProduct(res.data.productData),
-												navigate({
-													pathname: `/products`,
-													search: `bigCategoryId=${bigCategoryId}&smallCategoryId=${smallCategoryId}`,
-												}),
-										  )
-										: PostQueryApi(`/api/product/productList`, { bigCategoryId }).then(
-												res => setNewProduct(res.data.productData),
-												navigate({
-													pathname: `/products`,
-													search: `bigCategoryId=${bigCategoryId}`,
-												}),
-										  );
-
-									setOnSortSecondClick(false);
 								}}
 							>
 								<span className="select-medium">{selectPrice}</span>

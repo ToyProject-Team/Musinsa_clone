@@ -96,7 +96,9 @@ const Header = () => {
 					</HUser>
 				)}
 			</HDiv>
-			<article style={{ width: '200px', backgroundColor: 'white' }}>
+			<article
+				style={{ position: 'absolute', width: '200px', height: '200px', backgroundColor: 'white' }}
+			>
 				<dl>
 					<dd></dd>
 				</dl>
