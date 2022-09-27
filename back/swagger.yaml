@@ -1290,7 +1290,7 @@ paths:
           required: true
       responses:
         '200':
-          description: 성공 - 환불 시 어케가는지 아직 모름
+          description: 주문 리스트 전달(이미지 포함)
           schema:
             properties:
               myOrder:
@@ -1298,27 +1298,39 @@ paths:
                 items:
                   type: object
                   properties:
-                    orderPrice:
-                      type: number
-                      example: 24970
-                    amount:
-                      type: number
-                      example: 1
-                    state:
-                      type: string
-                      example: 2
-                    orderSize:
-                      type: string
-                      example: L
-                    orderColor:
-                      type: string
-                      example: 라이트 핑크
-                    createdAt:
-                      type: string
-                      example: 2022-09-22T05:05:20.000Z
-                    ProductId:
-                      type: string
-                      example: 1
+                    ProductImg:
+                      type: object
+                      properties:
+                        src:
+                          type: string
+                          example: Accessory/Accessory1
+                    Order:
+                      type: object
+                      properties:
+                        MerchantUid:
+                          type: string
+                          example: 3914619
+                        orderPrice:
+                          type: number
+                          example: 24970
+                        amount:
+                          type: number
+                          example: 1
+                        state:
+                          type: string
+                          example: 2
+                        orderSize:
+                          type: string
+                          example: L
+                        orderColor:
+                          type: string
+                          example: 라이트 핑크
+                        createdAt:
+                          type: string
+                          example: 2022-09-22T05:05:20.000Z
+                        ProductId:
+                          type: string
+                          example: 1
         '500':
           $ref: '#/serverError'
   /api/order/refundMyOrder:
