@@ -13,44 +13,7 @@
                 schema:
                     type: array
                     items:
-                        type: object
-                        properties:
-                            packingAmount:
-                                type: number
-                                example: 1
-                            packingSize:
-                                type: string
-                                example: 'M'
-                            packingColor:
-                                type: string,
-                                example: '샌드'
-                            Product:
-                                type: object
-                                properties:
-                                    id:
-                                        type: number
-                                        example: 23
-                                    productTitle:
-                                        type: string,
-                                        example: 'Car'
-                                    productInfo:
-                                        type: string
-                                        example: 'navigate mobile firewall'
-                                    productPrice:
-                                        type: number
-                                        example: 251680
-                                    likes:
-                                        type: number
-                                        example: 234
-                                    comments:
-                                        type: number
-                                        example: 8621
-                                    ProductImg:
-                                        type: object
-                                        properties:
-                                            src:
-                                                type: string
-                                                example: 'Accessory/Accessory23'
+                        $ref: './models/MyCart.yaml#/MyCart'
             400:
                 description: 유저의 조회 결과가 없습니다 - 토큰에 대한 사용자 정보가 데이터베이스에 존재하지 않습니다
                 schema:

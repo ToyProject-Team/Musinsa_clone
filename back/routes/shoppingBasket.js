@@ -28,9 +28,21 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
                 UserId: exUser.id,
             },
 
-            attributes: ['packingAmount', 'packingSize', 'packingColor'],
+            attributes: ['packingAmount'],
 
             include: [
+                {
+                    model: ProductMainTag,
+                    attributes: ['name'],
+                    include: {
+                        model: ProductSubTag,
+                        attributes: ['name', 'amount'],
+                    },
+                },
+                {
+                    model: ProductSubTag,
+                    attributes: ['name', 'amount'],
+                },
                 {
                     model: Product,
                     attributes: [
@@ -46,6 +58,15 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
                         {
                             model: ProductImg,
                             attributes: ['src'],
+                        },
+
+                        {
+                            model: ProductMainTag,
+                            attributes: ['name'],
+                            include: {
+                                model: ProductSubTag,
+                                attributes: ['name', 'amount'],
+                            },
                         },
                     ],
                 },

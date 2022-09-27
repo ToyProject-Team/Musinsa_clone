@@ -1,4 +1,5 @@
 const express = require('express')
+const { Product, ProductImg } = require('../models')
 const Order = require('../models/order')
 const User = require('../models/user')
 const authJWT = require('../utils/authJWT')
@@ -13,8 +14,25 @@ router.get('/orderList', authJWT, async (req, res, next) => {
         }) 
 
         const myOrder = await exUser.getMyOrder({
-            // joinTableAttributes: [],
-            attributes: []
+            joinTableAttributes: [                
+                "orderPrice",
+                "amount",
+                "state",
+                "MerchantUid",
+                "orderSize",
+                "orderColor",
+                "createdAt",
+                "ProductId",
+            ],
+            include: [
+                {
+                    model: ProductImg,
+                    attributes: ["src"]
+                }  
+            ],
+            attributes: [
+                "productTitle"
+            ],
         })
         res.status(200).send({ myOrder })
     } catch (e) {
