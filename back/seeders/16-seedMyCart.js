@@ -16,10 +16,8 @@ module.exports = {
                 include: [
                     {
                         model: ProductMainTag,
-                        attributes: ['name'],
                         include: {
                             model: ProductSubTag,
-                            attributes: ['name', 'amount'],
                         },
                     },
                 ],
@@ -56,8 +54,8 @@ module.exports = {
                             updatedAt: new Date(),
                             UserId: userId,
                             ProductId: product.id,
-                            productMainTagId: productMainTag.id,
-                            productSubTagId: productSubTag.id,
+                            ProductMainTagId: productMainTag.id,
+                            ProductSubTagId: productSubTag.id,
                             packingAmount,
                         });
                     }
