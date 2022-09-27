@@ -1,5 +1,5 @@
 const DataTypes = require('sequelize');
-const { Model } = DataTypes
+const { Model } = DataTypes;
 
 module.exports = class Product extends Model {
     static init(sequelize) {
@@ -11,84 +11,84 @@ module.exports = class Product extends Model {
                 },
                 productInfo: {
                     type: DataTypes.STRING(400),
-                    allowNull: false
+                    allowNull: false,
                 },
                 productPrice: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
                 views: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
                 likes: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
                 comments: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
                 gender: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
-                season : {
+                season: {
                     type: DataTypes.STRING(10),
-                    allowNull: false
+                    allowNull: false,
                 },
-                beRleased : {
+                beRleased: {
                     type: DataTypes.DATE,
-                    allowNull: false
+                    allowNull: false,
                 },
-                deliveryFrom : {
+                deliveryFrom: {
                     type: DataTypes.BOOLEAN,
-                    allowNull: false
+                    allowNull: false,
                 },
-                deliveryWay : {
+                deliveryWay: {
                     type: DataTypes.BOOLEAN,
-                    allowNull: false
+                    allowNull: false,
                 },
-                deliveryCompany : {
+                deliveryCompany: {
                     type: DataTypes.STRING(30),
                     // allowNull: false
                 },
-                nonMemberPrice : {
+                nonMemberPrice: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
-                rookiePrice : {
+                rookiePrice: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
-                memberPrice : {
+                memberPrice: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
-                bronzePrice : {
+                bronzePrice: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
-                silverPrice : {
+                silverPrice: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
-                goldPrice : {
+                goldPrice: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
-                platinumPrice : {
+                platinumPrice: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
-                diamondPrice : {
+                diamondPrice: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
+                    allowNull: false,
                 },
                 sells: {
                     type: DataTypes.INTEGER(11),
-                    allowNull: false
-                }
+                    allowNull: false,
+                },
             },
             {
                 modelName: 'Product',
@@ -96,42 +96,38 @@ module.exports = class Product extends Model {
                 paranoid: true,
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
-                sequelize
-            }
-        )
+                sequelize,
+            },
+        );
     }
     static associate(db) {
         db.Product.belongsToMany(db.User, {
             through: db.Order,
-            as: 'sellThis'
-        })
-        db.Product.belongsToMany(db.User, {
-            through: 'MyCart',
-            as: 'buyer'
-        })
+            as: 'sellThis',
+        });
         db.Product.belongsToMany(db.User, {
             through: db.Comment,
-            as: "commenter"
-        })
+            as: 'commenter',
+        });
         db.Product.belongsToMany(db.CustomCategory, {
-            through: 'CustomCategoryMatch'
-        })
-        db.Product.hasOne(db.ProductImg)
+            through: 'CustomCategoryMatch',
+        });
+        db.Product.hasOne(db.ProductImg);
         db.Product.belongsToMany(db.User, {
             through: 'ProductThumbsUp',
-            as: 'liked'
-        })
+            as: 'liked',
+        });
         db.Product.belongsToMany(db.User, {
             through: 'Views',
-            as:'IsViewed'
-        })
+            as: 'IsViewed',
+        });
         db.Product.belongsToMany(db.User, {
-            through: 'isLikes'
-        })
-        db.Product.belongsTo(db.BigCategory)
+            through: 'isLikes',
+        });
+        db.Product.belongsTo(db.BigCategory);
 
-        db.Product.hasMany(db.ProductSize)
-        
-        db.Product.hasMany(db.ProductMainTag)
+        db.Product.hasMany(db.ProductSize);
+
+        db.Product.hasMany(db.ProductMainTag);
     }
-}
+};

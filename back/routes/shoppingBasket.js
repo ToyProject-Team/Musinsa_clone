@@ -47,6 +47,14 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
                             model: ProductImg,
                             attributes: ['src'],
                         },
+                        {
+                            model: ProductMainTag,
+                            attributes: ['name'],
+                            include: {
+                                model: ProductSubTag,
+                                attributes: ['name', 'amount'],
+                            },
+                        },
                     ],
                 },
             ],
