@@ -1,17 +1,18 @@
 'use strict';
 
 const { User, Product, ProductMainTag, ProductSubTag } = require('../models');
+const { truncateForce } = require('../utils/seeder-helper');
 
 module.exports = {
     async up(queryInterface, Sequelize) {
         function rand(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
-        let dummyOrder = []
-        let cnt = 0
+        let dummyOrder = [];
+        let cnt = 0;
         for (let i = 1; i < 51; i++) {
             const product = await Product.findOne({
-                where: { id: i},
+                where: { id: i },
                 include: [
                     {
                         model: ProductMainTag,
@@ -24,9 +25,9 @@ module.exports = {
                 ],
             });
 
-            let repeat = rand(1, 6)
-            cnt +=1
-            const productMainTag = 
+            let repeat = rand(1, 6);
+            cnt += 1;
+            const productMainTag =
                 product.ProductMainTags[
                     rand(0, product.ProductMainTags.length - 1)
                 ];
@@ -38,7 +39,7 @@ module.exports = {
             const size = productMainTag.name;
             const color = productSubTag.name;
             const amount = productSubTag.amount;
-        
+
             dummyOrder.push({
                 orderPrice: product.productPrice,
                 cancelableAmount: product.productPrice,
@@ -52,13 +53,13 @@ module.exports = {
                 updatedAt: new Date(),
                 UserId: i,
                 ProductId: cnt,
-            });           
+            });
         }
 
         await queryInterface.bulkInsert('Orders', dummyOrder);
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('Orders', null, {});
+        await truncateForce(queryInterface, 'Orders');
     },
 };
