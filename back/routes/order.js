@@ -31,6 +31,7 @@ router.get('/orderList', authJWT, async (req, res, next) => {
                 }  
             ],
             attributes: [
+                "productTitle"
             ],
         })
         res.status(200).send({ myOrder })

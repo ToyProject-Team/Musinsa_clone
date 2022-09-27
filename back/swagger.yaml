@@ -1298,6 +1298,9 @@ paths:
                 items:
                   type: object
                   properties:
+                    productTitle:
+                      type: string
+                      example: Sausages
                     ProductImg:
                       type: object
                       properties:
