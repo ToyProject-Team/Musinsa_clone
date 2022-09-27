@@ -6,7 +6,6 @@ import { PagenationBox } from '../Like/styles';
 import Pagination from 'react-js-pagination';
 import { GetTokenApi } from 'utils/api';
 import { getData } from 'utils/getData';
-// import dummyData from 'components/Mypage/data.json';
 
 function OrderList() {
 	const dummyData = {
@@ -69,7 +68,7 @@ function OrderList() {
 						{orderData.slice(items * (page - 1), items * (page - 1) + items).map((data, index) => (
 							<Tr 
 							key={index}
-							data={data.Order} />
+							data={data} />
 						))}
 						
 					</OrderTable>

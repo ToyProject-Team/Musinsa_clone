@@ -22,8 +22,6 @@ function Cart() {
 		});
 	}, []);
 
-	// const [data, setData] = useState([]);
-
 	const [checkBox, setCheckBox] = useState(false);
 	const [sum, setSum] = useState(0);
 	const loginToken = getData();

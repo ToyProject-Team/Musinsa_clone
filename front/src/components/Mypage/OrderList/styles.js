@@ -25,6 +25,9 @@ export const OrderTable = styled.table`
         &:first-of-type{
             text-align: left;
         }
+        ul{
+            margin-top: 10px;
+        }
 }
 `;
 
