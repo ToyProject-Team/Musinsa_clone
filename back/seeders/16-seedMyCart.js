@@ -35,26 +35,7 @@ module.exports = {
                 continue;
             }
 
-            let temp = rand(0, 6);
-            let randNumbers = [];
-            let idx = 0;
-            while (true) {
-                if (idx == temp) {
-                    break;
-                }
-                let randNumber = rand(1, 50);
-                if (!randNumbers.includes(randNumber)) {
-                    randNumbers.push(randNumber);
-                    idx++;
-                }
-            }
-
-            for (var k = 0; k < temp; k++) {
-                const productMainTag =
-                    product.ProductMainTags[
-                        rand(0, product.ProductMainTags.length - 1)
-                    ];
-
+            for (let productMainTag of product.ProductMainTags) {
                 if (
                     productMainTag.ProductSubTags == undefined ||
                     productMainTag.ProductSubTags.length == 0
@@ -65,27 +46,24 @@ module.exports = {
                     continue;
                 }
 
-                const productSubTag =
-                    productMainTag.ProductSubTags[
-                        rand(0, productMainTag.ProductSubTags.length - 1)
-                    ];
+                for (let productSubTag of productMainTag.ProductSubTags) {
+                    const packingAmount = rand(1, productSubTag.amount);
+                    const userId = rand(1, 50);
 
-                const size = productMainTag.name;
-                const color = productSubTag.name;
-                const amount = productSubTag.amount;
-
-                Cart.push({
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    UserId: randNumbers[k],
-                    ProductId: productId,
-                    packingAmount: rand(1, amount),
-                    packingSize: size,
-                    packingColor: color,
-                });
+                    if (packingAmount > 0) {
+                        Cart.push({
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
+                            UserId: userId,
+                            ProductId: product.id,
+                            productMainTagId: productMainTag.id,
+                            productSubTagId: productSubTag.id,
+                            packingAmount,
+                        });
+                    }
+                }
             }
         }
-
         await queryInterface.bulkInsert('MyCarts', Cart);
     },
 
