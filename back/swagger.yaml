@@ -3,9 +3,9 @@ info:
   version: 1.0.0
   title: Musinsa-API-docs
   description: Musinsa API문서
-  servers:
-    - description: Musinsa-Clone dev
-      url: 'http://localhost:80/'
+servers:
+  - url: 'http://localhost:80/'
+    description: Musinsa-Clone dev
 tags:
   - name: auth
     description: API about auth
@@ -1180,58 +1180,11 @@ paths:
           required: true
       responses:
         '200':
-          description: 성공 - likeProduct 배열에 담긴체 좋아요한 상품들을 전달합니다(최대 100개)
+          description: 성공 - 장바구니 리스트를 반환합니다.
           schema:
-            properties:
-              exCart:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      example: 4
-                    productTitle:
-                      type: string
-                      example: Fish
-                    productPrice:
-                      type: integer
-                      example: 57200
-                    nonMemberPrice:
-                      type: integer
-                      example: 52000
-                    deliveryFrom:
-                      type: boolean
-                      example: true
-                    deliveryWay:
-                      type: boolean
-                      example: false
-                    deliveryCompany:
-                      type: string
-                      example: CJ대한통운
-                    ProductImg:
-                      type: object
-                      properties:
-                        src:
-                          type: string
-                          example: Accessory/Accessory2
-                    ProductMainTags:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          name:
-                            type: string
-                            example: XL
-                          ProductSubTags:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                name:
-                                  type: string
-                                  example: 딥레드
-                                  amount: 3
+            type: array
+            items:
+              $ref: '#/components/schemas/MyCart'
         '400':
           description: 유저의 조회 결과가 없습니다 - 토큰에 대한 사용자 정보가 데이터베이스에 존재하지 않습니다
           schema:
@@ -1287,6 +1240,63 @@ paths:
               message:
                 type: string
                 example: 장바구니에 없는 상품을 삭제 시도하셨습니다
+        '500':
+          $ref: '#/serverError'
+  /api/order/orderList:
+    get:
+      tags:
+        - order
+      summary: 주문 리스트
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+      responses:
+        '200':
+          description: 주문 리스트 전달(이미지 포함)
+          schema:
+            properties:
+              myOrder:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    productTitle:
+                      type: string
+                      example: Sausages
+                    ProductImg:
+                      type: object
+                      properties:
+                        src:
+                          type: string
+                          example: Accessory/Accessory1
+                    Order:
+                      type: object
+                      properties:
+                        MerchantUid:
+                          type: string
+                          example: 3914619
+                        orderPrice:
+                          type: number
+                          example: 24970
+                        amount:
+                          type: number
+                          example: 1
+                        state:
+                          type: string
+                          example: 2
+                        orderSize:
+                          type: string
+                          example: L
+                        orderColor:
+                          type: string
+                          example: 라이트 핑크
+                        createdAt:
+                          type: string
+                          example: 2022-09-22T05:05:20.000Z
+                        ProductId:
+                          type: string
+                          example: 1
         '500':
           $ref: '#/serverError'
   /api/order/refundMyOrder:
@@ -1364,3 +1374,83 @@ serverError:
       message:
         type: string
         example: 서버 에러
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 23
+        productTitle:
+          type: 'string,'
+          example: Car
+        productInfo:
+          type: string
+          example: navigate mobile firewall
+        productPrice:
+          type: number
+          example: 251680
+        likes:
+          type: number
+          example: 234
+        comments:
+          type: number
+          example: 8621
+        ProductImg:
+          type: object
+          properties:
+            src:
+              type: string
+              example: Accessory/Accessory23
+        ProductMainTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductMainTag'
+    ProductMainTag:
+      type: object
+      properties:
+        name:
+          type: string
+          example: M
+        ProductSubTags:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: 빨간색
+              amount:
+                type: number
+                example: 1
+          example:
+            - name: 빨간색
+              amount: 1
+            - name: 다크 그린
+              amount: 1
+            - name: 진청
+              amount: 2
+            - name: 분홍색
+              amount: 0
+    ProductSubTag:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 빨간색
+        amount:
+          type: number
+          example: 1
+    MyCart:
+      type: object
+      properties:
+        packingAmount:
+          type: number
+          example: 3
+        ProductMainTag:
+          $ref: '#/components/schemas/ProductMainTag'
+        ProductSubTag:
+          $ref: '#/components/schemas/ProductSubTag'
+        Product:
+          $ref: '#/components/schemas/Product'

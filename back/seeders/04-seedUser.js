@@ -26,7 +26,7 @@ module.exports = {
         for (var i = 0; i < 70; i++) {
             // console.log(i)
             let name = faker.name.findName();
-            let randPhoneNumber = faker.phone.phoneNumber('010-####-####');
+            let randPhoneNumber = faker.phone.number('010-####-####');
             dummyUser.push({
                 loginId: faker.internet.email(),
                 email: faker.internet.email(name),

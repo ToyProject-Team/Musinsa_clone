@@ -103,6 +103,7 @@ export const HUser = styled.div`
 		position: relative;
 		border-radius: 4px;
 		font-weight: 900;
+		border: none;
 	}
 
 	.notLogin {
@@ -258,24 +259,29 @@ export const HUser = styled.div`
 		}
 	}
 
-	& div:nth-of-type(2) {
-		& a {
-			color: #ff0000;
-		}
+	& .logOut:hover {
+			background: linear-gradient(to right, #833ab4, #fd1d1d, #fcb045, #B3FFAB, #12FFF7);
+			-webkit-background-clip: text;
+			background-clip: text;
+			color: transparent;
+			animation: rainbow 6s ease-in-out infinite;
+			background-size: 400% 100%;
+			
 	}
+	
 `;
 
 export const CountNum = styled.span`
 	display: inline-block;
 	min-width: 18px;
-	height: 18px;
-	padding: 1px 0 0 0;
+	height: 16px;
 	border-radius: 10px;
 	background-color: #0078ff;
 	font-size: 12px;
 	font-family: 'Arial', 'sans-serif';
 	line-height: normal;
 	color: white;
-	vertical-align: top;
+	vertical-align: text-top;
 	margin-left: 2px;
+	padding-top: 3px;
 `;

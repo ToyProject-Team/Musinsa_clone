@@ -33,6 +33,21 @@ export const GetTokenApi = async (PATH, params) => {
 
 /**
  *
+ * @param 카카오 로그인 전용
+ * @param URL주소 PATH
+ * @param query params
+ * @returns result 데이터
+ */
+export const KakaoGetQueryApi = async (PATH, params) => {
+	const result = await axios.get(`${PATH}?${params}`, {
+		headers: { 'Content-Type': 'application/json' },
+	});
+
+	return result;
+};
+
+/**
+ *
  * @param URL주소 PATH
  * @param body값 params
  * @returns result 데이터

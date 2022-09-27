@@ -8,15 +8,11 @@ import {
 	ButtonCart,
 	Button,
 	Like,
-	Selected,
 	SelectedOption,
-	Amount,
 	Decrease,
-	Price,
 } from './styles';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Modal from 'react-modal';
 import Order from 'components/Order';
 import {
 	LIKES,
@@ -26,10 +22,10 @@ import {
 import { thousandComma } from 'utils/thousandComma';
 import { getData } from 'utils/getData';
 import { URLquery } from 'utils/URLquery';
-import { baseUrl, DeleteHeaderBodyApi, GetApi, GetTokenApi, PostHeaderBodyApi } from 'utils/api';
-import axios from 'axios';
+import { DeleteHeaderBodyApi, GetTokenApi, PostHeaderBodyApi } from 'utils/api';
 import ConfirmModal from 'components/Modals/ConfirmModal';
 import OrderModal from 'components/Modals/OrderModal';
+import Cookies from 'js-cookie';
 
 const ModalStyle = {
 	overlay: {
@@ -189,7 +185,16 @@ const PurchaseForm = () => {
 				prev = {
 					...prev,
 					[option_1]: prev[option_1].map(v =>
-						v[option_2] ? { ...v, [option_2]: v[option_2] + 1 } : v,
+						v[option_2]
+							? {
+									...v,
+									[option_2]:
+										v[option_2] ===
+										Number(option_2.slice(option_2.indexOf('(') + 1, option_2.indexOf('개남음')))
+											? (alert('상품을 추가하실수 없습니다.'), v[option_2])
+											: v[option_2] + 1,
+							  }
+							: v,
 					),
 				};
 				return prev;
@@ -249,7 +254,8 @@ const PurchaseForm = () => {
 	const onLikeClicked = useCallback(async () => {
 		if (!user) {
 			const { pathname, search } = location;
-			navigate(`/login?redirect=${pathname}${search}`);
+			Cookies.set('redirect', pathname + search);
+			navigate(`/login`);
 		}
 
 		const token = user.accessToken;
@@ -289,7 +295,8 @@ const PurchaseForm = () => {
 	const onClickBasket = useCallback(async () => {
 		if (!user) {
 			const { pathname, search } = location;
-			navigate(`/login?redirect=${pathname}${search}`);
+			Cookies.set('redirect', pathname + search);
+			navigate(`/login`);
 		}
 
 		const token = user.accessToken;

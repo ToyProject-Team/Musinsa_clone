@@ -2,13 +2,15 @@ import styled from '@emotion/styled';
 
 export const ScrollContainer = styled.div`
 	display: flex;
-	height: 100vh;
-	position: sticky;
+	min-height: 100vh;
+	// position: sticky;
 `;
 
 export const MainContainer = styled.div`
+	display: flex;
+	flex-direction: column;
 	font-size: 13px;
-	height: 100vh;
+	min-height: 100vh;
 	border-left: 1px solid #ddd;
 `;
 
@@ -23,12 +25,12 @@ export const CategoryTitle = styled.div`
 	flex-shrink: 0;
 	border-bottom: solid 1px;
 	border-color: rgb(212, 212, 212);
-	padding: 4px 10px 10px 45px;
+	padding: 6px 10px 4px 45px;
 
 	.page_title {
 		float: left;
 		text-justify: center;
-		padding-right: 20px;
+		padding: 6px 20px 0;
 		font-size: 24px;
 
 		:hover {
@@ -361,7 +363,7 @@ export const SelectBox = styled.div`
 export const Items = styled.div`
 	// min-width: 933px;
 	background-color: #fff;
-	height: 100vh;
+	min-height: 100vh;
 	//border-right: 1px solid #ddd;
 	border-left: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
@@ -411,7 +413,6 @@ export const SortBox = styled.div`
 
 export const ListBox = styled.div`
 	width: 100%;
-	height: 317px;
 	// text-align: center;
 	// border-right: 1px solid #ddd;
 

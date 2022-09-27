@@ -106,10 +106,6 @@ module.exports = class Product extends Model {
             as: 'sellThis',
         });
         db.Product.belongsToMany(db.User, {
-            through: 'MyCart',
-            as: 'buyer',
-        });
-        db.Product.belongsToMany(db.User, {
             through: db.Comment,
             as: 'commenter',
         });
