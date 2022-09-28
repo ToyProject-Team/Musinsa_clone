@@ -21,6 +21,18 @@ module.exports = class MyCart extends Model {
                 paranoid: true,
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
+                indexes: [
+                    {
+                        unique: true,
+                        fields: [
+                            'ProductMainTagId',
+                            'ProductSubTagId',
+                            'UserId',
+                            'ProductId',
+                        ],
+                        name: 'my_carts_unique_p_p_u_p_id', //Identifier name is too long 오류 방지
+                    },
+                ],
                 sequelize,
             },
         );
