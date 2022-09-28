@@ -13,6 +13,15 @@ export const HDiv = styled.div`
 	width: 100%;
 	padding: 23px 0 23px 0;
 	background-color: black;
+
+	.none{
+		display: none;
+	}
+
+	.block{
+		display: block;
+	}
+
 `;
 
 export const HLogo = styled.h1`
@@ -31,13 +40,6 @@ export const HSearch = styled.div`
 	margin-left: 20px;
 	margin-right: auto;
 
-	.none{
-		display: none;
-	}
-
-	.block{
-		display: block;
-	}
 
 	& article{
 		width: 260px;
@@ -311,6 +313,54 @@ export const HUser = styled.div`
 		& a {
 			text-decoration: none;
 			color: inherit;
+		}
+
+		& article{
+			position: absolute;
+			width: 375px;
+			padding: 15px 0;
+			top: 9.6%;
+			left: 47.5%;
+			box-sizeing: border-box;
+			border: 1px solid #ddd;
+			background-color: white;
+			color: #777;
+			font-size: 12px;
+			line-height: 1.5;
+			z-index:11;
+			animation: fadeIn 0.4s;
+
+			& p:last-of-type{
+				padding: 20px;
+			}
+
+			& span{
+			position: absolute;
+    		font-size: 46px;
+			top: -24%;
+   			left: 42%;
+			z-index: 4;
+				& svg{
+					fill: white;
+				}
+			}
+		}
+		@keyframes fadeIn{
+			from{
+				opacity: 0;
+			}
+
+			to{
+				opacity: 1;
+			}
+		}
+		
+	}
+
+	& div:nth-of-type(2){
+
+		& a{
+			color: rgb(237, 0, 96);
 		}
 	}
 

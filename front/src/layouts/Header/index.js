@@ -1,41 +1,43 @@
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { HContainer, HDiv, HLogo, HSearch, HUser, CountNum } from './styles';
 import { Link } from 'react-router-dom';
 import { AiOutlineCamera, AiOutlineSearch } from 'react-icons/ai';
 import { getData } from 'utils/getData';
 import { deleteData } from 'utils/deleteData';
 import { PostHeaderApi } from 'utils/api';
+import { IoMdArrowDropup } from "react-icons/io";
 import Cookies from 'js-cookie';
 
 const Header = () => {
 	const [login, setLogin] = useState(getData());
 	const [cartNum, setCartNum] = useState(0);
-	const [search, setSearch] = useState(Cookies.get("input", ""));
+	const [search, setSearch] = useState([]);
 	const [open, setOpen] = useState(false);
-
-	const valRef = useRef();
-
+	const [op, setOp] = useState(false);
+	const valRef = useRef()
+	 
 	const formSub = useCallback((e)=>{
 		e.preventDefault();
 		const val = valRef.current.value;
-		// Cookies.set("input", val)
-		setSearch(Cookies.set("input",val))
-
-		// let val = valRef.current.value
-		// let co = Cookies.get("input", val)
-		// setSearch(co)
-		// console.log(val,123123,search.length, 11111, co)
-	},[])
+		const saveInput = {
+			input: val,
+			id: Date.now(),
+		  };
 		
-	const inputChange = useCallback(()=>{
-		const val = valRef.current.value;
-		// console.log(co,123123,search,123123,val)
+		search.push(saveInput)
+		// saveText();
+		// saveInput.input = ""
+		// console.log(saveInput,123123,search.length)
+			
 	},[])
-	
+
+	useEffect (()=>{
+		sessionStorage.setItem("input",JSON.stringify(search))
+
+	},[search])
 
 	const inputValue = () =>{
 		setOpen(!open)
-		// if(e.keyCode == 13) console.log("asd")
 	}
 
 
@@ -82,10 +84,23 @@ const Header = () => {
 								<h3>최근 검색어</h3>
 								<button type="button">전체 삭제</button>
 							</dt>
-						{search}
 							<dd>
 								<ul>
+								{/* {search.length === 0 ?
 									<li>최근 검색어 내용이 없습니다.</li>
+									:
+									{search.map((text, index) => {
+										<li>{text}</li>
+									})}
+								} */}
+								{search.map((text, idx) => {
+									<li>
+									{/* console.log(text.input,"ddddddd",idx) */}
+									{text.input}
+									</li>
+									{/* <li>{consol}</li> */}
+								})}
+
 								</ul>
 							</dd>
 						</dl>
@@ -101,7 +116,13 @@ const Header = () => {
 						</Link>
 					}
 						<div>
-							<a>알림</a>
+							<a onClick={() => setOp(!op)}>알림</a>
+							<article className={op ? "block" : "none"}>
+								<p>PC에서는 공지, 구매 정보 알림만 확인하실 수 있습니다. <br/>그 외 알림은 앱에서 확인 가능합니다.</p>
+								<p>등록된 알림이 없습니다.</p>
+								<span><IoMdArrowDropup/></span>
+							</article>
+							
 						</div>
 						<div>
 							<Link to="/mypage/like">
