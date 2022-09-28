@@ -6,7 +6,7 @@ import { TbArrowBigUpLine, TbArrowBigDownLine } from 'react-icons/tb';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import UrlCopyModal from 'components/Modals/UrlCopyModal';
 
-const DialLog = () => {
+const DialLog = props => {
 	const saveUrl = useLocation();
 
 	// 다이얼 로그
@@ -60,11 +60,11 @@ const DialLog = () => {
 							: { boxShadow: 'inset 0px 0px 4px 1px rgba(0,0,255,0.5)' }
 					}
 				>
-					<Link to="/">
+					<div onClick={() => props.goMain()}>
 						<button type="button">
 							{basic.home ? <BiHomeCircle /> : <BiHomeHeart style={{ color: 'blue' }} />}
 						</button>
-					</Link>
+					</div>
 				</div>
 				<div
 					style={

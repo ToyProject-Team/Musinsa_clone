@@ -4,6 +4,8 @@ export const ScrollContainer = styled.div`
 	display: flex;
 	min-height: 100vh;
 	// position: sticky;
+	margin-top: 200px;
+	border-top: 1px solid #ddd;
 `;
 
 export const MainContainer = styled.div`
@@ -409,6 +411,7 @@ export const SortBox = styled.div`
 		height: 40px;
 		float: left;
 		font-weight: bold;
+		text-decoration: underline;
 		padding-right: 10px;
 
 		// &::after {
@@ -448,17 +451,60 @@ export const SortBox = styled.div`
 	}
 `;
 
+export const PaginationWapper = styled.div`
+	text-align: center;
+
+	.pagination {
+		display: flex;
+		// position: relative;
+		// top: -41px;
+		height: 40px;
+		justify-content: flex-end;
+
+		li {
+			display: inline-block;
+			width: 30px;
+			justify-content: center;
+			align-items: center;
+			// padding-top: 12px;
+			border-left: 1px solid #ddd;
+			font-size: 1rem;
+			&:hover {
+				background-color: #f2f2f2;
+			}
+			a {
+				text-decoration: none;
+				color: gray;
+				font-size: 1rem;
+				font-weight: bold;
+			}
+		}
+		.active {
+			padding: 0;
+			a {
+				color: black;
+			}
+		}
+	}
+`;
+
 export const ListBox = styled.div`
 	width: 100%;
 	// text-align: center;
 	// border-right: 1px solid #ddd;
 
 	.list_item {
-		display: inline-block;
-
-		// border-right: 1px solid #ddd;
 	}
 `;
+
+// export const ListBox = styled.div`
+// 	width: 100%;
+// 	// text-align: center;
+// 	// border-right: 1px solid #ddd;
+
+// 	.list_item {
+// 	}
+// `;
 
 // 	.li_outer {
 // 		position: relative;

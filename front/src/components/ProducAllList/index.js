@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { ListOuter, ListBox } from './styles';
+import { ListBox, ListOuter } from './styles';
 
-const ShowList = props => {
+const AllList = props => {
+	//페이지네이션 관련
+
 	//옵션 데이터
 	const [arrow, setArrow] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
@@ -72,4 +74,4 @@ const ShowList = props => {
 	);
 };
 
-export default ShowList;
+export default AllList;

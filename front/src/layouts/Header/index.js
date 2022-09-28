@@ -6,7 +6,7 @@ import { getData } from 'utils/getData';
 import { deleteData } from 'utils/deleteData';
 import { PostHeaderApi } from 'utils/api';
 
-const Header = () => {
+const Header = props => {
 	const [login, setLogin] = useState(getData());
 	const [cartNum, setCartNum] = useState(0);
 	const [search, setSearch] = useState('');
@@ -27,9 +27,9 @@ const Header = () => {
 	return (
 		<HContainer>
 			<HDiv>
-				<Link to="/">
+				<div onClick={() => props.goMain()}>
 					<HLogo>MUSINSA</HLogo>
-				</Link>
+				</div>
 				<HSearch>
 					<div>
 						<form id="search_form">

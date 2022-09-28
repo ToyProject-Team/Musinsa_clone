@@ -12,6 +12,7 @@ import {
 	SelectBox,
 	SortBox,
 	ListBox,
+	PaginationWapper,
 } from './styles';
 
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
@@ -19,12 +20,11 @@ import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
 import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
-// import InfiniteScroll from 'react-infinite-scroll-component';
 import Header from 'layouts/Header';
 import Sidebar from 'layouts/Sidebar';
 import Footer from 'layouts/Footer';
 import DialLog from 'layouts/DialLog';
-// import { URLquery } from 'utils/URLquery';
+import Pagination from 'react-js-pagination';
 
 const Main = () => {
 	const navigate = useNavigate();
@@ -33,13 +33,12 @@ const Main = () => {
 		fallback: <div>로딩중</div>,
 	});
 
-	const NewList = loadable(() => import('components/ProductNewList'), {
+	const AllList = loadable(() => import('components/ProducAllList'), {
 		fallback: <div>로딩중</div>,
 	});
 
 	//데이터 저장할 state(원본 담을 state/조건추가시 필터된 데이터 담을 state)
 	const [product, setProduct] = useState([]);
-	const [newProduct, setNewProduct] = useState([]);
 
 	//쿼리스트링 활용
 	const location = useLocation();
@@ -88,7 +87,18 @@ const Main = () => {
 		setClickPrice(newArr);
 	};
 
-	//클릭된 요소 style
+	//priceMin, Max 삭제함수
+	const onResetPriceRange = () => {
+		delete filterVal.priceMin;
+		delete filterVal.priceMax;
+		setFilterVal({ ...filterVal });
+
+		setMinPriceInput('');
+		setMaxPriceInput('');
+	};
+
+	//클릭한 요소 style변경
+	//전체 요소수와 같은 배열 생성 - 모두  false로 채움 - 클릭한 요소만 true로 변경
 	const [clickCate, setClickCate] = useState(
 		Array.from({
 			length: smallCategory[filterVal.bigCategoryId ? filterVal.bigCategoryId - 1 : 0].length,
@@ -122,16 +132,20 @@ const Main = () => {
 			filterVal.priceMax ? `&priceMax=${filterVal.priceMax}` : ''
 		}${filterVal.mainSort ? `&mainSort=${filterVal.mainSort}` : ''}`;
 
+		setPage(1);
+
 		navigate({ pathname: `/products`, search: queryString });
 	}, [filterVal]);
 
 	useEffect(() => {
 		PostQueryApi(`/api/product/productList${location.search}`).then(res =>
-			setNewProduct(res.data.productData),
+			setProduct(res.data.productData),
 		);
 	}, [location.search]);
 
 	useEffect(() => {
+		setMinPriceInput('');
+		setMaxPriceInput('');
 		setClickCate(clickCate.fill(false));
 		setClickMainSort(clickMainSort.fill(false));
 		setClickPrice(clickPrice.fill(false));
@@ -157,12 +171,27 @@ const Main = () => {
 
 	//price추가
 	const onFilterPrice = val => {
+		delete filterVal.priceMin;
+		delete filterVal.priceMax;
+		setMinPriceInput('');
+		setMaxPriceInput('');
 		handleFilter(val, 'price');
 
 		const newArr = clickPrice;
 		if (newArr.includes(true)) newArr[clickPrice.indexOf(true)] = false;
-
 		newArr[val - 1] = true;
+		setClickPrice(newArr);
+	};
+
+	//pricaRange 추가
+	const onFilterPriceRange = (val1, val2) => {
+		delete filterVal.price;
+		setFilterVal(prev => {
+			return { ...prev, priceMin: val1, priceMax: val2 };
+		});
+
+		const newArr = clickPrice;
+		if (newArr.includes(true)) newArr[clickPrice.indexOf(true)] = false;
 		setClickPrice(newArr);
 	};
 
@@ -190,8 +219,8 @@ const Main = () => {
 	//검색창 함수
 	const onSearch = () => {
 		setSearch(true);
-		setNewProduct(
-			newProduct.filter(data => data.productTitle.toLowerCase().includes(searchTerm.toLowerCase())),
+		setProduct(
+			product.filter(data => data.productTitle.toLowerCase().includes(searchTerm.toLowerCase())),
 		);
 	};
 
@@ -199,21 +228,36 @@ const Main = () => {
 	const onResetSearch = () => {
 		setSearch(false);
 		PostQueryApi(`/api/product/productList${location.search}`).then(res =>
-			setNewProduct(res.data.productData),
+			setProduct(res.data.productData),
 		);
 		setSearchTerm('');
 	};
 
+	// //페이지네이션 관련
+	const [page, setPage] = useState(1);
+	const [items, setItems] = useState(18);
+	const handlePageChange = page => {
+		setPage(page);
+	};
+	// const length = product.length;
+	const length = product.length;
+
+	const goMain = () => {
+		delete filterVal.bigCategoryId;
+		delete filterVal.smallCategoryId;
+		delete filterVal.price;
+		delete filterVal.priceMin;
+		delete filterVal.priceMax;
+
+		setFilterVal({ filterVal });
+	};
+
 	return (
 		<>
-			<DialLog />
-			<Header></Header>
+			<DialLog goMain={goMain} />
+			<Header goMain={goMain}></Header>
 			<ScrollContainer>
-				<Sidebar
-					filterVal={filterVal}
-					setFilterVal={setFilterVal}
-					// setSelectBox={setSelectBox}
-				></Sidebar>
+				<Sidebar filterVal={filterVal} setFilterVal={setFilterVal}></Sidebar>
 				<MainContainer>
 					{/* 카테고리 */}
 					<Category>
@@ -221,7 +265,7 @@ const Main = () => {
 							<div
 								className="page_title"
 								onClick={() => {
-									navigate('/');
+									setFilterVal({ bigCategoryId: filterVal.bigCategoryId });
 								}}
 							>
 								{filterVal.bigCategoryId
@@ -240,7 +284,9 @@ const Main = () => {
 							<div className="hash_tag">
 								#
 								{filterVal.bigCategoryId
-									? smallCategory[filterVal.bigCategoryId][1]
+									? smallCategory[filterVal.bigCategoryId - 1][
+											Math.floor(Math.random() * smallCategory[filterVal.bigCategoryId - 1].length)
+									  ]
 									: smallCategory[0][1]}
 							</div>
 						</CategoryTitle>
@@ -355,7 +401,7 @@ const Main = () => {
 											type="submit"
 											className="search_btn"
 											onClick={() => {
-												//onFilterPriceRange(minPriceInput, maxPriceInput);
+												onFilterPriceRange(minPriceInput, maxPriceInput);
 											}}
 										>
 											검색
@@ -404,7 +450,23 @@ const Main = () => {
 									onResetPrice();
 								}}
 							>
-								<span className="select-medium">{priceArr[filterVal.price]}</span>
+								<span className="select-medium">{priceArr[filterVal.price - 1]}</span>
+								<span className="select-medium-button">&#160;X</span>
+							</div>
+							{/* 최소, 최대가격 */}
+							<div
+								className={filterVal.priceMin || filterVal.priceMax ? 'visible' : 'invisible'}
+								onClick={() => {
+									onResetPriceRange();
+								}}
+							>
+								<span className="select-medium">
+									{filterVal.priceMin ? `${filterVal.priceMin}원 ` : null}
+								</span>
+								<span className="select-medium">~</span>
+								<span className="select-medium">
+									{filterVal.priceMax ? ` ${filterVal.priceMax}원` : null}
+								</span>
 								<span className="select-medium-button">&#160;X</span>
 							</div>
 							<div
@@ -442,15 +504,30 @@ const Main = () => {
 										후기순
 									</span>
 								</div>
+								<PaginationWapper>
+									<Pagination
+										activePage={page}
+										itemsCountPerPage={items}
+										totalItemsCount={length}
+										pageRangeDisplayed={10}
+										onChange={handlePageChange}
+										// hideNavigation={true}
+										// hideFirstLastPages={true}
+									/>
+								</PaginationWapper>
 							</SortBox>
 
 							<ListBox>
 								<ul className="list_item">
 									<Routes>
-										<Route exact path="/" element={<ShowList product={product} />}></Route>
+										<Route
+											exact
+											path="/"
+											element={<AllList product={product} items={items} page={page} />}
+										></Route>
 										<Route
 											path="/products"
-											element={<NewList product={product} newProduct={newProduct} />}
+											element={<ShowList product={product} items={items} page={page} />}
 										></Route>
 									</Routes>
 								</ul>
