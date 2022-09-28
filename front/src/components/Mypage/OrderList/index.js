@@ -52,7 +52,7 @@ function OrderList() {
 							<col width="14.2%" />
 							<col width="14.2%" />
 							<col width="10.2%" />
-							<col width="11%" />
+							<col width="15%" />
 						</colgroup>
 						<thead>
 							<tr>

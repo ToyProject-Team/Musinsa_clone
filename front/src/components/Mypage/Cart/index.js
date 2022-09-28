@@ -95,7 +95,7 @@ function Cart() {
 							<col width="12%" />
 							<col width="9.5%" />
 							<col width="17.3%" />
-							<col width="12%" />
+							<col width="15%" />
 						</colgroup>
 						<thead>
 							<tr>

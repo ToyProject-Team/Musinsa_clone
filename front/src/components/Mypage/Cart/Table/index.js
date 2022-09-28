@@ -103,7 +103,7 @@ function CartTable({ item, setCartList, cartList }) {
 							<col width="12%" />
 							<col width="9.5%" />
 							<col width="17.3%" />
-							<col width="12%" />
+							<col width="15%" />
 						</colgroup>
 						<tbody>
 							<tr>
@@ -116,10 +116,12 @@ function CartTable({ item, setCartList, cartList }) {
 								<td className="top">
 									<div>
 										<ImgSpan>
-											<img
-												src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${item.Product.ProductImg.src}`}
-												alt="더미데이터"
-											/>
+											<a href={`/detail?productId=${item.Product.id}`}>
+												<img
+													src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${item.Product.ProductImg.src}`}
+													alt="더미데이터"
+												/>
+											</a>
 										</ImgSpan>
 										<ItemUl>
 											<li>
@@ -127,12 +129,15 @@ function CartTable({ item, setCartList, cartList }) {
 												{/* <a href="/"> {smallCategory[item.bigCategory][item.smallCategory]}</a> */}
 											</li>
 											<li>
-												<a href="/">
+												<a href={`/detail?productId=${item.Product.id}`}>
 													<strong>{item.Product.productTitle}</strong>
 												</a>
 											</li>
 											<li>
-												{item.packingColor} / {item.packingSize} / {item.packingAmount}개
+												{item.ProductSubTag.name} / {item.ProductMainTag.name} /{' '}
+												{item.ProductSubTag.amount === 0
+													? `품절`
+													: `${item.ProductSubTag.amount}개`}
 											</li>
 										</ItemUl>
 									</div>

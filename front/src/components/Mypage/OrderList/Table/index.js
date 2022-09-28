@@ -16,19 +16,23 @@ function OrderList({ data }) {
 			<tr>
 				<td>
 					<ImgSpan>
-						<img
-							src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.ProductImg.src}`}
-							alt="더미데이터"
-							width="50px"
-							height="50px"
-						/>
+						<a href={`/detail?productId=${data.Order.ProductId}`}>
+							<img
+								src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.ProductImg.src}`}
+								alt="더미데이터"
+								width="50px"
+								height="50px"
+							/>
+						</a>
 					</ImgSpan>
 					<ul>
 						<li>
-							<strong>{data.productTitle}</strong>
+							<a href={`/detail?productId=${data.Order.ProductId}`}>
+								<strong>{data.productTitle}</strong>
+							</a>
 						</li>
 						<li>
-							{data.Order.orderColor} / {data.Order.orderSize}
+							옵션 : {data.Order.orderColor} / {data.Order.orderSize}
 						</li>
 					</ul>
 				</td>
@@ -38,7 +42,7 @@ function OrderList({ data }) {
 					{thousandComma(data.Order.orderPrice * data.Order.amount)}원<br />
 					<span>({data.Order.amount}개)</span>
 				</td>
-				<td colSpan="2">{orderState()}</td>
+				<td colSpan="2"><span>{orderState()}</span><button>환불요청</button></td>
 			</tr>
 		</tbody>
 	);
