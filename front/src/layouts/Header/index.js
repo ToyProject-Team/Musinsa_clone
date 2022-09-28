@@ -11,9 +11,9 @@ import Cookies from 'js-cookie';
 const Header = () => {
 	const [login, setLogin] = useState(getData());
 	const [cartNum, setCartNum] = useState(0);
-	const [search, setSearch] = useState([]);
+	const [search, setSearch] = useState("");
 	const [open, setOpen] = useState(false);
-	const [op, setOp] = useState(false);
+	const [notice, setNotice] = useState(false);
 	const valRef = useRef()
 	 
 	const formSub = useCallback((e)=>{
@@ -27,16 +27,27 @@ const Header = () => {
 		search.push(saveInput)
 		// saveText();
 		// saveInput.input = ""
-		// console.log(saveInput,123123,search.length)
+		console.log(saveInput,123123,search)
 			
 	},[])
 
-	useEffect (()=>{
-		sessionStorage.setItem("input",JSON.stringify(search))
+	const inputValue = (e) =>{
+		const val = e.target.value;
+		setSearch(val)
+		console.log(val)
+	}
 
-	},[search])
+	const searchBtn = () =>{
+		console.log(search,123)
+		
+	}
 
-	const inputValue = () =>{
+	// useEffect (()=>{
+	// 	sessionStorage.setItem("input",JSON.stringify(search))
+
+	// },[search])
+
+	const inputOpen = () =>{
 		setOpen(!open)
 	}
 
@@ -66,14 +77,14 @@ const Header = () => {
 							type="text" 
 							maxLength={30} 
 							autoComplete="off" 
-							onMouseOver={inputValue} 
+							onMouseOver={inputOpen} 
+							onChange={inputValue}
 							ref={valRef}
-							// onChange={inputChange}
 							/>
 							<span>
 								<AiOutlineCamera />
 							</span>
-							<span>
+							<span onClick={searchBtn}>
 								<AiOutlineSearch />
 							</span>
 						</form>
@@ -86,21 +97,20 @@ const Header = () => {
 							</dt>
 							<dd>
 								<ul>
-								{/* {search.length === 0 ?
-									<li>최근 검색어 내용이 없습니다.</li>
-									:
-									{search.map((text, index) => {
-										<li>{text}</li>
-									})}
+								{/* {search.length !== 0 ? 
+									
 								} */}
-								{search.map((text, idx) => {
-									<li>
-									{/* console.log(text.input,"ddddddd",idx) */}
-									{text.input}
+								
+								{/* {search.map((text, idx) => {
+									if(search.length === 0){
+										<li>최근 검색어 내용이 없습니다.</li>
+									}
+									<li key={idx}>
+										{text[0].input}
 									</li>
-									{/* <li>{consol}</li> */}
-								})}
-
+									
+								})} */}
+								<li>최근 검색어 내용이 없습니다.</li>
 								</ul>
 							</dd>
 						</dl>
@@ -116,8 +126,8 @@ const Header = () => {
 						</Link>
 					}
 						<div>
-							<a onClick={() => setOp(!op)}>알림</a>
-							<article className={op ? "block" : "none"}>
+							<a onClick={() => setNotice(!notice)}>알림</a>
+							<article className={notice ? "block" : "none"}>
 								<p>PC에서는 공지, 구매 정보 알림만 확인하실 수 있습니다. <br/>그 외 알림은 앱에서 확인 가능합니다.</p>
 								<p>등록된 알림이 없습니다.</p>
 								<span><IoMdArrowDropup/></span>
