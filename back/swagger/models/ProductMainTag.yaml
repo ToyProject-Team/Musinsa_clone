@@ -1,0 +1,19 @@
+ProductMainTag:
+    type: object
+    properties:
+        name:
+            type: string
+            example: 'M'
+        ProductSubTags:
+            type: array
+            items:
+                $ref: './productSubTag.yaml#/ProductSubTag'
+            example:
+                - name: '빨간색'
+                  amount: 1
+                - name: '다크 그린'
+                  amount: 1
+                - name: '진청'
+                  amount: 2
+                - name: '분홍색'
+                  amount: 0

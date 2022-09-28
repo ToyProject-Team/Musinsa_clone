@@ -1,0 +1,9 @@
+ProductSubTag:
+    type: object
+    properties:
+        name:
+            type: string
+            example: '빨간색'
+        amount:
+            type: number
+            example: 1
