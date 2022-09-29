@@ -518,19 +518,31 @@ const Main = () => {
 							</SortBox>
 
 							<ListBox>
-								<ul className="list_item">
-									<Routes>
-										<Route
-											exact
-											path="/"
-											element={<AllList product={product} items={items} page={page} />}
-										></Route>
-										<Route
-											path="/products"
-											element={<ShowList product={product} items={items} page={page} />}
-										></Route>
-									</Routes>
-								</ul>
+								<Routes>
+									<Route
+										exact
+										path="/"
+										element={
+											<AllList
+												product={product}
+												items={items}
+												page={page}
+												filterVal={filterVal}
+												setFilterVal={setFilterVal}
+												clickCate={clickCate}
+												clickPrice={clickPrice}
+												clickMainSort={clickMainSort}
+												setClickCate={setClickCate}
+												setClickPrice={setClickPrice}
+												setClickMainSort={setClickMainSort}
+											/>
+										}
+									></Route>
+									<Route
+										path="/products"
+										element={<ShowList product={product} items={items} page={page} />}
+									></Route>
+								</Routes>
 							</ListBox>
 						</Items>
 					</ItemSection>

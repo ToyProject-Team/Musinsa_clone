@@ -60,11 +60,11 @@ const DialLog = props => {
 							: { boxShadow: 'inset 0px 0px 4px 1px rgba(0,0,255,0.5)' }
 					}
 				>
-					<div onClick={() => props.goMain()}>
+					<Link to="/">
 						<button type="button">
 							{basic.home ? <BiHomeCircle /> : <BiHomeHeart style={{ color: 'blue' }} />}
 						</button>
-					</div>
+					</Link>
 				</div>
 				<div
 					style={

@@ -313,12 +313,8 @@ export const SelectBox = styled.div`
 `;
 
 export const Items = styled.div`
-	// min-width: 933px;
-	// display: flex;
-	// flex-wrap: wrap;
-	// clear: both;
-	// float: left;
-	width: 100%;
+	display: flex;
+	flex-direction: column;
 	background-color: #fff;
 	min-height: 100vh;
 	//border-right: 1px solid #ddd;
@@ -331,11 +327,12 @@ export const SortBox = styled.div`
 	justify-content: space-between;
 	padding-left: 15px;
 	padding-bottom: 10px;
-	width: 100%;
-	height: 42px;
+
 	line-height: 42px;
 	border: 1px solid #ddd;
-	box-sizing: border-box;
+	width: 100%;
+	height: 42px;
+	-webkit-box-sizing: border-box;
 	background-color: white;
 
 	.active {
@@ -423,14 +420,5 @@ export const PaginationWapper = styled.div`
 
 export const ListBox = styled.div`
 	width: 100%;
-	display: block;
-	box-sizing: border-box;
-	// height: auto;
-	// clear: both;
-	// -webkit-box-sizing: border-box;
-
-	.list_item {
-		width: 100%;
-		// -webkit-box-sizing: border-box;
-	}
+	-webkit-box-sizing: border-box;
 `;

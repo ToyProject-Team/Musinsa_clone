@@ -1,30 +1,52 @@
 import styled from '@emotion/styled';
 
+export const ListWrapper = styled.ul`
+	width: 100%;
+`;
+
 export const ListOuter = styled.li`
 	position: relative;
 	min-width: 154px;
-	//width: 100%;
-	// box-sizing: border-box;
 	float: left;
 	margin: 0;
 	background-color: white;
 	border-right: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
+	box-sizing: border-box;
+
+	@media only screen and (min-width: 0) {
+		width: 25% !important;
+	}
+
+	@media only screen and (min-width: 1200px) {
+		width: 20% !important;
+	}
+
+	// @media only screen and (min-width: 1200px) {
+	// 	width: 16.66666667% !important;
+	// }
+
+	@media only screen and (min-width: 1700px) {
+		width: 14.2857143% !important;
+	}
 
 	&:hover {
 		background-color: #f2f2f2;
 		z-index: 1;
 	}
 
+	a {
+		text-decoration: none;
+		color: black;
+	}
+
 	.li_inner {
 		border: 0;
 		vertical-align: top;
 		background: transparent;
-		// width: 100%;
-		// min-width: 154px;
-		// max-width: 175px;
 		height: 280px;
-		padding-top: 15px;
+		// padding-top: 15px;
+		margin: 15px auto 20px;
 	}
 
 	.list_img {
@@ -41,8 +63,8 @@ export const ListOuter = styled.li`
 		}
 
 		img {
-			width: 120px;
-			height: 145px;
+			min-width: 120px;
+			min-height: 145px;
 			object-fit: cover;
 		}
 	}
