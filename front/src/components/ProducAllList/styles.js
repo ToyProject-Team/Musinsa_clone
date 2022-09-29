@@ -1,14 +1,5 @@
 import styled from '@emotion/styled';
 
-export const ListBox = styled.div`
-	width: 100%;
-	// text-align: center;
-	// border-right: 1px solid #ddd;
-
-	.list_item {
-	}
-`;
-
 export const ListOuter = styled.li`
 	position: relative;
 	min-width: 150px;

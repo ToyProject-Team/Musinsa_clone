@@ -346,7 +346,7 @@ const Main = () => {
 										onClick={() => {
 											onResetPrice();
 										}}
-										style={{ color: 'black', fontWeight: 'bold' }}
+										style={{ 'min-width': '100px', color: 'black', fontWeight: 'bold' }}
 									>
 										전체보기
 									</li>

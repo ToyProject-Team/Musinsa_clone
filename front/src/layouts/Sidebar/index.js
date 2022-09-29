@@ -33,8 +33,6 @@ const Sidebar = props => {
 		setOpen(prev => [...prev].map((v, index) => (idx === index ? (v ? false : true) : false)));
 	}, []);
 
-	//메인 첫화면으로
-
 	return (
 		<SContainer>
 			<div onClick={() => setCancel(e => !e)} className={cancel ? 'toggle active' : 'toggle'}>
