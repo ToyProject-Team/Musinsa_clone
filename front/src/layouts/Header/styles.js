@@ -309,7 +309,7 @@ export const HUser = styled.div`
 		text-align: center;
 		word-break: keep-all;
 		font-size: 18px;
-
+		position: relative;
 		& a {
 			text-decoration: none;
 			color: inherit;
@@ -319,9 +319,7 @@ export const HUser = styled.div`
 			position: absolute;
 			width: 375px;
 			padding: 15px 0;
-			top: 9.6%;
-			left: 47.5%;
-			box-sizeing: border-box;
+			transform: translate(-164px, 18px);
 			border: 1px solid #ddd;
 			background-color: white;
 			color: #777;
