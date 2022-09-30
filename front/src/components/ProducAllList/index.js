@@ -1,7 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ListOuter, ListWrapper } from './styles';
 
-const ShowList = props => {
+const AllList = props => {
+	//AllList 접속시
+	useEffect(() => {
+		if (props.filterVal.bigCategoryId) delete props.filterVal.bigCategoryId;
+		if (props.filterVal.smallCategoryId) delete props.filterVal.smallCategoryId;
+		if (props.filterVal.price) delete props.filterVal.price;
+		if (props.filterVal.priceMin) delete props.filterVal.priceMin;
+		if (props.filterVal.priceMax) delete props.filterVal.priceMax;
+		if (props.filterVal.mainSort) delete props.filterVal.mainSort;
+
+		props.setClickCate(props.clickCate.fill(false));
+		props.setClickPrice(props.clickPrice.fill(false));
+		props.setClickMainSort(props.clickPrice.fill(false));
+
+		props.setFilterVal(props.filterVal);
+		console.log(props.filterVal);
+	}, []);
+
 	//옵션 데이터
 	const [arrow, setArrow] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
@@ -70,4 +87,4 @@ const ShowList = props => {
 	);
 };
 
-export default ShowList;
+export default AllList;

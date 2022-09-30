@@ -6,7 +6,7 @@ import { TbArrowBigUpLine, TbArrowBigDownLine } from 'react-icons/tb';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import UrlCopyModal from 'components/Modals/UrlCopyModal';
 
-const DialLog = () => {
+const DialLog = props => {
 	const saveUrl = useLocation();
 
 	// 다이얼 로그

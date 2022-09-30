@@ -61,16 +61,16 @@ export const PostApi = async (PATH, params) => {
 	return result;
 };
 
-export const PostQueryApi = async (PATH, params) => {
-	let answer = '';
-	let cnt = 0;
-	for (let i in params) {
-		if (++cnt > 1) answer += '&';
-		answer += i + '=';
-		answer += params[i] + '';
-	}
+export const PostQueryApi = async PATH => {
+	// let answer = '';
+	// let cnt = 0;
+	// for (let i in params) {
+	// 	if (++cnt > 1) answer += '&';
+	// 	answer += i + '=';
+	// 	answer += params[i] + '';
+	// }
 
-	const result = await axios.get(`${baseUrl}${PATH}?${answer}`, {
+	const result = await axios.get(`${baseUrl}${PATH}`, {
 		headers: { 'Content-Type': 'application/json' },
 	});
 
