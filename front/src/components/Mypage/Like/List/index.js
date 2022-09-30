@@ -9,10 +9,12 @@ function Likelist({ img, model, price, like, onRemove, id }) {
 		<LikeUl>
 			<LikeLi>
 				<ImgSpan>
-					<img
-						src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${img}`}
-						alt="더미데이터"
-					/>
+					<a href={`/detail?productId=${id}`}>
+						<img
+							src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${img}`}
+							alt="더미데이터"
+						/>
+					</a>
 				</ImgSpan>
 
 				<ul>

@@ -13,7 +13,7 @@ export const OrderTable = styled.table`
 		border-bottom: 1px solid #000000;
 		font-size: 16px;
 		vertical-align: middle;
-		font-weight: normal;
+		font-weight: bold;
 
 		&.modal {
 			height: auto;
