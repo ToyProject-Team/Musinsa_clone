@@ -4,6 +4,8 @@ export const ScrollContainer = styled.div`
 	display: flex;
 	min-height: 100vh;
 	// position: sticky;
+	margin-top: 200px;
+	border-top: 1px solid #ddd;
 `;
 
 export const MainContainer = styled.div`
@@ -80,10 +82,10 @@ export const MiddleCategory = styled.div`
 	}
 
 	.all_item {
-		min-width: 100px;
+		// min-width: 100px;
 		max-width: 100px;
 		padding-top: 15px;
-		padding-right: 12px;
+		// padding-right: 12px;
 		font-weight: bold;
 		color: #b2b2b2;
 	}
@@ -102,12 +104,21 @@ export const MiddleCategory = styled.div`
 			display: inline-block;
 			// max-width: 800px;
 
-			& li {
+			.inactive {
 				float: left;
 				width: 145px;
 				padding: 0 0 15px;
 				margin: 0;
 				color: #b2b2b2;
+			}
+
+			.active {
+				float: left;
+				width: 145px;
+				padding: 0 0 15px;
+				margin: 0;
+				color: black;
+				font-weight: bold;
 			}
 		}
 
@@ -122,7 +133,7 @@ export const MiddleCategory = styled.div`
 // 그외 카테고리(색상,가격, 검색)
 export const OtherCategory = styled.div`
 	display: flex;
-	flex-shrink: 0;
+	// flex-shrink: 0;
 	border-bottom: solid 1px;
 	border-color: rgb(212, 212, 212);
 	padding-left: 15px;
@@ -132,19 +143,20 @@ export const OtherCategory = styled.div`
 		z-index: 1;
 	}
 
-	.color,
 	.price {
 		padding-top: 15px;
 		padding-bottom: 15px;
 
 		& ul {
-			display: inline-block;
+			display: flex;
 			// min-width: 1200px;
 
-			& li {
+			.inactive {
 				float: left;
+				flex-shrink: 0;
 				line-height: 20px;
 				vertical-align: center;
+				// width: 145px;
 				padding-right: 17px;
 				margin: 0;
 				color: #b2b2b2;
@@ -154,8 +166,25 @@ export const OtherCategory = styled.div`
 				}
 			}
 
+			.active {
+				float: left;
+				flex-shrink: 0;
+				line-height: 20px;
+				vertical-align: center;
+				// width: 120px;
+				padding-right: 17px;
+				margin: 0;
+				color: black;
+				font-weight: bold;
+
+				input {
+					padding: 5px 7px 4px 4px;
+				}
+			}
+
 			& li:last-child {
 				text-decoration: none;
+				flex-shrink: 0;
 
 				input {
 					width: 57px;
@@ -211,83 +240,6 @@ export const OtherCategory = styled.div`
 			margin: -3px 0 0 4px;
 			border: 1px solid #ddd;
 			background: #fff;
-			cursor: pointer;
-		}
-	}
-`;
-
-export const BrandList = styled.div`
-	display: flex;
-	flex-shrink: 0;
-	padding-top: 15px;
-	// padding-left:10px;
-	// padding-bottom: 10px;
-	border-bottom: 1px solid #ddd;
-
-	& div {
-		& ul {
-			display: inline-block;
-			min-width: 600px;
-			max-width: 800px;
-
-			& li {
-				float: left;
-				width: 100px;
-				padding: 0 0 15px;
-				margin: 0;
-				color: #b2b2b2;
-			}
-		}
-	}
-
-	& li:hover {
-		text-decoration: underline;
-		color: black;
-		cursor: pointer;
-	}
-`;
-
-export const BrandAttribute = styled.div`
-	max-width: 100px;
-	min-width: 100px;
-	padding-right: 16px;
-	font-weight: bold;
-
-	& span {
-		padding-left: 5px;
-		color: #f33;
-	}
-
-	div:first-of-type {
-		margin-bottom: 15px;
-	}
-
-	div:last-child {
-		& p:hover {
-			color: black;
-			text-decoration: underline;
-			cursor: pointer;
-		}
-	}
-
-	& div {
-		display: flex;
-		min-width: 90px;
-
-		& button {
-			margin-left: 7px;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 15px;
-			font-weight: bold;
-			background-color: white;
-			height: 15px;
-			width: 15px;
-			border: 1px solid #ddd;
-		}
-
-		& button:hover {
 			cursor: pointer;
 		}
 	}
@@ -361,7 +313,8 @@ export const SelectBox = styled.div`
 `;
 
 export const Items = styled.div`
-	// min-width: 933px;
+	display: flex;
+	flex-direction: column;
 	background-color: #fff;
 	min-height: 100vh;
 	//border-right: 1px solid #ddd;
@@ -374,25 +327,51 @@ export const SortBox = styled.div`
 	justify-content: space-between;
 	padding-left: 15px;
 	padding-bottom: 10px;
-	width: 100%;
-	height: 42px;
+
 	line-height: 42px;
 	border: 1px solid #ddd;
-	box-sizing: border-box;
+	width: 100%;
+	height: 42px;
+	-webkit-box-sizing: border-box;
 	background-color: white;
+
+	.active {
+		display: block;
+		line-height: 40px;
+		height: 40px;
+		float: left;
+		font-weight: bold;
+		text-decoration: underline;
+		padding-right: 10px;
+
+		// &::after {
+		// 	//content: '|';
+		// 	padding-left: 10px;
+		// 	padding-right: 10px;
+		// }
+
+		&:hover {
+			cursor: pointer;
+			font-weight: bold;
+			text-decoration: underline;
+			color: black;
+		}
+	}
 
 	.sort {
 		display: block;
 		line-height: 40px;
 		height: 40px;
 		float: left;
-	}
-
-	.sort::after {
-		content: '|';
-		padding-left: 10px;
+		// padding-left: 5px;
 		padding-right: 10px;
 	}
+
+	// .sort::after {
+	// 	//content: '|';
+	// 	padding-left: 10px;
+	// 	padding-right: 10px;
+	// }
 
 	.sort:hover {
 		cursor: pointer;
@@ -400,123 +379,46 @@ export const SortBox = styled.div`
 		text-decoration: underline;
 		color: black;
 	}
+`;
 
-	.page {
-		border-left: 1px solid #ddd;
-		border-right: 1px solid #ddd;
-		height: 42px;
-		padding-left: 15px;
-		padding-right: 15px;
-		font-weight: bold;
+export const PaginationWapper = styled.div`
+	text-align: center;
+
+	.pagination {
+		display: flex;
+		// position: relative;
+		// top: -41px;
+		height: 40px;
+		justify-content: flex-end;
+
+		li {
+			display: inline-block;
+			width: 30px;
+			justify-content: center;
+			align-items: center;
+			// padding-top: 12px;
+			border-left: 1px solid #ddd;
+			font-size: 1rem;
+			&:hover {
+				background-color: #f2f2f2;
+			}
+			a {
+				text-decoration: none;
+				color: gray;
+				font-size: 1rem;
+				font-weight: bold;
+			}
+		}
+		.active {
+			padding: 0;
+			a {
+				color: black;
+			}
+		}
 	}
 `;
 
 export const ListBox = styled.div`
 	width: 100%;
-	// text-align: center;
-	// border-right: 1px solid #ddd;
-
-	.list_item {
-		display: inline-block;
-
-		// border-right: 1px solid #ddd;
-	}
+	-webkit-box-sizing: border-box;
 `;
-
-// 	.li_outer {
-// 		position: relative;
-// 		min-width: 150px;
-// 		float: left;
-// 		margin: 0;
-// 		background-color: white;
-// 		// border-left: 1px solid #ddd;
-// 		border-right: 1px solid #ddd;
-// 		border-bottom: 1px solid #ddd;
-
-// 		&:hover {
-// 			background-color: #f2f2f2;
-// 			z-index: 1;
-// 		}
-// 	}
-
-// 	.li_inner {
-// 		border: 0;
-// 		vertical-align: top;
-// 		background: transparent;
-// 		width: 150px;
-// 		height: 280px;
-// 		padding-top: 15px;
-// 		// &:hover {
-// 		// 	background-color: #f2f2f2;
-// 		// 	z-index: 1;
-// 		// }
-// 	}
-
-// 	.list_img {
-// 		position: relative;
-// 		width: 125px;
-// 		height: 150px;
-// 		margin: 0 auto 10px;
-// 		text-align: center;
-// 		overflow: hidden;
-// 		background-color: white;
-
-// 		:hover {
-// 			opacity: 0.5;
-// 		}
-
-// 		img {
-// 			width: 120px;
-// 			height: 145px;
-// 			object-fit: cover;
-// 		}
-// 	}
-
-// 	.item_info {
-// 		position: relative;
-// 		width: 125px;
-// 		margin: 0 auto;
-// 		text-align: left;
-// 	}
-
-// 	.option {
-// 		display: block;
-// 		float: right;
-// 		border-top: 1px solid #ddd;
-// 		border-left: 1px solid #ddd;
-// 		position: relative;
-// 		background-color: white;
-// 		z-index: 100;
-
-// 		.option_btn {
-// 			height: 17px;
-// 			padding: 3px 8px 0 8px;
-// 			cursor: pointer;
-// 		}
-
-// 		.option_list {
-// 			display: block;
-// 			position: relative;
-
-// 			ul {
-// 				right: -1;
-// 				position: absolute;
-// 				width: 100%;
-// 				color: #000;
-// 				background: #fff;
-// 				border: 1px solid #ddd;
-// 			}
-
-// 			.open {
-// 				display: flex;
-// 				justify-content: space-between;
-// 				color: #000;
-// 				background: #fff;
-// 				padding: 6px 10px 6px 10px;
-// 			}
-// 			.close {
-// 				display: none;
-// 			}
-// 		}
-// 	}
-// `;
