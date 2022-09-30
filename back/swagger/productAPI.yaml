@@ -267,6 +267,8 @@
               type: string
             price:
               type: integer
+            amount:
+              type: integer
     responses:
       200:
         description: 성공 - product 배열에 데이터들이 지급됩니다

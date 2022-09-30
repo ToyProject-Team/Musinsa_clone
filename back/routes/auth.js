@@ -208,7 +208,6 @@ router.get('/kakao/callback', async (req, res, next) => {
             JSON.stringify(randNum),
             'secret key 123'
           ).toString()
-        console.log(user.data.kakao_account.email)
 
         let userInfo = await User.findOne({
             where: {
