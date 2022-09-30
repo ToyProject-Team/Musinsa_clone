@@ -23,7 +23,7 @@ router.post('/signup', async (req, res, next) => {
                 loginId: req.body.loginId,
             },
         });
-
+        console.log(req.headers.encryptioncode)
         if (req.headers.encryptioncode) {
             bytes = CryptoJS.AES.decrypt(
                 req.headers.encryptioncode,
