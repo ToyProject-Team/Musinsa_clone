@@ -1,14 +1,19 @@
 const DataTypes = require('sequelize');
-const { Model } = DataTypes
+const { Model } = DataTypes;
 
 module.exports = class ProductMainTag extends Model {
     static init(sequelize) {
         return super.init(
             {
+                id: {
+                    type: DataTypes.INTEGER,
+                    primaryKey: true,
+                    autoIncrement: true,
+                },
                 name: {
                     type: DataTypes.STRING(100),
                     allowNull: false,
-                }
+                },
             },
             {
                 modelName: 'ProductMainTag',
@@ -16,12 +21,12 @@ module.exports = class ProductMainTag extends Model {
                 paranoid: true,
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
-                sequelize
-            }
-        )
+                sequelize,
+            },
+        );
     }
     static associate(db) {
-        db.ProductMainTag.belongsTo(db.Product)
-        db.ProductMainTag.hasMany(db.ProductSubTag)
+        db.ProductMainTag.belongsTo(db.Product);
+        db.ProductMainTag.hasMany(db.ProductSubTag);
     }
-}
+};

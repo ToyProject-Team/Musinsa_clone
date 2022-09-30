@@ -1,0 +1,12 @@
+MyCart:
+    type: object
+    properties:
+        packingAmount:
+            type: number
+            example: 3
+        ProductMainTag:
+            $ref: './ProductMainTag.yaml#/ProductMainTag'
+        ProductSubTag:
+            $ref: './ProductSubTag.yaml#/ProductSubTag'
+        Product:
+            $ref: './Product.yaml#/Product'
