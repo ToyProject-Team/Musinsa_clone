@@ -5,15 +5,18 @@ import { OrderTable, CartPayment, OrderBtn, ModalStyle } from 'components/Mypage
 import { FaPlus, FaEquals } from 'react-icons/fa';
 import Order from 'components/Order';
 import OrderModal from 'components/Modals/OrderModal';
-import { useNavigate } from 'react-router';
 import { thousandComma } from 'utils/thousandComma';
 import { CheckLabel } from './Table/styles';
 import { getData } from 'utils/getData';
-import axios from 'axios';
 import { GetTokenApi } from 'utils/api';
+import axios from 'axios';
+
 
 function Cart() {
 	const [cartList, setCartList] = useState([]);
+	const loginToken = getData();
+	// console.log(loginToken);
+
 
 	//장바구니 리스트 가져오기
 	useEffect(() => {
@@ -22,10 +25,47 @@ function Cart() {
 		});
 	}, []);
 
+	//장바구니 리스트 삭제
+	const cartRemove = useCallback(id => {
+		const originList = setCartList(cartList);
+		const deleteList = cartList.filter(prev => prev.Product.id !== id);
+		setCartList(deleteList);
+		axios.delete('/api/shoppingBasket/delshoppingList', {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: loginToken.accessToken,
+			},
+			data: {
+				productId: id,
+			},
+		}).then(res => {
+			const deleteList = cartList.filter(prev => prev.Product.id !== id);
+			setCartList(deleteList);
+			console.log('성공', res);
+		}).catch(err => {
+			switch (err) {
+				case 400:
+					console.log('입력값을 다시 확인해주세요');
+					break;
+				case 401:
+					console.log('유저의 조회 결과가 없습니다');
+					break;
+				case 402:
+					console.log('장바구니에 없는 상품을 삭제 시도하셨습니다');
+					break;
+				case 500:
+					console.log('서버 에러');
+					break;
+			}
+			console.log('실패');
+			// 안지워졌을시 필터했던 아이템 다시 추가
+			setCartList(originList);;
+		});
+	});
+
 	const [checkBox, setCheckBox] = useState(false);
 	const [sum, setSum] = useState(0);
-	const loginToken = getData();
-	// console.log(loginToken);
+
 
 	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);
@@ -111,7 +151,7 @@ function Cart() {
 							</tr>
 						</thead>
 						{cartList.map((item, index) => (
-							<CartTable key={index} item={item} setCartList={setCartList} cartList={cartList} />
+							<CartTable key={index} item={item} setCartList={setCartList} cartList={cartList} cartRemove={cartRemove} />
 						))}
 					</OrderTable>
 					<CartPayment>

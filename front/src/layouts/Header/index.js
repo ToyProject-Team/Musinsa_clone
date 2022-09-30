@@ -5,6 +5,8 @@ import { AiOutlineCamera, AiOutlineSearch } from 'react-icons/ai';
 import { getData } from 'utils/getData';
 import { deleteData } from 'utils/deleteData';
 import { PostHeaderApi } from 'utils/api';
+import { useContext } from 'react';
+
 
 const Header = () => {
 	const [login, setLogin] = useState(getData());
@@ -23,6 +25,7 @@ const Header = () => {
 				console.log(err);
 			});
 	}, [login]);
+
 
 	return (
 		<HContainer>

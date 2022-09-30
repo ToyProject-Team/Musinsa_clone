@@ -8,10 +8,11 @@ import OrderModal from 'components/Modals/OrderModal';
 import Order from 'components/Order';
 import { Link } from 'react-router-dom';
 
-function CartTable({ item, setCartList, cartList }) {
+function CartTable({ item, setCartList, cartList, cartRemove }) {
 	const [modalOrder, setModalOrder] = useState(false);
 	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);
+	const id = item.Product.id
 
 	// 수량 기입
 	const handleChange = useCallback(
@@ -68,9 +69,9 @@ function CartTable({ item, setCartList, cartList }) {
 	}, [cartList]);
 
 	// 삭제
-	const removeItem = useCallback(() => {
-		setCartList(prev => prev.filter(v => v.Product.id !== item.Product.id));
-	}, [cartList]);
+	// const removeItem = useCallback(() => {
+	// 	setCartList(prev => prev.filter(v => v.Product.id !== item.Product.id));
+	// }, [cartList]);
 
 	// 결제 모달창
 	const onCloseModal = useCallback(() => {
@@ -107,11 +108,8 @@ function CartTable({ item, setCartList, cartList }) {
 						</colgroup>
 						<tbody>
 							<tr>
-								<td>
-									<CheckLabel
-										onClick={checkItem}
-										className={item.check ? 'active' : ''}
-									></CheckLabel>
+								<td onClick={checkItem}>
+									<CheckLabel className={item.check ? 'active' : ''}></CheckLabel>
 								</td>
 								<td className="top">
 									<div>
@@ -171,7 +169,7 @@ function CartTable({ item, setCartList, cartList }) {
 											결제하기
 										</button>
 										{order && <Order pay={pay} />}
-										<button className="del_btn" onClick={removeItem}>
+										<button className="del_btn" onClick={e => cartRemove(id)}>
 											<FiX />
 										</button>
 									</div>
