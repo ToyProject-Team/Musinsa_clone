@@ -1,30 +1,37 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  version: 1.0.0
-  title: Musinsa-API-docs
-  description: Musinsa API문서
-  servers:
-    - description: Musinsa-Clone dev
-      url: http://localhost:80/
+    version: 1.0.0
+    title: Musinsa-API-docs
+    description: Musinsa API문서
+servers:
+    - url: http://localhost:80/
+      description: Musinsa-Clone dev
 tags:
-  - name: auth
-    description: API about auth
-
+    - name: auth
+      description: API about auth
 paths:
-  $ref: "./authAPI.yaml"
-
+    $ref: './authAPI.yaml'
 success:
-  description: 성공
-  schema:
-    properties:
-      success:
-        type: boolean
-        example: true
-
+    description: 성공
+    schema:
+        properties:
+            success:
+                type: boolean
+                example: true
 serverError:
-  description: 서버 에러
-  schema:
-    properties:
-      message:
-        type: string
-        example: 서버 에러
+    description: 서버 에러
+    schema:
+        properties:
+            message:
+                type: string
+                example: 서버 에러
+components:
+    schemas:
+        Product:
+            $ref: './models/Product.yaml#/Product'
+        ProductMainTag:
+            $ref: './models/ProductMainTag.yaml#/ProductMainTag'
+        ProductSubTag:
+            $ref: './models/ProductSubTag.yaml#/ProductSubTag'
+        MyCart:
+            $ref: './models/MyCart.yaml#/MyCart'

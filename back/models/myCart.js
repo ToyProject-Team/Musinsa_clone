@@ -5,19 +5,14 @@ module.exports = class MyCart extends Model {
     static init(sequelize) {
         return super.init(
             {
+                id: {
+                    type: DataTypes.INTEGER,
+                    primaryKey: true,
+                    autoIncrement: true,
+                },
                 packingAmount: {
                     type: DataTypes.INTEGER,
-                    // defaultValue: 2,
                     allowNull: false,
-                },
-                packingSize: {
-                    // defaultValue: "S",
-                    type: DataTypes.STRING(30),
-                    allowNull: true,
-                },
-                packingColor: {
-                    type: DataTypes.STRING(100),
-                    allowNull: true,
                 },
             },
             {
@@ -26,12 +21,31 @@ module.exports = class MyCart extends Model {
                 paranoid: true,
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
+                indexes: [
+                    {
+                        unique: true,
+                        fields: [
+                            'ProductMainTagId',
+                            'ProductSubTagId',
+                            'UserId',
+                            'ProductId',
+                        ],
+                        name: 'my_carts_unique_p_p_u_p_id', //Identifier name is too long 오류 방지
+                    },
+                ],
                 sequelize,
             },
         );
     }
     static associate(db) {
         db.MyCart.belongsTo(db.Product, { foreignKey: 'ProductId' });
+        db.MyCart.belongsTo(db.ProductMainTag, {
+            foreignKey: 'ProductMainTagId',
+        });
+        db.MyCart.belongsTo(db.ProductSubTag, {
+            foreignKey: 'ProductSubTagId',
+        });
+
         db.MyCart.belongsTo(db.User, { foreignKey: 'UserId' });
     }
 };

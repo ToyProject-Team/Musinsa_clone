@@ -11,39 +11,28 @@ const Sidebar = props => {
 	const [cancel, setCancel] = useState(Cookies.get('sideBarToggle') === 'false' ? false : true);
 	const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
 
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
-	const onClickToggle = useCallback(() => {
-		setCancel(e => !e);
-		Cookies.set('sideBarToggle', !cancel);
-	}, [cancel]);
-
-	//Main으로 idx값 보내고, url에 쿼리스트링 추가하는 함수
-	const sendSmallCate = idx => {
-		props.setSmallCategoryId(idx + 1);
-		props.setOnSortClick(true);
-		props.setSelectBox(true);
-		navigate({
-			pathname: `/products`,
-			search: `bigCategoryId=${props.bigCategoryId}&smallCategoryId=${idx}`,
-		});
-	};
-
-	const sendBigCate = () => {
-		props.setDetect(!props.detect);
-		navigate({
-			pathname: `/products`,
-			search: `bigCategoryId=${props.bigCategoryId}`,
-		});
+	//Main에 쿼리스트링 보내기
+	const sendSmallCate = (big, small) => {
+		// smallCate index가 0인 경우(전체) / 아닌경우
+		// smallCate index가 1이상인 경우에는 bigCateId가 이미 있는경우/없는경우
+		//이중 삼항연산자
+		small === 0
+			? props.setFilterVal(() => {
+					return { bigCategoryId: big + 1 };
+			  })
+			: props.filterVal.bigCategoryId - 1 === big
+			? props.setFilterVal(prev => {
+					return { ...prev, smallCategoryId: small };
+			  })
+			: props.setFilterVal(() => {
+					return { bigCategoryId: big + 1, smallCategoryId: small };
+			  });
 	};
 
 	const onClickCategory = useCallback(idx => {
 		setOpen(prev => [...prev].map((v, index) => (idx === index ? (v ? false : true) : false)));
-
-		//Category클릭시 Main에 Category Id전달
-		props.setOnSortClick(false);
-		props.setSelectBox(false);
-		props.setBigCategoryId(idx + 1);
 	}, []);
 
 	return (
@@ -54,9 +43,6 @@ const Sidebar = props => {
 				<span className="line"></span>
 			</div>
 			<SDiv className={cancel ? 'appear' : 'disappear'}>
-				<Link to="/">
-					전체<span>All</span>
-				</Link>
 				<nav>
 					{bigCategory.map((big, idx) => (
 						<div
@@ -80,7 +66,7 @@ const Sidebar = props => {
 									<li
 										key={idex}
 										onClick={() => {
-											idex === 0 ? sendBigCate() : sendSmallCate(idex);
+											sendSmallCate(idx, idex);
 										}}
 									>
 										<span>{small}</span>
