@@ -969,6 +969,8 @@ paths:
                 type: string
               price:
                 type: integer
+              amount:
+                type: integer
       responses:
         '200':
           description: 성공 - product 배열에 데이터들이 지급됩니다
@@ -1412,14 +1414,7 @@ components:
         ProductSubTags:
           type: array
           items:
-            type: object
-            properties:
-              name:
-                type: string
-                example: 빨간색
-              amount:
-                type: number
-                example: 1
+            $ref: '#/components/schemas/ProductSubTag'
           example:
             - name: 빨간색
               amount: 1
