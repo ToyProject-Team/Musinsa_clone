@@ -969,6 +969,8 @@ paths:
                 type: string
               price:
                 type: integer
+              amount:
+                type: integer
       responses:
         '200':
           description: 성공 - product 배열에 데이터들이 지급됩니다
@@ -1194,7 +1196,7 @@ paths:
                 example: 유저의 조회 결과가 없습니다
         '500':
           $ref: '#/serverError'
-  /api/shoppingBasket/delshoppingList:
+  /api/shoppingBasket/del:
     delete:
       tags:
         - shoppingBasket
@@ -1203,19 +1205,15 @@ paths:
         - name: Authorization
           in: header
           required: true
-        - name: productId
+        - name: body
           in: body
-          type: object
-          properties:
-            productId:
-              type: array
-              items:
-                type: integer
-                format: int64
-              example:
-                - 1
-                - 2
-                - 3
+          required: true
+          schema:
+            type: object
+            properties:
+              shoppingBasketId:
+                type: number
+                example: 1
       responses:
         '200':
           $ref: '#/success'
@@ -1416,14 +1414,7 @@ components:
         ProductSubTags:
           type: array
           items:
-            type: object
-            properties:
-              name:
-                type: string
-                example: 빨간색
-              amount:
-                type: number
-                example: 1
+            $ref: '#/components/schemas/ProductSubTag'
           example:
             - name: 빨간색
               amount: 1
@@ -1445,6 +1436,9 @@ components:
     MyCart:
       type: object
       properties:
+        id:
+          type: number
+          exmaple: 1
         packingAmount:
           type: number
           example: 3

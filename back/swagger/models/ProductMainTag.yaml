@@ -7,7 +7,7 @@ ProductMainTag:
         ProductSubTags:
             type: array
             items:
-                $ref: './productSubTag.yaml#/ProductSubTag'
+                $ref: './ProductSubTag.yaml#/ProductSubTag'
             example:
                 - name: '빨간색'
                   amount: 1

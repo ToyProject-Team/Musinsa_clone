@@ -1,6 +1,9 @@
 MyCart:
     type: object
     properties:
+        id:
+            type: number
+            exmaple: 1
         packingAmount:
             type: number
             example: 3
