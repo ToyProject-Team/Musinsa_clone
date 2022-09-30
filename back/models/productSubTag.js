@@ -1,10 +1,15 @@
 const DataTypes = require('sequelize');
-const { Model } = DataTypes
+const { Model } = DataTypes;
 
 module.exports = class ProductSubTag extends Model {
     static init(sequelize) {
         return super.init(
             {
+                id: {
+                    type: DataTypes.INTEGER,
+                    primaryKey: true,
+                    autoIncrement: true,
+                },
                 name: {
                     type: DataTypes.STRING(100),
                     allowNull: false,
@@ -12,7 +17,7 @@ module.exports = class ProductSubTag extends Model {
                 amount: {
                     type: DataTypes.INTEGER,
                     allowNull: false,
-                }
+                },
             },
             {
                 modelName: 'ProductSubTag',
@@ -20,11 +25,11 @@ module.exports = class ProductSubTag extends Model {
                 paranoid: true,
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
-                sequelize
-            }
-        )
+                sequelize,
+            },
+        );
     }
     static associate(db) {
-        db.ProductSubTag.belongsTo(db.ProductMainTag)
+        db.ProductSubTag.belongsTo(db.ProductMainTag);
     }
-}
+};

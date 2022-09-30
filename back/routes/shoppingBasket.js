@@ -13,24 +13,33 @@ const router = express.Router();
 
 router.get('/shoppingList', authJWT, async (req, res, next) => {
     try {
-        const exUser = await User.findOne({
+        const owner = await User.findOne({
             where: {
                 id: req.myId,
             },
         });
-        if (!exUser) {
+
+        if (!owner)
             return res
                 .status(400)
                 .send({ message: '유저의 조회 결과가 없습니다' });
-        }
-        const carts = await MyCart.findAll({
-            where: {
-                UserId: exUser.id,
-            },
 
-            attributes: ['packingAmount', 'packingSize', 'packingColor'],
+        const shoppingBaskets = await owner.getMyCarts({
+            attributes: ['id', 'packingAmount'],
 
             include: [
+                {
+                    model: ProductMainTag,
+                    attributes: ['name'],
+                    include: {
+                        model: ProductSubTag,
+                        attributes: ['name', 'amount'],
+                    },
+                },
+                {
+                    model: ProductSubTag,
+                    attributes: ['name', 'amount'],
+                },
                 {
                     model: Product,
                     attributes: [
@@ -47,12 +56,21 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
                             model: ProductImg,
                             attributes: ['src'],
                         },
+
+                        {
+                            model: ProductMainTag,
+                            attributes: ['name'],
+                            include: {
+                                model: ProductSubTag,
+                                attributes: ['name', 'amount'],
+                            },
+                        },
                     ],
                 },
             ],
         });
 
-        res.status(200).send(carts);
+        res.status(200).send(shoppingBaskets);
     } catch (e) {
         console.error(e);
         next(e);
@@ -143,44 +161,40 @@ router.post('/shoppingCartPurchase', authJWT, async (req, res, next) => {
     }
 });
 
-router.delete('/delshoppingList', authJWT, async (req, res, next) => {
+router.delete('/del', authJWT, async (req, res, next) => {
     try {
-        if (!req.body.productId) {
+        const { shoppingBasketId } = req.body;
+
+        if (!shoppingBasketId) {
             return res
                 .status(400)
                 .send({ message: '입력값을 다시 확인해주세요' });
         }
 
-        const me = await User.findOne({
+        const owner = await User.findOne({
             where: {
                 id: req.myId,
             },
         });
 
-        if (!me) {
+        if (!owner)
             return res
-                .status(401)
+                .status(400)
                 .send({ message: '유저의 조회 결과가 없습니다' });
-        }
 
-        if (!req.body.productId) {
-            return res
-                .status(402)
-                .send({ message: 'productId가 전달되었는지 확인해주세요' });
-        }
-        const exProduct = await me.getMyCart({
+        const shoppingBasket = await MyCart.findOne({
             where: {
-                id: req.body.productId,
+                id: shoppingBasketId,
+                UserId: req.myId,
             },
         });
-        console.log(exProduct);
-        if (exProduct.length == 0) {
-            return res
-                .status(403)
-                .send({ message: '내 장바구니에 추가한 상품이 아닙니다' });
-        }
 
-        temp = await me.removeMyCart(exProduct);
+        if (!shoppingBasket)
+            return res
+                .status(401)
+                .send({ message: '유효하지 않은 요청입니다.' });
+
+        shoppingBasket.destroy();
 
         res.status(200).send({ success: true });
     } catch (e) {

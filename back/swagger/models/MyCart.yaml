@@ -1,0 +1,15 @@
+MyCart:
+    type: object
+    properties:
+        id:
+            type: number
+            exmaple: 1
+        packingAmount:
+            type: number
+            example: 3
+        ProductMainTag:
+            $ref: './ProductMainTag.yaml#/ProductMainTag'
+        ProductSubTag:
+            $ref: './ProductSubTag.yaml#/ProductSubTag'
+        Product:
+            $ref: './Product.yaml#/Product'

@@ -8,7 +8,7 @@ import OrderModal from 'components/Modals/OrderModal';
 import Order from 'components/Order';
 import { Link } from 'react-router-dom';
 
-function CartTable({ data, setData, item, checkedList, setCheckedList }) {
+function CartTable({ item, setCartList, cartList }) {
 	const [modalOrder, setModalOrder] = useState(false);
 	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);
@@ -16,45 +16,61 @@ function CartTable({ data, setData, item, checkedList, setCheckedList }) {
 	// 수량 기입
 	const handleChange = useCallback(
 		({ target: { value } }) => {
-			setData(prev => prev.map(v => (v.id === item.id ? { ...v, count: Number(value) } : v)));
+			setCartList(prev =>
+				prev.map(v =>
+					v.Product.id === item.Product.id ? { ...v, packingAmount: Number(value) } : v,
+				),
+			);
 		},
-		[data],
+		[cartList],
 	);
 
 	// 수량 증가
 	const plusCount = useCallback(() => {
-		setData(prev => prev.map(v => (v.id === item.id ? { ...v, count: v.count + 1 } : v)));
-	}, [data]);
+		setCartList(prev =>
+			prev.map(v =>
+				v.Product.id === item.Product.id ? { ...v, packingAmount: v.packingAmount + 1 } : v,
+			),
+		);
+	}, [cartList]);
 
 	// 수량 감소
 	const minusCount = useCallback(() => {
 		if (item.count === 1) {
 			alert('수량을 줄일 수 없습니다.');
 		} else {
-			setData(prev => prev.map(v => (v.id === item.Product.id ? { ...v, count: v.count - 1 } : v)));
+			setCartList(prev =>
+				prev.map(v =>
+					v.Product.id === item.Product.id ? { ...v, packingAmount: v.packingAmount - 1 } : v,
+				),
+			);
 		}
-	}, [data]);
+	}, [cartList]);
 
 	// 체크
 	const checkItem = useCallback(() => {
-		setCheckedList(prev => prev.map(v => (v.id === item.Product.id ? { ...v, check: !v.check } : v)));
-	}, [data]);
-
-	const onChecked = useCallback(
-		(checked, id) => {
-			if (checked) {
-				setCheckedList([...checkedList, id]);
-			} else {
-				setCheckedList(checkedList.filter(el => el !== id));
-			}
-		},
-		[checkedList],
-	);
+		setCartList(prev =>
+			prev.map(v =>
+				// v.Product.id === item.Product.id &&
+				// v.packingSize === item.packingSize &&
+				// v.packingColor === item.packingColor
+				// 	? { ...v, check: !v.check }
+				// 	: v,
+				v.Product.id === item.Product.id
+					? v.packingSize === item.packingSize
+						? v.packingColor === item.packingColor
+							? { ...v, check: !v.check }
+							: v
+						: v
+					: v,
+			),
+		);
+	}, [cartList]);
 
 	// 삭제
 	const removeItem = useCallback(() => {
-		setData(prev => prev.filter(v => v.id !== item.Product.id));
-	}, [data]);
+		setCartList(prev => prev.filter(v => v.Product.id !== item.Product.id));
+	}, [cartList]);
 
 	// 결제 모달창
 	const onCloseModal = useCallback(() => {
@@ -87,19 +103,11 @@ function CartTable({ data, setData, item, checkedList, setCheckedList }) {
 							<col width="12%" />
 							<col width="9.5%" />
 							<col width="17.3%" />
-							<col width="12%" />
+							<col width="15%" />
 						</colgroup>
 						<tbody>
 							<tr>
 								<td>
-									{/* <label key={id}>
-										<input
-											name="oncheck"
-											type="checkbox"
-											checked={checkedList.includes(id) ? true : false}
-											onChange={e => onChecked(e.target.checked, id)}
-										/>
-									</label> */}
 									<CheckLabel
 										onClick={checkItem}
 										className={item.check ? 'active' : ''}
@@ -108,10 +116,12 @@ function CartTable({ data, setData, item, checkedList, setCheckedList }) {
 								<td className="top">
 									<div>
 										<ImgSpan>
-											<img
-												src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${item.Product.ProductImg.src}`}
-												alt="더미데이터"
-											/>
+											<a href={`/detail?productId=${item.Product.id}`}>
+												<img
+													src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${item.Product.ProductImg.src}`}
+													alt="더미데이터"
+												/>
+											</a>
 										</ImgSpan>
 										<ItemUl>
 											<li>
@@ -119,12 +129,15 @@ function CartTable({ data, setData, item, checkedList, setCheckedList }) {
 												{/* <a href="/"> {smallCategory[item.bigCategory][item.smallCategory]}</a> */}
 											</li>
 											<li>
-												<a href="/">
+												<a href={`/detail?productId=${item.Product.id}`}>
 													<strong>{item.Product.productTitle}</strong>
 												</a>
 											</li>
 											<li>
-												{item.packingColor} / {item.packingSize} / {item.packingAmount}개
+												{item.ProductSubTag.name} / {item.ProductMainTag.name} /{' '}
+												{item.ProductSubTag.amount === 0
+													? `품절`
+													: `${item.ProductSubTag.amount}개`}
 											</li>
 										</ItemUl>
 									</div>
@@ -133,7 +146,9 @@ function CartTable({ data, setData, item, checkedList, setCheckedList }) {
 								<td>
 									<div className="input_amount">
 										<button value={1} onClick={minusCount}>
-											<FiMinus style={item.packingAmount === 1 ? { color: '#ddd' } : { color: '#777' }} />
+											<FiMinus
+												style={item.packingAmount === 1 ? { color: '#ddd' } : { color: '#777' }}
+											/>
 										</button>
 										<input type="text" value={item.packingAmount} onChange={handleChange}></input>
 										<button value={1} onClick={plusCount}>
@@ -144,7 +159,11 @@ function CartTable({ data, setData, item, checkedList, setCheckedList }) {
 								<td>{thousandComma(item.Product.productPrice * item.packingAmount)}원</td>
 								<td>
 									택배배송 <br />
-									<strong>{item.Product.productPrice * item.packingAmount > 30000 ? '배송비 무료' : `${dlvChr}원`}</strong>
+									<strong>
+										{item.Product.productPrice * item.packingAmount > 30000
+											? '배송비 무료'
+											: `${dlvChr}원`}
+									</strong>
 								</td>
 								<td>
 									<div>
@@ -169,7 +188,8 @@ function CartTable({ data, setData, item, checkedList, setCheckedList }) {
 					onCloseModal={onCloseModal}
 					onClickConfirm={onClickOrder}
 					price={thousandComma(
-						item.Product.productPrice * item.packingAmount + (item.Product.productPrice * item.packingAmount > 30000 ? 0 : 3000),
+						item.Product.productPrice * item.packingAmount +
+							(item.Product.productPrice * item.packingAmount > 30000 ? 0 : 3000),
 					)}
 					pay={pay}
 					setPay={setPay}

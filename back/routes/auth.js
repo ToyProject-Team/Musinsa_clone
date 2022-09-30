@@ -23,15 +23,12 @@ router.post('/signup', async (req, res, next) => {
                 loginId: req.body.loginId,
             },
         });
-
+        console.log(req.headers.encryptioncode)
         if (req.headers.encryptioncode) {
-            bytes = CryptoJS.AES.decrypt(
-                req.headers.encryptioncode,
-                'secret key 123',
-            );
-            req.headers.encryptioncode = JSON.parse(
-                bytes.toString(CryptoJS.enc.Utf8),
-            );
+            bytes  = CryptoJS.AES.decrypt(req.headers.encryptioncode, 'secret key 123');
+            console.log(bytes, "DASdasd")
+            req.headers.encryptioncode = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+            console.log(req.headers.encryptioncode)
         }
         const client = redisClient;
         const getAsync = promisify(client.get).bind(client);
@@ -196,7 +193,7 @@ router.post('/kakao', (req, res) => {
 
 router.get('/kakao/callback', async (req, res, next) => {
     try {
-        console.log(req.query)
+        console.log("???")
         const user = await axios({
             method: 'get',
             url: 'https://kapi.kakao.com/v2/user/me',
@@ -209,16 +206,15 @@ router.get('/kakao/callback', async (req, res, next) => {
         await redisClient.expire(randNum, 1200);
         const encryptionCode = await CryptoJS.AES.encrypt(
             JSON.stringify(randNum),
-            'secret key 123',
-        ).toString();
-        console.log(user.data.kakao_account.email)
+            'secret key 123'
+          ).toString()
 
         let userInfo = await User.findOne({
             where: {
                 socialEmail: user.data.kakao_account.email,
             },
         });
-        console.log(userInfo)
+        // console.log(userInfo)
         if (userInfo) {
             res.status(200).send({ alreadyMember: true, encryptionCode });
         } else {

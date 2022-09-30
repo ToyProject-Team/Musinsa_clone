@@ -4,9 +4,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
 import { HiOutlinePlusSm, HiOutlineMinusSm } from 'react-icons/hi';
+import Cookies from 'js-cookie';
 
 const Sidebar = props => {
-	const [cancel, setCancel] = useState(true);
+	// const [cancel, setCancel] = useState(true);
+	const [cancel, setCancel] = useState(Cookies.get('sideBarToggle') === 'false' ? false : true);
 	const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
 
 	// const navigate = useNavigate();
@@ -33,17 +35,19 @@ const Sidebar = props => {
 		setOpen(prev => [...prev].map((v, index) => (idx === index ? (v ? false : true) : false)));
 	}, []);
 
+	const onClickToggle = useCallback(() => {
+		setCancel(e => !e);
+		Cookies.set('sideBarToggle', !cancel);
+	}, [cancel]);
+
 	return (
 		<SContainer>
-			<div onClick={() => setCancel(e => !e)} className={cancel ? 'toggle active' : 'toggle'}>
+			<div onClick={onClickToggle} className={cancel ? 'toggle active' : 'toggle'}>
 				<span className="line"></span>
 				<span className="line"></span>
 				<span className="line"></span>
 			</div>
 			<SDiv className={cancel ? 'appear' : 'disappear'}>
-				{/* <Link to="/">
-					전체<span>All</span>
-				</Link> */}
 				<nav>
 					{bigCategory.map((big, idx) => (
 						<div

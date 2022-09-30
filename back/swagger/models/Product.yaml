@@ -1,0 +1,31 @@
+Product:
+    type: object
+    properties:
+        id:
+            type: number
+            example: 23
+        productTitle:
+            type: string,
+            example: 'Car'
+        productInfo:
+            type: string
+            example: 'navigate mobile firewall'
+        productPrice:
+            type: number
+            example: 251680
+        likes:
+            type: number
+            example: 234
+        comments:
+            type: number
+            example: 8621
+        ProductImg:
+            type: object
+            properties:
+                src:
+                    type: string
+                    example: 'Accessory/Accessory23'
+        ProductMainTags:
+            type: array
+            items:
+                $ref: './ProductMainTag.yaml#/ProductMainTag'

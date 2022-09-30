@@ -38,7 +38,6 @@ export const ImgSpan = styled.span`
 
 export const LikeUl = styled.ul`
 	vertical-align: top;
-	
 `;
 
 export const LikeLi = styled.li`
@@ -58,13 +57,7 @@ export const LikeLi = styled.li`
 	&:hover {
 		background-color: #eaeaea;
 	}
-	a{
-		text-decoration: none;
-		color: black;
-		div{
-			
-		}
-	}
+
 	ul {
 		width: 100%;
 		display: table-cell;
@@ -74,6 +67,15 @@ export const LikeLi = styled.li`
 		li {
 			font-size: 14px;
 			line-height: 22px;
+			&:first-child {
+				a {
+					text-decoration: none;
+					color: black;
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+			}
 		}
 		.brand {
 			font-weight: 300;
