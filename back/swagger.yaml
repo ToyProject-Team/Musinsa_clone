@@ -1194,7 +1194,7 @@ paths:
                 example: 유저의 조회 결과가 없습니다
         '500':
           $ref: '#/serverError'
-  /api/shoppingBasket/delshoppingList:
+  /api/shoppingBasket/del:
     delete:
       tags:
         - shoppingBasket
@@ -1203,19 +1203,15 @@ paths:
         - name: Authorization
           in: header
           required: true
-        - name: productId
+        - name: body
           in: body
-          type: object
-          properties:
-            productId:
-              type: array
-              items:
-                type: integer
-                format: int64
-              example:
-                - 1
-                - 2
-                - 3
+          required: true
+          schema:
+            type: object
+            properties:
+              shoppingBasketId:
+                type: number
+                example: 1
       responses:
         '200':
           $ref: '#/success'
