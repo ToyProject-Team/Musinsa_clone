@@ -3,15 +3,25 @@ import styled from '@emotion/styled';
 export const HContainer = styled.div`
 	border-bottom: 1px solid #dddddd;
 	max-width: 100%;
+	
 `;
 
 export const HDiv = styled.div`
+	display: flex;
 	min-height: 32px;
 	height: auto;
 	width: 100%;
 	padding: 23px 0 23px 0;
 	background-color: black;
-	display: flex;
+
+	.none{
+		display: none;
+	}
+
+	.block{
+		display: block;
+	}
+
 `;
 
 export const HLogo = styled.h1`
@@ -29,6 +39,53 @@ export const HLogo = styled.h1`
 export const HSearch = styled.div`
 	margin-left: 20px;
 	margin-right: auto;
+
+
+	& article{
+		width: 260px;
+		height: 466px;
+		position: absolute;
+		background-color: white;
+		z-index: 999;
+		
+		& dl{
+			& dt{
+				display: flex;
+				justify-content: space-between;
+				background-color: #f3f3f3;
+				line-height: 30px;
+				border-bottom: 1px solid #ddd;
+
+				& h3{
+					font-size: 14px;
+					font-weight: 900;
+					padding: 8px;
+				}
+
+				& button{
+					border: none;
+					font-size: 12px;
+					background-color: transparent;
+					text-decoration: underline;
+					padding: 0;
+					color: #b2b2b2;
+					font-weight: 600;
+					margin-right: 8px;
+				}
+			}
+
+			& dd{
+				& ul{
+					& li{
+						padding: 50px 0;
+						text-align: center;
+						font-size: 12px;
+					}
+				}
+			}
+		}
+		
+	}
 
 	& div {
 		width: 260px;
@@ -252,10 +309,56 @@ export const HUser = styled.div`
 		text-align: center;
 		word-break: keep-all;
 		font-size: 18px;
-
+		position: relative;
 		& a {
 			text-decoration: none;
 			color: inherit;
+		}
+
+		& article{
+			position: absolute;
+			width: 375px;
+			padding: 15px 0;
+			transform: translate(-164px, 18px);
+			border: 1px solid #ddd;
+			background-color: white;
+			color: #777;
+			font-size: 12px;
+			line-height: 1.5;
+			z-index:11;
+			animation: fadeIn 0.4s;
+
+			& p:last-of-type{
+				padding: 20px;
+			}
+
+			& span{
+			position: absolute;
+    		font-size: 46px;
+			top: -24%;
+   			left: 42%;
+			z-index: 4;
+				& svg{
+					fill: white;
+				}
+			}
+		}
+		@keyframes fadeIn{
+			from{
+				opacity: 0;
+			}
+
+			to{
+				opacity: 1;
+			}
+		}
+		
+	}
+
+	& div:nth-of-type(2){
+
+		& a{
+			color: rgb(237, 0, 96);
 		}
 	}
 
