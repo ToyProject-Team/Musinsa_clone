@@ -58,28 +58,28 @@ const AllList = props => {
 										<p>MEMBERSHIP PRICE</p>
 									</div>
 								</div>
-								<div className="option">
-									<p
-										className="option_btn"
-										onClick={() => {
-											clickOption(idx);
-											setArrow(!arrow);
-											setIsOpen(!isOpen);
-										}}
-									>
-										{selected[idx] ? 'OPTION ▲' : 'OPTION ▼'}
-									</p>
-									<div className="option_list">
-										<ul style={selected[idx] ? { display: 'block' } : { display: 'none' }}>
-											{data.ProductMainTags.map(data => (
-												<li className={selected[idx] ? 'open' : 'close'}>
-													<span>{data.name}</span>
-												</li>
-											))}
-										</ul>
-									</div>
-								</div>
 							</a>
+							<div className="option">
+								<p
+									className="option_btn"
+									onClick={() => {
+										clickOption(idx);
+										setArrow(!arrow);
+										setIsOpen(!isOpen);
+									}}
+								>
+									{selected[idx] ? 'OPTION ▲' : 'OPTION ▼'}
+								</p>
+								<div className="option_list">
+									<ul style={selected[idx] ? { display: 'block' } : { display: 'none' }}>
+										{data.ProductMainTags.map(data => (
+											<li className={selected[idx] ? 'open' : 'close'}>
+												<span>{data.name}</span>
+											</li>
+										))}
+									</ul>
+								</div>
+							</div>
 						</ListOuter>
 					))
 			)}

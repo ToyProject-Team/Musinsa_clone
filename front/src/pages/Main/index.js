@@ -25,9 +25,11 @@ import Sidebar from 'layouts/Sidebar';
 import Footer from 'layouts/Footer';
 import DialLog from 'layouts/DialLog';
 import Pagination from 'react-js-pagination';
+import { createBrowserHistory } from 'history';
 
 const Main = () => {
 	const navigate = useNavigate();
+	const history = createBrowserHistory();
 
 	const ShowList = loadable(() => import('components/ProductList'), {
 		fallback: <div>로딩중</div>,
@@ -43,7 +45,6 @@ const Main = () => {
 	//쿼리스트링 활용
 	const location = useLocation();
 
-	//parameter관리할 state - object로 한번에 관리
 	const [filterVal, setFilterVal] = useState({});
 
 	//가격 배열
@@ -124,6 +125,7 @@ const Main = () => {
 
 	//parameter 바뀔때마다 새로운 queryString 적용 후 axios
 	useEffect(() => {
+		// 쿼리문 받아와서 하는걸로 바꾸기
 		const queryString = `?${
 			filterVal.bigCategoryId ? `bigCategoryId=${filterVal.bigCategoryId}` : ''
 		}${filterVal.smallCategoryId ? `&smallCategoryId=${filterVal.smallCategoryId}` : ''}${
