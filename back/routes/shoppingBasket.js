@@ -13,21 +13,18 @@ const router = express.Router();
 
 router.get('/shoppingList', authJWT, async (req, res, next) => {
     try {
-        const exUser = await User.findOne({
+        const owner = await User.findOne({
             where: {
                 id: req.myId,
             },
         });
-        if (!exUser) {
+
+        if (!owner)
             return res
                 .status(400)
                 .send({ message: '유저의 조회 결과가 없습니다' });
-        }
-        const carts = await MyCart.findAll({
-            where: {
-                UserId: exUser.id,
-            },
 
+        const shoppingBaskets = await owner.getMyCarts({
             attributes: ['id', 'packingAmount'],
 
             include: [
@@ -73,7 +70,7 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
             ],
         });
 
-        res.status(200).send(carts);
+        res.status(200).send(shoppingBaskets);
     } catch (e) {
         console.error(e);
         next(e);
@@ -173,6 +170,17 @@ router.delete('/del', authJWT, async (req, res, next) => {
                 .status(400)
                 .send({ message: '입력값을 다시 확인해주세요' });
         }
+
+        const owner = await User.findOne({
+            where: {
+                id: req.myId,
+            },
+        });
+
+        if (!owner)
+            return res
+                .status(400)
+                .send({ message: '유저의 조회 결과가 없습니다' });
 
         const shoppingBasket = await MyCart.findOne({
             where: {
