@@ -1,8 +1,15 @@
+import ConfirmModal from 'components/Modals/ConfirmModal';
+import OrderRefund from 'components/OrderRefund';
 import React from 'react';
+import { useState } from 'react';
+import { useCallback } from 'react';
 import { thousandComma } from 'utils/thousandComma';
 import { ImgSpan } from '../styles';
 
 function OrderList({ data }) {
+	const [show, setShow] = useState(false);
+	const [cancelPay, setCancelPay] = useState(false);
+
 	const orderState = () => {
 		switch (data.Order.state) {
 			case 1:
@@ -11,6 +18,20 @@ function OrderList({ data }) {
 				return '환불완료';
 		}
 	};
+
+	const onClickCancelPay = useCallback(e => {
+		setShow(true);
+	}, []);
+
+	const onCloseModal = useCallback(() => {
+		setShow(false);
+	}, [show]);
+
+	const onClickConfirm = useCallback(() => {
+		setCancelPay(true);
+		setShow(false);
+	}, []);
+
 	return (
 		<tbody>
 			<tr>
@@ -42,8 +63,18 @@ function OrderList({ data }) {
 					{thousandComma(data.Order.orderPrice * data.Order.amount)}원<br />
 					<span>({data.Order.amount}개)</span>
 				</td>
-				<td colSpan="2"><span>{orderState()}</span><button>환불요청</button></td>
+				<td colSpan="2">
+					<span>{orderState()}</span>
+					<button onClick={onClickCancelPay}>환불요청</button>
+				</td>
 			</tr>
+			{cancelPay && <OrderRefund data={data} />}
+			<ConfirmModal
+				show={show}
+				onCloseModal={onCloseModal}
+				onClickConfirm={onClickConfirm}
+				content={`환불을 진행 하시겠습니까?`}
+			></ConfirmModal>
 		</tbody>
 	);
 }
