@@ -18,8 +18,6 @@ const Kakao = () => {
 
 	const autoLogin = Cookies.get('autoLogin');
 
-	console.log(autoLogin);
-
 	const getToken = async () => {
 		const payload = qs.stringify({
 			grant_type: 'authorization_code',

@@ -35,6 +35,11 @@ const Sidebar = props => {
 		setOpen(prev => [...prev].map((v, index) => (idx === index ? (v ? false : true) : false)));
 	}, []);
 
+	const onClickToggle = useCallback(() => {
+		setCancel(e => !e);
+		Cookies.set('sideBarToggle', !cancel);
+	}, [cancel]);
+
 	return (
 		<SContainer>
 			<div onClick={onClickToggle} className={cancel ? 'toggle active' : 'toggle'}>
