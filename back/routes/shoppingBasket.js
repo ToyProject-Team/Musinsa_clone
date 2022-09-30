@@ -28,7 +28,7 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
                 UserId: exUser.id,
             },
 
-            attributes: ['packingAmount'],
+            attributes: ['id', 'packingAmount'],
 
             include: [
                 {
