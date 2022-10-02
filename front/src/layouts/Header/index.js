@@ -19,14 +19,13 @@ const Header = props => {
 	const [notice, setNotice] = useState(false);
 	const valRef = useRef();
 
-	const {
-		data: shoppingNumber,
-		error,
-		revalidate,
-		mutate,
-	} = useSWR(token ? '/api/mypage/favoriteGoods' : null, url => fetcher(url, token), {
-		refreshInterval: 0,
-	});
+	const { data: shoppingNumber, mutate } = useSWR(
+		token ? '/api/mypage/favoriteGoods' : null,
+		url => fetcher(url, token),
+		{
+			refreshInterval: 0,
+		},
+	);
 
 	const onClickHello = useCallback(() => {
 		const params = {
@@ -47,7 +46,6 @@ const Header = props => {
 			},
 		);
 	}, []);
-	console.log(123, shoppingNumber);
 
 	const formSub = useCallback(e => {
 		e.preventDefault();
