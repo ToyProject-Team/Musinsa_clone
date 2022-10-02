@@ -1,9 +1,13 @@
 import axios from 'axios';
+import { baseUrl } from './api';
 
-const fetcher = url =>
+const fetcher = (url, token) =>
 	axios
-		.get(url, {
+		.get(baseUrl + url, {
 			withCredentials: true,
+			headers: {
+				Authorization: `${token}`,
+			},
 		})
 		.then(response => response.data);
 
