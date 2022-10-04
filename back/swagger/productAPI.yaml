@@ -341,16 +341,25 @@
             productId:
               type: string
               example: 1
+            packingAmount:
+              type: number
+              example: 2
+            productMainTagId:
+              type: number
+              example: 1
+            productSubTagId:
+              type: number
+              example: 1
     responses:
       200:
         $ref: "./openapi.yaml#/success"
       400:
-        description: 이미 내 장바구니에 추가한 상품일 경우
+        description: 이미 추가된 카테고리인 경우(상품 중복 가능)
         schema:
           properties:
             message:
               type: string
-              example: 이미 장바구니에 있는 상품입니다        
+              example: 이미 추가된 카테고리입니다      
       500:
         $ref: "./openapi.yaml#/serverError"
 

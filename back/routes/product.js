@@ -11,7 +11,7 @@ const fs = require('fs');
 const { sequelize, Op, Sequelize } = require('sequelize');
 const authJWT = require('../utils/authJWT');
 const axios = require('axios');
-const { Order } = require('../models');
+const { Order, MyCart } = require('../models');
 const router = express.Router();
 
 function checkParams(bigCategory, price) {
@@ -206,18 +206,38 @@ router.post('/addCart', authJWT, async (req, res, next) => {
                 id: req.myId,
             },
         });
-        console.log(req.body.productId);
-        const checkProduct = await exUser.getProduct({
+        // console.log(exUser);
+        const checkProduct = await exUser.getMyCarts({
             where: {
-                id: req.body.productId,
+                [Op.and]: [
+                    {
+                        ProductId: req.body.productId,
+                    },
+                    {
+                        ProductMainTagId: req.body.productMainTagId,
+                    },
+                    {
+                        ProductSubTagId: req.body.productSubTagId,
+                    },
+                ]
             },
         });
+        console.log(checkProduct)
         if (checkProduct.length > 0) {
             return res
                 .status(400)
-                .send({ message: '이미 장바구니에 있는 상품입니다' });
+                .send({ message: '이미 추가된 카테고리입니다' });
         }
-        await exUser.addProduct(req.body.productId);
+        console.log(req.body)
+        await MyCart.create({
+            packingAmount: req.body.packingAmount,
+            UserId: req.myId,
+            ProductId: req.body.productId,
+            ProductMainTagId: req.body.productMainTagId,
+            ProductSubTagId: req.body.productSubTagId,
+            packingAmount: req.body.packingAmount,
+        })
+        // await exUser.addProduct(req.body.productId);
 
         res.status(200).send({ success: true });
     } catch (e) {
