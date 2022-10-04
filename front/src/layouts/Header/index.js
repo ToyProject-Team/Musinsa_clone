@@ -1,20 +1,51 @@
-import React, { useCallback, useState, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useEffect, useTransition } from 'react';
 import { HContainer, HDiv, HLogo, HSearch, HUser, CountNum } from './styles';
 import { Link } from 'react-router-dom';
 import { AiOutlineCamera, AiOutlineSearch } from 'react-icons/ai';
 import { getData } from 'utils/getData';
 import { deleteData } from 'utils/deleteData';
-import { PostHeaderApi } from 'utils/api';
+import { DeleteHeaderBodyApi, PostHeaderApi, PostHeaderBodyApi } from 'utils/api';
 import { IoMdArrowDropup } from 'react-icons/io';
 import Cookies from 'js-cookie';
+import useSWR from 'swr';
+import fetcher from 'utils/fetcher';
 
 const Header = props => {
+	const token = getData()?.accessToken;
 	const [login, setLogin] = useState(getData());
 	const [cartNum, setCartNum] = useState(0);
 	const [search, setSearch] = useState([] || localStorage.getItem('keywords'));
 	const [open, setOpen] = useState(false);
 	const [notice, setNotice] = useState(false);
 	const valRef = useRef();
+
+	const { data: shoppingNumber, mutate } = useSWR(
+		token ? '/api/mypage/favoriteGoods' : null,
+		url => fetcher(url, token),
+		{
+			refreshInterval: 0,
+		},
+	);
+
+	const onClickHello = useCallback(() => {
+		const params = {
+			productId: 1,
+		};
+		PostHeaderBodyApi('/api/product/likeProduct', params, 'Authorization', token).then(() => {
+			mutate();
+		});
+	}, []);
+
+	const onClickHell2o = useCallback(() => {
+		const params = {
+			productId: 1,
+		};
+		DeleteHeaderBodyApi('/api/mypage/favoriteGoods/del', params, 'Authorization', token).then(
+			() => {
+				mutate();
+			},
+		);
+	}, []);
 
 	const formSub = useCallback(e => {
 		e.preventDefault();
@@ -175,9 +206,9 @@ const Header = props => {
 						<Link to="/mypage/cart">
 							<a>장바구니</a>
 						</Link>
-						<CountNum>{cartNum}</CountNum>
+						<CountNum>{shoppingNumber ? shoppingNumber.likeProduct.length : 0}</CountNum>
 					</div>
-					<div>
+					<div onClick={onClickHell2o}>
 						<a>주문배송조회</a>
 					</div>
 					{login ? (

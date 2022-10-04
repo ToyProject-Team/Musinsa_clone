@@ -1,18 +1,18 @@
 import React, { useReducer, createContext, useContext } from 'react';
 
 const initialGlobal = {
-	hello: false,
+	sideBar: false,
 	autoLogin: false,
 };
 
-export const AUTOLOGIN = 'AUTOLOGIN';
+export const SIDEBAR = 'SIDEBAR';
 
 function GlobalReducer(state, action) {
 	switch (action.type) {
-		case AUTOLOGIN:
+		case SIDEBAR:
 			return {
 				...state,
-				autoLogin: action.payload.autoLogin,
+				sideBar: action.payload.sideBar,
 			};
 
 		default:

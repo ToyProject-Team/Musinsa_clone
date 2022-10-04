@@ -1,3 +1,5 @@
+import { useGlobalState } from 'context/GlobalContext';
+import Cookies from 'js-cookie';
 import React from 'react';
 import { useCallback } from 'react';
 import { useState } from 'react';
@@ -10,6 +12,7 @@ import {
 } from './styles';
 
 const ImageZoom = ({ img, alt }) => {
+	const { sideBar } = useGlobalState();
 	const [show, setShow] = useState(false);
 	const [mouseCursor, setMouseCursor] = useState({ x: 0, y: 0 });
 	const [mousePosition, setMousePosition] = useState({
@@ -25,20 +28,27 @@ const ImageZoom = ({ img, alt }) => {
 		setShow(false);
 	}, [show]);
 
-	const onMoseMoveZoom = useCallback(e => {
-		// 사이드바 활성화 시
-		setMousePosition({
-			left: -e.pageX + 290 + 'px',
-			top: -e.pageY + 210 + 'px',
-		});
-
-		// 사이드바 비활성화 시
-		// setMousePosition({
-		// 	left: -e.pageX + 20 + 'px',
-		// 	top: -e.pageY + 210 + 'px',
-		// });
-		setMouseCursor({ x: e.pageX - 35, y: e.pageY - 20 });
-	}, []);
+	const onMoseMoveZoom = useCallback(
+		e => {
+			if (sideBar) {
+				// 사이드바 활성화 시
+				console.log(1);
+				setMousePosition({
+					left: -e.pageX + 290 + 'px',
+					top: -e.pageY + 210 + 'px',
+				});
+			} else {
+				// 사이드바 비활성화 시
+				console.log(2);
+				setMousePosition({
+					left: -e.pageX + 20 + 'px',
+					top: -e.pageY + 210 + 'px',
+				});
+			}
+			setMouseCursor({ x: e.pageX - 35, y: e.pageY - 20 });
+		},
+		[sideBar],
+	);
 
 	return (
 		<ProductImgContainer>

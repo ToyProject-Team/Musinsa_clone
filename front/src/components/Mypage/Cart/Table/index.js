@@ -12,14 +12,14 @@ function CartTable({ item, setCartList, cartList, cartRemove }) {
 	const [modalOrder, setModalOrder] = useState(false);
 	const [pay, setPay] = useState('card');
 	const [order, setOrder] = useState(false);
-	const id = item.Product.id
+	const id = item.id
 
 	// 수량 기입
 	const handleChange = useCallback(
 		({ target: { value } }) => {
 			setCartList(prev =>
 				prev.map(v =>
-					v.Product.id === item.Product.id ? { ...v, packingAmount: Number(value) } : v,
+					v.id === item.id ? { ...v, packingAmount: Number(value) } : v,
 				),
 			);
 		},
@@ -30,7 +30,7 @@ function CartTable({ item, setCartList, cartList, cartRemove }) {
 	const plusCount = useCallback(() => {
 		setCartList(prev =>
 			prev.map(v =>
-				v.Product.id === item.Product.id ? { ...v, packingAmount: v.packingAmount + 1 } : v,
+				v.id === item.id ? { ...v, packingAmount: v.packingAmount + 1 } : v,
 			),
 		);
 	}, [cartList]);
@@ -42,7 +42,7 @@ function CartTable({ item, setCartList, cartList, cartRemove }) {
 		} else {
 			setCartList(prev =>
 				prev.map(v =>
-					v.Product.id === item.Product.id ? { ...v, packingAmount: v.packingAmount - 1 } : v,
+					v.id === item.id ? { ...v, packingAmount: v.packingAmount - 1 } : v,
 				),
 			);
 		}
@@ -52,17 +52,8 @@ function CartTable({ item, setCartList, cartList, cartRemove }) {
 	const checkItem = useCallback(() => {
 		setCartList(prev =>
 			prev.map(v =>
-				// v.Product.id === item.Product.id &&
-				// v.packingSize === item.packingSize &&
-				// v.packingColor === item.packingColor
-				// 	? { ...v, check: !v.check }
-				// 	: v,
-				v.Product.id === item.Product.id
-					? v.packingSize === item.packingSize
-						? v.packingColor === item.packingColor
-							? { ...v, check: !v.check }
-							: v
-						: v
+				v.id === item.id
+					? { ...v, check: !v.check }
 					: v,
 			),
 		);
