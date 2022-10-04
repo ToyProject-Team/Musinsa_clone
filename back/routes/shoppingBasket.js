@@ -126,7 +126,7 @@ router.post('/shoppingCartPurchase', authJWT, async (req, res, next) => {
         const paymentData = getPaymentData.data.response; // 조회한 결제 정보
         // 결제 검증하기
         const { amount, status } = paymentData;
-        if (amount != req.body.productPrice) {
+        if (amount != req.body.price) {
             return res.status(405).send({ message: '위조된 결제 시도입니다' });
         }
         const exUser = await User.findOne({
