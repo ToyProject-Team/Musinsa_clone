@@ -4,7 +4,6 @@ export const ScrollContainer = styled.div`
 	display: flex;
 	min-height: 100vh;
 	// position: sticky;
-	margin-top: 200px;
 	border-top: 1px solid #ddd;
 `;
 
