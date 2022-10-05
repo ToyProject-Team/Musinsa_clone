@@ -7,20 +7,15 @@ import HeaderInfo from 'components/DetailProduct/ProductInfoRight/HeaderInfo';
 import ProductInfo from 'components/DetailProduct/ProductInfo';
 import { GetApi } from 'utils/api';
 import { useEffect } from 'react';
-import {
-	initialProduceDetail,
-	PRODUCTDETAIL,
-	ProductDetailProvider,
-	useProductDetailDispatch,
-	useProductDetailState,
-} from 'context/ProductDetailContext';
+import { ProductDetailProvider } from 'context/ProductDetailContext';
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 import { URLquery } from 'utils/URLquery';
 import Footer from 'layouts/Footer';
 import Header from 'layouts/Header';
 import Sidebar from 'layouts/Sidebar';
 import DialLog from 'layouts/DialLog';
+import { Oval } from 'react-loader-spinner';
 
 const dummyProduct = {
 	BigCategoryName: '상의',
@@ -112,28 +107,32 @@ const DetailProduct = () => {
 		asyncFunction();
 	}, []);
 
+	if (loading) {
+		return (
+			<div className="loading">
+				<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+			</div>
+		);
+	}
+
 	return (
 		<>
-			{loading ? (
-				<div>Loading...</div>
-			) : (
-				<ProductDetailProvider value={initialProduceDetail}>
-					<Header></Header>
-					<Sidebar></Sidebar>
-					<DialLog></DialLog>
-					<DetailContainer>
-						<DetailWrapper>
-							<HeaderInfo />
-							<ProductWrapper>
-								<ProductInfoLeft data={dummyProduct} />
-								<ProductInfoRight data={dummyProduct} />
-							</ProductWrapper>
-						</DetailWrapper>
-						<ProductInfo />
-						<Footer></Footer>
-					</DetailContainer>
-				</ProductDetailProvider>
-			)}
+			<ProductDetailProvider value={initialProduceDetail}>
+				<Header></Header>
+				<Sidebar></Sidebar>
+				<DialLog></DialLog>
+				<DetailContainer>
+					<DetailWrapper>
+						<HeaderInfo />
+						<ProductWrapper>
+							<ProductInfoLeft data={dummyProduct} />
+							<ProductInfoRight data={dummyProduct} />
+						</ProductWrapper>
+					</DetailWrapper>
+					<ProductInfo />
+					<Footer></Footer>
+				</DetailContainer>
+			</ProductDetailProvider>
 		</>
 	);
 };
