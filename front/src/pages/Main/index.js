@@ -25,15 +25,13 @@ import Sidebar from 'layouts/Sidebar';
 import Footer from 'layouts/Footer';
 import DialLog from 'layouts/DialLog';
 import Pagination from 'react-js-pagination';
+import { createBrowserHistory } from 'history';
 
 const Main = () => {
 	const navigate = useNavigate();
+	const history = createBrowserHistory();
 
 	const ShowList = loadable(() => import('components/ProductList'), {
-		fallback: <div>로딩중</div>,
-	});
-
-	const AllList = loadable(() => import('components/ProducAllList'), {
 		fallback: <div>로딩중</div>,
 	});
 
@@ -42,8 +40,6 @@ const Main = () => {
 
 	//쿼리스트링 활용
 	const location = useLocation();
-
-	//parameter관리할 state - object로 한번에 관리
 	const [filterVal, setFilterVal] = useState({});
 
 	//가격 배열
@@ -118,13 +114,22 @@ const Main = () => {
 	);
 
 	//맨처음 데이터 받아오기(parameter 없이)
-	useEffect(() => {
-		PostQueryApi(`/api/product/productList`).then(res => setProduct(res.data.productData));
-	}, []);
+	// useEffect(() => {
+	// 	PostQueryApi(`/api/product/productList`).then(res => setProduct(res.data.productData));
+	// }, []);
+
+	const [box, setBox] = useState();
 
 	//parameter 바뀔때마다 새로운 queryString 적용 후 axios
 	useEffect(() => {
-		const queryString = `?${
+		// 쿼리문 받아와서 그대로 url주소에 반영하는걸로 수정?
+
+		//onCLick 이벤트 클릭 -> parameter 추가하면서 데이터 받아오기??? -> url에 반영 -> 화면 출력
+
+		//내가한거 onClick이벤트 클릭 -> parameter추가, url반영 -> parameter 반영한 데이터 받아옴(axios) -> 화면에 출력
+		// if(Object.keys(filterVal).length === 0)
+		//useMemo.. join
+		const queryString = `${
 			filterVal.bigCategoryId ? `bigCategoryId=${filterVal.bigCategoryId}` : ''
 		}${filterVal.smallCategoryId ? `&smallCategoryId=${filterVal.smallCategoryId}` : ''}${
 			filterVal.price ? `&price=${filterVal.price}` : ''
@@ -134,14 +139,35 @@ const Main = () => {
 
 		setPage(1);
 
-		navigate({ pathname: `/products`, search: queryString });
+		// navigate({ pathname: `/products`, search: queryString });
+
+		if (Object.keys(filterVal).length === 0) {
+			PostQueryApi(`/api/product/productList`).then(
+				res => setProduct(res.data.productData),
+				// navigate(`/`),
+			);
+		} else {
+			PostQueryApi(`/api/product/productList?${queryString}`).then(
+				res => setProduct(res.data.productData),
+				// history.push(`/products?${queryString}`, { params: queryString }),
+				navigate(`/products?${queryString}`),
+			);
+		}
 	}, [filterVal]);
 
-	useEffect(() => {
-		PostQueryApi(`/api/product/productList${location.search}`).then(res =>
-			setProduct(res.data.productData),
-		);
-	}, [location.search]);
+	// useEffect(() => {
+	// 	if (location.pathname == 'detail') {
+	// 		history.listen(() => {
+	// 			console.log(history.action);
+	// 		});
+	// 	}
+	// });
+
+	// useEffect(() => {
+	// 	PostQueryApi(`/api/product/productList${location.search}`).then(res =>
+	// 		setProduct(res.data.productData),
+	// 	);
+	// }, [location.search]);
 
 	useEffect(() => {
 		setMinPriceInput('');
@@ -242,20 +268,25 @@ const Main = () => {
 	// const length = product.length;
 	const length = product.length;
 
-	const goMain = () => {
-		delete filterVal.bigCategoryId;
-		delete filterVal.smallCategoryId;
-		delete filterVal.price;
-		delete filterVal.priceMin;
-		delete filterVal.priceMax;
-
-		setFilterVal({ filterVal });
-	};
+	// const goMain = () => {
+	// 	// delete filterVal.bigCategoryId;
+	// 	// delete filterVal.smallCategoryId;
+	// 	// delete filterVal.price;
+	// 	// delete filterVal.priceMin;
+	// 	// delete filterVal.priceMax;
+	// 	return (
+	// 		navigate(`/`),
+	// 		setClickCate(clickCate.fill(false)),
+	// 		setClickMainSort(clickMainSort.fill(false)),
+	// 		setClickPrice(clickPrice.fill(false)),
+	// 		setFilterVal({})
+	// 	);
+	// };
 
 	return (
 		<>
-			<DialLog goMain={goMain} />
-			<Header goMain={goMain}></Header>
+			<DialLog />
+			<Header />
 			<ScrollContainer>
 				<Sidebar filterVal={filterVal} setFilterVal={setFilterVal}></Sidebar>
 				<MainContainer>
@@ -518,7 +549,14 @@ const Main = () => {
 							</SortBox>
 
 							<ListBox>
-								<Routes>
+								<ShowList
+									product={product}
+									items={items}
+									page={page}
+									filterVal={filterVal}
+									setFilterVal={setFilterVal}
+								/>
+								{/* <Routes>
 									<Route
 										exact
 										path="/"
@@ -539,10 +577,10 @@ const Main = () => {
 										}
 									></Route>
 									<Route
-										path="/products"
+										path="/"
 										element={<ShowList product={product} items={items} page={page} />}
 									></Route>
-								</Routes>
+								</Routes> */}
 							</ListBox>
 						</Items>
 					</ItemSection>

@@ -21,6 +21,9 @@ import Footer from 'layouts/Footer';
 import Header from 'layouts/Header';
 import Sidebar from 'layouts/Sidebar';
 import DialLog from 'layouts/DialLog';
+import { FaCommentsDollar } from 'react-icons/fa';
+import { AiOutlineConsoleSql } from 'react-icons/ai';
+import { createBrowserHistory } from 'history';
 
 const dummyProduct = {
 	BigCategoryName: '상의',
@@ -94,6 +97,8 @@ const DetailProduct = () => {
 	});
 	const [loading, setLoading] = useState(true);
 
+	//const history = createBrowserHistory();
+
 	useEffect(() => {
 		const asyncFunction = async () => {
 			try {
@@ -106,6 +111,7 @@ const DetailProduct = () => {
 				setLoading(false);
 			} catch (error) {
 				console.error(error);
+				console.log(query);
 			}
 		};
 
