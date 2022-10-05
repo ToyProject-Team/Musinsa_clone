@@ -8,6 +8,10 @@ const {
     ProductSubTag,
 } = require('../models');
 const authJWT = require('../utils/authJWT');
+const {
+    getIamportAccessToken,
+    getIamportPaymentData,
+} = require('../utils/iamport');
 const router = express.Router();
 
 router.get('/shoppingList', authJWT, async (req, res, next) => {
@@ -78,53 +82,35 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
 
 router.post('/shoppingCartPurchase', authJWT, async (req, res, next) => {
     try {
-        if (!req.body.productId) {
+        const { shoppingBasketId, merchant_uid, imp_uid } = req.body;
+
+        if (!shoppingBasketId)
             return res.status(400).send({
                 message:
-                    '상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요',
+                    '장바구니 번호가 지급되지 않았습니다 장바구니 번호를 넘겨주세요',
             });
-        }
-        if (!req.body.MerchantUid) {
+
+        if (!merchant_uid)
             return res.status(401).send({
                 message:
                     '주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요',
             });
-        }
-        if (!req.body.imp_uid) {
+
+        if (!imp_uid)
             return res.status(402).send({
                 message:
                     'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요',
             });
-        }
-        if (req.body.price) {
-            return res.status(403).send({
-                message:
-                    '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
-            });
-        }
 
-        const { imp_uid, merchant_uid } = req.body; // req의 query에서 imp_uid, merchant_uid 추출
-        // 액세스 토큰(access token) 발급 받기
-        const getToken = await axios({
-            url: 'https://api.iamport.kr/users/getToken',
-            method: 'post', // POST method
-            headers: { 'Content-Type': 'application/json' }, // "Content-Type": "application/json"
-            data: {
-                imp_key: '7886282210238108', // REST API 키
-                imp_secret:
-                    'lNItGvMSCUT2kTs0QiIha0fzoOgE3VgRFC2ykVwmEuCnoOpd2VTkLy4LHohY2ZZpyxhxP5uEhs9QyFPC', // REST API Secret
-            },
-        });
-        const { access_token } = getToken.data.response; // 인증 토큰
-        // imp_uid로 아임포트 서버에서 결제 정보 조회
-        const getPaymentData = await axios({
-            url: `https://api.iamport.kr/payments/${imp_uid}`, // imp_uid 전달
-            method: 'get', // GET method
-            headers: { Authorization: access_token }, // 인증 토큰 Authorization header에 추가
-        });
-        const paymentData = getPaymentData.data.response; // 조회한 결제 정보
+        // iamport 액세스 토큰(access token)
+        const iamportAccessToken = await getIamportAccessToken();
+        // 조회한 결제 정보
+        const { amount, status } = await getIamportPaymentData(
+            iamportAccessToken,
+            imp_uid,
+        );
+
         // 결제 검증하기
-        const { amount, status } = paymentData;
         if (amount != req.body.price) {
             return res.status(405).send({ message: '위조된 결제 시도입니다' });
         }
