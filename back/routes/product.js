@@ -8,7 +8,7 @@ const ProductMainTag = require('../models/productMainTag');
 const ProductSubTag = require('../models/productSubTag');
 const AWS = require('aws-sdk');
 const { Op, Sequelize } = require('sequelize');
-const authJWT = require('../utils/authJWT');
+const authJWT = require('../utils/middlewares/authJWT');
 const { Order, MyCart } = require('../models');
 const {
     getIamportAccessToken,

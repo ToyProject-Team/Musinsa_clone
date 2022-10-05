@@ -7,7 +7,7 @@ const {
     ProductMainTag,
     ProductSubTag,
 } = require('../models');
-const authJWT = require('../utils/authJWT');
+const authJWT = require('../utils/middlewares/authJWT');
 const {
     getIamportAccessToken,
     getIamportPaymentData,

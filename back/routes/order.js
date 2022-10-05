@@ -2,7 +2,7 @@ const express = require('express');
 const { ProductImg } = require('../models');
 const Order = require('../models/order');
 const User = require('../models/user');
-const authJWT = require('../utils/authJWT');
+const authJWT = require('../utils/middlewares/authJWT');
 const {
     cancelIamportPaymentData,
     getIamportAccessToken,

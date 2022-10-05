@@ -3,9 +3,9 @@ const express = require('express');
 const User = require('../models/user');
 const Product = require('../models/product');
 const router = express.Router();
-const authJWT = require('../utils/authJWT');
 const ProductImg = require('../models/productImg');
 const { Sequelize } = require('sequelize');
+const authJWT = require('../utils/middlewares/authJWT');
 
 router.get('/favoriteGoods', authJWT, async (req, res, next) => {
     try {
