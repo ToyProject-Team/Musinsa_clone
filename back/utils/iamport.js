@@ -43,7 +43,7 @@ exports.getIamportPaymentData = async (accessToken, imp_uid) => {
  * @param {*} refund_account [가상계좌 환불시 필수입력] 환불 수령계좌 번호
  * @returns {Promise<any>} 결제환불 응답 데이터
  */
-exports.cancelPaymentData = async (
+exports.cancelIamportPaymentData = async (
     accessToken,
     reason,
     ImpUid,
