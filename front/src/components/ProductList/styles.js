@@ -35,9 +35,8 @@ export const ListOuter = styled.li`
 		z-index: 1;
 	}
 
-	a {
-		text-decoration: none;
-		color: black;
+	div {
+		cursor: pointer;
 	}
 
 	.li_inner {
