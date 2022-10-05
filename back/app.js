@@ -1,5 +1,6 @@
 //외부모듈
 const express = require('express');
+require('express-async-errors');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
