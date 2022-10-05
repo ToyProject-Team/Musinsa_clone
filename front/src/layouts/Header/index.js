@@ -9,18 +9,20 @@ import { IoMdArrowDropup } from 'react-icons/io';
 import Cookies from 'js-cookie';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
+import useInput from 'hooks/useInput';
+import { BiSkipPreviousCircle } from 'react-icons/bi';
 
 const Header = props => {
 	const token = getData()?.accessToken;
 	const [login, setLogin] = useState(getData());
 	const [cartNum, setCartNum] = useState(0);
-	const [search, setSearch] = useState([] || localStorage.getItem('keywords'));
+	const [inputValue, onChangeInputValue, setInputValue] = useInput();
+	const [search, setSearch] = useState(JSON.parse(localStorage.getItem('keywords')) || []);
 	const [open, setOpen] = useState(false);
 	const [notice, setNotice] = useState(false);
-	const valRef = useRef();
 
 	const { data: shoppingNumber, mutate } = useSWR(
-		token ? '/api/mypage/favoriteGoods' : null,
+		token ? '/api/shoppingBasket/shoppingList' : null,
 		url => fetcher(url, token),
 		{
 			refreshInterval: 0,
@@ -47,60 +49,51 @@ const Header = props => {
 		);
 	}, []);
 
-	const formSub = useCallback(e => {
-		e.preventDefault();
-		const val = valRef.current.value;
-		// const saveInput = {
-		// 	input: val,
-		// 	id: Date.now(),
-		//   };
+	const formSub = useCallback(
+		e => {
+			e.preventDefault();
 
-		// search.push(saveInput)
-		// saveText();
-		// saveInput.input = ""
-		// console.log(saveInput,123123,search)
+			const keyWord = localStorage.getItem('keywords');
+
+			if (!keyWord?.includes(inputValue) || !inputValue === '') {
+				setSearch(prev => [...prev, inputValue]);
+				const value = [...search, inputValue];
+				localStorage.setItem('keywords', JSON.stringify(value));
+			}
+		},
+		[search, inputValue],
+	);
+
+	const searchBtn = useCallback(() => {
+		const keyWord = localStorage.getItem('keywords');
+
+		if (!keyWord.includes(inputValue) || !inputValue === '') {
+			setSearch(prev => [...prev, inputValue]);
+			const value = [...search, inputValue];
+			localStorage.setItem('keywords', JSON.stringify(value));
+		}
+	}, [search, inputValue]);
+
+	const onClickDeleteSearchAll = useCallback(() => {
+		setSearch([]);
+		localStorage.removeItem('keywords');
 	}, []);
 
-	const inputValue = e => {
-		const val = e.target.value;
-		// setSearch(val)
-		console.log(val);
-	};
+	const onClickSearchItem = useCallback(
+		idx => {
+			setInputValue(search[idx]);
+		},
+		[search],
+	);
 
-	// const saveText = () =>{
-	// 	;
-	// }
-
-	const searchBtn = () => {
-		let val = valRef.current.value;
-		// val = ""
-
-		const newKeyword = {
-			id: Date.now(),
-			keywords: val,
-		};
-
-		search.push(newKeyword);
-		localStorage.setItem('keywords', JSON.stringify(search));
-
-		// const key = localStorage.getItem("keywords")
-		// const getKey = JSON.parse(search)
-		// const arr = getW.map((e) => e)
-		console.log(search, 123321, search.length);
-	};
-
-	// useEffect(()=>{
-	// 	localStorage.getItem('keywords', JSON.stringify(search))
-	// },[search])
-	// useEffect (()=>{
-	// 	sessionStorage.setItem("input",JSON.stringify(search))
-	// },[search])
-	useEffect(() => {
-		// let val = localStorage.getItem("keywords")
-		// const getW = JSON.parse(val)
-		// const arr = getW.map((e) => e)
-		console.log(search.length, 123, search);
-	}, [search]);
+	const onClickDeleteSearchItem = useCallback(
+		idx => {
+			const filterItem = search.filter((v, i) => i !== idx);
+			setSearch(filterItem);
+			localStorage.setItem('keywords', JSON.stringify(filterItem));
+		},
+		[search],
+	);
 
 	const inputOpen = () => {
 		setOpen(!open);
@@ -120,8 +113,10 @@ const Header = props => {
 	return (
 		<HContainer>
 			<HDiv>
-				<div onClick={() => props.goMain()}>
-					<HLogo>MUSINSA</HLogo>
+				<div>
+					<Link to="/">
+						<HLogo>MUSINSA</HLogo>
+					</Link>
 				</div>
 				<HSearch>
 					<div>
@@ -131,9 +126,9 @@ const Header = props => {
 								type="text"
 								maxLength={30}
 								autoComplete="off"
-								onMouseOver={inputOpen}
-								onChange={inputValue}
-								ref={valRef}
+								onClick={inputOpen}
+								onChange={onChangeInputValue}
+								value={inputValue}
 							/>
 							<span>
 								<AiOutlineCamera />
@@ -147,27 +142,33 @@ const Header = props => {
 						<dl>
 							<dt>
 								<h3>최근 검색어</h3>
-								<button type="button">전체 삭제</button>
+								<button type="button" onClick={onClickDeleteSearchAll}>
+									전체 삭제
+								</button>
 							</dt>
 							<dd>
-								{search.length !== 0 && (
-									<ul>
-										{search.map(e => {
-											<li>{e.id}</li>;
-										})}
-
-										{/* {search.map((text, idx) => {
-									if(search.length === 0){
-										<li>최근 검색어 내용이 없습니다.</li>
-									}
-									<li key={idx}>
-										{text[0].input}
-									</li>
-									
-								})} */}
-										<li>최근 검색어 내용이 없습니다.</li>
-									</ul>
-								)}
+								<ul>
+									{search.length === 0 && <li className="no-item">최근 검색어 내용이 없습니다.</li>}
+									{search?.map((text, idx) => {
+										return (
+											<li key={idx}>
+												<a>{text}</a>
+												<div class="box-edit">
+													<a href="#" className="move" onClick={() => onClickSearchItem(idx)}>
+														↖
+													</a>
+													<a
+														href="#"
+														className="remove"
+														onClick={() => onClickDeleteSearchItem(idx)}
+													>
+														X
+													</a>
+												</div>
+											</li>
+										);
+									})}
+								</ul>
 							</dd>
 						</dl>
 					</article>
@@ -183,7 +184,10 @@ const Header = props => {
 					)}
 					{login ? (
 						<div>
-							<a onClick={() => setNotice(!notice)}>알림</a>
+							<div className="flex" onClick={() => setNotice(!notice)}>
+								<a>알림</a>
+								<CountNum>{shoppingNumber ? 'N' : 0}</CountNum>
+							</div>
 							<article className={notice ? 'block' : 'none'}>
 								<p>
 									PC에서는 공지, 구매 정보 알림만 확인하실 수 있습니다. <br />그 외 알림은 앱에서
@@ -198,18 +202,15 @@ const Header = props => {
 					) : null}
 
 					<div>
-						<Link to="/mypage/like">
-							<a>좋아요</a>
-						</Link>
+						<Link to="/mypage/like">좋아요</Link>
 					</div>
 					<div>
-						<Link to="/mypage/cart">
-							<a>장바구니</a>
+						<Link to="/mypage/cart" className="basket">
+							장바구니 <CountNum>{shoppingNumber ? shoppingNumber.length : 0}</CountNum>
 						</Link>
-						<CountNum>{shoppingNumber ? shoppingNumber.likeProduct.length : 0}</CountNum>
 					</div>
 					<div onClick={onClickHell2o}>
-						<a>주문배송조회</a>
+						<Link to="/mypage/orderlist">주문배송조회</Link>
 					</div>
 					{login ? (
 						<div onClick={deleteLogout} className="logOut">
