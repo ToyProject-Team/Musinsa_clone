@@ -61,6 +61,7 @@ const Sidebar = props => {
 							title="MeunContainer"
 							onClick={() => onClickCategory(idx)}
 							aria-expanded={open[idx]}
+							key={idx}
 						>
 							<div title="BigMenu" key={idx}>
 								{big}
@@ -81,7 +82,7 @@ const Sidebar = props => {
 											sendSmallCate(idx, idex);
 										}}
 									>
-										<span>{small}</span>
+										<span key={idex}>{small}</span>
 										<span>{`(${idex + 1})`}</span>
 									</li>
 								))}

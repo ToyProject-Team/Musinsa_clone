@@ -234,8 +234,8 @@ const Main = () => {
 
 	//검색창 input들 state
 	const [searchInput, setSearchInput] = useState('');
-	const [minPriceInput, setMinPriceInput] = useState();
-	const [maxPriceInput, setMaxPriceInput] = useState();
+	const [minPriceInput, setMinPriceInput] = useState('');
+	const [maxPriceInput, setMaxPriceInput] = useState('');
 	const [searchTerm, setSearchTerm] = useState('');
 
 	//select박스 상태
@@ -344,7 +344,7 @@ const Main = () => {
 								onClick={() => {
 									onReset();
 								}}
-								style={{ color: 'black', 'font-weight': 'bold' }}
+								style={{ color: 'black', 'fontWeight': 'bold' }}
 							>
 								전체
 							</div>
@@ -360,6 +360,7 @@ const Main = () => {
 												<li
 													className={clickCate[idx] ? 'active' : 'inactive'}
 													onClick={() => onSort(idx)}
+													key={idx}
 												>
 													{data}
 												</li>
@@ -377,7 +378,7 @@ const Main = () => {
 										onClick={() => {
 											onResetPrice();
 										}}
-										style={{ 'min-width': '100px', color: 'black', fontWeight: 'bold' }}
+										style={{ 'minWidth': '100px', color: 'black', fontWeight: 'bold' }}
 									>
 										전체보기
 									</li>

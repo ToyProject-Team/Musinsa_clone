@@ -5,7 +5,6 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 const ShowList = props => {
 	const navigate = useNavigate();
 	const location = useLocation().search;
-
 	//옵션 데이터
 	const [arrow, setArrow] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
@@ -24,12 +23,12 @@ const ShowList = props => {
 	return (
 		<ListWrapper>
 			{props.product.length === 0 ? (
-				<div style={{ 'font-size': '20px', padding: '15px' }}>해당하는 상품이 없습니다.</div>
+				<div style={{ 'fontSize': '20px', padding: '15px' }}>해당하는 상품이 없습니다.</div>
 			) : (
 				props.product
 					.slice(props.items * (props.page - 1), props.items * (props.page - 1) + props.items)
 					.map((data, idx) => (
-						<ListOuter>
+						<ListOuter key={idx}>
 							<div
 								onClick={() => {
 									navigate(`/detail?productId=${data.id}`, {
@@ -38,7 +37,7 @@ const ShowList = props => {
 								}}
 							>
 								{/* <Link to={`/detail?productId=${data.id}`}> */}
-								<div className="li_inner" key={idx}>
+								<div className="li_inner">
 									<div className="list_img">
 										<img
 											src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.ProductImg.src}`}
@@ -65,8 +64,8 @@ const ShowList = props => {
 								</p>
 								<div className="option_list">
 									<ul style={selected[idx] ? { display: 'block' } : { display: 'none' }}>
-										{data.ProductMainTags.map(data => (
-											<li className={selected[idx] ? 'open' : 'close'}>
+										{data.ProductMainTags.map((data, idex)=> (
+											<li className={selected[idx] ? 'open' : 'close'} key={idex}>
 												<span>{data.name}</span>
 											</li>
 										))}
