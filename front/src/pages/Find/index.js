@@ -4,23 +4,40 @@ import { ReactComponent as BackArrow } from 'assets/svg/BackArrow.svg';
 import { Link, Navigate, NavLink, Route, Routes, useParams } from 'react-router-dom';
 import loadable from '@loadable/component';
 import { UserFindProvider } from 'context/UserFindContext';
+import { Oval } from 'react-loader-spinner';
 
 const FindId = loadable(() => import('components/FindPage/UserFindId'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 
 const FindPassword = loadable(() => import('components/FindPage/UserFindPassword'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 
 const FindPasswordAuth = loadable(() => import('components/FindPage/UserFindPasswordAuth'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 
 const UserFindPasswordChange = loadable(
 	() => import('components/FindPage/UserFindPasswordChange'),
 	{
-		fallback: <div>로딩중</div>,
+		fallback: (
+			<div className="loading">
+				<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+			</div>
+		),
 	},
 );
 
@@ -65,7 +82,8 @@ const Find = () => {
 							<Route path="/id" element={<FindId />} /> {/* id 찾기 */}
 							<Route exact path="/password" element={<FindPassword />} /> {/* 패스워드 찾기 */}
 							<Route path="/password/choice" element={<FindPasswordAuth />} /> {/* 패스워드 찾기 */}
-							<Route path="/password/change" element={<UserFindPasswordChange />} />{/* 패스워드 변경 */}
+							<Route path="/password/change" element={<UserFindPasswordChange />} />
+							{/* 패스워드 변경 */}
 						</Routes>
 					</Section>
 				</Inner>

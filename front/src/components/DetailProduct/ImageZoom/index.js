@@ -12,7 +12,7 @@ import {
 } from './styles';
 
 const ImageZoom = ({ img, alt }) => {
-	const { sideBar } = useGlobalState();
+	const [sideBar, setSidebar] = useState(Cookies.get('sideBarToggle') === 'false' ? false : true);
 	const [show, setShow] = useState(false);
 	const [mouseCursor, setMouseCursor] = useState({ x: 0, y: 0 });
 	const [mousePosition, setMousePosition] = useState({
@@ -30,6 +30,7 @@ const ImageZoom = ({ img, alt }) => {
 
 	const onMoseMoveZoom = useCallback(
 		e => {
+			console.log(sideBar);
 			if (sideBar) {
 				// 사이드바 활성화 시
 				console.log(1);

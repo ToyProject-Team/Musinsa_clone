@@ -1,18 +1,20 @@
 import React, { useCallback, useState, useRef, useEffect, useTransition } from 'react';
 import { HContainer, HDiv, HLogo, HSearch, HUser, CountNum } from './styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineCamera, AiOutlineSearch } from 'react-icons/ai';
 import { getData } from 'utils/getData';
 import { deleteData } from 'utils/deleteData';
-import { DeleteHeaderBodyApi, PostHeaderApi, PostHeaderBodyApi } from 'utils/api';
+import { DeleteHeaderBodyApi, PostHeaderApi, PostHeaderBodyApi, PostQueryApi } from 'utils/api';
 import { IoMdArrowDropup } from 'react-icons/io';
 import Cookies from 'js-cookie';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
 import useInput from 'hooks/useInput';
 import { BiSkipPreviousCircle } from 'react-icons/bi';
+import FirstModal from 'components/Modals/FirstModal';
 
 const Header = props => {
+	const navigate = useNavigate();
 	const token = getData()?.accessToken;
 	const [login, setLogin] = useState(getData());
 	const [cartNum, setCartNum] = useState(0);
@@ -20,6 +22,16 @@ const Header = props => {
 	const [search, setSearch] = useState(JSON.parse(localStorage.getItem('keywords')) || []);
 	const [open, setOpen] = useState(false);
 	const [notice, setNotice] = useState(false);
+
+	const [modalFirst, setModalFirst] = useState(false);
+	const onCloseModal = useCallback(() => {
+		setModalFirst(false);
+	}, []);
+	useEffect(() => {
+		PostQueryApi(`/api/product/productList`).catch(() => {
+			setModalFirst(true);
+		});
+	}, []);
 
 	const { data: shoppingNumber, mutate } = useSWR(
 		token ? '/api/shoppingBasket/shoppingList' : null,
@@ -111,115 +123,121 @@ const Header = props => {
 	}, [login]);
 
 	return (
-		<HContainer>
-			<HDiv>
-				<div>
-					<Link to="/">
-						<HLogo>MUSINSA</HLogo>
-					</Link>
-				</div>
-				<HSearch>
+		<>
+			<HContainer>
+				<HDiv>
 					<div>
-						<form id="search_form" onSubmit={formSub}>
-							<input
-								id="search_query"
-								type="text"
-								maxLength={30}
-								autoComplete="off"
-								onClick={inputOpen}
-								onChange={onChangeInputValue}
-								value={inputValue}
-							/>
-							<span>
-								<AiOutlineCamera />
-							</span>
-							<span onClick={searchBtn}>
-								<AiOutlineSearch />
-							</span>
-						</form>
-					</div>
-					<article className={open ? 'block' : 'none'}>
-						<dl>
-							<dt>
-								<h3>최근 검색어</h3>
-								<button type="button" onClick={onClickDeleteSearchAll}>
-									전체 삭제
-								</button>
-							</dt>
-							<dd>
-								<ul>
-									{search.length === 0 && <li className="no-item">최근 검색어 내용이 없습니다.</li>}
-									{search?.map((text, idx) => {
-										return (
-											<li key={idx}>
-												<a>{text}</a>
-												<div class="box-edit">
-													<a href="#" className="move" onClick={() => onClickSearchItem(idx)}>
-														↖
-													</a>
-													<a
-														href="#"
-														className="remove"
-														onClick={() => onClickDeleteSearchItem(idx)}
-													>
-														X
-													</a>
-												</div>
-											</li>
-										);
-									})}
-								</ul>
-							</dd>
-						</dl>
-					</article>
-				</HSearch>
-
-				<HUser>
-					{login ? (
-						<button className="nowLogin">{login.userData.loginId}</button>
-					) : (
-						<Link to="/login">
-							<button className="notLogin">로그인</button>
+						<Link to="/">
+							<HLogo>MUSINSA</HLogo>
 						</Link>
-					)}
-					{login ? (
+					</div>
+					<HSearch>
 						<div>
-							<div className="flex" onClick={() => setNotice(!notice)}>
-								<a>알림</a>
-								<CountNum>{shoppingNumber ? 'N' : 0}</CountNum>
-							</div>
-							<article className={notice ? 'block' : 'none'}>
-								<p>
-									PC에서는 공지, 구매 정보 알림만 확인하실 수 있습니다. <br />그 외 알림은 앱에서
-									확인 가능합니다.
-								</p>
-								<p>등록된 알림이 없습니다.</p>
+							<form id="search_form" onSubmit={formSub}>
+								<input
+									id="search_query"
+									type="text"
+									maxLength={30}
+									autoComplete="off"
+									onClick={inputOpen}
+									onChange={onChangeInputValue}
+									value={inputValue}
+								/>
 								<span>
-									<IoMdArrowDropup />
+									<AiOutlineCamera />
 								</span>
-							</article>
+								<span onClick={searchBtn}>
+									<AiOutlineSearch />
+								</span>
+							</form>
 						</div>
-					) : null}
+						<article className={open ? 'block' : 'none'}>
+							<dl>
+								<dt>
+									<h3>최근 검색어</h3>
+									<button type="button" onClick={onClickDeleteSearchAll}>
+										전체 삭제
+									</button>
+								</dt>
+								<dd>
+									<ul>
+										{search.length === 0 && (
+											<li className="no-item">최근 검색어 내용이 없습니다.</li>
+										)}
+										{search?.map((text, idx) => {
+											return (
+												<li key={idx}>
+													<a>{text}</a>
+													<div class="box-edit">
+														<a href="#" className="move" onClick={() => onClickSearchItem(idx)}>
+															↖
+														</a>
+														<a
+															href="#"
+															className="remove"
+															onClick={() => onClickDeleteSearchItem(idx)}
+														>
+															X
+														</a>
+													</div>
+												</li>
+											);
+										})}
+									</ul>
+								</dd>
+							</dl>
+						</article>
+					</HSearch>
 
-					<div>
-						<Link to="/mypage/like">좋아요</Link>
-					</div>
-					<div>
-						<Link to="/mypage/cart" className="basket">
-							장바구니 <CountNum>{shoppingNumber ? shoppingNumber.length : 0}</CountNum>
-						</Link>
-					</div>
-					<div onClick={onClickHell2o}>
-						<Link to="/mypage/orderlist">주문배송조회</Link>
-					</div>
-					{login ? (
-						<div onClick={deleteLogout} className="logOut">
-							로그아웃
+					<HUser>
+						{login ? (
+							<button className="nowLogin">{login.userData.loginId}</button>
+						) : (
+							<Link to="/login">
+								<button className="notLogin">로그인</button>
+							</Link>
+						)}
+						{login ? (
+							<div>
+								<div className="flex" onClick={() => setNotice(!notice)}>
+									<a>알림</a>
+									<CountNum>{shoppingNumber ? 'N' : 0}</CountNum>
+								</div>
+								<article className={notice ? 'block' : 'none'}>
+									<p>
+										PC에서는 공지, 구매 정보 알림만 확인하실 수 있습니다. <br />그 외 알림은 앱에서
+										확인 가능합니다.
+									</p>
+									<p>등록된 알림이 없습니다.</p>
+									<span>
+										<IoMdArrowDropup />
+									</span>
+								</article>
+							</div>
+						) : null}
+
+						<div>
+							<Link to="/mypage/like">좋아요</Link>
 						</div>
-					) : null}
-				</HUser>
-			</HDiv>
-		</HContainer>
+						<div>
+							<Link to="/mypage/cart" className="basket">
+								장바구니 <CountNum>{shoppingNumber ? shoppingNumber.length : 0}</CountNum>
+							</Link>
+						</div>
+						<div onClick={onClickHell2o}>
+							<Link to="/mypage/orderlist">주문배송조회</Link>
+						</div>
+						{login ? (
+							<div onClick={deleteLogout} className="logOut">
+								로그아웃
+							</div>
+						) : null}
+					</HUser>
+				</HDiv>
+			</HContainer>
+
+			<FirstModal show={modalFirst} onCloseModal={onCloseModal}></FirstModal>
+		</>
 	);
 };
 
