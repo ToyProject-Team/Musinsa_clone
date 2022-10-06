@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
 	ScrollContainer,
 	MainContainer,
@@ -15,7 +15,14 @@ import {
 	PaginationWapper,
 } from './styles';
 
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import {
+	Route,
+	Routes,
+	useNavigate,
+	useLocation,
+	useSearchParams,
+	useParams,
+} from 'react-router-dom';
 import { PostQueryApi } from 'utils/api';
 import loadable from '@loadable/component';
 import { bigCategory, alpabet } from 'utils/bigCategory';
@@ -26,6 +33,8 @@ import Footer from 'layouts/Footer';
 import DialLog from 'layouts/DialLog';
 import Pagination from 'react-js-pagination';
 import { createBrowserHistory } from 'history';
+import { AiOutlineConsoleSql } from 'react-icons/ai';
+//import { MainProvider } from 'context/MainContext';
 
 const Main = () => {
 	const navigate = useNavigate();
@@ -113,22 +122,7 @@ const Main = () => {
 		}).fill(false),
 	);
 
-	//맨처음 데이터 받아오기(parameter 없이)
-	// useEffect(() => {
-	// 	PostQueryApi(`/api/product/productList`).then(res => setProduct(res.data.productData));
-	// }, []);
-
-	const [box, setBox] = useState();
-
-	//parameter 바뀔때마다 새로운 queryString 적용 후 axios
 	useEffect(() => {
-		// 쿼리문 받아와서 그대로 url주소에 반영하는걸로 수정?
-
-		//onCLick 이벤트 클릭 -> parameter 추가하면서 데이터 받아오기??? -> url에 반영 -> 화면 출력
-
-		//내가한거 onClick이벤트 클릭 -> parameter추가, url반영 -> parameter 반영한 데이터 받아옴(axios) -> 화면에 출력
-		// if(Object.keys(filterVal).length === 0)
-		//useMemo.. join
 		const queryString = `${
 			filterVal.bigCategoryId ? `bigCategoryId=${filterVal.bigCategoryId}` : ''
 		}${filterVal.smallCategoryId ? `&smallCategoryId=${filterVal.smallCategoryId}` : ''}${
@@ -137,37 +131,20 @@ const Main = () => {
 			filterVal.priceMax ? `&priceMax=${filterVal.priceMax}` : ''
 		}${filterVal.mainSort ? `&mainSort=${filterVal.mainSort}` : ''}`;
 
-		setPage(1);
-
-		// navigate({ pathname: `/products`, search: queryString });
-
-		if (Object.keys(filterVal).length === 0) {
-			PostQueryApi(`/api/product/productList`).then(
-				res => setProduct(res.data.productData),
-				// navigate(`/`),
+		if (localStorage.getItem('memo')) {
+			PostQueryApi(`/api/product/productList${localStorage.getItem('memo')}`).then(res =>
+				setProduct(res.data.productData),
 			);
+			localStorage.removeItem('memo');
+		} else if (queryString == '') {
+			PostQueryApi(`/api/product/productList`).then(res => setProduct(res.data.productData));
 		} else {
-			PostQueryApi(`/api/product/productList?${queryString}`).then(
-				res => setProduct(res.data.productData),
-				// history.push(`/products?${queryString}`, { params: queryString }),
-				navigate(`/products?${queryString}`),
+			PostQueryApi(`/api/product/productList?${queryString}`).then(res =>
+				setProduct(res.data.productData),
 			);
+			navigate(`?${queryString}`);
 		}
 	}, [filterVal]);
-
-	// useEffect(() => {
-	// 	if (location.pathname == 'detail') {
-	// 		history.listen(() => {
-	// 			console.log(history.action);
-	// 		});
-	// 	}
-	// });
-
-	// useEffect(() => {
-	// 	PostQueryApi(`/api/product/productList${location.search}`).then(res =>
-	// 		setProduct(res.data.productData),
-	// 	);
-	// }, [location.search]);
 
 	useEffect(() => {
 		setMinPriceInput('');
@@ -263,25 +240,11 @@ const Main = () => {
 	const [page, setPage] = useState(1);
 	const [items, setItems] = useState(18);
 	const handlePageChange = page => {
-		setPage(page);
+		//history push
+		setPage(page); //페이지바뀔때마다
 	};
 	// const length = product.length;
 	const length = product.length;
-
-	// const goMain = () => {
-	// 	// delete filterVal.bigCategoryId;
-	// 	// delete filterVal.smallCategoryId;
-	// 	// delete filterVal.price;
-	// 	// delete filterVal.priceMin;
-	// 	// delete filterVal.priceMax;
-	// 	return (
-	// 		navigate(`/`),
-	// 		setClickCate(clickCate.fill(false)),
-	// 		setClickMainSort(clickMainSort.fill(false)),
-	// 		setClickPrice(clickPrice.fill(false)),
-	// 		setFilterVal({})
-	// 	);
-	// };
 
 	return (
 		<>
@@ -555,6 +518,7 @@ const Main = () => {
 									page={page}
 									filterVal={filterVal}
 									setFilterVal={setFilterVal}
+									//memoVal={memoVal}
 								/>
 								{/* <Routes>
 									<Route

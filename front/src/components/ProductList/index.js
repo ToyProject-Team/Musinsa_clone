@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ListOuter, ListWrapper } from './styles';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 
 const ShowList = props => {
 	const navigate = useNavigate();
-	const location = useLocation().search;
+	const location = useLocation();
+	const history = createBrowserHistory();
+
+	const goDetail = data => {
+		navigate(`/detail?productId=${data.id}`);
+		localStorage.setItem('memo', location.search);
+	};
 
 	//옵션 데이터
 	const [arrow, setArrow] = useState(false);
@@ -32,12 +39,9 @@ const ShowList = props => {
 						<ListOuter>
 							<div
 								onClick={() => {
-									navigate(`/detail?productId=${data.id}`, {
-										state: { params: location },
-									});
+									goDetail(data);
 								}}
 							>
-								{/* <Link to={`/detail?productId=${data.id}`}> */}
 								<div className="li_inner" key={idx}>
 									<div className="list_img">
 										<img
