@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { ListOuter, ListWrapper } from './styles';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 
 const ShowList = props => {
+	const navigate = useNavigate();
+	const location = useLocation().search;
+
 	//옵션 데이터
 	const [arrow, setArrow] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
@@ -26,14 +30,19 @@ const ShowList = props => {
 					.slice(props.items * (props.page - 1), props.items * (props.page - 1) + props.items)
 					.map((data, idx) => (
 						<ListOuter>
-							<a href={`/detail?productId=${data.id}`}>
+							<div
+								onClick={() => {
+									navigate(`/detail?productId=${data.id}`, {
+										state: { params: location },
+									});
+								}}
+							>
+								{/* <Link to={`/detail?productId=${data.id}`}> */}
 								<div className="li_inner" key={idx}>
 									<div className="list_img">
-										{/* <a href={`/detail?productId=${data.id}`}> */}
 										<img
 											src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.ProductImg.src}`}
 										></img>
-										{/* </a> */}
 									</div>
 									<div className="item_info">
 										<p>{data.productTitle}</p>
@@ -41,28 +50,29 @@ const ShowList = props => {
 										<p>MEMBERSHIP PRICE</p>
 									</div>
 								</div>
-								<div className="option">
-									<p
-										className="option_btn"
-										onClick={() => {
-											clickOption(idx);
-											setArrow(!arrow);
-											setIsOpen(!isOpen);
-										}}
-									>
-										{selected[idx] ? 'OPTION ▲' : 'OPTION ▼'}
-									</p>
-									<div className="option_list">
-										<ul style={selected[idx] ? { display: 'block' } : { display: 'none' }}>
-											{data.ProductMainTags.map(data => (
-												<li className={selected[idx] ? 'open' : 'close'}>
-													<span>{data.name}</span>
-												</li>
-											))}
-										</ul>
-									</div>
+								{/* </Link> */}
+							</div>
+							<div className="option">
+								<p
+									className="option_btn"
+									onClick={() => {
+										clickOption(idx);
+										setArrow(!arrow);
+										setIsOpen(!isOpen);
+									}}
+								>
+									{selected[idx] ? 'OPTION ▲' : 'OPTION ▼'}
+								</p>
+								<div className="option_list">
+									<ul style={selected[idx] ? { display: 'block' } : { display: 'none' }}>
+										{data.ProductMainTags.map(data => (
+											<li className={selected[idx] ? 'open' : 'close'}>
+												<span>{data.name}</span>
+											</li>
+										))}
+									</ul>
 								</div>
-							</a>
+							</div>
 						</ListOuter>
 					))
 			)}

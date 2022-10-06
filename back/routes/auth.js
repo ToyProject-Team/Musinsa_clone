@@ -3,15 +3,14 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 const axios = require('axios');
-const qs = require('qs');
 const CryptoJS = require('crypto-js');
 const request = require('request');
 
 const { Op } = require('sequelize');
 const jwt = require('../utils/jwt-utils');
-const { sequelize, User } = require('../models');
+const { User } = require('../models');
 const redisClient = require('../utils/redis');
-const authJWT = require('../utils/authJWT');
+const authJWT = require('../utils/middlewares/authJWT');
 const { smtpTransport } = require('../utils/email');
 const { promisify } = require('util');
 
@@ -23,12 +22,17 @@ router.post('/signup', async (req, res, next) => {
                 loginId: req.body.loginId,
             },
         });
-        console.log(req.headers.encryptioncode)
+        console.log(req.headers.encryptioncode);
         if (req.headers.encryptioncode) {
-            bytes  = CryptoJS.AES.decrypt(req.headers.encryptioncode, 'secret key 123');
-            console.log(bytes, "DASdasd")
-            req.headers.encryptioncode = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-            console.log(req.headers.encryptioncode)
+            bytes = CryptoJS.AES.decrypt(
+                req.headers.encryptioncode,
+                'secret key 123',
+            );
+            console.log(bytes, 'DASdasd');
+            req.headers.encryptioncode = JSON.parse(
+                bytes.toString(CryptoJS.enc.Utf8),
+            );
+            console.log(req.headers.encryptioncode);
         }
         const client = redisClient;
         const getAsync = promisify(client.get).bind(client);
@@ -193,7 +197,7 @@ router.post('/kakao', (req, res) => {
 
 router.get('/kakao/callback', async (req, res, next) => {
     try {
-        console.log("???")
+        console.log('???');
         const user = await axios({
             method: 'get',
             url: 'https://kapi.kakao.com/v2/user/me',
@@ -206,8 +210,8 @@ router.get('/kakao/callback', async (req, res, next) => {
         await redisClient.expire(randNum, 1200);
         const encryptionCode = await CryptoJS.AES.encrypt(
             JSON.stringify(randNum),
-            'secret key 123'
-          ).toString()
+            'secret key 123',
+        ).toString();
 
         let userInfo = await User.findOne({
             where: {
