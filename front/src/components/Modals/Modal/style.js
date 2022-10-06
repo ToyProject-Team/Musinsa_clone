@@ -8,7 +8,7 @@ export const CreateModal = styled.div`
 	top: 0;
 	right: 0;
 	background-color: #00000021;
-	z-index: 1022;
+	z-index: 9999;
 
 	& > div {
 		position: absolute;
