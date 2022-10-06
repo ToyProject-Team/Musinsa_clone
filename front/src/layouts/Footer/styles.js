@@ -23,13 +23,14 @@ export const FTitle = styled.p`
 	font-size: 14px;
 	margin-bottom: 1em;
 	line-height: 2em;
-	& p {
+	& .subTitle {
 		font-size: 18px;
 	}
 
 	& span {
 		font-size: 12px;
 		font-weight: Black;
+		display: block;
 	}
 `;
 
@@ -65,7 +66,7 @@ export const FBttom = styled.p`
 	}
 `;
 
-export const SNS = styled.a`
+export const SNS = styled.span`
 	display: block;
 	width: 606px;
 	height: 60px;
