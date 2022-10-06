@@ -5,8 +5,10 @@ import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
 import { HiOutlinePlusSm, HiOutlineMinusSm } from 'react-icons/hi';
 import Cookies from 'js-cookie';
+import { SIDEBAR, useGlobalDispatch } from 'context/GlobalContext';
 
 const Sidebar = props => {
+	const dispatch = useGlobalDispatch();
 	// const [cancel, setCancel] = useState(true);
 	const [cancel, setCancel] = useState(Cookies.get('sideBarToggle') === 'false' ? false : true);
 	const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
@@ -38,6 +40,11 @@ const Sidebar = props => {
 	const onClickToggle = useCallback(() => {
 		setCancel(e => !e);
 		Cookies.set('sideBarToggle', !cancel);
+		console.log(cancel);
+		const payload = {
+			sideBar: !cancel,
+		};
+		dispatch({ type: SIDEBAR, payload });
 	}, [cancel]);
 
 	return (
@@ -54,6 +61,7 @@ const Sidebar = props => {
 							title="MeunContainer"
 							onClick={() => onClickCategory(idx)}
 							aria-expanded={open[idx]}
+							key={idx}
 						>
 							<div title="BigMenu" key={idx}>
 								{big}
@@ -74,7 +82,7 @@ const Sidebar = props => {
 											sendSmallCate(idx, idex);
 										}}
 									>
-										<span>{small}</span>
+										<span key={idex}>{small}</span>
 										<span>{`(${idex + 1})`}</span>
 									</li>
 								))}

@@ -329,7 +329,8 @@ const PurchaseForm = () => {
 	const onClickOrderButton = useCallback(() => {
 		if (!user) {
 			const { pathname, search } = location;
-			navigate(`/login?redirect=${pathname}${search}`);
+			Cookies.set('redirect', pathname + search);
+			navigate(`/login`);
 		}
 
 		if (Object.keys(selectList).length === 0) return alert('구매하실 상품이 없습니다.');
@@ -341,7 +342,8 @@ const PurchaseForm = () => {
 	const onClickOrder = useCallback(() => {
 		if (!user) {
 			const { pathname, search } = location;
-			navigate(`/login?redirect=${pathname}${search}`);
+			Cookies.set('redirect', pathname + search);
+			navigate(`/login`);
 		}
 
 		setModalOrder(false);

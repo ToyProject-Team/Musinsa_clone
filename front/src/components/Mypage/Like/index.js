@@ -4,7 +4,7 @@ import Ul from 'components/Mypage/Like/List';
 import { LikeSection, PagenationBox } from './styles';
 import dummy from 'components/Mypage/data.json';
 import Pagination from 'react-js-pagination';
-import { GetApi, PostHeaderApi, PostQueryApi } from 'utils/api';
+import { GetApi, GetTokenApi, PostHeaderApi, PostQueryApi } from 'utils/api';
 import { getData } from 'utils/getData';
 import axios from 'axios';
 
@@ -21,23 +21,10 @@ function Mainlike() {
 
 	// 좋아요 리스트 서버에서 가져오기
 	const loginToken = getData();
-	// console.log(loginToken);
-
 	useEffect(() => {
-		// const headers = {
-		// 	Authorization: loginToken.accessToken
-		// }
-		// GetApi('/api/mypage/favoriteGoods', headers ).then(res => {setlikeList(res.data.likeProduct)});
-		axios
-			.get('http://141.164.48.244/api/mypage/favoriteGoods', {
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: loginToken.accessToken,
-				},
-			})
-			.then(res => {
-				setlikeList(res.data.likeProduct);
-			});
+		GetTokenApi('/api/mypage/favoriteGoods',loginToken.accessToken).then(res => {
+			setlikeList(res.data.likeProduct);
+		})
 	}, []);
 
 	console.log('like', likeLists);

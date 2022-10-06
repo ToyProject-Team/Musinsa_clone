@@ -50,6 +50,9 @@ export const OrderTable = styled.table`
 				strong{
 					font-weight: bold;
 				}
+				&:first-child{
+					cursor: pointer;
+				}
 			}
 		}
 	}

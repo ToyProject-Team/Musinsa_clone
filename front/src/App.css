@@ -123,3 +123,10 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+.loading {
+	position: absolute !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
+}
