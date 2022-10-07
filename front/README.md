@@ -1,3 +1,7 @@
+test ID/PW
+ID: test
+PW: test
+
 # Clone Coding First Start
 
 ### `npm install`
