@@ -22,6 +22,12 @@ const Sidebar = props => {
         // smallCate index가 0인 경우(전체) / 아닌경우
         // smallCate index가 1이상인 경우에는 bigCateId가 이미 있는경우/없는경우
         //이중 삼항연산자
+        // props.setClickCate(
+        //     Array.from({
+        //         length: smallCategory[big + 1].length,
+        //     }).fill(false),
+        // );
+        props.setClickCate([]);
 
         const { pathname } = location;
 
@@ -40,6 +46,8 @@ const Sidebar = props => {
         } else {
             return navigate(`/products?bigCategoryId=${big + 1}&smallCategoryId=${small}`);
         }
+
+        console.log(props.clickCate);
     };
 
     const onClickCategory = useCallback(idx => {
