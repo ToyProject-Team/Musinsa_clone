@@ -17,7 +17,6 @@ const Header = props => {
     const location = useLocation();
     const token = getData()?.accessToken;
     const [login, setLogin] = useState(getData());
-    const [cartNum, setCartNum] = useState(0);
     const [inputValue, onChangeInputValue, setInputValue] = useInput();
     const [search, setSearch] = useState(JSON.parse(localStorage.getItem('keywords')) || []);
     const [open, setOpen] = useState(false);

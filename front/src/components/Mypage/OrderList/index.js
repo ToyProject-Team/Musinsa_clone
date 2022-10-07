@@ -8,20 +8,7 @@ import { GetTokenApi } from 'utils/api';
 import { getData } from 'utils/getData';
 
 function OrderList() {
-	const dummyData = {
-		id: '1',
-		ProductCompany: '어프어프',
-		ProductImg:
-			'https://image.msscdn.net/images/goods_img/20191115/1226331/1226331_1_500.jpg?t=20191115100755',
-		ProductName: 'Bear heart',
-		ProductOption: 'FREE',
-		ProductPrice: '20681',
-		ProductNum: '1',
-		OrderDay: '2020.03.02',
-		OrderNum: '12345',
-		Orderstatus: '환불완료',
-	};
-
+	
 	// 페이지네이션
 	const [page, setPage] = useState(1);
 	const [items, setItems] = useState(8);
@@ -76,7 +63,7 @@ function OrderList() {
 						<Pagination
 							activePage={page}
 							itemsCountPerPage={items}
-							totalItemsCount={dummyData.length - 1}
+							totalItemsCount={orderData.length - 1}
 							pageRangeDisplayed={5}
 							onChange={handlePageChange}
 							hideNavigation={true}

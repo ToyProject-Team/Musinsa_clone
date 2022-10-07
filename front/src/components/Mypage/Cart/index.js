@@ -9,21 +9,31 @@ import { thousandComma } from 'utils/thousandComma';
 import { CheckLabel } from './Table/styles';
 import { getData } from 'utils/getData';
 import { DeleteHeaderBodyApi, GetTokenApi } from 'utils/api';
+import useSWR from 'swr';
+import fetcher from 'utils/fetcher';
 
 
 function Cart() {
 	const [cartList, setCartList] = useState([]);
-	const loginToken = getData();
+	const loginToken = getData().accessToken;
 	// console.log(loginToken);
 
 	//장바구니 리스트 가져오기
 	useEffect(() => {
-		GetTokenApi('/api/shoppingBasket/shoppingList', loginToken.accessToken).then(res => {
+		GetTokenApi('/api/shoppingBasket/shoppingList', loginToken).then(res => {
 			setCartList(res.data.map(item => Object.assign(item, { check: false })));
 		});
 	}, []);
 
 	//장바구니 리스트 삭제
+	const { data: shoppingNumber, mutate } = useSWR(
+        loginToken ? '/api/shoppingBasket/shoppingList' : null,
+        url => fetcher(url, loginToken),
+        {
+            refreshInterval: 0,
+        },
+    );
+
 	const cartRemove = useCallback(id => {
 		const originList = setCartList(cartList);
 		const deleteList = cartList.filter(prev => prev.id !== id);
@@ -35,6 +45,7 @@ function Cart() {
 			.then(res => {
 				const deleteList = cartList.filter(prev => prev.id !== id);
 				setCartList(deleteList);
+				mutate();
 			})
 			.catch(err => {
 				switch (err.request.status) {
@@ -88,9 +99,14 @@ function Cart() {
 	}, []);
 
 	// 모두 체크 확인 및 총상품 금액
+	
+	const [prdId, setPrdId] = useState([]);
+	// let prdId = [];
+
 	useEffect(() => {
 		let arrId = [];
 		cartList.map(v => (v.check ? arrId.push(v.id) : arrId.filter(f => f !== v.id)));
+		cartList.map(v => (v.check ? setPrdId([...prdId, v.Product.id]) : setPrdId(prdId.filter(f => f !== v.Product.id))));
 
 		if (cartList.length === arrId.length && cartList.length != 0) setCheckBox(true);
 		else setCheckBox(false);
@@ -107,11 +123,16 @@ function Cart() {
 					?.reduce((a, b) => a + b),
 			);
 		} else setSum(0);
+
+		console.log('arrId',arrId);
+		
 	}, [cartList]);
 
 	console.log('cart', cartList);
 	// console.log('data', data);
-	// console.log(arrId);
+	// console.log('arrId',arrId);
+	console.log('prdId',prdId);
+	
 
 	return (
 		<>
