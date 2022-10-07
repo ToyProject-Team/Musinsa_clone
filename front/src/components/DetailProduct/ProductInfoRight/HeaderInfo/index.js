@@ -1,7 +1,7 @@
 import {
-	PRODUCTDETAIL,
-	useProductDetailDispatch,
-	useProductDetailState,
+    PRODUCTDETAIL,
+    useProductDetailDispatch,
+    useProductDetailState,
 } from 'context/ProductDetailContext';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -10,22 +10,32 @@ import { smallCategory } from 'utils/smallCategory';
 import { Header, CategoryWrapper } from './styles';
 
 const HeaderInfo = () => {
-	const detail = useProductDetailState();
-	const navigate = useNavigate();
+    const detail = useProductDetailState();
+    const navigate = useNavigate();
 
-	return (
-		<Header>
-			<CategoryWrapper>
-				<p onClick={() => navigate(`/${detail.product.BigCategoryId}`)}>
-					{bigCategory[detail.product.BigCategoryId]}
-				</p>
-				<span> &gt; </span>
-				<p onClick={() => navigate(`/${detail.product.SmallCategoryId}`)}>
-					{smallCategory[detail.product.BigCategoryId][detail.product.SmallCategoryId]}
-				</p>
-			</CategoryWrapper>
-			<p>{detail.product.productTitle}</p>
-		</Header>
-	);
+    return (
+        <Header>
+            <CategoryWrapper>
+                <p
+                    onClick={() =>
+                        navigate(`/products?bigCategoryId=${detail.product.BigCategoryId}`)
+                    }
+                >
+                    {bigCategory[detail.product.BigCategoryId]}
+                </p>
+                <span> &gt; </span>
+                <p
+                    onClick={() =>
+                        navigate(
+                            `/products?bigCategoryId=${detail.product.BigCategoryId}&smallCategoryId=${detail.product.SmallCategoryId}`,
+                        )
+                    }
+                >
+                    {smallCategory[detail.product.BigCategoryId][detail.product.SmallCategoryId]}
+                </p>
+            </CategoryWrapper>
+            <p>{detail.product.productTitle}</p>
+        </Header>
+    );
 };
 export default HeaderInfo;

@@ -28,6 +28,8 @@ const Header = props => {
         setModalFirst(false);
     }, []);
     useEffect(() => {
+        if (window.location.host.includes('local')) return;
+
         PostQueryApi(`/api/product/productList`).catch(() => {
             setModalFirst(true);
         });
@@ -112,8 +114,6 @@ const Header = props => {
     };
 
     const deleteLogout = useCallback(() => {
-        if (window.location.host.includes('local')) return;
-
         PostHeaderApi('/api/auth/logout', 'Authorization', login.accessToken)
             .then(() => {
                 deleteData();
