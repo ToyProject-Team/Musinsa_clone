@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useContext } from 'react';
 import { useState } from 'react';
 import TextModal from 'components/Modals/TextModal';
 import { useEffect } from 'react';
@@ -10,79 +10,93 @@ import { useLocation } from 'react-router';
 const impNumber = process.env.REACT_APP_PAYMENT;
 
 const Order = ({ modal, pay }) => {
-	const data = getData();
-	const { accessToken } = data;
+    const data = getData();
+    const { accessToken } = data;
 
-	const location = useLocation();
-	const query = URLquery(location);
-	const { productId } = query;
+    const location = useLocation();
+    const query = URLquery(location);
+    const { productId } = query;
 
-	const [modalOrder, setModalOrder] = useState(false);
+    const [modalOrder, setModalOrder] = useState(false);
 
-	useEffect(() => {
-		let pg = '';
-		let pay_method = '';
-		let price = 10;
-		if (pay === 'card') pg = 'html5_inicis';
-		else if (pay === 'Virtual') pg = 'html5_inicis';
-		else if (pay === 'kakao') pg = 'kakaopay';
-		else if (pay == 'payco') pg = 'payco';
+    useEffect(() => {
+        let pg = '';
+        let pay_method = '';
+        let price = 10;
+		let productPrice = 10;
+        if (pay === 'card') pg = 'html5_inicis';
+        else if (pay === 'Virtual') pg = 'html5_inicis';
+        else if (pay === 'kakao') pg = 'kakaopay';
+        else if (pay == 'payco') pg = 'payco';
 
-		if (pay === 'Virtual') pay_method = 'vbank';
-		else pay_method = 'card';
+        if (pay === 'Virtual') pay_method = 'vbank';
+        else pay_method = 'card';
 
-		var { IMP } = window; // 생략가능
-		IMP.init(impNumber); // <-- 본인 가맹점 식별코드 삽입
-		IMP.request_pay(
-			{
-				pg,
-				pay_method,
-				merchant_uid: `mid_${new Date().getTime()}`,
-				name: 'Test 상품',
-				amount: price,
-				buyer_email: 'devhyuktest@gmail.com',
-				buyer_name: '홍길동',
-				buyer_tel: '01096361038',
-				buyer_addr: '서울특별시 강남구 신사동',
-				buyer_postcode: '01181',
-			},
-			rsp => {
-				console.log(rsp);
-				// callback
-				if (rsp.success) {
-					// 결제 성공 시 로직,
-					const data = {
-						imp_uid: rsp.imp_uid,
-						Merchant_uid: rsp.merchant_uid,
-						ProductId: productId,
-						price,
-						amount: 2,
-					};
+        var { IMP } = window; // 생략가능
+        IMP.init(impNumber); // <-- 본인 가맹점 식별코드 삽입
+        IMP.request_pay(
+            {
+                pg,
+                pay_method,
+                merchant_uid: `mid_${new Date().getTime()}`,
+                name: 'Test 상품',
+                amount: price,
+                buyer_email: 'devhyuktest@gmail.com',
+                buyer_name: '홍길동',
+                buyer_tel: '01096361038',
+                buyer_addr: '서울특별시 강남구 신사동',
+                buyer_postcode: '01181',
+            },
+            rsp => {
+                console.log(rsp);
+                // callback
+                if (rsp.success) {
+                    // 결제 성공 시 로직,
+                    if (productId == undefined) {
+                        const data = {
+                            shoppingBasketId: 1,
+                            productId: 1,
+                            MerchantUid: rsp.merchant_uid,
+                            imp_uid: rsp.imp_uid,
+                            price,
+                            productPrice,
+                        };
+                    } else {
+                        const data = {
+                            imp_uid: rsp.imp_uid,
+                            Merchant_uid: rsp.merchant_uid,
+                            ProductId: productId,
+                            price,
+                            amount: 2,
+                        };
+                        PostHeaderBodyApi(
+                            '/api/product/purchase',
+                            data,
+                            'Authorization',
+                            accessToken,
+                        ).then(res => {
+                            setModalOrder(true);
+                        });
+                    }
+                } else {
+                    // 결제 실패 시 로직,
+                    console.log(2);
+                }
+            },
+        );
+    }, [pay]);
 
-					PostHeaderBodyApi('/api/product/purchase', data, 'Authorization', accessToken).then(
-						res => {
-							setModalOrder(true);
-						},
-					);
-				} else {
-					// 결제 실패 시 로직,
-					console.log(2);
-				}
-			},
-		);
-	}, [pay]);
+    const onCloseModal = useCallback(() => {
+        setModalOrder(false);
+    }, []);
 
-	const onCloseModal = useCallback(() => {
-		setModalOrder(false);
-	}, []);
-
-	return (
-		<TextModal
-			show={modalOrder}
-			onCloseModal={onCloseModal}
-			content="결제가 완료 되었습니다."
-		></TextModal>
-	);
+    return (
+        <TextModal
+            show={modalOrder}
+            onCloseModal={onCloseModal}
+            content="결제가 완료 되었습니다."
+        ></TextModal>
+    );
 };
 
 export default Order;

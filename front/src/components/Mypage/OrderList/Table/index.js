@@ -64,7 +64,7 @@ function OrderList({ data }) {
 					<span>({data.Order.amount}개)</span>
 				</td>
 				<td colSpan="2">
-					<span>{orderState()}</span>
+					<span>주문완료</span>
 					<button onClick={onClickCancelPay}>환불요청</button>
 				</td>
 			</tr>

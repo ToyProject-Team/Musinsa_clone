@@ -50,7 +50,7 @@ function Mainlike() {
 				setlikeList(deleteList);
 			})
 			.catch(err => {
-				switch (err) {
+				switch (err.request.status) {
 					case 400:
 						console.log('입력값을 다시 확인해주세요');
 						break;
