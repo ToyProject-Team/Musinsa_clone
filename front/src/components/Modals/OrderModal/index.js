@@ -6,9 +6,10 @@ import {
 	useProductDetailDispatch,
 	useProductDetailState,
 } from 'context/ProductDetailContext';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useCallback } from 'react';
+import { PostHeaderBodyApi } from 'utils/api';
 import { getData } from 'utils/getData';
 import { Address, Price, RadioContainer } from './style';
 
@@ -17,7 +18,9 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price, pay, setPay }) 
 	const dispatch = useProductDetailDispatch();
 
 	const data = getData();
-	const { userData } = data;
+	const { accessToken } = data;
+
+	const [info, setInfo] = useState({});
 
 	const changeDispatch = useCallback((type, payload) => {
 		return dispatch({ type, payload });
@@ -27,6 +30,26 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price, pay, setPay }) 
 		const { value } = e.target;
 		setPay(value);
 		changeDispatch(ORDER, { pay: value });
+	}, []);
+
+	useEffect(() => {
+		const asyncFunction = async () => {
+			try {
+				const data = {
+					keys: ['address'],
+				};
+				const result = await PostHeaderBodyApi(
+					'/api/auth/getUserData',
+					data,
+					'Authorization',
+					accessToken,
+				);
+
+				setInfo(result.data);
+			} catch (error) {}
+		};
+
+		asyncFunction();
 	}, []);
 
 	return (
@@ -67,7 +90,7 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price, pay, setPay }) 
 							<th className="modal" scope="row">
 								배송지 주소
 							</th>
-							<td className="address-input">{userData.address}</td>
+							<td className="address-input">{info.address}</td>
 						</tr>
 					</tbody>
 				</table>

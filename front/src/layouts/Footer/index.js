@@ -50,7 +50,7 @@ const Footer = () => {
 
 				<div>
 					<FTitle>
-						<p>100% AUTHENTIC</p>
+						<span className='subTitle'>100% AUTHENTIC</span>
 						<span>
 							무신사스토어에서 판매되는 모든 브랜드 제품은 정식제조, 정식수입원을 통해 유통되는 100%
 							정품임을 보증합니다.

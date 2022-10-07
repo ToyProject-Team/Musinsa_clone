@@ -3,49 +3,98 @@ import { BrowserRouter, Routes, Redirect, Route } from 'react-router-dom';
 import loadable from '@loadable/component';
 import { UserProvider } from 'context/UserContext';
 import { GlobalProvider } from 'context/GlobalContext';
+import { Oval } from 'react-loader-spinner';
 
 const Main = loadable(() => import('pages/Main'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 const LogIn = loadable(() => import('pages/Login'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 const SignUp = loadable(() => import('pages/Signup'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 const Find = loadable(() => import('pages/Find'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 
 const Dtail = loadable(() => import('pages/Dtail'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 const MyPage = loadable(() => import('pages/Mypage'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 
 const Agree = loadable(() => import('contract/Agree'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 
 const Terms = loadable(() => import('contract/Terms'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 
 const Sns = loadable(() => import('contract/Sns'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 
 const Kakao = loadable(() => import('pages/Kakao'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 
 const Notice = loadable(() => import('contract/Footer/Notice'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 
 const Declar = loadable(() => import('contract/Footer/Declar'), {
-	fallback: <div>로딩중</div>,
+	fallback: (
+		<div className="loading">
+			<Oval color="#00BFFF" height={80} width={80} timeout={10000} />
+		</div>
+	),
 });
 
 function App() {
