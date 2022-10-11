@@ -153,8 +153,8 @@ const Main = () => {
             navigate(`?${queryString}`);
         }
 
-        console.log(filterVal);
-        console.log(query);
+        // console.log(filterVal);
+        // console.log(query);
     }, [filterVal]);
 
     useEffect(() => {
@@ -222,8 +222,8 @@ const Main = () => {
 
     //검색창 input들 state
     const [searchInput, setSearchInput] = useState('');
-    const [minPriceInput, setMinPriceInput] = useState();
-    const [maxPriceInput, setMaxPriceInput] = useState();
+    const [minPriceInput, setMinPriceInput] = useState('');
+    const [maxPriceInput, setMaxPriceInput] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
 
     //select박스 상태
@@ -351,6 +351,7 @@ const Main = () => {
                                                         clickCate[idx] ? 'active' : 'inactive'
                                                     }
                                                     onClick={() => onSort(idx)}
+                                                    key = {idx}
                                                 >
                                                     {data}
                                                 </li>

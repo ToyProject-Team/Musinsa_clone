@@ -6,6 +6,10 @@ export const FContainer = styled.footer`
 	margin-top: 300px;
 `;
 
+
+
+
+
 export const FDiv = styled.div`
 	& div {
 		border-bottom: 2px solid rgba(0, 0, 0, 0.2);
@@ -20,6 +24,16 @@ export const FDiv = styled.div`
 			& li{
 				width: 60px;
 				height: 60px;
+				text-align: center;
+
+				
+				& a{
+					vertical-align: text-top;
+					text-decoration: none;
+					line-height: 0;
+
+				}
+				
 			}
 
 			& li:first-of-type{
@@ -31,49 +45,76 @@ export const FDiv = styled.div`
 			& li:nth-of-type(2){
 				& a{
 					font-size: 3.6em;
-					background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-  -webkit-background-clip: text;
-          background-clip: text;
-  -webkit-text-fill-color: transparent;
+					background: linear-gradient(to right, #ee9ca7, #ffdde1, #2193b0, #6dd5ed);
+					background-size: 300%;
+					background-clip: text;
+					-webkit-text-fill-color: transparent;
+				}
+			}
+			& li:nth-of-type(3){
+				& a{
+					color: #4267B2;
+					font-size: 3.6em;
+				}
+			}
+			& li:nth-of-type(4){
+				& a{
+					color: #1DA1F2;
+					font-size: 3.6em;
+				}
+			}
+			& li:nth-of-type(5){
+				& a{
+					color: #2DB400;
+					font-size: 3.6em;
+				}
+			}
 
+			& li:nth-of-type(6){
+				background-color: black;
+				border-radius: 50%;
+				& a{
+					color: white;
+					font-size: 12px;
+					vertical-align: bottom;
 				}
 			}
-			& li:first-of-type{
+			& li:nth-of-type(7){
+				border: 2px solid black;
+				border-radius: 50%;
 				& a{
-					color: red;
-					font-size: 3.6em;
+					color: black;
+					font-weight: 900;
+					font-size: 13px;
+					vertical-align: bottom;
 				}
 			}
-			& li:first-of-type{
+			& li:last-of-type{
+				background-color: #453675;
+				border-radius: 50%;
 				& a{
-					color: red;
-					font-size: 3.6em;
-				}
-			}
-			& li:first-of-type{
-				& a{
-					color: red;
-					font-size: 3.6em;
-				}
-			}
-			& li:first-of-type{
-				& a{
-					color: red;
-					font-size: 3.6em;
+					color: white;
+					font-size: 12px;
+					vertical-align: bottom;
 				}
 			}
 		}
-		@keyframes rainbow {
-			0%,
-			100% {
-				background-position: 0 0;
+		@keyframes gradient{
+			0% {
+			background-position: 0 50%;
 			}
 			50% {
-				background-position: 100% 0;
+			background-position: 100% 50%;
+			}
+			100% {
+			background-position: 0 50%;
 			}
 		}
+
 	}
 `;
+
+
 
 export const FTitle = styled.p`
 	${'' /* font-family: "MusinsaRegualr", "sans-serif"; */}

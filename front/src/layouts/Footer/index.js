@@ -27,14 +27,14 @@ const Footer = () => {
 			<FDiv>
 				<div>
 					<ul>
-						<li><a href="#"><ImYoutube/></a></li>
-						<li><a href="#"><FaInstagram/></a></li>
-						<li><a href="#"><FaFacebook/></a></li>
-						<li><a href="#"><AiFillTwitterCircle/></a></li>
-						<li><a href="#"><SiNaver/></a></li>
-						<li><a href="#">musinsa<br/>studio</a></li>
-						<li><a href="#">Musinsa<br/>TV</a></li>
-						<li><a href="#">misinsa<br/>terrace</a></li>
+						<li><a href="//youtube.com/musinsatv"><ImYoutube/></a></li>
+						<li><a href="//instagram.com/musinsacom"><FaInstagram/></a></li>
+						<li><a href="//www.facebook.com/musinsa"><FaFacebook/></a></li>
+						<li><a href="//twitter.com/musinsacom"><AiFillTwitterCircle/></a></li>
+						<li><a href="//post.naver.com/musinsa_store"><SiNaver/></a></li>
+						<li><a href="//www.musinsastudio.com/">musinsa<br/>studio</a></li>
+						<li><a href="//tv.musinsa.com/">Musinsa<br/>TV</a></li>
+						<li><a href="//www.musinsaterrace.com">misinsa<br/>terrace</a></li>
 					</ul>
 				</div>
 
