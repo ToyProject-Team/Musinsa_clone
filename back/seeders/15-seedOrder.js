@@ -9,50 +9,43 @@ module.exports = {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
         let dummyOrder = [];
-        let cnt = 0;
-        for (let i = 1; i < 51; i++) {
+        for (let productId = 1; productId <= 50; productId++) {
             const product = await Product.findOne({
-                where: { id: i },
+                where: { id: productId },
                 include: [
                     {
                         model: ProductMainTag,
-                        attributes: ['name'],
                         include: {
                             model: ProductSubTag,
-                            attributes: ['name', 'amount'],
                         },
                     },
                 ],
             });
 
-            let repeat = rand(1, 6);
-            cnt += 1;
             const productMainTag =
                 product.ProductMainTags[
                     rand(0, product.ProductMainTags.length - 1)
                 ];
-
             const productSubTag =
                 productMainTag.ProductSubTags[
                     rand(0, productMainTag.ProductSubTags.length - 1)
                 ];
-            const size = productMainTag.name;
-            const color = productSubTag.name;
-            const amount = productSubTag.amount;
+
+            const amount = rand(1, productSubTag.amount);
 
             dummyOrder.push({
-                orderPrice: product.productPrice,
-                cancelableAmount: product.productPrice,
+                orderPrice: product.productPrice * amount,
+                cancelableAmount: amount,
                 state: rand(1, 2),
                 MerchantUid: rand(1324141, 4324141),
                 ImpUid: rand(1324123, 4324141),
-                orderSize: size,
-                orderColor: color,
-                amount: rand(1, amount),
+                amount: amount,
                 createdAt: new Date(),
                 updatedAt: new Date(),
-                UserId: i,
-                ProductId: cnt,
+                UserId: rand(1, 50),
+                ProductId: product.id,
+                ProductMainTagId: productMainTag.id,
+                ProductSubTagId: productSubTag.id,
             });
         }
 
