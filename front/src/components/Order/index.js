@@ -6,10 +6,14 @@ import { PostHeaderBodyApi } from 'utils/api';
 import { getData } from 'utils/getData';
 import { URLquery } from 'utils/URLquery';
 import { useLocation } from 'react-router';
+import { useScript } from 'hooks/useScript';
 
 const impNumber = process.env.REACT_APP_PAYMENT;
 
 const Order = ({ modal, pay }) => {
+    const jQuery = useScript('https://code.jquery.com/jquery-1.12.4.min.js');
+    const iamport = useScript('https://cdn.iamport.kr/js/iamport.payment-1.1.8.js');
+
     const data = getData();
     const { accessToken } = data;
 
@@ -20,71 +24,79 @@ const Order = ({ modal, pay }) => {
     const [modalOrder, setModalOrder] = useState(false);
 
     useEffect(() => {
-        let pg = '';
-        let pay_method = '';
-        let price = 10;
-		let productPrice = 10;
-        if (pay === 'card') pg = 'html5_inicis';
-        else if (pay === 'Virtual') pg = 'html5_inicis';
-        else if (pay === 'kakao') pg = 'kakaopay';
-        else if (pay == 'payco') pg = 'payco';
+        if (iamport === 'ready' && jQuery === 'ready') {
+            console.log(jQuery);
+            //     // sdk 초기화하기
+            //     window.SomeThingSDK();
+            let pg = '';
+            let pay_method = '';
+            let price = 10;
+            let productPrice = 10;
+            if (pay === 'card') pg = 'html5_inicis';
+            else if (pay === 'Virtual') pg = 'html5_inicis';
+            else if (pay === 'kakao') pg = 'kakaopay';
+            else if (pay == 'payco') pg = 'payco';
 
-        if (pay === 'Virtual') pay_method = 'vbank';
-        else pay_method = 'card';
+            if (pay === 'Virtual') pay_method = 'vbank';
+            else pay_method = 'card';
 
-        var { IMP } = window; // 생략가능
-        IMP.init(impNumber); // <-- 본인 가맹점 식별코드 삽입
-        IMP.request_pay(
-            {
-                pg,
-                pay_method,
-                merchant_uid: `mid_${new Date().getTime()}`,
-                name: 'Test 상품',
-                amount: price,
-                buyer_email: 'devhyuktest@gmail.com',
-                buyer_name: '홍길동',
-                buyer_tel: '01096361038',
-                buyer_addr: '서울특별시 강남구 신사동',
-                buyer_postcode: '01181',
-            },
-            rsp => {
-                console.log(rsp);
-                // callback
-                if (rsp.success) {
-                    // 결제 성공 시 로직,
-                    if (productId == undefined) {
-                        const data = {
-                            shoppingBasketId: 1,
-                            productId: 1,
-                            MerchantUid: rsp.merchant_uid,
-                            imp_uid: rsp.imp_uid,
-                            price,
-                            productPrice,
-                        };
+            console.log(window);
+
+            var { IMP } = window; // 생략가능
+            console.log(IMP);
+            IMP.init(impNumber); // <-- 본인 가맹점 식별코드 삽입
+            IMP.request_pay(
+                {
+                    pg,
+                    pay_method,
+                    merchant_uid: `mid_${new Date().getTime()}`,
+                    name: 'Test 상품',
+                    amount: price,
+                    buyer_email: 'devhyuktest@gmail.com',
+                    buyer_name: '홍길동',
+                    buyer_tel: '01096361038',
+                    buyer_addr: '서울특별시 강남구 신사동',
+                    buyer_postcode: '01181',
+                },
+                rsp => {
+                    console.log(rsp);
+                    // callback
+                    if (rsp.success) {
+                        // 결제 성공 시 로직,
+                        if (productId == undefined) {
+                            const data = {
+                                shoppingBasketId: 1,
+                                productId: 1,
+                                MerchantUid: rsp.merchant_uid,
+                                imp_uid: rsp.imp_uid,
+                                price,
+                                productPrice,
+                            };
+                        } else {
+                            const data = {
+                                imp_uid: rsp.imp_uid,
+                                Merchant_uid: rsp.merchant_uid,
+                                ProductId: productId,
+                                price,
+                                amount: 2,
+                            };
+                            PostHeaderBodyApi(
+                                '/api/product/purchase',
+                                data,
+                                'Authorization',
+                                accessToken,
+                            ).then(res => {
+                                setModalOrder(true);
+                            });
+                        }
                     } else {
-                        const data = {
-                            imp_uid: rsp.imp_uid,
-                            Merchant_uid: rsp.merchant_uid,
-                            ProductId: productId,
-                            price,
-                            amount: 2,
-                        };
-                        PostHeaderBodyApi(
-                            '/api/product/purchase',
-                            data,
-                            'Authorization',
-                            accessToken,
-                        ).then(res => {
-                            setModalOrder(true);
-                        });
+                        // 결제 실패 시 로직,
+                        console.log(2);
                     }
-                } else {
-                    // 결제 실패 시 로직,
-                    console.log(2);
-                }
-            },
-        );
-    }, [pay]);
+                },
+            );
+        }
+    }, [jQuery, iamport, pay]);
 
     const onCloseModal = useCallback(() => {
         setModalOrder(false);
