@@ -12,6 +12,66 @@ export const FDiv = styled.div`
 		overflow: hidden;
 		padding: 20px;
 		line-height: 18px;
+
+		& ul{
+			display: flex;
+			gap: 40px;
+
+			& li{
+				width: 60px;
+				height: 60px;
+			}
+
+			& li:first-of-type{
+				& a{
+					color: red;
+					font-size: 3.6em;
+				}
+			}
+			& li:nth-of-type(2){
+				& a{
+					font-size: 3.6em;
+					background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+				}
+			}
+			& li:first-of-type{
+				& a{
+					color: red;
+					font-size: 3.6em;
+				}
+			}
+			& li:first-of-type{
+				& a{
+					color: red;
+					font-size: 3.6em;
+				}
+			}
+			& li:first-of-type{
+				& a{
+					color: red;
+					font-size: 3.6em;
+				}
+			}
+			& li:first-of-type{
+				& a{
+					color: red;
+					font-size: 3.6em;
+				}
+			}
+		}
+		@keyframes rainbow {
+			0%,
+			100% {
+				background-position: 0 0;
+			}
+			50% {
+				background-position: 100% 0;
+			}
+		}
 	}
 `;
 
@@ -66,11 +126,3 @@ export const FBttom = styled.p`
 	}
 `;
 
-export const SNS = styled.span`
-	display: block;
-	width: 606px;
-	height: 60px;
-	padding-bottom: 20px;
-	cursor: pointer;
-	background: url(https://static.msscdn.net/skin/musinsa/images/footer_sns.png?20190903) no-repeat;
-`;

@@ -1,5 +1,9 @@
 import React from 'react';
-import { FContainer, FDiv, FTitle, FDescription, FBttom, SNS } from './styles';
+import {ImYoutube} from "react-icons/im"
+import {FaInstagram, FaFacebook} from "react-icons/fa"
+import {AiFillTwitterCircle} from "react-icons/ai"
+import {SiNaver} from "react-icons/si"
+import { FContainer, FDiv, FTitle, FDescription, FBttom } from './styles';
 
 const Footer = () => {
 	// 약관 모달 이벤트
@@ -22,9 +26,16 @@ const Footer = () => {
 		<FContainer>
 			<FDiv>
 				<div>
-					<a href="https://www.musinsa.com/app/" target="_blank">
-						<SNS />
-					</a>
+					<ul>
+						<li><a href="#"><ImYoutube/></a></li>
+						<li><a href="#"><FaInstagram/></a></li>
+						<li><a href="#"><FaFacebook/></a></li>
+						<li><a href="#"><AiFillTwitterCircle/></a></li>
+						<li><a href="#"><SiNaver/></a></li>
+						<li><a href="#">musinsa<br/>studio</a></li>
+						<li><a href="#">Musinsa<br/>TV</a></li>
+						<li><a href="#">misinsa<br/>terrace</a></li>
+					</ul>
 				</div>
 
 				<div>
