@@ -11,8 +11,8 @@ import { useScript } from 'hooks/useScript';
 const impNumber = process.env.REACT_APP_PAYMENT;
 
 const Order = ({ modal, pay }) => {
-    const jQuery = useScript('https://code.jquery.com/jquery-1.12.4.min.js');
-    const iamport = useScript('https://cdn.iamport.kr/js/iamport.payment-1.1.8.js');
+    const jQueryScript = useScript('https://code.jquery.com/jquery-1.12.4.min.js');
+    const iamportScript = useScript('https://cdn.iamport.kr/js/iamport.payment-1.1.8.js');
 
     const data = getData();
     const { accessToken } = data;
@@ -24,8 +24,8 @@ const Order = ({ modal, pay }) => {
     const [modalOrder, setModalOrder] = useState(false);
 
     useEffect(() => {
-        if (iamport === 'ready' && jQuery === 'ready') {
-            console.log(jQuery);
+        if (iamportScript === 'ready' && jQueryScript === 'ready') {
+            console.log(jQueryScript);
             //     // sdk 초기화하기
             //     window.SomeThingSDK();
             let pg = '';
@@ -96,7 +96,7 @@ const Order = ({ modal, pay }) => {
                 },
             );
         }
-    }, [jQuery, iamport, pay]);
+    }, [jQueryScript, iamportScript, pay]);
 
     const onCloseModal = useCallback(() => {
         setModalOrder(false);
