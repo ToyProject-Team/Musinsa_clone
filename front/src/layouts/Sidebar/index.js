@@ -3,9 +3,11 @@ import { SContainer, SDiv } from './styles';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
-import { HiOutlinePlusSm, HiOutlineMinusSm } from 'react-icons/hi';
 import Cookies from 'js-cookie';
 import { SIDEBAR, useGlobalDispatch } from 'context/GlobalContext';
+
+import { AiOutlinePlus } from '@react-icons/all-files/ai/AiOutlinePlus';
+import { AiOutlineMinus } from '@react-icons/all-files/ai/AiOutlineMinus';
 
 const Sidebar = props => {
     const dispatch = useGlobalDispatch();
@@ -83,9 +85,7 @@ const Sidebar = props => {
                             <div title="BigMenu" key={idx}>
                                 {big}
                                 <span>{alpabet[idx]}</span>
-                                <span>
-                                    {!open[idx] ? <HiOutlinePlusSm /> : <HiOutlineMinusSm />}
-                                </span>
+                                <span>{!open[idx] ? <AiOutlinePlus /> : <AiOutlineMinus />}</span>
                             </div>
 
                             <ul
