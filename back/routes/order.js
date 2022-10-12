@@ -1,5 +1,10 @@
 const express = require('express');
-const { ProductImg } = require('../models');
+const {
+    ProductImg,
+    ProductSubTag,
+    ProductMainTag,
+    Product,
+} = require('../models');
 const Order = require('../models/order');
 const User = require('../models/user');
 const authJWT = require('../utils/middlewares/authJWT');
@@ -17,26 +22,37 @@ router.get('/orderList', authJWT, async (req, res, next) => {
             },
         });
 
-        const myOrder = await exUser.getMyOrder({
-            joinTableAttributes: [
+        const myOrders = await exUser.getMyOrders({
+            attributes: [
+                'id',
                 'orderPrice',
                 'amount',
                 'state',
                 'MerchantUid',
-                'orderSize',
-                'orderColor',
                 'createdAt',
-                'ProductId',
             ],
             include: [
                 {
-                    model: ProductImg,
-                    attributes: ['src'],
+                    model: ProductSubTag,
+                    attributes: ['name', 'amount'],
+                },
+                {
+                    model: ProductMainTag,
+                    attributes: ['name'],
+                },
+                {
+                    model: Product,
+                    attributes: ['productTitle'],
+                    include: [
+                        {
+                            model: ProductImg,
+                            attributes: ['src'],
+                        },
+                    ],
                 },
             ],
-            attributes: ['productTitle'],
         });
-        res.status(200).send({ myOrder });
+        res.status(200).send(myOrders);
     } catch (e) {
         console.error(e);
         next(e);

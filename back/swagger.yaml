@@ -1277,7 +1277,7 @@ paths:
                 example: 장바구니에 없는 상품을 삭제 시도하셨습니다
         '500':
           $ref: '#/serverError'
-  /api/shoppingBasket/shoppingCartPurchase:
+  /api/shoppingBasket/purchase:
     post:
       tags:
         - shoppingBasket
@@ -1292,24 +1292,26 @@ paths:
           schema:
             type: object
             properties:
-              shoppingBasketId:
-                type: number
-                example: 1
-              productId:
-                type: number
-                example: 1
-              MerchantUid:
+              purchasedDataList:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    shoppingBasketId:
+                      type: number
+                      example: 87
+                    price:
+                      type: number
+                      example: 334950
+                    amount:
+                      type: number
+                      example: 3
+              merchant_uid:
                 type: number
                 example: 4234234
               imp_uid:
                 type: number
                 example: 1244
-              price:
-                type: number
-                example: 4234
-              productPrice:
-                type: number
-                example: 4234
       responses:
         '200':
           $ref: '#/success'
@@ -1349,48 +1351,9 @@ paths:
         '200':
           description: 주문 리스트 전달(이미지 포함)
           schema:
-            properties:
-              myOrder:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    productTitle:
-                      type: string
-                      example: Sausages
-                    ProductImg:
-                      type: object
-                      properties:
-                        src:
-                          type: string
-                          example: Accessory/Accessory1
-                    Order:
-                      type: object
-                      properties:
-                        MerchantUid:
-                          type: string
-                          example: 3914619
-                        orderPrice:
-                          type: number
-                          example: 24970
-                        amount:
-                          type: number
-                          example: 1
-                        state:
-                          type: string
-                          example: 2
-                        orderSize:
-                          type: string
-                          example: L
-                        orderColor:
-                          type: string
-                          example: 라이트 핑크
-                        createdAt:
-                          type: string
-                          example: 2022-09-22T05:05:20.000Z
-                        ProductId:
-                          type: string
-                          example: 1
+            type: array
+            items:
+              $ref: '#/components/schemas/Order'
         '500':
           $ref: '#/serverError'
   /api/order/refundMyOrder:
@@ -1520,6 +1483,12 @@ components:
               amount: 2
             - name: 분홍색
               amount: 0
+    ProductMainTag_Name:
+      type: object
+      properties:
+        name:
+          type: string
+          example: M
     ProductSubTag:
       type: object
       properties:
@@ -1544,3 +1513,42 @@ components:
           $ref: '#/components/schemas/ProductSubTag'
         Product:
           $ref: '#/components/schemas/Product'
+    Product_Title_Img:
+      type: object
+      properties:
+        productTitle:
+          type: 'string,'
+          example: Car
+        ProductImg:
+          type: object
+          properties:
+            src:
+              type: string
+              example: Accessory/Accessory23
+    Order:
+      type: object
+      properties:
+        id:
+          type: number
+          exmaple: 1
+        MerchantUid:
+          type: string
+          example: 3914619
+        orderPrice:
+          type: number
+          example: 24970
+        amount:
+          type: number
+          example: 1
+        state:
+          type: string
+          example: 2
+        createdAt:
+          type: date-time
+          example: 2017-07-21T17:32:28.000Z
+        ProductMainTag:
+          $ref: '#/components/schemas/ProductMainTag_Name'
+        ProductSubTag:
+          $ref: '#/components/schemas/ProductSubTag'
+        Product:
+          $ref: '#/components/schemas/Product_Title_Img'

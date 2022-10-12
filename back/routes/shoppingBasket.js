@@ -6,6 +6,9 @@ const {
     MyCart,
     ProductMainTag,
     ProductSubTag,
+    sequelize,
+    Order,
+    Sequelize,
 } = require('../models');
 const authJWT = require('../utils/middlewares/authJWT');
 const {
@@ -80,14 +83,19 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
     }
 });
 
-router.post('/shoppingCartPurchase', authJWT, async (req, res, next) => {
+router.post('/purchase', authJWT, async (req, res, next) => {
     try {
-        const { shoppingBasketId, merchant_uid, imp_uid } = req.body;
+        const { purchasedDataList, merchant_uid, imp_uid } = req.body;
 
-        if (!shoppingBasketId)
+        const owner = await User.findOne({
+            where: {
+                id: req.myId,
+            },
+        });
+
+        if (!purchasedDataList)
             return res.status(400).send({
-                message:
-                    '장바구니 번호가 지급되지 않았습니다 장바구니 번호를 넘겨주세요',
+                message: 'purchasedDataList가 지급되지 않았습니다.',
             });
 
         if (!merchant_uid)
@@ -102,44 +110,135 @@ router.post('/shoppingCartPurchase', authJWT, async (req, res, next) => {
                     'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요',
             });
 
+        // /**
+        //  * 결제 검증
+        //  */
+
         // iamport 액세스 토큰(access token)
         const iamportAccessToken = await getIamportAccessToken();
         // 조회한 결제 정보
-        const { amount, status } = await getIamportPaymentData(
+        const paymentData = await getIamportPaymentData(
             iamportAccessToken,
             imp_uid,
         );
 
-        // 결제 검증하기
-        if (amount != req.body.price) {
-            return res.status(405).send({ message: '위조된 결제 시도입니다' });
+        const totalPrice = paymentData.amount;
+
+        /** 총 금액 */
+        let isValidatePruchase = true;
+
+        const sumPurchasedPrice = purchasedDataList
+            .map(({ price }) => price)
+            .reduce((pre, cur) => pre + cur);
+
+        isValidatePruchase = sumPurchasedPrice == totalPrice;
+
+        if (isValidatePruchase) {
+            for (let { shoppingBasketId, price, amount } of purchasedDataList) {
+                const shoppingBasket = await MyCart.findOne({
+                    where: {
+                        id: shoppingBasketId,
+                        UserId: owner.id,
+                    },
+                    attributes: ['packingAmount'],
+                    include: [
+                        {
+                            model: ProductSubTag,
+                            attributes: ['name', 'amount'],
+                        },
+                        {
+                            model: Product,
+                            attributes: ['id', 'productPrice'],
+                        },
+                    ],
+                });
+
+                const productSubTag = shoppingBasket.ProductSubTag;
+                const product = shoppingBasket.Product;
+
+                /** 장바구니와 입력된 개수와 같은지 */
+                if (amount != shoppingBasket.packingAmount) {
+                    isValidatePruchase = false;
+                    break;
+                }
+
+                /** productSubTag개수를 초과한 경우 */
+                if (amount <= productSubTag.amount) {
+                    isValidatePruchase = false;
+                    break;
+                }
+
+                /** 실제 price 값이 나오는지 */
+                if (price != amount * product.productPrice) {
+                    isValidatePruchase = false;
+                    break;
+                }
+            }
         }
-        const exUser = await User.findOne({
-            where: {
-                id: req.myId,
-            },
+
+        if (!isValidatePruchase)
+            return res.status(405).send({ message: '위조된 결제 시도입니다' });
+
+        // 결제 시도
+        const t = await sequelize.transaction({
+            isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE,
         });
 
-        const exProduct = await Product.findOne({
-            where: {
-                id: req.body.ProductId,
-            },
-        });
-        await sequelize.transaction(async (t) => {
-            await exUser.addmyOrder(
-                {
-                    id: req.body.ProductId,
-                    orderPrice: req.body.price,
-                    state: 1,
-                    MerchantUid: merchant_uid,
-                    ImpUid: imp_uid,
-                },
-                { transaction: t },
-            );
+        try {
+            for (let { shoppingBasketId, price, amount } of purchasedDataList) {
+                const shoppingBasket = await MyCart.findOne({
+                    where: {
+                        id: shoppingBasketId,
+                        UserId: owner.id,
+                    },
+                    attributes: ['id', 'ProductId', 'ProductMainTagId'],
+                    include: [
+                        {
+                            model: ProductSubTag,
+                            attributes: ['id', 'name', 'amount'],
+                        },
+                    ],
+                });
 
-            await exUser.removeMyCart(exProduct);
-            res.status(200).send({ message: '일반 결제 성공' });
-        });
+                if (!shoppingBasket) {
+                    return res.status(404).send({
+                        message:
+                            '요청한 장바구니가 존재하지 않습니다. (요청한 장바구니 id : ' +
+                            shoppingBasketId +
+                            ')',
+                    });
+                }
+
+                let productSubTag = shoppingBasket.ProductSubTag;
+
+                await Order.create(
+                    {
+                        UserId: owner.id,
+                        ProductId: shoppingBasket.ProductId,
+                        orderPrice: price,
+                        amount: amount,
+                        state: 1,
+                        cancelableAmount: price,
+                        MerchantUid: merchant_uid,
+                        ImpUid: imp_uid,
+                        ProductSubTagId: productSubTag.id,
+                        ProductMainTagId: shoppingBasket.ProductMainTagId,
+                    },
+                    { transaction: t },
+                );
+
+                productSubTag = await productSubTag.reduceAmount(amount, {
+                    transaction: t,
+                });
+                await shoppingBasket.destroy({ transaction: t });
+            }
+            await t.commit();
+        } catch (err) {
+            await t.rollback();
+            throw err;
+        }
+
+        res.status(200).send({ message: '일반 결제 성공' });
     } catch (e) {
         console.error(e);
         next(e);

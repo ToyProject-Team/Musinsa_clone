@@ -97,39 +97,41 @@
             500:
                 $ref: './openapi.yaml#/serverError'
 
-/api/shoppingBasket/shoppingCartPurchase:
+/api/shoppingBasket/purchase:
     post:
         tags:
             - shoppingBasket
         summary: 장바구니 상품 구매
         parameters:
-            -   name: Authorization
-                in: header
-                required: true
-            -   name: body
-                in: body
-                required: true
-                schema:
-                    type: object
-                    properties:
-                        shoppingBasketId:
-                            type: number
-                            example: 1
-                        productId:
-                            type: number
-                            example: 1
-                        MerchantUid:
-                            type: number
-                            example: 4234234
-                        imp_uid: 
-                            type: number
-                            example: 1244
-                        price:
-                            type: number
-                            example: 4234
-                        productPrice:
-                            type: number
-                            example: 4234
+            - name: Authorization
+              in: header
+              required: true
+            - name: body
+              in: body
+              required: true
+              schema:
+                  type: object
+                  properties:
+                      purchasedDataList:
+                          type: array
+                          items:
+                              type: object
+                              properties:
+                                  shoppingBasketId:
+                                      type: number
+                                      example: 87
+                                  price:
+                                      type: number
+                                      example: 334950
+                                  amount:
+                                      type: number
+                                      example: 3
+                      merchant_uid:
+                          type: number
+                          example: 4234234
+                      imp_uid:
+                          type: number
+                          example: 1244
         responses:
             200:
                 $ref: './openapi.yaml#/success'

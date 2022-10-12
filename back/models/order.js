@@ -1,10 +1,15 @@
 const DataTypes = require('sequelize');
-const { Model } = DataTypes
+const { Model } = DataTypes;
 
 module.exports = class Order extends Model {
     static init(sequelize) {
         return super.init(
             {
+                id: {
+                    type: DataTypes.INTEGER,
+                    primaryKey: true,
+                    autoIncrement: true,
+                },
                 orderPrice: {
                     type: DataTypes.INTEGER,
                     allowNull: false,
@@ -15,7 +20,7 @@ module.exports = class Order extends Model {
                 },
                 state: {
                     type: DataTypes.INTEGER,
-                    allowNull: false
+                    allowNull: false,
                 },
                 MerchantUid: {
                     type: DataTypes.STRING(100),
@@ -27,17 +32,8 @@ module.exports = class Order extends Model {
                 },
                 cancelableAmount: {
                     type: DataTypes.INTEGER,
-                    allowNull: false
+                    allowNull: false,
                 },
-                orderSize: {
-                    type: DataTypes.STRING(50),
-                    allowNull: false
-                },
-                orderColor: {
-                    type: DataTypes.STRING(50),
-                    allowNull: false
-                }
-                
             },
             {
                 modelName: 'Order',
@@ -45,10 +41,19 @@ module.exports = class Order extends Model {
                 paranoid: true,
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
-                sequelize
-            }
-        )
+                sequelize,
+            },
+        );
     }
     static associate(db) {
+        db.Order.belongsTo(db.Product, { foreignKey: 'ProductId' });
+        db.Order.belongsTo(db.ProductMainTag, {
+            foreignKey: 'ProductMainTagId',
+        });
+        db.Order.belongsTo(db.ProductSubTag, {
+            foreignKey: 'ProductSubTagId',
+        });
+
+        db.Order.belongsTo(db.User, { foreignKey: 'UserId' });
     }
-}
+};

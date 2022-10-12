@@ -1,120 +1,81 @@
 /api/order/orderList:
-  get:
-    tags:
-      - order
-    summary: 주문 리스트
-    parameters:
-      - name: Authorization
-        in: header
-        required: true
-    responses:
-      200:
-        description: 주문 리스트 전달(이미지 포함)
-        schema:
-          properties:
-            myOrder:
-              type: array
-              items:
-                type: object
-                properties:
-                  productTitle:
-                    type: string
-                    example: Sausages
-                  ProductImg:
-                    type: object
-                    properties:
-                      src:
-                        type: string
-                        example: Accessory/Accessory1
-                  Order:
-                    type: object
-                    properties:
-                      MerchantUid:
-                        type: string
-                        example: 3914619
-                      orderPrice:
-                        type: number
-                        example: 24970
-                      amount:
-                        type: number
-                        example: 1
-                      state:
-                        type: string
-                        example: 2
-                      orderSize:
-                        type: string
-                        example: L
-                      orderColor:
-                        type: string
-                        example: 라이트 핑크
-                      createdAt:
-                        type: string
-                        example: 2022-09-22T05:05:20.000Z
-                      ProductId:
-                        type: string
-                        example: 1
+    get:
+        tags:
+            - order
+        summary: 주문 리스트
+        parameters:
+            - name: Authorization
+              in: header
+              required: true
+        responses:
+            200:
+                description: 주문 리스트 전달(이미지 포함)
+                schema:
+                    type: array
+                    items:
+                        $ref: './models/Order.yaml#/Order'
 
-      500:
-        $ref: "./openapi.yaml#/serverError"
+            500:
+                $ref: './openapi.yaml#/serverError'
 
 /api/order/refundMyOrder:
-  post:
-    tags:
-      - order
-    summary: 상품 환불
-    parameters:
-      - name: Authorization
-        in: header
-        required: true
-      - name: body
-        in: body
-        required: true
-        schema:
-          type: object
-          properties:
-            merchant_uid:
-              type: string
-            reason:
-              type: string
-            cancel_request_amount:
-              type: string
-            refund_holder:
-              type: string
-            refund_bank:
-              type: string
-            refund_account:
-              type: string  
-    responses:
-      200:
-        description: 성공 - 환불 시 어케가는지 아직 모름
-        schema:
-          properties:
-            likeProduct:
-              type: array
-              items:
-                type: object
-                properties:
-                  productPrice:
-                    type: integer
-                    example: 1
-                  likes:
-                    type: string
-                    example: 845
-                  productTitle:
-                    type: string
-                    example: Car
-                  ProductImg:
-                    type: object
+    post:
+        tags:
+            - order
+        summary: 상품 환불
+        parameters:
+            - name: Authorization
+              in: header
+              required: true
+            - name: body
+              in: body
+              required: true
+              schema:
+                  type: object
+                  properties:
+                      merchant_uid:
+                          type: string
+                      reason:
+                          type: string
+                      cancel_request_amount:
+                          type: string
+                      refund_holder:
+                          type: string
+                      refund_bank:
+                          type: string
+                      refund_account:
+                          type: string
+        responses:
+            200:
+                description: 성공 - 환불 시 어케가는지 아직 모름
+                schema:
                     properties:
-                      src:
-                        type: string
-                        example: Accessory/Accessory2
-      400:
-        description: 주문 상품에 대한 데이터가 없을 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: 주문 상품에 대한 데이터가 없습니다      
-      500:
-        $ref: "./openapi.yaml#/serverError"
+                        likeProduct:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    productPrice:
+                                        type: integer
+                                        example: 1
+                                    likes:
+                                        type: string
+                                        example: 845
+                                    productTitle:
+                                        type: string
+                                        example: Car
+                                    ProductImg:
+                                        type: object
+                                        properties:
+                                            src:
+                                                type: string
+                                                example: Accessory/Accessory2
+            400:
+                description: 주문 상품에 대한 데이터가 없을 경우
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: 주문 상품에 대한 데이터가 없습니다
+            500:
+                $ref: './openapi.yaml#/serverError'
