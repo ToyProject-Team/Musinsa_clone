@@ -24,6 +24,7 @@ router.get('/orderList', authJWT, async (req, res, next) => {
 
         const myOrders = await exUser.getMyOrders({
             attributes: [
+                'id',
                 'orderPrice',
                 'amount',
                 'state',
