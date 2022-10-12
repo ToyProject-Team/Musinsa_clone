@@ -334,7 +334,7 @@ export const SortBox = styled.div`
     -webkit-box-sizing: border-box;
     background-color: white;
 
-    .active {
+    .activeSort {
         display: block;
         line-height: 40px;
         height: 40px;
@@ -343,11 +343,15 @@ export const SortBox = styled.div`
         text-decoration: underline;
         padding-right: 10px;
 
-        // &::after {
-        // 	//content: '|';
-        // 	padding-left: 10px;
-        // 	padding-right: 10px;
-        // }
+        &::after {
+            content: '|';
+            padding-left: 10px;
+        }
+
+        &:last-child::after {
+            content: '';
+            padding-left: 10px;
+        }
 
         &:hover {
             cursor: pointer;
@@ -363,20 +367,25 @@ export const SortBox = styled.div`
         height: 40px;
         float: left;
         // padding-left: 5px;
+        color: gray;
         padding-right: 10px;
-    }
 
-    // .sort::after {
-    // 	//content: '|';
-    // 	padding-left: 10px;
-    // 	padding-right: 10px;
-    // }
+        &::after {
+            content: '|';
+            padding-left: 10px;
+        }
 
-    .sort:hover {
-        cursor: pointer;
-        font-weight: bold;
-        text-decoration: underline;
-        color: black;
+        &:last-child::after {
+            content: '';
+            padding-left: 10px;
+        }
+
+        &:hover {
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: underline;
+            color: black;
+        }
     }
 `;
 

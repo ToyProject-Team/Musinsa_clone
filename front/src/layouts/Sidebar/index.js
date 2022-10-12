@@ -17,39 +17,54 @@ const Sidebar = props => {
     const [cancel, setCancel] = useState(Cookies.get('sideBarToggle') === 'false' ? false : true);
     const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
 
-    // const navigate = useNavigate();
-
-    //Main에 쿼리스트링 보내기
+    //Main - filterVal 수정 등
     const sendSmallCate = (big, small) => {
         // smallCate index가 0인 경우(전체) / 아닌경우
         // smallCate index가 1이상인 경우에는 bigCateId가 이미 있는경우/없는경우
         //이중 삼항연산자
-        // props.setClickCate(
-        //     Array.from({
-        //         length: smallCategory[big + 1].length,
-        //     }).fill(false),
-        // );
-        props.setClickCate([]);
+
+        props.setClickCate(
+            Array.from({
+                length: smallCategory[big].length,
+            }).fill(false),
+        );
+
+        const newArr = props.clickCate;
+        if (newArr.includes(true)) {
+            newArr[props.clickCate.indexOf(true)] = false;
+        }
 
         const { pathname } = location;
 
         if (pathname !== '/detail') {
-            small === 0
-                ? props.setFilterVal(() => {
-                      return { bigCategoryId: big + 1 };
-                  })
-                : props.filterVal.bigCategoryId - 1 === big
-                ? props.setFilterVal(prev => {
-                      return { ...prev, smallCategoryId: small };
-                  })
-                : props.setFilterVal(() => {
-                      return { bigCategoryId: big + 1, smallCategoryId: small };
-                  });
+            if (small === 0) {
+                delete props.filterVal.smallCategoryId;
+                props.setFilterVal(data => {
+                    return { ...data, bigCategoryId: big + 1 };
+                });
+                // props.setClickCate(() => newArr);
+                // props.setClickPrice(() => props.clickPrice.fill(false));
+                // props.setClickMainSort(() => props.clickMainSort.fill(false));
+            } else {
+                if (props.filterVal.bigCategoryId - 1 === big) {
+                    props.setFilterVal(prev => {
+                        return { ...prev, smallCategoryId: small };
+                    });
+                    // newArr[small] = true;
+                    // props.setClickCate(() => newArr);
+                } else {
+                    props.setFilterVal(data => {
+                        return { bigCategoryId: big + 1, smallCategoryId: small };
+                    });
+                    // newArr[small] = true;
+                    // props.setClickCate(() => newArr);
+                    // props.setClickPrice(() => props.clickPrice.fill(false));
+                    // props.setClickMainSort(() => props.clickMainSort.fill(false));
+                }
+            }
         } else {
-            return navigate(`/products?bigCategoryId=${big + 1}&smallCategoryId=${small}`);
+            return navigate(`/?bigCategoryId=${big + 1}&smallCategoryId=${small}`);
         }
-
-        console.log(props.clickCate);
     };
 
     const onClickCategory = useCallback(idx => {
