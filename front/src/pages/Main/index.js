@@ -138,13 +138,15 @@ const Main = () => {
         }).fill(false),
     );
 
-    useMemo(() => {
-        setClickCate(data => {
-            return Array.from({
-                length: smallCategory[filterVal.bigCategoryId - 1 || 0].length,
-            }).fill(false);
-        });
-    }, [filterVal.bigCategoryId]);
+    // useMemo(() => {
+    //     setClickCate(data => {
+    //         return Array.from({
+    //             length: smallCategory[filterVal.bigCategoryId - 1 || 0].length,
+    //         }).fill(false);
+    //     });
+
+    //     console.log('useMemo 작동');
+    // }, [filterVal.bigCategoryId]);
 
     const makeQS = () => {
         let result = '?';
@@ -165,9 +167,39 @@ const Main = () => {
         setClickCate(() => newArr);
     };
 
+    const clickBoldPrice = () => {
+        const newArr = clickPrice;
+
+        if (newArr.includes(true)) newArr[clickPrice.indexOf(true)] = false;
+
+        newArr[filterVal.price && filterVal.price - 1] = true;
+
+        // else {
+        //     if (newArr.includes(true)) newArr[clickPrice.indexOf(true)] = false;
+        // }
+
+        setClickPrice(newArr);
+    };
+
+    const clickBoldMainSort = () => {
+        const newArr = clickMainSort;
+
+        if (newArr.includes(true)) newArr[clickMainSort.indexOf(true)] = false;
+
+        newArr[filterVal.mainSort && filterVal.mainSort - 1] = true;
+
+        // else {
+        //     if (newArr.includes(true)) newArr[clickMainSort.indexOf(true)] = false;
+        // }
+
+        // if (newArr.includes(true)) newArr[clickMainSort.indexOf(true)] = false;
+        // newArr[filterVal.mainSort && filterVal.mainSort - 1] = true;
+        setClickMainSort(newArr);
+    };
+
     useEffect(() => {
         const result = makeQS();
-        console.log(result);
+
         if (result == '?') {
             PostQueryApi(`/api/product/productList`).then(res => setProduct(res.data.productData));
         } else {
@@ -178,20 +210,13 @@ const Main = () => {
         }
 
         clickBold();
-        // console.log('filterval', filterVal);
-        // console.log('filterVal 변경', clickCate);
-        console.log(location);
+        clickBoldPrice();
+        clickBoldMainSort();
     }, [filterVal]);
 
     useEffect(() => {
-        // makeNewArr();
-
         setMinPriceInput('');
         setMaxPriceInput('');
-        //setClickCate(clickCate.fill(false));
-        //setClickCate(newArr);
-        // setClickMainSort(clickMainSort.fill(false));
-        // setClickPrice(clickPrice.fill(false));
     }, [filterVal.bigCategoryId]);
 
     //handleFilter함수 사용해서 쿼리문 추가
@@ -205,7 +230,7 @@ const Main = () => {
                   });
         }
 
-        clickBold(val);
+        clickBold();
     };
 
     //price추가
@@ -216,10 +241,7 @@ const Main = () => {
         setMaxPriceInput('');
         handleFilter(val, 'price');
 
-        const newArr = clickPrice;
-        if (newArr.includes(true)) newArr[clickPrice.indexOf(true)] = false;
-        newArr[val - 1] = true;
-        setClickPrice(newArr);
+        clickBoldPrice();
     };
 
     //pricaRange 추가
@@ -238,17 +260,13 @@ const Main = () => {
     const onMainSort = val => {
         handleFilter(val, 'mainSort');
 
-        const newArr = clickMainSort;
-        if (newArr.includes(true)) newArr[clickMainSort.indexOf(true)] = false;
-
-        newArr[val - 1] = true;
-        setClickMainSort(newArr);
+        clickBoldMainSort();
     };
 
     //검색창 input들 state
     const [searchInput, setSearchInput] = useState('');
-    const [minPriceInput, setMinPriceInput] = useState();
-    const [maxPriceInput, setMaxPriceInput] = useState();
+    const [minPriceInput, setMinPriceInput] = useState('');
+    const [maxPriceInput, setMaxPriceInput] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
 
     //select박스 상태
@@ -379,6 +397,7 @@ const Main = () => {
                                                         clickCate[idx] ? 'active' : 'inactive'
                                                     }
                                                     onClick={() => onSort(idx)}
+                                                    key={idx}
                                                 >
                                                     {data}
                                                 </li>
@@ -491,6 +510,7 @@ const Main = () => {
                                 }}
                             >
                                 <span className="select-medium">
+                                    중분류:{' '}
                                     {
                                         smallCategory[
                                             filterVal.bigCategoryId
@@ -508,7 +528,7 @@ const Main = () => {
                                 }}
                             >
                                 <span className="select-medium">
-                                    {priceArr[filterVal.price - 1]}
+                                    가격: {priceArr[filterVal.price - 1]}
                                 </span>
                                 <span className="select-medium-button">&#160;X</span>
                             </div>
@@ -524,7 +544,7 @@ const Main = () => {
                                 }}
                             >
                                 <span className="select-medium">
-                                    {filterVal.priceMin ? `${filterVal.priceMin}원 ` : null}
+                                    가격: {filterVal.priceMin ? `${filterVal.priceMin}원 ` : null}
                                 </span>
                                 <span className="select-medium">~</span>
                                 <span className="select-medium">
@@ -538,7 +558,7 @@ const Main = () => {
                                     onResetSearch();
                                 }}
                             >
-                                <span className="select-medium">{searchTerm}</span>
+                                <span className="select-medium">검색: {searchTerm}</span>
                                 <span className="select-medium-button">&#160;X</span>
                             </div>
                             <div
@@ -548,7 +568,7 @@ const Main = () => {
                                 }}
                             >
                                 <span className="select-medium">
-                                    {mainSortArr[filterVal.mainSort - 1]}
+                                    정렬: {mainSortArr[filterVal.mainSort - 1]}
                                 </span>
                                 <span className="select-medium-button">&#160;X</span>
                             </div>
@@ -559,33 +579,16 @@ const Main = () => {
                                     {mainSortArr.map((data, idx) => {
                                         return (
                                             <span
-                                                className={clickMainSort[idx] ? 'active' : 'sort'}
+                                                className={
+                                                    clickMainSort[idx] ? 'activeSort' : 'sort'
+                                                }
                                                 onClick={() => onMainSort(idx + 1)}
+                                                key={idx}
                                             >
                                                 {data}
                                             </span>
                                         );
                                     })}
-                                    {/* <span
-                                    className={clickMainSort[0] ? 'active' : 'sort'}
-                                    onClick={() => onMainSort(1)}
-                                >
-                                    낮은 가격순
-                                </span>
-                                <span className="sort">|</span>
-                                <span
-                                    className={clickMainSort[1] ? 'active' : 'sort'}
-                                    onClick={() => onMainSort(2)}
-                                >
-                                    높은 가격순
-                                </span>
-                                <span className="sort">|</span>
-                                <span
-                                    className={clickMainSort[2] ? 'active' : 'sort'}
-                                    onClick={() => onMainSort(3)}
-                                >
-                                    후기순
-                                </span> */}
                                 </div>
                                 <PaginationWapper>
                                     <Pagination

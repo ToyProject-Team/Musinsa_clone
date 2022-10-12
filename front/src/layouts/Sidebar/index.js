@@ -40,24 +40,24 @@ const Sidebar = props => {
                 props.setFilterVal(data => {
                     return { ...data, bigCategoryId: big + 1 };
                 });
-                props.setClickCate(() => newArr);
-                props.setClickPrice(() => props.clickPrice.fill(false));
-                props.setClickMainSort(() => props.clickMainSort.fill(false));
+                // props.setClickCate(() => newArr);
+                // props.setClickPrice(() => props.clickPrice.fill(false));
+                // props.setClickMainSort(() => props.clickMainSort.fill(false));
             } else {
                 if (props.filterVal.bigCategoryId - 1 === big) {
                     props.setFilterVal(prev => {
                         return { ...prev, smallCategoryId: small };
                     });
-                    newArr[small] = true;
-                    props.setClickCate(() => newArr);
+                    // newArr[small] = true;
+                    // props.setClickCate(() => newArr);
                 } else {
                     props.setFilterVal(data => {
                         return { bigCategoryId: big + 1, smallCategoryId: small };
                     });
-                    newArr[small] = true;
-                    props.setClickCate(() => newArr);
-                    props.setClickPrice(() => props.clickPrice.fill(false));
-                    props.setClickMainSort(() => props.clickMainSort.fill(false));
+                    // newArr[small] = true;
+                    // props.setClickCate(() => newArr);
+                    // props.setClickPrice(() => props.clickPrice.fill(false));
+                    // props.setClickMainSort(() => props.clickMainSort.fill(false));
                 }
             }
         } else {

@@ -89,8 +89,6 @@ const DetailProduct = () => {
     });
     const [loading, setLoading] = useState(true);
 
-    //const history = createBrowserHistory();
-
     useEffect(() => {
         const asyncFunction = async () => {
             try {

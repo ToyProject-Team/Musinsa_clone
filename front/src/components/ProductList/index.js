@@ -10,7 +10,7 @@ const ShowList = props => {
 
     const goDetail = data => {
         navigate(`/detail?productId=${data.id}`);
-        localStorage.setItem('memo', location.search);
+        //localStorage.setItem('memo', location.search);
     };
 
     //옵션 데이터
@@ -39,13 +39,13 @@ const ShowList = props => {
                         props.items * (props.page - 1) + props.items,
                     )
                     .map((data, idx) => (
-                        <ListOuter key={idx}>
+                        <ListOuter key={data.id}>
                             <div
                                 onClick={() => {
                                     goDetail(data);
                                 }}
                             >
-                                <div className="li_inner" key={idx}>
+                                <div className="li_inner">
                                     <div className="list_img">
                                         <img
                                             src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.ProductImg.src}`}
