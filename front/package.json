@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/styled": "^11.10.0",
     "@loadable/component": "^5.15.2",
+    "@react-icons/all-files": "^4.1.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -56,5 +57,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cra-bundle-analyzer": "^0.1.1"
   }
 }

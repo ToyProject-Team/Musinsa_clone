@@ -48,10 +48,25 @@ const ImageZoom = ({ img, alt }) => {
         [sideBar],
     );
 
+    function getParametersForUnsplash({ width, height, quality, format }) {
+        return `?w=${width}&h=${height}&q=${quality}&fm=${format}&fit=crop`;
+    }
+
     return (
         <ProductImgContainer>
             <ProductImg show={show} onMouseMove={onMoseMoveZoom} onClick={onClickZoomIn}>
-                <img src={img} alt={alt} />
+                <img
+                    src={
+                        img +
+                        getParametersForUnsplash({
+                            width: 500,
+                            height: 600,
+                            quality: 80,
+                            format: 'jpg',
+                        })
+                    }
+                    alt={alt}
+                />
             </ProductImg>
 
             <ProductImgZoomContainer
@@ -61,7 +76,15 @@ const ImageZoom = ({ img, alt }) => {
             >
                 <ProductImgZoom show={show}>
                     <img
-                        src={img}
+                        src={
+                            img +
+                            getParametersForUnsplash({
+                                width: 2000,
+                                height: 1200,
+                                quality: 80,
+                                format: 'jpg',
+                            })
+                        }
                         alt={alt}
                         style={{ left: mousePosition.left, top: mousePosition.top }}
                     />

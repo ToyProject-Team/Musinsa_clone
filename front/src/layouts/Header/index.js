@@ -1,17 +1,19 @@
 import React, { useCallback, useState, useRef, useEffect, useTransition } from 'react';
 import { HContainer, HDiv, HLogo, HSearch, HUser, CountNum } from './styles';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AiOutlineCamera, AiOutlineSearch } from 'react-icons/ai';
 import { getData } from 'utils/getData';
 import { deleteData } from 'utils/deleteData';
 import { DeleteHeaderBodyApi, PostHeaderApi, PostHeaderBodyApi, PostQueryApi } from 'utils/api';
-import { IoMdArrowDropup } from 'react-icons/io';
 import Cookies from 'js-cookie';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
 import useInput from 'hooks/useInput';
 import { BiSkipPreviousCircle } from 'react-icons/bi';
 import FirstModal from 'components/Modals/FirstModal';
+
+import { AiOutlineCamera } from '@react-icons/all-files/ai/AiOutlineCamera';
+import { AiOutlineSearch } from '@react-icons/all-files/ai/AiOutlineSearch';
+import { IoMdArrowDropup } from '@react-icons/all-files/io/IoMdArrowDropup';
 
 const Header = props => {
     const location = useLocation();

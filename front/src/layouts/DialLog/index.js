@@ -1,9 +1,12 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Btm, Filter } from './styles';
-import { BiShoppingBag, BiHomeCircle, BiHomeHeart } from 'react-icons/bi';
-import { BsShare } from 'react-icons/bs';
-import { TbArrowBigUpLine, TbArrowBigDownLine } from 'react-icons/tb';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { BiHomeCircle } from '@react-icons/all-files/bi/BiHomeCircle';
+import { BiHomeHeart } from '@react-icons/all-files/bi/BiHomeHeart';
+import { BiShoppingBag } from '@react-icons/all-files/bi/BiShoppingBag';
+import { AiOutlineShareAlt } from '@react-icons/all-files/ai/AiOutlineShareAlt';
+import { RiArrowDownSLine } from '@react-icons/all-files/ri/RiArrowDownSLine';
+import { RiArrowUpSLine } from '@react-icons/all-files/ri/RiArrowUpSLine';
+import { Link, useLocation } from 'react-router-dom';
 import UrlCopyModal from 'components/Modals/UrlCopyModal';
 
 const DialLog = props => {
@@ -90,17 +93,17 @@ const DialLog = props => {
                 </div>
                 <div>
                     <a title="공유 하기" onClick={() => setModalAuth(e => !e)}>
-                        <BsShare />
+                        <AiOutlineShareAlt />
                     </a>
                 </div>
                 <div onClick={scrollTop}>
                     <a title="위로 가기">
-                        <TbArrowBigUpLine />
+                        <RiArrowUpSLine />
                     </a>
                 </div>
                 <div onClick={scrollBtm}>
                     <a title="아래로 가기">
-                        <TbArrowBigDownLine />
+                        <RiArrowDownSLine />
                     </a>
                 </div>
             </Filter>
