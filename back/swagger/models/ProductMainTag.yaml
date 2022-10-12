@@ -17,3 +17,10 @@ ProductMainTag:
                   amount: 2
                 - name: '분홍색'
                   amount: 0
+
+ProductMainTag_Name:
+    type: object
+    properties:
+        name:
+            type: string
+            example: 'M'

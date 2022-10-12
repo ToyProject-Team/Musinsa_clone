@@ -31,7 +31,13 @@ components:
             $ref: './models/Product.yaml#/Product'
         ProductMainTag:
             $ref: './models/ProductMainTag.yaml#/ProductMainTag'
+        ProductMainTag_Name:
+            $ref: './models/ProductMainTag.yaml#/ProductMainTag_Name'
         ProductSubTag:
             $ref: './models/ProductSubTag.yaml#/ProductSubTag'
         MyCart:
             $ref: './models/MyCart.yaml#/MyCart'
+        Product_Title_Img:
+            $ref: './models/Product.yaml#/Product_Title_Img'
+        Order:
+            $ref: './models/Order.yaml#/Order'

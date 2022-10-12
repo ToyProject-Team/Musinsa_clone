@@ -29,3 +29,16 @@ Product:
             type: array
             items:
                 $ref: './ProductMainTag.yaml#/ProductMainTag'
+
+Product_Title_Img:
+    type: object
+    properties:
+        productTitle:
+            type: string,
+            example: 'Car'
+        ProductImg:
+            type: object
+            properties:
+                src:
+                    type: string
+                    example: 'Accessory/Accessory23'

@@ -1,0 +1,24 @@
+Order:
+    type: object
+    properties:
+        id:
+            type: number
+            exmaple: 1
+        MerchantUid:
+            type: string
+            example: 3914619
+        orderPrice:
+            type: number
+            example: 24970
+        amount:
+            type: number
+            example: 1
+        state:
+            type: string
+            example: 2
+        ProductMainTag:
+            $ref: './ProductMainTag.yaml#/ProductMainTag_Name'
+        ProductSubTag:
+            $ref: './ProductSubTag.yaml#/ProductSubTag'
+        Product:
+            $ref: './Product.yaml#/Product_Title_Img'

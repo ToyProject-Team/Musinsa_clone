@@ -1349,48 +1349,9 @@ paths:
         '200':
           description: 주문 리스트 전달(이미지 포함)
           schema:
-            properties:
-              myOrder:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    productTitle:
-                      type: string
-                      example: Sausages
-                    ProductImg:
-                      type: object
-                      properties:
-                        src:
-                          type: string
-                          example: Accessory/Accessory1
-                    Order:
-                      type: object
-                      properties:
-                        MerchantUid:
-                          type: string
-                          example: 3914619
-                        orderPrice:
-                          type: number
-                          example: 24970
-                        amount:
-                          type: number
-                          example: 1
-                        state:
-                          type: string
-                          example: 2
-                        orderSize:
-                          type: string
-                          example: L
-                        orderColor:
-                          type: string
-                          example: 라이트 핑크
-                        createdAt:
-                          type: string
-                          example: 2022-09-22T05:05:20.000Z
-                        ProductId:
-                          type: string
-                          example: 1
+            type: array
+            items:
+              $ref: '#/components/schemas/Order'
         '500':
           $ref: '#/serverError'
   /api/order/refundMyOrder:
@@ -1520,6 +1481,12 @@ components:
               amount: 2
             - name: 분홍색
               amount: 0
+    ProductMainTag_Name:
+      type: object
+      properties:
+        name:
+          type: string
+          example: M
     ProductSubTag:
       type: object
       properties:
@@ -1544,3 +1511,39 @@ components:
           $ref: '#/components/schemas/ProductSubTag'
         Product:
           $ref: '#/components/schemas/Product'
+    Product_Title_Img:
+      type: object
+      properties:
+        productTitle:
+          type: 'string,'
+          example: Car
+        ProductImg:
+          type: object
+          properties:
+            src:
+              type: string
+              example: Accessory/Accessory23
+    Order:
+      type: object
+      properties:
+        id:
+          type: number
+          exmaple: 1
+        MerchantUid:
+          type: string
+          example: 3914619
+        orderPrice:
+          type: number
+          example: 24970
+        amount:
+          type: number
+          example: 1
+        state:
+          type: string
+          example: 2
+        ProductMainTag:
+          $ref: '#/components/schemas/ProductMainTag_Name'
+        ProductSubTag:
+          $ref: '#/components/schemas/ProductSubTag'
+        Product:
+          $ref: '#/components/schemas/Product_Title_Img'
