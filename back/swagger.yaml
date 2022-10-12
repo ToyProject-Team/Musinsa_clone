@@ -1277,7 +1277,7 @@ paths:
                 example: 장바구니에 없는 상품을 삭제 시도하셨습니다
         '500':
           $ref: '#/serverError'
-  /api/shoppingBasket/shoppingCartPurchase:
+  /api/shoppingBasket/purchase:
     post:
       tags:
         - shoppingBasket
@@ -1292,24 +1292,26 @@ paths:
           schema:
             type: object
             properties:
-              shoppingBasketId:
-                type: number
-                example: 1
-              productId:
-                type: number
-                example: 1
-              MerchantUid:
+              purchasedDataList:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    shoppingBasketId:
+                      type: number
+                      example: 87
+                    price:
+                      type: number
+                      example: 334950
+                    amount:
+                      type: number
+                      example: 3
+              merchant_uid:
                 type: number
                 example: 4234234
               imp_uid:
                 type: number
                 example: 1244
-              price:
-                type: number
-                example: 4234
-              productPrice:
-                type: number
-                example: 4234
       responses:
         '200':
           $ref: '#/success'
