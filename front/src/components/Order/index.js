@@ -10,7 +10,7 @@ import { useScript } from 'hooks/useScript';
 
 const impNumber = process.env.REACT_APP_PAYMENT;
 
-const Order = ({ modal, pay }) => {
+const Order = ({ modal, pay, ShoppingBasketId }) => {
     const jQueryScript = useScript('https://code.jquery.com/jquery-1.12.4.min.js');
     const iamportScript = useScript('https://cdn.iamport.kr/js/iamport.payment-1.1.8.js');
 
@@ -65,13 +65,24 @@ const Order = ({ modal, pay }) => {
                         // 결제 성공 시 로직,
                         if (productId == undefined) {
                             const data = {
-                                shoppingBasketId: 1,
-                                productId: 1,
+                                purchasedDataList: [
+                                    {
+                                        shoppingBasketId: ShoppingBasketId,
+                                        price,
+                                        amount: 1,
+                                    },
+                                ],
                                 MerchantUid: rsp.merchant_uid,
                                 imp_uid: rsp.imp_uid,
-                                price,
-                                productPrice,
                             };
+                            PostHeaderBodyApi(
+                                '/api/shoppingBasket/purchase',
+                                data,
+                                'Authorization',
+                                accessToken,
+                            ).then(res => {
+                                setModalOrder(true);
+                            });
                         } else {
                             const data = {
                                 imp_uid: rsp.imp_uid,

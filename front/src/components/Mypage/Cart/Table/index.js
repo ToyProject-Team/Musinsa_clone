@@ -8,7 +8,7 @@ import OrderModal from 'components/Modals/OrderModal';
 import Order from 'components/Order';
 import { Link } from 'react-router-dom';
 
-function CartTable({ item, setCartList, cartList, cartRemove }) {
+function CartTable({ item, setCartList, cartList, cartRemove}) {
     const [modalOrder, setModalOrder] = useState(false);
     const [pay, setPay] = useState('card');
     const [order, setOrder] = useState(false);
@@ -90,7 +90,7 @@ function CartTable({ item, setCartList, cartList, cartRemove }) {
                         <tbody>
                             <tr>
                                 <td onClick={checkItem}>
-                                    <CheckLabel className={item.check ? 'active' : ''}></CheckLabel>
+                                    <CheckLabel className={ item.ProductSubTag.amount > 0 ? (item.check ? 'active' : '') : ''}></CheckLabel>
                                 </td>
                                 <td className="top">
                                     <div>
