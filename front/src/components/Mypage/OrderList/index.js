@@ -21,7 +21,7 @@ function OrderList() {
 	const [orderData, setOrderData] = useState([]);
 	useEffect(() => {
 		GetTokenApi('/api/order/orderList', loginToken.accessToken).then(res => {
-			setOrderData(res.data.myOrder);
+			setOrderData(res.data);
 		})
 	},[]);
 

@@ -67,7 +67,7 @@ export const LikeLi = styled.li`
 		li {
 			font-size: 14px;
 			line-height: 22px;
-			&:first-child {
+			&:first-of-type{
 				a {
 					text-decoration: none;
 					color: black;
