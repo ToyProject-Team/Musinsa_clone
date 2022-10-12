@@ -16,6 +16,9 @@ Order:
         state:
             type: string
             example: 2
+        createdAt:
+            type: date-time
+            example: 2017-07-21T17:32:28Z
         ProductMainTag:
             $ref: './ProductMainTag.yaml#/ProductMainTag_Name'
         ProductSubTag:

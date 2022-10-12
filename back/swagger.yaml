@@ -1541,6 +1541,9 @@ components:
         state:
           type: string
           example: 2
+        createdAt:
+          type: date-time
+          example: 2017-07-21T17:32:28.000Z
         ProductMainTag:
           $ref: '#/components/schemas/ProductMainTag_Name'
         ProductSubTag:
