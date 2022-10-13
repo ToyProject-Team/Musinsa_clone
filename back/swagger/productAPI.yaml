@@ -338,18 +338,23 @@
         schema:
           type: object
           properties:
-            productId:
-              type: string
-              example: 1
-            packingAmount:
-              type: number
-              example: 2
-            productMainTagId:
-              type: number
-              example: 1
-            productSubTagId:
-              type: number
-              example: 1
+            addCarts:
+              type: array
+              items:
+                type: object
+                properties:
+                  productId:
+                    type: string
+                    example: 1
+                  packingAmount:
+                    type: number
+                    example: 2
+                  productMainTagId:
+                    type: number
+                    example: 1
+                  productSubTagId:
+                    type: number
+                    example: 1
     responses:
       200:
         $ref: "./openapi.yaml#/success"
