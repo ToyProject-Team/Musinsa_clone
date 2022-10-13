@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { MypageMain } from 'pages/Mypage/styles.js';
 import CartTable from 'components/Mypage/Cart/Table';
 import { OrderTable, CartPayment, OrderBtn, ModalStyle } from 'components/Mypage/Cart/styles';
-import { FaPlus, FaEquals } from 'react-icons/fa';
+import { FaPlus } from '@react-icons/all-files/fa/FaPlus';
+import { FaEquals } from '@react-icons/all-files/fa/FaEquals';
 import Order from 'components/Order';
 import OrderModal from 'components/Modals/OrderModal';
 import { thousandComma } from 'utils/thousandComma';
@@ -104,11 +105,14 @@ function Cart() {
 
     // 모두 체크 확인 및 총상품 금액
 
-    // let prdId = [];
+    const [basketId, setBasketId] = useState([]);
+    console.log(basketId);
 
     useEffect(() => {
         let arrId = [];
         cartList.map(v => (v.check ? arrId.push(v.id) : arrId.filter(f => f !== v.id)));
+
+        setBasketId(arrId);
 
         if (cartList.length === arrId.length && cartList.length != 0) setCheckBox(true);
         else setCheckBox(false);
@@ -208,7 +212,7 @@ function Cart() {
                         {order && (
                             <Order
                                 pay={pay}
-                                ShoppingBasketId={cartList.map(v => (v.check ? v.id : null))}
+                                ShoppingBasketId={basketId}
                             />
                         )}
                     </OrderBtn>

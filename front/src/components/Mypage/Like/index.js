@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { MypageMain } from 'pages/Mypage/styles.js';
 import Ul from 'components/Mypage/Like/List';
 import { LikeSection, PagenationBox } from './styles';
-import dummy from 'components/Mypage/data.json';
 import Pagination from 'react-js-pagination';
 import { GetApi, GetTokenApi, PostHeaderApi, PostQueryApi } from 'utils/api';
 import { getData } from 'utils/getData';

@@ -30,8 +30,8 @@ const Order = ({ modal, pay, ShoppingBasketId }) => {
             //     window.SomeThingSDK();
             let pg = '';
             let pay_method = '';
-            let price = 10;
-            let productPrice = 10;
+            let price = 100;
+
             if (pay === 'card') pg = 'html5_inicis';
             else if (pay === 'Virtual') pg = 'html5_inicis';
             else if (pay === 'kakao') pg = 'kakaopay';

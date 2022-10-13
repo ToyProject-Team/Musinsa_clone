@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ImgSpan, LikeLi, LikeUl } from '../styles';
-import { FaHeart } from 'react-icons/fa';
-import { FiX } from 'react-icons/fi';
+import { FaHeart } from '@react-icons/all-files/fa/FaHeart';
+import { FiX } from '@react-icons/all-files/fi/FiX';
 import { thousandComma } from 'utils/thousandComma';
 
 function Likelist({ img, model, price, like, onRemove, id }) {

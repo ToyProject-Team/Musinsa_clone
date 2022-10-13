@@ -1,14 +1,15 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { ImgSpan } from '../styles';
-import { FiMinus, FiPlus, FiX } from 'react-icons/fi';
+import { FiMinus } from '@react-icons/all-files/fi/FiMinus';
+import { FiPlus } from '@react-icons/all-files/fi/FiPlus';
+import { FiX } from '@react-icons/all-files/fi/FiX';
 import { thousandComma } from 'utils/thousandComma';
 import { smallCategory } from 'utils/smallCategory';
 import { CheckLabel, ItemUl } from './styles';
 import OrderModal from 'components/Modals/OrderModal';
 import Order from 'components/Order';
-import { Link } from 'react-router-dom';
 
-function CartTable({ item, setCartList, cartList, cartRemove}) {
+function CartTable({ item, setCartList, cartList, cartRemove }) {
     const [modalOrder, setModalOrder] = useState(false);
     const [pay, setPay] = useState('card');
     const [order, setOrder] = useState(false);
@@ -90,7 +91,15 @@ function CartTable({ item, setCartList, cartList, cartRemove}) {
                         <tbody>
                             <tr>
                                 <td onClick={checkItem}>
-                                    <CheckLabel className={ item.ProductSubTag.amount > 0 ? (item.check ? 'active' : '') : ''}></CheckLabel>
+                                    <CheckLabel
+                                        className={
+                                            item.ProductSubTag.amount > 0
+                                                ? item.check
+                                                    ? 'active'
+                                                    : ''
+                                                : ''
+                                        }
+                                    ></CheckLabel>
                                 </td>
                                 <td className="top">
                                     <div>
