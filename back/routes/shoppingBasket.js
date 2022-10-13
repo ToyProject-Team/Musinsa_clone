@@ -66,6 +66,7 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
                         {
                             model: CustomCategory,
                             attributes: ['id', 'categoryName'],
+                            through: { attributes: [] },
                         },
                         {
                             model: ProductMainTag,
