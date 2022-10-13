@@ -25,9 +25,6 @@ const Order = ({ modal, pay, ShoppingBasketId }) => {
 
     useEffect(() => {
         if (iamportScript === 'ready' && jQueryScript === 'ready') {
-            console.log(jQueryScript);
-            //     // sdk 초기화하기
-            //     window.SomeThingSDK();
             let pg = '';
             let pay_method = '';
             let price = 10;
@@ -40,10 +37,7 @@ const Order = ({ modal, pay, ShoppingBasketId }) => {
             if (pay === 'Virtual') pay_method = 'vbank';
             else pay_method = 'card';
 
-            console.log(window);
-
             var { IMP } = window; // 생략가능
-            console.log(IMP);
             IMP.init(impNumber); // <-- 본인 가맹점 식별코드 삽입
             IMP.request_pay(
                 {
@@ -59,7 +53,6 @@ const Order = ({ modal, pay, ShoppingBasketId }) => {
                     buyer_postcode: '01181',
                 },
                 rsp => {
-                    console.log(rsp);
                     // callback
                     if (rsp.success) {
                         // 결제 성공 시 로직,
@@ -102,7 +95,7 @@ const Order = ({ modal, pay, ShoppingBasketId }) => {
                         }
                     } else {
                         // 결제 실패 시 로직,
-                        console.log(2);
+                        console.log('error');
                     }
                 },
             );
