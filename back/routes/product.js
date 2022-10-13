@@ -363,7 +363,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
             });
         }
 
-        const { imp_uid, Merchant_uid } = req.body; // req의 query에서 imp_uid, Merchant_uid 추출
+        const { imp_uid, Merchant_uid } = req.body.auth; // req의 query에서 imp_uid, Merchant_uid 추출
         // 액세스 토큰(access token) 발급 받기
         const getToken = await axios({
             url: 'https://api.iamport.kr/users/getToken',
@@ -385,41 +385,49 @@ router.post('/purchase', authJWT, async (req, res, next) => {
         const paymentData = getPaymentData.data.response; // 조회한 결제 정보
         // 결제 검증하기
         const { amount, status } = paymentData;
-        console.log(amount, req.body.price);
-        if (amount != req.body.price) {
+
+        let priceSum = 0
+        for (i = 0; i < orderList.length; i++) {
+            priceSum += Number(req.body.orderList[i].price)
+        }
+
+        if (amount != priceSum) {
             return res.status(405).send({ message: '위조된 결제 시도입니다' });
         }
-        const exUser = await User.findOne({
-            where: {
-                id: req.myId,
-            },
-        });
-        // console.log(req.body, Merchant_uid, imp_uid, exUser)
-        const isExistedOrder = await Order.findOne({
-            where: {
+
+        for (i = 0 ; i < req.body.orderList.length; i++) {
+            const isExistedOrder = await Order.findOne({
+                where: {
+                    UserId: req.myId,
+                    ProductId: req.body.orderList[i].ProductId,
+                    ProductMainTagId: req.body.orderList[i].ProductMainTagId,
+                    ProductSubTagId: req.body.orderList[i].ProductSubTagId
+                },
+            });
+            // console.log(isExistedOrder)
+            if (isExistedOrder) {
+                return res.status(407).send({ message: '이미 접수된 주문입니다' });
+            }
+            await Order.create({
                 UserId: req.myId,
-                ProductId: req.body.ProductId,
-            },
-        });
-        // console.log(isExistedOrder)
-        if (isExistedOrder) {
-            return res.status(407).send({ message: '이미 접수된 주문입니다' });
+                ProductId: req.body.orderList[i].ProductId,
+                orderPrice: req.body.orderList[i].price,
+                amount: req.body.orderList[i].amount,
+                state: 1,
+                MerchantUid: Merchant_uid,
+                cancelableAmount: req.body.orderList[i].price,
+                ImpUid: imp_uid,
+                ProductMainTagId: req.body.orderList[i].ProductMainTagId,
+                ProductSubTagId: req.body.orderList[i].ProductSubTagId
+            });
         }
-        await Order.create({
-            UserId: req.myId,
-            ProductId: req.body.ProductId,
-            orderPrice: req.body.price,
-            amount: req.body.amount,
-            state: 1,
-            MerchantUid: Merchant_uid,
-            cancelableAmount: req.body.price,
-            ImpUid: imp_uid,
-        });
         res.status(200).send({ message: '일반 결제 성공' });
     } catch (e) {
         console.error(e);
         next(e);
     }
 });
+
+router.post('search')
 
 module.exports = router;
