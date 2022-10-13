@@ -816,120 +816,11 @@ paths:
           description: 상품 id 쿼리입니다. 상품 식별 id 를 보내주세요
       responses:
         '200':
-          description: '성공 - product 배열에 데이터들이 지급됩니다<br>`gender [0 == 여자, 1 == 남자]`<br>`deliveryFrom [0 == 국내, 1 == 해외]`<br>`deliveryWay [0 == 입점사 배송, 1 == 무신사 직배송]<br>`'
+          description: '성공 - product에 지급됩니다<br>`gender [0 == 여자, 1 == 남자]`<br>`deliveryFrom [0 == 국내, 1 == 해외]`<br>`deliveryWay [0 == 입점사 배송, 1 == 무신사 직배송]<br>`'
           schema:
             properties:
               product:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      example: 33
-                    productTitle:
-                      type: string
-                      example: Chips
-                    productPrice:
-                      type: integer
-                      example: 94160
-                    views:
-                      type: integer
-                      example: 1661
-                    likes:
-                      type: integer
-                      example: 418
-                    comments:
-                      type: integer
-                      example: 541
-                    gender:
-                      type: integer
-                      example: 0
-                    season:
-                      type: string
-                      example: 2021 ALL
-                    beRleased:
-                      type: string
-                      example: 2022-07-29T19:06:04.000Z
-                    deliveryFrom:
-                      type: boolean
-                      example: true
-                    deliveryWay:
-                      type: boolean
-                      example: true
-                    deliveryCompany:
-                      type: integer
-                      example: CJ대한통운
-                    nonMemberPrice:
-                      type: integer
-                      example: 85600
-                    rookiePrice:
-                      type: integer
-                      example: 77040
-                    memberPrice:
-                      type: integer
-                      example: 76184
-                    bronzePrice:
-                      type: integer
-                      example: 75328
-                    silverPrice:
-                      type: integer
-                      example: 74472
-                    goldPrice:
-                      type: integer
-                      example: 73616
-                    platinumPrice:
-                      type: integer
-                      example: 72760
-                    diamondPrice:
-                      type: integer
-                      example: 71904
-                    sells:
-                      type: integer
-                      example: 1843
-                    BigCategoryId:
-                      type: integer
-                      example: 1
-                    SmallCategoryId:
-                      type: integer
-                      example: 1
-                    commentCount:
-                      type: integer
-                      example: 3
-                    rated:
-                      type: integer
-                      example: 4.1
-                    ProductImg:
-                      type: object
-                      properties:
-                        src:
-                          type: string
-                          example: Accessory/Accessory2
-                    CustomCategories:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          id:
-                            type: integer
-                            example: 5
-                    ProductMainTags:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          name:
-                            type: string
-                            example: XL
-                          ProductSubTags:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                name:
-                                  type: string
-                                  example: 딥레드
-                                  amount: 3
+                $ref: '#/components/schemas/Product_Detail'
         '400':
           description: 상품 조회 결과가 없을 경우
           schema:
@@ -1086,20 +977,6 @@ paths:
               message:
                 type: string
                 example: 이미 추가된 카테고리입니다
-        '401':
-          description: 전달한 상품 정보 중 데이터베이스에 없는 상품 정보가 껴있는 경우
-          schema:
-            properties:
-              message:
-                type: string
-                example: 존재하지 않는 상품을 장바구니에 추가하고있습니다
-        '402':
-          description: 제품의 양보다 담는 양이 더 많을 경우
-          schema:
-            properties:
-              message:
-                type: string
-                example: 재고보다 담으려는 수량이 더 많습니다
         '500':
           $ref: '#/serverError'
   /api/product/likeProduct:
@@ -1503,9 +1380,145 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductMainTag'
+        CustomCategories:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 1
+              categoryName:
+                type: string
+                example: 데일리
+          example:
+            - id: 1
+              name: 데일리
+            - id: 2
+              name: 트랜디
+            - id: 10
+              name: 캐시
+            - id: 13
+              name: 어센틱
+    Product_Detail:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 33
+        productTitle:
+          type: string
+          example: Chips
+        productPrice:
+          type: integer
+          example: 94160
+        gender:
+          type: integer
+          example: 0
+        season:
+          type: string
+          example: 2021 ALL
+        beRleased:
+          type: date-time
+          example: 2022-07-29T19:06:04.000Z
+        deliveryFrom:
+          type: boolean
+          example: true
+        deliveryWay:
+          type: boolean
+          example: true
+        deliveryCompany:
+          type: integer
+          example: CJ대한통운
+        nonMemberPrice:
+          type: integer
+          example: 85600
+        rookiePrice:
+          type: integer
+          example: 77040
+        memberPrice:
+          type: integer
+          example: 76184
+        bronzePrice:
+          type: integer
+          example: 75328
+        silverPrice:
+          type: integer
+          example: 74472
+        goldPrice:
+          type: integer
+          example: 73616
+        platinumPrice:
+          type: integer
+          example: 72760
+        diamondPrice:
+          type: integer
+          example: 71904
+        sells:
+          type: integer
+          example: 1843
+        BigCategoryId:
+          type: integer
+          example: 1
+        SmallCategoryId:
+          type: integer
+          example: 1
+        commentCount:
+          type: integer
+          example: 3
+        rated:
+          type: integer
+          example: 4.1
+        productInfo:
+          type: string
+          example: navigate mobile firewall
+        likes:
+          type: number
+          example: 234
+        comments:
+          type: number
+          example: 8621
+        ProductImg:
+          type: object
+          properties:
+            src:
+              type: string
+              example: Accessory/Accessory23
+        ProductMainTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductMainTag'
+        CustomCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product/properties/CustomCategories/items'
+          example:
+            - id: 1
+              name: 데일리
+            - id: 2
+              name: 트랜디
+            - id: 10
+              name: 캐시
+            - id: 13
+              name: 어센틱
+    Product_Title_Img:
+      type: object
+      properties:
+        productTitle:
+          type: 'string,'
+          example: Car
+        ProductImg:
+          type: object
+          properties:
+            src:
+              type: string
+              example: Accessory/Accessory23
     ProductMainTag:
       type: object
       properties:
+        id:
+          type: number
+          exmaple: 23
         name:
           type: string
           example: M
@@ -1514,13 +1527,17 @@ components:
           items:
             $ref: '#/components/schemas/ProductSubTag'
           example:
-            - name: 빨간색
+            - id: 123
+              name: 빨간색
               amount: 1
-            - name: 다크 그린
+            - id: 262
+              name: 다크 그린
               amount: 1
-            - name: 진청
+            - id: 152
+              name: 진청
               amount: 2
-            - name: 분홍색
+            - id: 121
+              name: 분홍색
               amount: 0
     ProductMainTag_Name:
       type: object
@@ -1531,6 +1548,9 @@ components:
     ProductSubTag:
       type: object
       properties:
+        id:
+          type: number
+          example: 142
         name:
           type: string
           example: 빨간색
@@ -1552,18 +1572,6 @@ components:
           $ref: '#/components/schemas/ProductSubTag'
         Product:
           $ref: '#/components/schemas/Product'
-    Product_Title_Img:
-      type: object
-      properties:
-        productTitle:
-          type: 'string,'
-          example: Car
-        ProductImg:
-          type: object
-          properties:
-            src:
-              type: string
-              example: Accessory/Accessory23
     Order:
       type: object
       properties:

@@ -29,6 +29,121 @@ Product:
             type: array
             items:
                 $ref: './ProductMainTag.yaml#/ProductMainTag'
+        CustomCategories:
+            type: array
+            items:
+                $ref: './CustomCategory.yaml#/CustomCategory'
+            example:
+                - id: 1
+                  name: '데일리'
+                - id: 2
+                  name: '트랜디'
+                - id: 10
+                  name: '캐시'
+                - id: 13
+                  name: '어센틱'
+
+Product_Detail:
+    type: object
+    properties:
+        id:
+            type: integer
+            example: 33
+        productTitle:
+            type: string
+            example: Chips
+        productPrice:
+            type: integer
+            example: 94160
+        gender:
+            type: integer
+            example: 0
+        season:
+            type: string
+            example: 2021 ALL
+        beRleased:
+            type: date-time
+            example: 2022-07-29T19:06:04.000Z
+        deliveryFrom:
+            type: boolean
+            example: true
+        deliveryWay:
+            type: boolean
+            example: true
+        deliveryCompany:
+            type: integer
+            example: 'CJ대한통운'
+        nonMemberPrice:
+            type: integer
+            example: 85600
+        rookiePrice:
+            type: integer
+            example: 77040
+        memberPrice:
+            type: integer
+            example: 76184
+        bronzePrice:
+            type: integer
+            example: 75328
+        silverPrice:
+            type: integer
+            example: 74472
+        goldPrice:
+            type: integer
+            example: 73616
+        platinumPrice:
+            type: integer
+            example: 72760
+        diamondPrice:
+            type: integer
+            example: 71904
+        sells:
+            type: integer
+            example: 1843
+        BigCategoryId:
+            type: integer
+            example: 1
+        SmallCategoryId:
+            type: integer
+            example: 1
+        commentCount:
+            type: integer
+            example: 3
+        rated:
+            type: integer
+            example: 4.1
+        productInfo:
+            type: string
+            example: 'navigate mobile firewall'
+        likes:
+            type: number
+            example: 234
+        comments:
+            type: number
+            example: 8621
+        ProductImg:
+            type: object
+            properties:
+                src:
+                    type: string
+                    example: 'Accessory/Accessory23'
+        ProductMainTags:
+            type: array
+            items:
+                $ref: './ProductMainTag.yaml#/ProductMainTag'
+        CustomCategories:
+            type: array
+            items:
+                $ref: './CustomCategory.yaml#/CustomCategory'
+            example:
+                - id: 1
+                  name: '데일리'
+                - id: 2
+                  name: '트랜디'
+                - id: 10
+                  name: '캐시'
+                - id: 13
+                  name: '어센틱'
 
 Product_Title_Img:
     type: object

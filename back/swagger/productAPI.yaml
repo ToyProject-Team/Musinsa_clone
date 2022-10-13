@@ -1,438 +1,291 @@
 /api/product/productList:
-  get:
-    tags:
-      - product
-    summary: 상품 리스트
-    parameters:
-      - in: query
-        name: mainSort
-        schema:
-          type: integer
-        description: 상품정렬 쿼리입니다. 정렬할 인덱스를 보내주세요. <br>`1 == 낮은 가격순, 2 == 높은 가격순, 3 == 후기 내림차순 4 == 후기 오름차순`
-      - in: query
-        name: page
-        schema:
-          type: integer
-        description: 현재페이지 쿼리입니다. 현재 페이지 인덱스를 보내주세요. 아무것도 지급되지 않을 경우 자동으로 0 처리됩니다<br>`2페이지를 조회할 경우 2`
-      - in: query
-        name: price
-        schema:
-          type: integer
-        description: 가격필터링용 쿼리입니다 가격 분류 인덱스를 정수로 보내주세요<br>`5만~10만의 상품을 조회할 경우 2`<br>[0 ~ 5만, 2- 5만~10만, 10만~20만, 20만~30만, 30만이상]
-      - in: query
-        name: priceMin
-        schema:
-          type: integer
-        description: 사용자지정 최소가격필터용 쿼리입니다. 최소 가격을 정수로 보내주세요<br>`최소가격 3만의 경우 - 30000`
-      - in: query
-        name: priceMax
-        schema:
-          type: integer
-        description: 사용자지정 최대가격필터용 쿼리입니다. 최대 가격을 정수로 보내주세요<br>`최대가격 10만의 경우 - 100000`
-      - in: query
-        name: bigCategoryId
-        schema:
-          type: integer
-        description: 상품 카테고리(대) 범주 필터링입니다. 대분류 카테고리 인덱스를 정수로 보내주세요 <br> `상의조회의 경우 1, 아우터조회의 경우 2`<br>대분류 - ['상의', '아우터', '바지', '원피스', '스커트', '스니커즈', '신발', '가방', '여성 가방', '스포츠/용품', '모자', '양말/레그웨어', '속옷', '선글라스/안경테', '악세서리', '시계', '주얼리', '뷰티', '디지털/테크', '생활/취미/예술', '책/음악/티켓', '반려동물']
-      - in: query
-        name: smallCategoryId
-        schema:
-          type: integer
-        description: 상품 카테고리(소) 범주 필터링입니다. 소분류 카테고리 인덱스를 정수로 보내주세요 <br>`백팩 조회의 경우 bigCategoryId:1 && smallCategoryId:1` <br>대분류당 갯수 - [9, 12, 8, 3, 3, 3, 11, 13, 9, 13, 7, 2, 5, 3, 8, 5, 7, 12, 11, 11, 2, 2]
-    responses:
-      200:
-        description: 성공 - productData 배열에 담긴체 100개 전달합니다(아래는 예시용 1개)
-        schema:
-          properties:
-            productData:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  productTitle:
-                    type: string
-                    example: '[MONSTA X 민혁 착용] 리커버리 슬리퍼'
-                  productPrice:
-                    type: integer
-                    example: 305360
-                  likes:
-                    type: integer
-                    example: 222
-                  comments:
-                    type: integer
-                    example: 826
-                  ProductImg:
-                    type: object
+    get:
+        tags:
+            - product
+        summary: 상품 리스트
+        parameters:
+            - in: query
+              name: mainSort
+              schema:
+                  type: integer
+              description: 상품정렬 쿼리입니다. 정렬할 인덱스를 보내주세요. <br>`1 == 낮은 가격순, 2 == 높은 가격순, 3 == 후기 내림차순 4 == 후기 오름차순`
+            - in: query
+              name: page
+              schema:
+                  type: integer
+              description: 현재페이지 쿼리입니다. 현재 페이지 인덱스를 보내주세요. 아무것도 지급되지 않을 경우 자동으로 0 처리됩니다<br>`2페이지를 조회할 경우 2`
+            - in: query
+              name: price
+              schema:
+                  type: integer
+              description: 가격필터링용 쿼리입니다 가격 분류 인덱스를 정수로 보내주세요<br>`5만~10만의 상품을 조회할 경우 2`<br>[0 ~ 5만, 2- 5만~10만, 10만~20만, 20만~30만, 30만이상]
+            - in: query
+              name: priceMin
+              schema:
+                  type: integer
+              description: 사용자지정 최소가격필터용 쿼리입니다. 최소 가격을 정수로 보내주세요<br>`최소가격 3만의 경우 - 30000`
+            - in: query
+              name: priceMax
+              schema:
+                  type: integer
+              description: 사용자지정 최대가격필터용 쿼리입니다. 최대 가격을 정수로 보내주세요<br>`최대가격 10만의 경우 - 100000`
+            - in: query
+              name: bigCategoryId
+              schema:
+                  type: integer
+              description: 상품 카테고리(대) 범주 필터링입니다. 대분류 카테고리 인덱스를 정수로 보내주세요 <br> `상의조회의 경우 1, 아우터조회의 경우 2`<br>대분류 - ['상의', '아우터', '바지', '원피스', '스커트', '스니커즈', '신발', '가방', '여성 가방', '스포츠/용품', '모자', '양말/레그웨어', '속옷', '선글라스/안경테', '악세서리', '시계', '주얼리', '뷰티', '디지털/테크', '생활/취미/예술', '책/음악/티켓', '반려동물']
+            - in: query
+              name: smallCategoryId
+              schema:
+                  type: integer
+              description: 상품 카테고리(소) 범주 필터링입니다. 소분류 카테고리 인덱스를 정수로 보내주세요 <br>`백팩 조회의 경우 bigCategoryId:1 && smallCategoryId:1` <br>대분류당 갯수 - [9, 12, 8, 3, 3, 3, 11, 13, 9, 13, 7, 2, 5, 3, 8, 5, 7, 12, 11, 11, 2, 2]
+        responses:
+            200:
+                description: 성공 - productData 배열에 담긴체 100개 전달합니다(아래는 예시용 1개)
+                schema:
                     properties:
-                      src:
-                        type: string
-                        example: Accessory/Accessory2
-                  ProductMainTags:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                          example: XL
-                        ProductSubTags:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                example: 딥레드
-                                amount: 3
-      400:
-        description: 상품 조회 결과가 없을 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요        
-      500:
-        $ref: "./openapi.yaml#/serverError"
+                        productData:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    id:
+                                        type: integer
+                                        example: 1
+                                    productTitle:
+                                        type: string
+                                        example: '[MONSTA X 민혁 착용] 리커버리 슬리퍼'
+                                    productPrice:
+                                        type: integer
+                                        example: 305360
+                                    likes:
+                                        type: integer
+                                        example: 222
+                                    comments:
+                                        type: integer
+                                        example: 826
+                                    ProductImg:
+                                        type: object
+                                        properties:
+                                            src:
+                                                type: string
+                                                example: Accessory/Accessory2
+                                    ProductMainTags:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                name:
+                                                    type: string
+                                                    example: XL
+                                                ProductSubTags:
+                                                    type: array
+                                                    items:
+                                                        type: object
+                                                        properties:
+                                                            name:
+                                                                type: string
+                                                                example: 딥레드
+                                                                amount: 3
+            400:
+                description: 상품 조회 결과가 없을 경우
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요
+            500:
+                $ref: './openapi.yaml#/serverError'
 /api/product/productDetail:
-  get:
-    tags:
-      - product
-    summary: 상품 상세보기
-    parameters:
-      - in: query
-        name: productId
-        schema:
-          type: integer
-        required: true
-        description: 상품 id 쿼리입니다. 상품 식별 id 를 보내주세요
-    responses:
-      200:
-        description: 성공 - product 배열에 데이터들이 지급됩니다<br>`gender [0 == 여자, 1 == 남자]`<br>`deliveryFrom [0 == 국내, 1 == 해외]`<br>`deliveryWay [0 == 입점사 배송, 1 == 무신사 직배송]<br>`
-        schema:
-          properties:
-            product:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 33
-                  productTitle: 
-                    type: string
-                    example: Chips
-                  productPrice:
-                    type: integer
-                    example: 94160 
-                  views:
-                    type: integer
-                    example: 1661
-                  likes:
-                    type: integer
-                    example: 418
-                  comments:
-                    type: integer
-                    example: 541
-                  gender:
-                    type: integer
-                    example: 0
-                  season:
-                    type: string
-                    example: 2021 ALL
-                  beRleased:
-                    type: string
-                    example: 2022-07-29T19:06:04.000Z
-                  deliveryFrom:
-                    type: boolean
-                    example: true
-                  deliveryWay:
-                    type: boolean
-                    example: true
-                  deliveryCompany:
-                    type: integer
-                    example: 'CJ대한통운'
-                  nonMemberPrice:
-                    type: integer
-                    example: 85600
-                  rookiePrice:
-                    type: integer
-                    example: 77040
-                  memberPrice:
-                    type: integer
-                    example: 76184
-                  bronzePrice:
-                    type: integer
-                    example: 75328
-                  silverPrice:
-                    type: integer
-                    example: 74472
-                  goldPrice:
-                    type: integer
-                    example: 73616
-                  platinumPrice:
-                    type: integer
-                    example: 72760
-                  diamondPrice:
-                    type: integer
-                    example: 71904
-                  sells:
-                    type: integer
-                    example: 1843
-                  BigCategoryId:
-                    type: integer
-                    example: 1
-                  SmallCategoryId:
-                    type: integer
-                    example: 1
-                  commentCount:
-                    type: integer
-                    example: 3
-                  rated:
-                    type: integer
-                    example: 4.1
-                  ProductImg:
-                    type: object
+    get:
+        tags:
+            - product
+        summary: 상품 상세보기
+        parameters:
+            - in: query
+              name: productId
+              schema:
+                  type: integer
+              required: true
+              description: 상품 id 쿼리입니다. 상품 식별 id 를 보내주세요
+        responses:
+            200:
+                description: 성공 - product에 지급됩니다<br>`gender [0 == 여자, 1 == 남자]`<br>`deliveryFrom [0 == 국내, 1 == 해외]`<br>`deliveryWay [0 == 입점사 배송, 1 == 무신사 직배송]<br>`
+                schema:
                     properties:
-                      src:
-                        type: string
-                        example: Accessory/Accessory2
-                  CustomCategories:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          example: 5
-                  ProductMainTags:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                          example: XL
-                        ProductSubTags:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              name:
-                                type: string
-                                example: 딥레드
-                                amount: 3
+                        product:
+                            $ref: './models/Product.yaml#/Product_Detail'
 
-                      
-                  
-      400:
-        description: 상품 조회 결과가 없을 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요        
-      401:
-        description: productId가 undefined인 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: productId가 쿼리로 전달되지 않았습니다
-      500:
-        $ref: "./openapi.yaml#/serverError"
+            400:
+                description: 상품 조회 결과가 없을 경우
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: 상품 조회 결과가 없습니다. 입력값을 다시 확인해주세요
+            401:
+                description: productId가 undefined인 경우
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: productId가 쿼리로 전달되지 않았습니다
+            500:
+                $ref: './openapi.yaml#/serverError'
 
 /api/product/purchase:
-  post:
-    tags:
-      - product
-    summary: 상품 구매하기
-    parameters:
-      - name: Authorization
-        in: header
-        required: true
-      - name: body
-        in: body
-        required: true
-        schema:
-          type: object
-          properties:
-            authPayment:
-              type: object
-              properties:
-                imp_uid:
-                  type: string
-                  example: 1
-                Merchant_uid:
-                  type: string
-                  example: 1
-            orderList:
-              type: array
-              items:
-                type: object
-                properties:
-                  ProductId:
-                    type: string
-                    example: 2
-                  price:
-                    type: string
-                    example: 132100
-                  amount:
-                    type: string
-                    example: 3
-                  ProductMainTagId:
-                    type: string
-                    example: 3
-                  ProductSubTagId:
-                    type: string
-                    example: 4
-    responses:
-      200:
-        $ref: "./openapi.yaml#/success"
-      400:
-        description: 상품 조회 결과가 없을 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: 상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요
-      401:
-        description: 주문 번호가 지급되지 않았을 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: 주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요
-      402:
-        description: uniqueKey가 지급되지 않았읋 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요
-      403:
-        description: 가격 정보가 지급되지 않았을 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: 가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요
-      405:
-        description: 실제 결제 금액과 넘겨준 상품의 가격이 다를 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: 위조된 결제 시도입니다 
-      406:
-        description: 구매갯수가 지급되지 않았을 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: 구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요
-      407:
-        description: 같은 옵션으로 상품을 주문할 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: 이미 접수된 주문입니다
-      500:
-        $ref: "./openapi.yaml#/serverError"
+    post:
+        tags:
+            - product
+        summary: 상품 구매하기
+        parameters:
+            - name: Authorization
+              in: header
+              required: true
+            - name: body
+              in: body
+              required: true
+              schema:
+                  type: object
+                  properties:
+                      imp_uid:
+                          type: string
+                      Merchant_uid:
+                          type: string
+                      ProductId:
+                          type: string
+                      price:
+                          type: integer
+                      amount:
+                          type: integer
+        responses:
+            200:
+                description: 성공 - product 배열에 데이터들이 지급됩니다
+                schema:
+                    properties:
+                        product:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    id:
+                                        type: integer
+                                        example: 33
+                                    productTitle:
+                                        type: string
+                                        example: Chips
+            400:
+                description: 상품 조회 결과가 없을 경우
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: 상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요
+            401:
+                description: 주문 번호가 지급되지 않았을 경우
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: 주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요
+            402:
+                description: uniqueKey가 지급되지 않았읋 경우
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요
+            403:
+                description: 가격 정보가 지급되지 않았을 경우
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: 가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요
+            405:
+                description: 실제 결제 금액과 넘겨준 상품의 가격이 다를 경우
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: 위조된 결제 시도입니다
+            500:
+                $ref: './openapi.yaml#/serverError'
 
 /api/product/addCart:
-  post:
-    tags:
-      - product
-    summary: 상품 내 장바구니에 추가
-    parameters:
-      - name: Authorization
-        in: header
-        required: true
-      - name: body
-        in: body
-        required: true
-        schema:
-          type: object
-          properties:
-            addCarts:
-              type: array
-              items:
-                type: object
-                properties:
-                  productId:
-                    type: string
-                    example: 1
-                  packingAmount:
-                    type: number
-                    example: 2
-                  productMainTagId:
-                    type: number
-                    example: 1
-                  productSubTagId:
-                    type: number
-                    example: 1
-    responses:
-      200:
-        $ref: "./openapi.yaml#/success"
-      400:
-        description: 이미 추가된 카테고리인 경우(상품 중복 가능)
-        schema:
-          properties:
-            message:
-              type: string
-              example: 이미 추가된 카테고리입니다      
-      401:
-        description: 전달한 상품 정보 중 데이터베이스에 없는 상품 정보가 껴있는 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: 존재하지 않는 상품을 장바구니에 추가하고있습니다 
-      402:
-        description: 제품의 양보다 담는 양이 더 많을 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: 재고보다 담으려는 수량이 더 많습니다    
-      500:
-        $ref: "./openapi.yaml#/serverError"
+    post:
+        tags:
+            - product
+        summary: 상품 내 장바구니에 추가
+        parameters:
+            - name: Authorization
+              in: header
+              required: true
+            - name: body
+              in: body
+              required: true
+              schema:
+                  type: object
+                  properties:
+                      addCarts:
+                          type: array
+                          items:
+                              type: object
+                              properties:
+                                  productId:
+                                      type: string
+                                      example: 1
+                                  packingAmount:
+                                      type: number
+                                      example: 2
+                                  productMainTagId:
+                                      type: number
+                                      example: 1
+                                  productSubTagId:
+                                      type: number
+                                      example: 1
+        responses:
+            200:
+                $ref: './openapi.yaml#/success'
+            400:
+                description: 이미 추가된 카테고리인 경우(상품 중복 가능)
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: 이미 추가된 카테고리입니다
+            500:
+                $ref: './openapi.yaml#/serverError'
 
 /api/product/likeProduct:
-  post:
-    tags:
-      - product
-    summary: 상품 좋아요
-    parameters:
-      - name: Authorization
-        in: header
-        required: true
-      - name: body
-        in: body
-        required: true
-        schema:
-          type: object
-          properties:
-            productId:
-              type: string
-              example: 1
-    responses:
-      200:
-        $ref: "./openapi.yaml#/success"
-      400:
-        description: 이미 좋아요한 상품일 경우
-        schema:
-          properties:
-            message:
-              type: string
-              example: 이미 좋아요한 상품입니다     
-      500:
-        $ref: "./openapi.yaml#/serverError"
+    post:
+        tags:
+            - product
+        summary: 상품 좋아요
+        parameters:
+            - name: Authorization
+              in: header
+              required: true
+            - name: body
+              in: body
+              required: true
+              schema:
+                  type: object
+                  properties:
+                      productId:
+                          type: string
+                          example: 1
+        responses:
+            200:
+                $ref: './openapi.yaml#/success'
+            400:
+                description: 이미 좋아요한 상품일 경우
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: 이미 좋아요한 상품입니다
+            500:
+                $ref: './openapi.yaml#/serverError'
 
-
-$ref: "./myPageAPI.yaml"
-
+$ref: './myPageAPI.yaml'
