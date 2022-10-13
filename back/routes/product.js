@@ -363,7 +363,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
             });
         }
 
-        const { imp_uid, Merchant_uid } = req.body.auth; // req의 query에서 imp_uid, Merchant_uid 추출
+        const { imp_uid, Merchant_uid } = req.body.authPayment; // req의 query에서 imp_uid, Merchant_uid 추출
         // 액세스 토큰(access token) 발급 받기
         const getToken = await axios({
             url: 'https://api.iamport.kr/users/getToken',
@@ -428,6 +428,13 @@ router.post('/purchase', authJWT, async (req, res, next) => {
     }
 });
 
-router.post('search')
+router.post('/checkAmount', authJWT, async (req, res, next) => {
+    try {
+
+    } catch (e) {
+        console.error(e)
+        next(e)
+    }
+})
 
 module.exports = router;

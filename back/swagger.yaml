@@ -852,32 +852,38 @@ paths:
           schema:
             type: object
             properties:
-              imp_uid:
-                type: string
-              Merchant_uid:
-                type: string
-              ProductId:
-                type: string
-              price:
-                type: integer
-              amount:
-                type: integer
-      responses:
-        '200':
-          description: 성공 - product 배열에 데이터들이 지급됩니다
-          schema:
-            properties:
-              product:
+              authPayment:
+                type: object
+                properties:
+                  imp_uid:
+                    type: string
+                    example: 1
+                  Merchant_uid:
+                    type: string
+                    example: 1
+              orderList:
                 type: array
                 items:
                   type: object
                   properties:
-                    id:
-                      type: integer
-                      example: 33
-                    productTitle:
+                    ProductId:
                       type: string
-                      example: Chips
+                      example: 2
+                    price:
+                      type: string
+                      example: 132100
+                    amount:
+                      type: string
+                      example: 3
+                    ProductMainTagId:
+                      type: string
+                      example: 3
+                    ProductSubTagId:
+                      type: string
+                      example: 4
+      responses:
+        '200':
+          $ref: '#/success'
         '400':
           description: 상품 조회 결과가 없을 경우
           schema:
@@ -913,6 +919,20 @@ paths:
               message:
                 type: string
                 example: 위조된 결제 시도입니다
+        '406':
+          description: 구매갯수가 지급되지 않았을 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요
+        '407':
+          description: 같은 옵션으로 상품을 주문할 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 이미 접수된 주문입니다
         '500':
           $ref: '#/serverError'
   /api/product/addCart:
