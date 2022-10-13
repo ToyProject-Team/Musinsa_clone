@@ -1066,6 +1066,20 @@ paths:
               message:
                 type: string
                 example: 이미 추가된 카테고리입니다
+        '401':
+          description: 전달한 상품 정보 중 데이터베이스에 없는 상품 정보가 껴있는 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 존재하지 않는 상품을 장바구니에 추가하고있습니다
+        '402':
+          description: 제품의 양보다 담는 양이 더 많을 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 재고보다 담으려는 수량이 더 많습니다
         '500':
           $ref: '#/serverError'
   /api/product/likeProduct:
