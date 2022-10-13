@@ -1390,8 +1390,8 @@ paths:
           schema:
             type: object
             properties:
-              merchant_uid:
-                type: string
+              order_id:
+                type: number
               reason:
                 type: string
               cancel_request_amount:
