@@ -63,7 +63,7 @@ router.post('/refundMyOrder', async (req, res, next) => {
     try {
         // 클라이언트로부터 전달받은 주문번호, 환불사유, 환불금액, 가상계좌 정보(예금주, 계좌번호, 은행코드)
         const {
-            merchant_uid,
+            order_id,
             reason,
             cancel_request_amount,
             refund_holder,
@@ -73,15 +73,16 @@ router.post('/refundMyOrder', async (req, res, next) => {
 
         const userOrder = await Order.findOne({
             where: {
-                MerchantUid: merchant_uid,
+                order_id: order_id,
+                UserId: req.myId,
             },
         });
+
         if (!userOrder)
             return res
                 .status(400)
                 .send({ message: '주문 상품에 대한 데이터가 없습니다' });
 
-        /* ... 중략 ... */
         const paymentData = userOrder; // 조회된 결제정보
         const { ImpUid, amount, cancel_amount } = paymentData; // 조회한 결제정보로부터 imp_uid, amount(결제금액), cancel_amount(환불된 총 금액) 추출
 
