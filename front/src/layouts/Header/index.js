@@ -3,7 +3,13 @@ import { HContainer, HDiv, HLogo, HSearch, HUser, CountNum } from './styles';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getData } from 'utils/getData';
 import { deleteData } from 'utils/deleteData';
-import { DeleteHeaderBodyApi, PostHeaderApi, PostHeaderBodyApi, PostQueryApi } from 'utils/api';
+import {
+    DeleteHeaderBodyApi,
+    PostHeaderApi,
+    PostHeaderBodyApi,
+    PostQueryApi,
+    GetTokenApi,
+} from 'utils/api';
 import Cookies from 'js-cookie';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
@@ -28,12 +34,44 @@ const Header = props => {
     const onCloseModal = useCallback(() => {
         setModalFirst(false);
     }, []);
+
+    //알림 추가, 더미데이터
+    // const [noticeList, setNoticeList] = useState([]);
+
+    const dummyData = {
+        id: 0,
+        MerchantUid: '3914619',
+        orderPrice: 24970,
+        amount: 1,
+        state: '2',
+        createdAt: '2017-07-21T17:32:28.000Z',
+        ProductMainTag: {
+            name: 'M',
+        },
+        ProductSubTag: {
+            id: 142,
+            name: '빨간색',
+            amount: 1,
+        },
+        Product: {
+            productTitle: 'Car',
+            ProductImg: {
+                src: 'Accessory/Accessory23',
+            },
+        },
+    };
+
     useEffect(() => {
         if (window.location.host.includes('local')) return;
 
         PostQueryApi(`/api/product/productList`).catch(() => {
             setModalFirst(true);
         });
+
+        //알림창에 넣을 orderLsit 호출
+        // GetTokenApi('/api/order/orderList', token).then(res => {
+        //     console.log(res.data);
+        // });
     }, []);
 
     const { data: shoppingNumber, mutate } = useSWR(
@@ -215,11 +253,15 @@ const Header = props => {
                                     <CountNum>{shoppingNumber ? 'N' : 0}</CountNum>
                                 </div>
                                 <article className={notice ? 'block' : 'none'}>
-                                    <p>
+                                    <p>{dummyData.Product.ProductImg.src}</p>
+                                    <p>{dummyData.Product.productTitle}</p>
+                                    <p>{dummyData.ProductMainTag.name}</p>
+                                    {/* <p>
                                         PC에서는 공지, 구매 정보 알림만 확인하실 수 있습니다. <br />
                                         그 외 알림은 앱에서 확인 가능합니다.
                                     </p>
-                                    <p>등록된 알림이 없습니다.</p>
+                                    <p>등록된 알림이 없습니다.</p> */}
+
                                     <span>
                                         <IoMdArrowDropup />
                                     </span>
