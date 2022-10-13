@@ -9,6 +9,7 @@ const {
     sequelize,
     Order,
     Sequelize,
+    CustomCategory,
 } = require('../models');
 const authJWT = require('../utils/middlewares/authJWT');
 const {
@@ -62,7 +63,10 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
                             model: ProductImg,
                             attributes: ['src'],
                         },
-
+                        {
+                            model: CustomCategory,
+                            attributes: ['id', 'categoryName'],
+                        },
                         {
                             model: ProductMainTag,
                             attributes: ['name'],
