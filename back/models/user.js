@@ -75,6 +75,10 @@ module.exports = class User extends Model {
     static associate(db) {
         db.User.hasMany(db.Order, {
             as: 'myOrders',
+            foreignKey: {
+                name: 'UserId',
+                allowNull: false,
+            },
         });
         db.User.hasMany(db.MyCart, {
             as: 'myCarts',
