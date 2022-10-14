@@ -19,7 +19,7 @@
     
 송민지 | 서경주 | 김우혁 | 이다노 
 --- | --- | --- | --- 
-<a href="www.naver.com">![image](https://user-images.githubusercontent.com/110218594/195768212-887e1436-bbff-4dac-b6c6-f362e7f9048d.png)</a> | 301 | 283 | 290 
+<a href="www.naver.com"><img width="60" src="http://material-bread.org/logo-shadow.svg](https://t1.daumcdn.net/cfile/tistory/24283C3858F778CA2E" alt="Material Bread logo"></a> | 301 | 283 | 290 
 Seconds | 301 | 283 | 290 
     
 </div>
