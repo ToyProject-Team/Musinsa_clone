@@ -81,6 +81,8 @@ function Cart() {
 
     const [modalOrder, setModalOrder] = useState(false);
 
+    const [checkList, setCheckList] = useState({});
+
     // 체크
     const checkItem = useCallback(() => {
         setCheckBox(check => !check);
@@ -101,12 +103,30 @@ function Cart() {
     const onClickOrder = useCallback(() => {
         setModalOrder(false);
         setOrder(true);
-    }, []);
+        let arrBsId = [];
+        let arrPrice = [];
+        let arrAmount = [];
+        cartList.map(v =>
+            v.check
+                ? arrBsId.push(v.id) &&
+                  arrPrice.push(v.Product.productPrice * v.packingAmount) &&
+                  arrAmount.push(v.packingAmount)
+                : arrBsId.filter(f => f !== v.id) &&
+                  arrPrice.filter(f => f !== v.Product.productPrice * v.packingAmount) &&
+                  arrAmount.filter(f => f !== v.packingAmount),
+        );
+
+        setCheckList({ shoppingBasketId: arrBsId, price: arrPrice, amout: arrAmount });
+
+        // console.log('ok', arrBsId, arrPrice, arrAmount);
+    }, [cartList]);
+
+    console.log('check', checkList);
 
     // 모두 체크 확인 및 총상품 금액
 
     const [basketId, setBasketId] = useState([]);
-    console.log(basketId);
+    // console.log(basketId);
 
     useEffect(() => {
         let arrId = [];
@@ -209,12 +229,7 @@ function Cart() {
                     </CartPayment>
                     <OrderBtn>
                         <button onClick={onClickOrderButton}>결제하기</button>
-                        {order && (
-                            <Order
-                                pay={pay}
-                                ShoppingBasketId={basketId}
-                            />
-                        )}
+                        {order && <Order pay={pay} checkList={checkList} />}
                     </OrderBtn>
                 </div>
 
