@@ -1,4 +1,4 @@
-로고 예정
+<div align="center"><img src="https://user-images.githubusercontent.com/110218594/195773693-4b1828da-8903-4b07-9ba6-fcab1e240418.png" alt="Material Bread logo"></div>
 
 # ❓ What is the Musinsa Project?
 
@@ -7,7 +7,7 @@
     <a href="www.naver.com">사이트</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
     <a href="www.naver.com">노션</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
     <a href="www.naver.com">위키</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-    <a href="www.naver.com">PPT</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <a href="www.naver.com">PPT</a>
 </div>
 <div align="center">
     기술 스택 들어갈 예정
@@ -21,10 +21,20 @@
 <div align="center">
     
 송민지 | 서경주 | 김우혁 | 이다노 
---- | --- | --- | --- 
+:---: | :---: | :---: | :---: 
 <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> 
-<a href="www.naver.com">git으로 이동하기</a> | 301 | 283 | 290 
+<a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> 
+FrontEnd | FrontEnd | FrontEnd | FrontEnd
+ 
+</div>
+<div align="center">
     
+이민서 | 이준영
+:---: | :---:
+<a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a>
+<a href="www.naver.com">git으로 이동하기</a> | 301 
+BackEnd | BackEnd
+ 
 </div>
 　
  
