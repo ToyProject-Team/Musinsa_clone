@@ -19,7 +19,7 @@
     
 송민지 | 서경주 | 김우혁 | 이다노 
 --- | --- | --- | --- 
-![image](https://user-images.githubusercontent.com/110218594/195768039-2e592bb8-64a7-4bc4-a6f1-5bbdc428b07b.png) | 301 | 283 | 290 
+<a href="www.naver.com">![image](https://user-images.githubusercontent.com/110218594/195768039-2e592bb8-64a7-4bc4-a6f1-5bbdc428b07b.png)</a> | 301 | 283 | 290 
 Seconds | 301 | 283 | 290 
     
 </div>
