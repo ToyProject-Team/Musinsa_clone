@@ -1,6 +1,9 @@
 ProductSubTag:
     type: object
     properties:
+        id:
+            type: number
+            example: 142
         name:
             type: string
             example: '빨간색'

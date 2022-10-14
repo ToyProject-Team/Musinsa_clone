@@ -1,0 +1,9 @@
+CustomCategory:
+    type: object
+    properties:
+        id:
+            type: number
+            example: 1
+        categoryName:
+            type: string
+            example: 데일리
