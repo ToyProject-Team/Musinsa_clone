@@ -16,10 +16,10 @@
 
 # ✍ 팀원 소개>
 <div align="center">
-   김우혁 J100_배지호 서경주 이다노
-    img	img	img	img
-    zaehuun	jiho-bae	Dev-Beom	hanbyeol
-    Web Backend	Web Frontend	Web Backend	Web Frontend
+    |김우혁|송민지|서경주|이다노|
+    |김우혁|송민지|서경주|이다노|
+    |김우혁|송민지|서경주|이다노|
+    |김우혁|송민지|서경주|이다노|
 </div>
 　
 # 🤝 회의록
