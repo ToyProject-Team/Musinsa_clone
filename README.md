@@ -4,8 +4,8 @@
 
 <h1 align="center">000 서비스</h1>
 <div align="center">
-    <a href="www.naver.com">hello</a><span>&nbsp;|&nbsp;</span>
-    <a href="www.naver.com">hello</a>
+    <a href="www.naver.com" target="_blank">hello</a><span>&nbsp;|&nbsp;</span>
+    <a href="www.naver.com" target="_blank">hello</a>
 </div>
 
 # ✍ 팀원 소개
