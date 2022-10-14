@@ -17,7 +17,7 @@
     > 프로젝트 소개
 </div>
 
-# ✍ 팀원 소개>
+# ✍ 팀원 소개
 <div align="center">
     
 송민지 | 서경주 | 김우혁 | 이다노 
@@ -27,10 +27,11 @@
     
 </div>
 　
+ 
 # 🛠 기술적 도전
 
 <details>
-<summary>토글버튼 도저언</summary>
+<summary>🛠 토글버튼 도저언</summary>
 <div markdown="1">
 
 안녕
