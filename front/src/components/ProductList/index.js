@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { ListOuter, ListWrapper } from './styles';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import { AiFillStar } from '@react-icons/all-files/ai/AiFillStar';
 
 const ShowList = props => {
     const navigate = useNavigate();
@@ -70,15 +71,35 @@ const ShowList = props => {
                                     </div>
                                     <div className="item_comment">
                                         {data.comments < 100 ? null : data.comments < 2000 ? (
-                                            <p>⭐</p>
+                                            <p style={{ color: '#FF923A' }}>
+                                                <AiFillStar />
+                                            </p>
                                         ) : data.comments < 4000 ? (
-                                            <p>⭐⭐</p>
+                                            <p style={{ color: '#FF923A' }}>
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                            </p>
                                         ) : data.comments < 8000 ? (
-                                            <p>⭐⭐⭐</p>
+                                            <p style={{ color: '#FF923A' }}>
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                            </p>
                                         ) : data.comments < 10000 ? (
-                                            <p>⭐⭐⭐⭐</p>
+                                            <p style={{ color: '#FF923A' }}>
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                            </p>
                                         ) : (
-                                            <p>⭐⭐⭐⭐⭐</p>
+                                            <p style={{ color: '#FF923A' }}>
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                            </p>
                                         )}
                                         <p className="comments">{data.comments}</p>
                                     </div>
