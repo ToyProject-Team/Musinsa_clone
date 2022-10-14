@@ -14,7 +14,7 @@
     React, Style-Component, Scss, Context, Axios, useSWR, NodeJs...
 </div>
 <div align="center">
-    > 프로젝트 소개
+    프로젝트 소개
 </div>
 
 # ✍ 팀원 소개
