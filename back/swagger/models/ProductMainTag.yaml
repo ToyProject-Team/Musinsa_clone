@@ -1,6 +1,9 @@
 ProductMainTag:
     type: object
     properties:
+        id:
+            type: number
+            exmaple: 23
         name:
             type: string
             example: 'M'
@@ -9,13 +12,17 @@ ProductMainTag:
             items:
                 $ref: './ProductSubTag.yaml#/ProductSubTag'
             example:
-                - name: '빨간색'
+                - id: 123
+                  name: '빨간색'
                   amount: 1
-                - name: '다크 그린'
+                - id: 262
+                  name: '다크 그린'
                   amount: 1
-                - name: '진청'
+                - id: 152
+                  name: '진청'
                   amount: 2
-                - name: '분홍색'
+                - id: 121
+                  name: '분홍색'
                   amount: 0
 
 ProductMainTag_Name:

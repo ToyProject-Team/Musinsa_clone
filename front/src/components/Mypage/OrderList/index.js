@@ -18,6 +18,7 @@ function OrderList() {
 
 	//주문내역조회 api연결
 	const loginToken = getData();
+	console.log(loginToken)
 	const [orderData, setOrderData] = useState([]);
 	useEffect(() => {
 		GetTokenApi('/api/order/orderList', loginToken.accessToken).then(res => {

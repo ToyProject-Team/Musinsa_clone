@@ -1,18 +1,20 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { ImgSpan } from '../styles';
-import { FiMinus, FiPlus, FiX } from 'react-icons/fi';
+import { FiMinus } from '@react-icons/all-files/fi/FiMinus';
+import { FiPlus } from '@react-icons/all-files/fi/FiPlus';
+import { FiX } from '@react-icons/all-files/fi/FiX';
 import { thousandComma } from 'utils/thousandComma';
 import { smallCategory } from 'utils/smallCategory';
 import { CheckLabel, ItemUl } from './styles';
 import OrderModal from 'components/Modals/OrderModal';
 import Order from 'components/Order';
-import { Link } from 'react-router-dom';
 
-function CartTable({ item, setCartList, cartList, cartRemove}) {
+function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
     const [modalOrder, setModalOrder] = useState(false);
     const [pay, setPay] = useState('card');
     const [order, setOrder] = useState(false);
     const id = item.id;
+    const amountValue = item.ProductSubTag.amount== 0 ? 0 : item.packingAmount ;
 
     // 수량 기입
     const handleChange = useCallback(
@@ -90,7 +92,15 @@ function CartTable({ item, setCartList, cartList, cartRemove}) {
                         <tbody>
                             <tr>
                                 <td onClick={checkItem}>
-                                    <CheckLabel className={ item.ProductSubTag.amount > 0 ? (item.check ? 'active' : '') : ''}></CheckLabel>
+                                    <CheckLabel
+                                        className={
+                                            item.ProductSubTag.amount > 0
+                                                ? item.check
+                                                    ? 'active'
+                                                    : ''
+                                                : ''
+                                        }
+                                    ></CheckLabel>
                                 </td>
                                 <td className="top">
                                     <div>
@@ -136,7 +146,7 @@ function CartTable({ item, setCartList, cartList, cartRemove}) {
                                         </button>
                                         <input
                                             type="text"
-                                            value={item.packingAmount}
+                                            value={amountValue}
                                             onChange={handleChange}
                                         ></input>
                                         <button value={1} onClick={plusCount}>
@@ -145,13 +155,13 @@ function CartTable({ item, setCartList, cartList, cartRemove}) {
                                     </div>
                                 </td>
                                 <td>
-                                    {thousandComma(item.Product.productPrice * item.packingAmount)}
+                                    {thousandComma(item.Product.productPrice * amountValue)}
                                     원
                                 </td>
                                 <td>
                                     택배배송 <br />
                                     <strong>
-                                        {item.Product.productPrice * item.packingAmount > 30000
+                                        {item.Product.productPrice * amountValue > 30000
                                             ? '배송비 무료'
                                             : `${dlvChr}원`}
                                     </strong>
