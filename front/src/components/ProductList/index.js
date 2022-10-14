@@ -52,9 +52,35 @@ const ShowList = props => {
                                         ></img>
                                     </div>
                                     <div className="item_info">
-                                        <p>{data.productTitle}</p>
+                                        <p
+                                            style={{
+                                                fontWeight: 'bold',
+                                                paddingBottom: '3px',
+                                                fontSize: '13px',
+                                            }}
+                                        >
+                                            {data.productTitle}
+                                        </p>
                                         <p>{data.productPrice.toLocaleString('ko-KR')}원</p>
-                                        <p>MEMBERSHIP PRICE</p>
+                                    </div>
+                                    <div className="choice">Members' Choice</div>
+                                    <div className="item_like">
+                                        <p style={{ color: 'red' }}>❤</p>
+                                        <p className="likes">{data.likes}</p>
+                                    </div>
+                                    <div className="item_comment">
+                                        {data.comments < 100 ? null : data.comments < 2000 ? (
+                                            <p>⭐</p>
+                                        ) : data.comments < 4000 ? (
+                                            <p>⭐⭐</p>
+                                        ) : data.comments < 8000 ? (
+                                            <p>⭐⭐⭐</p>
+                                        ) : data.comments < 10000 ? (
+                                            <p>⭐⭐⭐⭐</p>
+                                        ) : (
+                                            <p>⭐⭐⭐⭐⭐</p>
+                                        )}
+                                        <p className="comments">{data.comments}</p>
                                     </div>
                                 </div>
                             </div>
