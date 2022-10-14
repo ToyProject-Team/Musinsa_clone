@@ -293,7 +293,7 @@ const Main = () => {
 
     // //페이지네이션 관련
     const [page, setPage] = useState(1);
-    const [items, setItems] = useState(18);
+    const [items, setItems] = useState(75);
     const handlePageChange = page => {
         setPage(page); //페이지바뀔때마다
     };

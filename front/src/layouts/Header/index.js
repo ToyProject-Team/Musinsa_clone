@@ -3,7 +3,13 @@ import { HContainer, HDiv, HLogo, HSearch, HUser, CountNum } from './styles';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getData } from 'utils/getData';
 import { deleteData } from 'utils/deleteData';
-import { DeleteHeaderBodyApi, PostHeaderApi, PostHeaderBodyApi, PostQueryApi } from 'utils/api';
+import {
+    DeleteHeaderBodyApi,
+    PostHeaderApi,
+    PostHeaderBodyApi,
+    PostQueryApi,
+    GetTokenApi,
+} from 'utils/api';
 import Cookies from 'js-cookie';
 import useSWR from 'swr';
 import fetcher from 'utils/fetcher';
@@ -14,6 +20,7 @@ import FirstModal from 'components/Modals/FirstModal';
 import { AiOutlineCamera } from '@react-icons/all-files/ai/AiOutlineCamera';
 import { AiOutlineSearch } from '@react-icons/all-files/ai/AiOutlineSearch';
 import { IoMdArrowDropup } from '@react-icons/all-files/io/IoMdArrowDropup';
+import { FaCommentsDollar } from 'react-icons/fa';
 
 const Header = props => {
     const location = useLocation();
@@ -28,6 +35,33 @@ const Header = props => {
     const onCloseModal = useCallback(() => {
         setModalFirst(false);
     }, []);
+
+    //알림 추가, 더미데이터
+    const [noticeList, setNoticeList] = useState([]);
+
+    const dummyData = {
+        id: 0,
+        MerchantUid: '3914619',
+        orderPrice: 24970,
+        amount: 1,
+        state: '2',
+        createdAt: '2017-07-21T17:32:28.000Z',
+        ProductMainTag: {
+            name: 'M',
+        },
+        ProductSubTag: {
+            id: 142,
+            name: '빨간색',
+            amount: 1,
+        },
+        Product: {
+            productTitle: 'Car',
+            ProductImg: {
+                src: 'Accessory/Accessory23',
+            },
+        },
+    };
+
     useEffect(() => {
         if (window.location.host.includes('local')) return;
 
@@ -35,6 +69,14 @@ const Header = props => {
             setModalFirst(true);
         });
     }, []);
+
+    useEffect(() => {
+        GetTokenApi('/api/order/orderList', token).then(res => {
+            setNoticeList(res.data);
+        });
+        // console.log(noticeList[0].Product.productTitle);
+        // console.log(noticeList[0].Product.ProductImg.src);
+    }, [notice]);
 
     const { data: shoppingNumber, mutate } = useSWR(
         token ? '/api/shoppingBasket/shoppingList' : null,
@@ -124,6 +166,14 @@ const Header = props => {
                 console.log(err);
             });
     }, [login]);
+
+    // const onClickNotice = () => {
+    //     setNotice(!notice);
+    //     //알림창에 넣을 orderLsit 호출
+    //     GetTokenApi('/api/order/orderList', token).then(res => {
+    //         setNoticeList(res.data);
+    //     });
+    // };
 
     return (
         <>
@@ -215,11 +265,26 @@ const Header = props => {
                                     <CountNum>{shoppingNumber ? 'N' : 0}</CountNum>
                                 </div>
                                 <article className={notice ? 'block' : 'none'}>
-                                    <p>
-                                        PC에서는 공지, 구매 정보 알림만 확인하실 수 있습니다. <br />
-                                        그 외 알림은 앱에서 확인 가능합니다.
-                                    </p>
-                                    <p>등록된 알림이 없습니다.</p>
+                                    {noticeList ? (
+                                        noticeList?.map((data, idx) => {
+                                            <div>
+                                                {/* <p>
+                                                    <img
+                                                        src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.Product.ProductImg.src}`}
+                                                    />
+                                                </p> */}
+                                                <p>{data.Product.productTitle}</p>
+                                            </div>;
+                                        })
+                                    ) : (
+                                        <>
+                                            <p>
+                                                PC에서는 공지, 구매 정보 알림만 확인하실 수
+                                                있습니다. <br />그 외 알림은 앱에서 확인 가능합니다.
+                                            </p>
+                                            <p>등록된 알림이 없습니다.</p>
+                                        </>
+                                    )}
                                     <span>
                                         <IoMdArrowDropup />
                                     </span>
