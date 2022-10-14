@@ -1,4 +1,12 @@
+<h1>🛠 현재 백엔드 수정 작업 진행중</h1>
+1. 상세페이지 장바구니 추가
+2. 장바구니 페이지
+3. 주문내역 조회
+
 <div align="center"><img src="https://user-images.githubusercontent.com/110218594/195773693-4b1828da-8903-4b07-9ba6-fcab1e240418.png" alt="Material Bread logo"></div>
+
+<h3>testId: test</h3>
+<h3>testPw: test</h3>
 
 # ❓ What is the Musinsa Project?
 
@@ -18,6 +26,7 @@
 </div>
 
 # ✍ 팀원 소개
+
 <div align="center">
     
 송민지 | 서경주 | 김우혁 | 이다노 
@@ -48,4 +57,3 @@ BackEnd | BackEnd
 
 </div>
 </details>
-　

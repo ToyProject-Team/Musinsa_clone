@@ -274,33 +274,29 @@ const PurchaseForm = () => {
         //     navigate(`/login`);
         // }
         // create arr ############
-        // const addCarts = [];
-        // let selectListLength = 0;
-        // const keys = Object.keys(selectList);
-        // for (let i = 0; i < keys.length; i++) {
-        //     selectListLength += selectList[keys[i]].length;
-        // }
-        // for (let i = 0; i < selectListLength; i++) {
-        //     let obj = {
-        //         productId: query.productId,
-        //     };
-        //     let productMainTagId = 0;
-        //     let productSubTagId = 0;
-        //     let packingAmount = 0;
-        //     console.log(keys);
-        // }
+        const addCarts = [];
+        for (let list of selectArr) {
+            const obj = {
+                productId: query.productId,
+                productMainTagId: Number(list[0]),
+                productSubTagId: Number(list[1]),
+                packingAmount: list[2],
+            };
+            addCarts.push(obj);
+        }
+
         // create arr ############
-        // const token = user.accessToken;
-        // try {
-        //     const params = {
-        //         productId: query.productId,
-        //     };
-        //     await PostHeaderBodyApi('/api/product/addCart', params, 'Authorization', token);
-        //     setModalBasket(true);
-        // } catch (error) {
-        //     console.error(error);
-        // }
-    }, []);
+        const token = user.accessToken;
+        try {
+            const params = {
+                addCarts,
+            };
+            await PostHeaderBodyApi('/api/product/addCart', params, 'Authorization', token);
+            setModalBasket(true);
+        } catch (error) {
+            console.error(error);
+        }
+    }, [selectArr]);
 
     const onCloseModal = useCallback(() => {
         setModalBasket(false);

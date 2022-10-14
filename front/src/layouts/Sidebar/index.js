@@ -69,7 +69,6 @@ const Sidebar = props => {
     const onClickToggle = useCallback(() => {
         setCancel(e => !e);
         Cookies.set('sideBarToggle', !cancel);
-        console.log(cancel);
         const payload = {
             sideBar: !cancel,
         };

@@ -58,9 +58,7 @@ const Order = ({ modal, pay, checkList }) => {
                         // 결제 성공 시 로직,
                         if (productId == undefined) {
                             const data = {
-                                purchasedDataList: [
-                                    checkList
-                                ],
+                                purchasedDataList: [checkList],
                                 MerchantUid: rsp.merchant_uid,
                                 imp_uid: rsp.imp_uid,
                             };
@@ -74,11 +72,19 @@ const Order = ({ modal, pay, checkList }) => {
                             });
                         } else {
                             const data = {
-                                imp_uid: rsp.imp_uid,
-                                Merchant_uid: rsp.merchant_uid,
-                                ProductId: productId,
-                                price,
-                                amount: 2,
+                                authPayment: {
+                                    imp_uid: rsp.imp_uid,
+                                    Merchant_uid: rsp.merchant_uid,
+                                },
+                                orderList: [
+                                    {
+                                        ProductId: '2',
+                                        price: '132100',
+                                        amount: '3',
+                                        ProductMainTagId: '3',
+                                        ProductSubTagId: '4',
+                                    },
+                                ],
                             };
                             PostHeaderBodyApi(
                                 '/api/product/purchase',
