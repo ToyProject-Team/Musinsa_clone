@@ -7,9 +7,7 @@
     <a href="www.naver.com">사이트</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
     <a href="www.naver.com">노션</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
     <a href="www.naver.com">위키</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-    <a href="www.naver.com">PPT</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-    <a href="www.naver.com">개발환경</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-    <a href="www.naver.com">라이브러리</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <a href="www.naver.com">PPT</a>
 </div>
 <div align="center">
     기술 스택 들어갈 예정
