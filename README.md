@@ -2,7 +2,8 @@
 
 # ❓ What is the Musinsa Project?
 
-<h1 align="center">Material Bread</h1>
+<h1 align="center">000 서비스</h1>
+<div align="center"><a href="www.naver.com">hello</a></div>
 
 # ✍ 팀원 소개
 - Ground Rule 작성
