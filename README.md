@@ -1,4 +1,4 @@
-<h1 align="center"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195773693-4b1828da-8903-4b07-9ba6-fcab1e240418.png" alt="Material Bread logo"></h1>
+<h1 align="center"><img src="https://user-images.githubusercontent.com/110218594/195773693-4b1828da-8903-4b07-9ba6-fcab1e240418.png" alt="Material Bread logo"></h1>
 
 # ❓ What is the Musinsa Project?
 
