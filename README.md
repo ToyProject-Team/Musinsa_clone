@@ -8,6 +8,8 @@
     <a href="www.naver.com">노션</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
     <a href="www.naver.com">위키</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
     <a href="www.naver.com">PPT</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <a href="www.naver.com">개발환경</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <a href="www.naver.com">라이브러리</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
 </div>
 <div align="center">
     기술 스택 들어갈 예정
@@ -30,10 +32,10 @@ FrontEnd | FrontEnd | FrontEnd | FrontEnd
 <div align="center">
     
 이민서 | 이준영
---- | ---
+:---: | :---:
 <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a>
 <a href="www.naver.com">git으로 이동하기</a> | 301 
-FrontEnd | FrontEnd 
+BackEnd | BackEnd
  
 </div>
 　
