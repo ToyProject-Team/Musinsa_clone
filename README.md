@@ -4,15 +4,23 @@
 
 <h1 align="center">000 서비스</h1>
 <div align="center">
-    <a href="http://newbiecs.tistory.com/" target="_blank">hello</a><span>&nbsp;|&nbsp;</span>
-    <a href="www.naver.com" target="_blank">hello</a>
+    <a href="www.naver.com">사이트</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <a href="www.naver.com">노션</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <a href="www.naver.com">위키</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <a href="www.naver.com">PPT</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+</div>
+<div align="center">
+    기술 스택 들어갈 예정
+    React, Style-Component, Scss, Context, Axios, useSWR, NodeJs...
 </div>
 
-# ✍ 팀원 소개
-- Ground Rule 작성
-- UI 설계 명세서 작성
-    - **우혁** - 로그인, 회원가입, 마이페이지, 푸터, 다이얼로그, 좋아요 페이지, 상품 상세 페이지
-   
+# ✍ 팀원 소개>
+<div align="center">
+   김우혁 J100_배지호 서경주 이다노
+    img	img	img	img
+    zaehuun	jiho-bae	Dev-Beom	hanbyeol
+    Web Backend	Web Frontend	Web Backend	Web Frontend
+</div>
 　
 # 🤝 회의록
 ### **반응형 진행 방향**
