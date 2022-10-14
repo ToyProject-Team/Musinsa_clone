@@ -26,6 +26,7 @@ import { DeleteHeaderBodyApi, GetTokenApi, PostHeaderBodyApi } from 'utils/api';
 import ConfirmModal from 'components/Modals/ConfirmModal';
 import OrderModal from 'components/Modals/OrderModal';
 import Cookies from 'js-cookie';
+import { useMemo } from 'react';
 
 const PurchaseForm = () => {
     const navigate = useNavigate();
@@ -44,7 +45,10 @@ const PurchaseForm = () => {
     const [option, setOption] = useState({});
     const [selectList, setSelectList] = useState({});
     const [selectIdx, setSelectIdx] = useState();
+
     const [firstSelectId, setFirstSelectId] = useState();
+    const [selectArr, setSelectArr] = useState([]);
+
     const [totalPrice, setTotalPrice] = useState(0);
 
     const [pay, setPay] = useState('card');
@@ -119,42 +123,42 @@ const PurchaseForm = () => {
                 : objData.length - 1;
             let inifFlag = false;
 
+            // 첫번째 옵션 눌렀다면?
             if (index === 0) {
                 optionListInit();
                 setSelectIdx(optionData[name].map(v => v.split('/')[0]).indexOf(value));
                 setFirstSelectId(selectedValue);
             }
 
+            // 마지막 옵션 눌렀다면?
             if (index === lastOptionIndex && value !== '옵션 선택') {
-                // 마지막 옵션 눌렀다면?
-                if (objData.length === Number(name.replace('option', ''))) {
-                    const key = option[0][objData[0]];
-                    const nowValue = value;
-                    const oldValue = selectList[key];
-                    let flag = false;
+                const overlap = selectArr
+                    .map(v => v[5] === `${firstSelectId}/${selectedValue}`)
+                    .includes(true);
+                if (overlap) return alert('중복된 상품이 있습니다.');
 
-                    if (value.includes('품절')) return alert('이미 품절된 상품입니다.');
+                const key = option[0][objData[0]];
+                const nowValue = value;
+                let flag = false;
 
-                    if (objData.length > 1) {
-                        // 옵션이 2개 이상일 경우
-                        selectList[key]?.map(v => {
-                            if (Object.keys(v)[0] === nowValue) flag = true;
-                        });
-                        if (flag) return alert('이미 선택한 상품입니다.');
+                if (value.includes('품절')) return alert('이미 품절된 상품입니다.');
 
-                        // 이곳부터 진행
-                        console.log(firstSelectId, selectedValue);
-                        setSelectList(prev => {
-                            return {
-                                ...prev,
-                                [key]: oldValue
-                                    ? [...oldValue, { [nowValue]: 1 }]
-                                    : [{ [nowValue]: 1 }],
-                            };
-                        });
-                        inifFlag = true;
-                    }
-                }
+                if (flag) return alert('이미 선택한 상품입니다.');
+
+                // 이곳부터 진행
+                setSelectArr(prev => [
+                    ...prev,
+                    [
+                        firstSelectId,
+                        selectedValue,
+                        1,
+                        key,
+                        nowValue,
+                        `${firstSelectId}/${selectedValue}`,
+                    ],
+                ]);
+
+                inifFlag = true;
             }
             setOption(prev => {
                 prev[index][name] = value;
@@ -166,84 +170,56 @@ const PurchaseForm = () => {
                 setSelectIdx(-1);
             }
         },
-        [option, selectList],
+        [option, selectArr],
     );
 
     const onClickIncrease = useCallback(
-        (option_1, option_2) => {
-            setSelectList(prev => {
-                prev = {
-                    ...prev,
-                    [option_1]: prev[option_1].map(v =>
-                        v[option_2]
-                            ? {
-                                  ...v,
-                                  [option_2]:
-                                      v[option_2] ===
-                                      Number(
-                                          option_2.slice(
-                                              option_2.indexOf('(') + 1,
-                                              option_2.indexOf('개남음'),
-                                          ),
-                                      )
-                                          ? (alert('상품을 추가하실수 없습니다.'), v[option_2])
-                                          : v[option_2] + 1,
-                              }
-                            : v,
-                    ),
-                };
-                return prev;
-            });
+        idx => {
+            const reg = /[^0-9]/g;
+            const maxCount = selectArr[idx][4].replace(reg, '');
+            const nowCount = selectArr[idx][2];
+
+            if (Number(maxCount) === nowCount) return alert('더이상 수량을 추가할 수 없습니다.');
+
+            setSelectArr(
+                selectArr.map((v, i) => {
+                    if (idx === i) {
+                        v[2] += 1;
+                    }
+                    return v;
+                }),
+            );
         },
-        [selectList],
+        [selectArr],
     );
 
     const onClickDecrease = useCallback(
-        (option_1, option_2) => {
-            setSelectList(prev => {
-                prev = {
-                    ...prev,
-                    [option_1]: prev[option_1].map(v =>
-                        v[option_2] ? { ...v, [option_2]: v[option_2] - 1 } : v,
-                    ),
-                };
-                return prev;
-            });
+        idx => {
+            setSelectArr(
+                selectArr.map((v, i) => {
+                    if (idx === i) {
+                        v[2] -= 1;
+                    }
+                    return v;
+                }),
+            );
         },
-        [selectList],
+        [selectArr],
     );
 
     const onClickRemove = useCallback(
-        (option_1, option_2) => {
-            setSelectList(prev => {
-                prev = {
-                    ...prev,
-                    [option_1]: prev[option_1].filter(v => !v[option_2]),
-                };
-
-                if (prev[option_1].length === 0) delete prev[option_1];
-
-                return prev;
-            });
+        idx => {
+            setSelectArr(selectArr.filter((v, i) => i !== idx));
         },
-        [selectList],
+        [selectArr],
     );
 
-    useEffect(() => {
-        let answer = 0;
-        if (Object.keys(selectList).length > 0) {
-            answer = Object.values(selectList)
-                ?.map(v =>
-                    v.map(item => {
-                        return Number(Object.values(item)[0]);
-                    }),
-                )
-                .flat(Infinity)
-                .reduce((a, b) => a + b);
-        }
-
-        setTotalPrice(answer);
-    }, [selectList]);
+    const TotalPr = useMemo(() => {
+        return selectArr.length > 0
+            ? selectArr?.map(v => Number(v[2]))?.reduce((a, b) => a + b) *
+                  detail.product.rookiePrice
+            : 0;
+    }, [selectArr]);
 
     // 좋아요
     const onLikeClicked = useCallback(async () => {
@@ -297,16 +273,13 @@ const PurchaseForm = () => {
         //     Cookies.set('redirect', pathname + search);
         //     navigate(`/login`);
         // }
-
         // create arr ############
         // const addCarts = [];
         // let selectListLength = 0;
         // const keys = Object.keys(selectList);
-
         // for (let i = 0; i < keys.length; i++) {
         //     selectListLength += selectList[keys[i]].length;
         // }
-
         // for (let i = 0; i < selectListLength; i++) {
         //     let obj = {
         //         productId: query.productId,
@@ -314,14 +287,10 @@ const PurchaseForm = () => {
         //     let productMainTagId = 0;
         //     let productSubTagId = 0;
         //     let packingAmount = 0;
-
         //     console.log(keys);
         // }
-        console.log(selectList);
         // create arr ############
-
         // const token = user.accessToken;
-
         // try {
         //     const params = {
         //         productId: query.productId,
@@ -331,7 +300,7 @@ const PurchaseForm = () => {
         // } catch (error) {
         //     console.error(error);
         // }
-    }, [selectList]);
+    }, []);
 
     const onCloseModal = useCallback(() => {
         setModalBasket(false);
@@ -349,13 +318,13 @@ const PurchaseForm = () => {
         if (!user) {
             const { pathname, search } = location;
             Cookies.set('redirect', pathname + search);
-            navigate(`/login`);
+            return navigate(`/login`);
         }
 
-        if (Object.keys(selectList).length === 0) return alert('구매하실 상품이 없습니다.');
+        if (selectArr.length === 0) return alert('구매하실 상품이 없습니다.');
 
         setModalOrder(true);
-    }, [selectList]);
+    }, [selectArr]);
 
     // 결제
     const onClickOrder = useCallback(() => {
@@ -368,6 +337,10 @@ const PurchaseForm = () => {
         setModalOrder(false);
         setOrder(true);
     }, []);
+
+    useEffect(() => {
+        console.log('Fruit', selectArr);
+    }, [selectArr]);
 
     return (
         <div>
@@ -416,50 +389,48 @@ const PurchaseForm = () => {
                 })}
             </FormWrapper>
 
-            {Object.keys(selectList)?.map((option_1, idx) => {
-                return selectList[option_1].map(item => {
-                    const option_2 = Object.keys(item)[0];
-                    const orderCount = item[option_2];
+            {selectArr?.map((select, idx) => {
+                const count = select[2];
+                const option_1 = select[3];
+                const option_2 = select[4];
 
-                    return (
-                        <div key={option_1 + option_2}>
-                            <SelectedOption>
-                                <div>
-                                    {option_1}/{option_2}
-                                </div>
-                                <div>
-                                    <ul>
-                                        <Decrease
-                                            orderAmount={orderCount}
-                                            onClick={() =>
-                                                orderCount > 1
-                                                    ? onClickDecrease(option_1, option_2)
-                                                    : alert('더이상 수량을 줄일 수 없습니다.')
-                                            }
-                                        >
-                                            -
-                                        </Decrease>
-                                        <li>{orderCount}</li>
-                                        <li onClick={() => onClickIncrease(option_1, option_2)}>
-                                            +
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <div>
-                                        {thousandComma(orderCount * detail.product.rookiePrice)}원
-                                    </div>
-                                    <p onClick={() => onClickRemove(option_1, option_2)}>X</p>
-                                </div>
-                            </SelectedOption>
-                        </div>
-                    );
-                });
+                const reg = /[^0-9]/g;
+                const max = option_2.replace(reg, '');
+
+                return (
+                    <div key={option_1 + option_2}>
+                        <SelectedOption>
+                            <div>
+                                {option_1}/{option_2}
+                            </div>
+                            <div>
+                                <ul>
+                                    <Decrease
+                                        orderAmount={count}
+                                        onClick={() =>
+                                            count > 1
+                                                ? onClickDecrease(idx)
+                                                : alert('더이상 수량을 줄일 수 없습니다.')
+                                        }
+                                    >
+                                        -
+                                    </Decrease>
+                                    <li>{count}</li>
+                                    <li onClick={() => onClickIncrease(idx)}>+</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div>{thousandComma(count * detail.product.rookiePrice)}원</div>
+                                <p onClick={() => onClickRemove(idx)}>X</p>
+                            </div>
+                        </SelectedOption>
+                    </div>
+                );
             })}
 
             <TotalPrice>
                 <p>총 상품 금액</p>
-                <div>{thousandComma(totalPrice * detail.product.rookiePrice)}원</div>
+                <div>{thousandComma(TotalPr)}원</div>
             </TotalPrice>
             <ButtonWrapper>
                 <ButtonBuy onClick={onClickOrderButton}>바로구매</ButtonBuy>
