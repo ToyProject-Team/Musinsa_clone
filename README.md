@@ -1,6 +1,10 @@
-# 📝 오늘 한 일
+로고 예정
 
-### ✍ Plan
+# ❓ What is the Musinsa Project?
+
+<h1 align="center">Material Bread</h1>
+
+# ✍ 팀원 소개
 - Ground Rule 작성
 - UI 설계 명세서 작성
     - **우혁** - 로그인, 회원가입, 마이페이지, 푸터, 다이얼로그, 좋아요 페이지, 상품 상세 페이지
