@@ -13,6 +13,9 @@
     기술 스택 들어갈 예정
     React, Style-Component, Scss, Context, Axios, useSWR, NodeJs...
 </div>
+<div align="center">
+    > 프로젝트 소개
+</div>
 
 # ✍ 팀원 소개>
 <div align="center">
@@ -24,21 +27,13 @@
     
 </div>
 　
-# 🤝 회의록
-### **반응형 진행 방향**
-- 반응형 진행 x
-- desktop 버전으로 진행
-- 추후에 제작 기간 고려하여 반응형 진행
-   
-　
-# 📌 진행 Project
-### 🖍 **우혁**
-- 푸터
-- 다이얼로그
-- 좋아요
-- 상품 상세
-- 로그인
-- 회원 가입
-- 마이페이지
-   
+# 🛠 기술적 도전
+<details>
+<summary>토글버튼 도저언</summary>
+<div markdown="1">
+
+안녕
+
+</div>
+</details>
 　
