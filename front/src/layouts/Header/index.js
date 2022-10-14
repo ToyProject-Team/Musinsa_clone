@@ -20,6 +20,7 @@ import FirstModal from 'components/Modals/FirstModal';
 import { AiOutlineCamera } from '@react-icons/all-files/ai/AiOutlineCamera';
 import { AiOutlineSearch } from '@react-icons/all-files/ai/AiOutlineSearch';
 import { IoMdArrowDropup } from '@react-icons/all-files/io/IoMdArrowDropup';
+import { FaCommentsDollar } from 'react-icons/fa';
 
 const Header = props => {
     const location = useLocation();
@@ -36,7 +37,7 @@ const Header = props => {
     }, []);
 
     //알림 추가, 더미데이터
-    // const [noticeList, setNoticeList] = useState([]);
+    const [noticeList, setNoticeList] = useState([]);
 
     const dummyData = {
         id: 0,
@@ -67,12 +68,15 @@ const Header = props => {
         PostQueryApi(`/api/product/productList`).catch(() => {
             setModalFirst(true);
         });
-
-        //알림창에 넣을 orderLsit 호출
-        // GetTokenApi('/api/order/orderList', token).then(res => {
-        //     console.log(res.data);
-        // });
     }, []);
+
+    useEffect(() => {
+        GetTokenApi('/api/order/orderList', token).then(res => {
+            setNoticeList(res.data);
+        });
+        // console.log(noticeList[0].Product.productTitle);
+        // console.log(noticeList[0].Product.ProductImg.src);
+    }, [notice]);
 
     const { data: shoppingNumber, mutate } = useSWR(
         token ? '/api/shoppingBasket/shoppingList' : null,
@@ -162,6 +166,14 @@ const Header = props => {
                 console.log(err);
             });
     }, [login]);
+
+    // const onClickNotice = () => {
+    //     setNotice(!notice);
+    //     //알림창에 넣을 orderLsit 호출
+    //     GetTokenApi('/api/order/orderList', token).then(res => {
+    //         setNoticeList(res.data);
+    //     });
+    // };
 
     return (
         <>
@@ -253,15 +265,26 @@ const Header = props => {
                                     <CountNum>{shoppingNumber ? 'N' : 0}</CountNum>
                                 </div>
                                 <article className={notice ? 'block' : 'none'}>
-                                    <p>{dummyData.Product.ProductImg.src}</p>
-                                    <p>{dummyData.Product.productTitle}</p>
-                                    <p>{dummyData.ProductMainTag.name}</p>
-                                    {/* <p>
-                                        PC에서는 공지, 구매 정보 알림만 확인하실 수 있습니다. <br />
-                                        그 외 알림은 앱에서 확인 가능합니다.
-                                    </p>
-                                    <p>등록된 알림이 없습니다.</p> */}
-
+                                    {noticeList ? (
+                                        noticeList?.map((data, idx) => {
+                                            <div>
+                                                {/* <p>
+                                                    <img
+                                                        src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.Product.ProductImg.src}`}
+                                                    />
+                                                </p> */}
+                                                <p>{data.Product.productTitle}</p>
+                                            </div>;
+                                        })
+                                    ) : (
+                                        <>
+                                            <p>
+                                                PC에서는 공지, 구매 정보 알림만 확인하실 수
+                                                있습니다. <br />그 외 알림은 앱에서 확인 가능합니다.
+                                            </p>
+                                            <p>등록된 알림이 없습니다.</p>
+                                        </>
+                                    )}
                                     <span>
                                         <IoMdArrowDropup />
                                     </span>

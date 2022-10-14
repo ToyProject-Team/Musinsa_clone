@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
 
 export const ListWrapper = styled.ul`
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(154px, auto));
+    grid-template-rows: repeat(auto-fill, minmax(100px, auto));
     width: 100%;
 `;
 
@@ -15,21 +18,21 @@ export const ListOuter = styled.li`
     border-bottom: 1px solid #ddd;
     box-sizing: border-box;
 
-    @media only screen and (min-width: 0) {
-        width: 25% !important;
-    }
+    // @media only screen and (min-width: 0) {
+    //     width: 25% !important;
+    // }
 
-    @media only screen and (min-width: 1200px) {
-        width: 20% !important;
-    }
+    // @media only screen and (min-width: 1200px) {
+    //     width: 20% !important;
+    // }
 
     // @media only screen and (min-width: 1200px) {
     // 	width: 16.66666667% !important;
     // }
 
-    @media only screen and (min-width: 1700px) {
-        width: 14.2857143% !important;
-    }
+    // @media only screen and (min-width: 1700px) {
+    //     width: 14.2857143% !important;
+    // }
 
     &:hover {
         background-color: #f2f2f2;
