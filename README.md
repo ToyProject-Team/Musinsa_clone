@@ -4,7 +4,7 @@
 
 <h1 align="center">000 서비스</h1>
 <div align="center">
-    <a href="www.naver.com" target="_blank">hello</a><span>&nbsp;|&nbsp;</span>
+    <a href="http://newbiecs.tistory.com/" target="_blank">hello</a><span>&nbsp;|&nbsp;</span>
     <a href="www.naver.com" target="_blank">hello</a>
 </div>
 
