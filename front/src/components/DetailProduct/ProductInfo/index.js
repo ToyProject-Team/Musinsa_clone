@@ -19,26 +19,32 @@ const dummyImage = {
         {
             id: 0,
             src: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff',
+            preload: true,
         },
         {
             id: 1,
             src: 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2',
+            preload: false,
         },
         {
             id: 2,
             src: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa',
+            preload: false,
         },
         {
             id: 3,
             src: 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519',
+            preload: false,
         },
         {
             id: 4,
             src: 'https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717',
+            preload: false,
         },
         {
             id: 5,
             src: 'https://images.unsplash.com/photo-1576672843344-f01907a9d40c',
+            preload: false,
         },
     ],
 };
