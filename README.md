@@ -27,17 +27,14 @@
 FrontEnd | FrontEnd | FrontEnd | FrontEnd
  
 </div>
-
-
 <div align="center">
     
-
-이민서 | 이준영
+송민지 | 서경주 | 김우혁 | 이다노 
 --- | --- | --- | --- 
-<a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a>
-<a href="www.naver.com">git으로 이동하기</a> | <a href="www.naver.com">git으로 이동하기</a> 
-BackEnd | BackEnd
-    
+<a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> 
+<a href="www.naver.com">git으로 이동하기</a> | 301 | 283 | 290 
+FrontEnd | FrontEnd | FrontEnd | FrontEnd
+ 
 </div>
 　
  
