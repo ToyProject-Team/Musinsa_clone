@@ -33,8 +33,10 @@
     <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=Node.js&logoColor=white"/>
     <p>배지 크기는 이렇게 두가지로 할 수 있는데, Scss(Sass만 있음), useContex, useSWR 은 배지가 따로 없 </p>
 </div>
+
+# 프로젝트 소개
 <div align="center">
-    프로젝트 소개
+    로그인, 상품 검색 및 정렬, 장바구니 기능, 상품 결제 및 결제취소 등<br>전반적인 쇼핑몰의 구성부터 기능까지 무신사 클론코딩을 통해 구현해 보았습니다.
 </div>
 
 # ✍ 팀원 소개
