@@ -1381,6 +1381,12 @@ components:
             src:
               type: string
               example: Accessory/Accessory23
+        SmallCategoryId:
+          type: number
+          example: 1
+        BigCategoryId:
+          type: number
+          example: 1
         ProductMainTags:
           type: array
           items:

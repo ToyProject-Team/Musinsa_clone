@@ -13,11 +13,6 @@ const axios = require('axios');
 const { Order, MyCart } = require('../models');
 const router = express.Router();
 
-function checkParams(bigCategory, price) {
-    if (!bigCategory) {
-    }
-}
-
 require('dotenv');
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY,
