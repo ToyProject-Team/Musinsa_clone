@@ -32,13 +32,7 @@
     
 <h3>🧪테스트 아이디</h3>
     
-    <table>
-        <tr>
-            <th>hello</th>
-        </tr>
-    </table>
-    
-| <td backgroun="red">아이디</td> | 비밀번호 |
+| 아이디 | 비밀번호 |
 |:-:|:-:|
 | test | test |
     
