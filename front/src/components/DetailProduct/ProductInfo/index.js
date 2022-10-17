@@ -73,7 +73,7 @@ const ProductInfo = () => {
             </TitleBox>
             <ImageInfo clicked={buttonClick}>
                 {dummyImage.dummyImage.map(image => (
-                    <ProductInfoImageList image={image} />
+                    <ProductInfoImageList key={image.id} image={image} />
                 ))}
             </ImageInfo>
             <ButtonWrapper onClick={() => setButtonClick(!buttonClick)}>
