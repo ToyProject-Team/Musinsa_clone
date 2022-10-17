@@ -35,9 +35,10 @@
     <p>useSWR 은 배지가 따로 없음</p>
     
     
-| One    | Two | Three | Four    | Five  | Six
-|-|-|-|-|-|-
-| Span <td colspan=3>triple  <td colspan=2>double
+| <td colspan=2>테스트아이디 |
+|-|-|
+| 아이디 | 비밀번호 |
+| test | test |
     
     
 </div>
