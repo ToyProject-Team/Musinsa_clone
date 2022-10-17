@@ -7,12 +7,10 @@ const Comment = require('../models/comment');
 const ProductMainTag = require('../models/productMainTag');
 const ProductSubTag = require('../models/productSubTag');
 const AWS = require('aws-sdk');
-const fs = require('fs');
 const { sequelize, Op, Sequelize } = require('sequelize');
 const authJWT = require('../utils/middlewares/authJWT');
 const axios = require('axios');
 const { Order, MyCart } = require('../models');
-const { title } = require('process');
 const router = express.Router();
 
 function checkParams(bigCategory, price) {
