@@ -711,6 +711,11 @@ paths:
       summary: 상품 리스트
       parameters:
         - in: query
+          name: productTitle
+          schema:
+            type: string
+          description: '제품 이름 검색용 쿼리입니다. 제품 이름의 부분을 검색합니다. <br>`다중 검색 쿼리를 사용하려면 ,를 사용하세요 "Shirt,Red"`'
+        - in: query
           name: mainSort
           schema:
             type: integer
@@ -1223,10 +1228,10 @@ paths:
                       type: number
                       example: 3
               merchant_uid:
-                type: number
+                type: string
                 example: 4234234
               imp_uid:
-                type: number
+                type: string
                 example: 1244
       responses:
         '200':
@@ -1376,6 +1381,12 @@ components:
             src:
               type: string
               example: Accessory/Accessory23
+        SmallCategoryId:
+          type: number
+          example: 1
+        BigCategoryId:
+          type: number
+          example: 1
         ProductMainTags:
           type: array
           items:

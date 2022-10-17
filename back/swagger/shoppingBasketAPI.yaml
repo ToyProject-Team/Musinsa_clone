@@ -127,10 +127,10 @@
                                       type: number
                                       example: 3
                       merchant_uid:
-                          type: number
+                          type: string
                           example: 4234234
                       imp_uid:
-                          type: number
+                          type: string
                           example: 1244
         responses:
             200:

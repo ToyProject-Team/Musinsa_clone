@@ -56,6 +56,8 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
                         'productPrice',
                         'likes',
                         'comments',
+                        'SmallCategoryId',
+                        'BigCategoryId',
                     ],
 
                     include: [

@@ -596,10 +596,22 @@ router.post('/checkIsLoginIdCheckUser', (req, res, next) => {
 });
 
 router.post('/getUserData', authJWT, async (req, res, next) => {
-    const ALLOWED_KEYS = ['address'];
+    const ALLOWED_KEYS = [
+        'address',
+        'loginId',
+        'email',
+        'password',
+        'nickname',
+        'phoneNumber',
+        'socialEmail',
+        'rank',
+        'recipientNumber',
+        'recipient',
+        'addressNumber',
+    ];
 
     try {
-        const keys = req.body.keys;
+        const { keys } = req.body;
 
         // 모든 키값 중 하나라도 ALLOWED_KEYS 값에 없다면 에러
         if (
@@ -610,6 +622,12 @@ router.post('/getUserData', authJWT, async (req, res, next) => {
         ) {
             res.status(400).send({
                 message: `허용되지 않은 key값을 요청할 수 없습니다. 허용되는 키값: [${ALLOWED_KEYS}]`,
+            });
+        }
+
+        if (keys && keys.length == 0) {
+            res.status(401).send({
+                message: `keys값이 아무것도 없습니다. key값을 넣어주세요. 허용되는 키값: [${ALLOWED_KEYS}]`,
             });
         }
 
