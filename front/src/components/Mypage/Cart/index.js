@@ -16,7 +16,7 @@ import fetcher from 'utils/fetcher';
 function Cart() {
     const [cartList, setCartList] = useState([]);
     const loginToken = getData().accessToken;
-    // console.log(loginToken);
+    console.log(getData());
 
     //장바구니 리스트 가져오기
     useEffect(() => {
@@ -45,7 +45,7 @@ function Cart() {
             '/api/shoppingBasket/del',
             params,
             'Authorization',
-            loginToken.accessToken,
+            loginToken,
         )
             .then(res => {
                 const deleteList = cartList.filter(prev => prev.id !== id);

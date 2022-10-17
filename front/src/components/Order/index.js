@@ -56,6 +56,7 @@ const Order = ({ modal, pay, checkList }) => {
                     // callback
                     if (rsp.success) {
                         // 결제 성공 시 로직,
+                        console.log(rsp.merchant_uid , rsp.imp_uid);
                         if (productId == undefined) {
                             const data = {
                                 purchasedDataList: [

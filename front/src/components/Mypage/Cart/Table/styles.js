@@ -67,4 +67,19 @@ export const CheckLabel = styled.label`
             box-sizing: border-box;
         }
     }
+
+    &.sold {
+        &::before{
+            position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 15px;
+        height: 15px;
+        border: 1px solid #bbb;
+        border-radius: 100%;
+        background-color: #ccc;
+        content: '';
+        }
+    }
 `;

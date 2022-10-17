@@ -14,7 +14,7 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
     const [pay, setPay] = useState('card');
     const [order, setOrder] = useState(false);
     const id = item.id;
-    const amountValue = item.ProductSubTag.amount== 0 ? 0 : item.packingAmount ;
+    const amountValue = item.ProductSubTag.amount == 0 ? 0 : item.packingAmount;
 
     // 수량 기입
     const handleChange = useCallback(
@@ -48,7 +48,9 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
 
     // 체크
     const checkItem = useCallback(() => {
-        setCartList(prev => prev.map(v => (v.id === item.id ? { ...v, check: !v.check } : v)));
+        item.ProductSubTag.amount > 0
+            ? setCartList(prev => prev.map(v => (v.id === item.id ? { ...v, check: !v.check } : v)))
+            : setCartList(cartList);
     }, [cartList]);
 
     // 삭제
@@ -98,13 +100,17 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
                                                 ? item.check
                                                     ? 'active'
                                                     : ''
-                                                : ''
+                                                : 'sold'
                                         }
                                     ></CheckLabel>
                                 </td>
                                 <td className="top">
                                     <div>
-                                        <ImgSpan>
+                                        <ImgSpan
+                                            className={
+                                                item.ProductSubTag.amount === 0 ? 'soldout' : ''
+                                            }
+                                        >
                                             <a href={`/detail?productId=${item.Product.id}`}>
                                                 <img
                                                     src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${item.Product.ProductImg.src}`}
@@ -114,7 +120,10 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
                                         </ImgSpan>
                                         <ItemUl>
                                             <li>
-                                                <a href="/"> 청바지 </a>
+                                                <a href={`/detail?productId=${item.Product.id}`}>
+                                                    {' '}
+                                                    청바지{' '}
+                                                </a>
                                                 {/* <a href="/"> {smallCategory[item.bigCategory][item.smallCategory]}</a> */}
                                             </li>
                                             <li>
@@ -138,7 +147,7 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
                                         <button value={1} onClick={minusCount}>
                                             <FiMinus
                                                 style={
-                                                    item.packingAmount === 1
+                                                    amountValue <= 1
                                                         ? { color: '#ddd' }
                                                         : { color: '#777' }
                                                 }
@@ -150,14 +159,17 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
                                             onChange={handleChange}
                                         ></input>
                                         <button value={1} onClick={plusCount}>
-                                            <FiPlus style={{ color: '#777' }} />
+                                            <FiPlus
+                                                style={
+                                                    amountValue === 0
+                                                        ? { color: '#ddd' }
+                                                        : { color: '#777' }
+                                                }
+                                            />
                                         </button>
                                     </div>
                                 </td>
-                                <td>
-                                    {thousandComma(item.Product.productPrice * amountValue)}
-                                    원
-                                </td>
+                                <td>{thousandComma(item.Product.productPrice * amountValue)}원</td>
                                 <td>
                                     택배배송 <br />
                                     <strong>
