@@ -32,15 +32,13 @@
     <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white"/>   
     <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white"/>
     <img src="https://img.shields.io/badge/useContext-764ABC?style=for-the-badge&logoColor=white"/>
-    <p>useSWR 은 배지가 따로 없 </p>
+    <p>useSWR 은 배지가 따로 없음</p>
     
     
-    <div align="center">
-    테스트 아이디
+    테스트 아이디|ㅇ
     :---: | :---: 
     아이디 | 비밀번호
     test | test
-    </div>
     
     
 </div>
