@@ -35,9 +35,10 @@
     <p>useSWR 은 배지가 따로 없음</p>
     
     
-| Sloth name   | Sloth colors | Sloth powers |
-| ------------ | ------------ | ------------ |
-| Stormy       | Gray         | Wind         |
+| 테스트 아이디                    |
+| :------------: | :------------: |
+| 아이디         | 패스워드        |
+| test           | test           |
     
     
 </div>
