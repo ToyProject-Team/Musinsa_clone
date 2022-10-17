@@ -42,6 +42,13 @@ Span <td colspan=3>triple  <td colspan=2>double
     
 </div>
 
+
+
+One    | Two | Three | Four    | Five  | Six
+-|||||-
+Span <td colspan=3>triple  <td colspan=2>double
+    
+
 # 💻프로젝트 소개
 <div align="center">
     로그인, 상품 검색 및 정렬, 장바구니 기능, 상품 결제 및 결제취소 등<br>전반적인 쇼핑몰의 구성부터 기능까지 무신사 클론코딩을 통해 구현해 보았습니다.
