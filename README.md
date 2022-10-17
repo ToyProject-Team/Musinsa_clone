@@ -10,10 +10,6 @@
 <br />
 <div align="center"><img src="https://user-images.githubusercontent.com/110218594/195773693-4b1828da-8903-4b07-9ba6-fcab1e240418.png" alt="Material Bread logo"></div>
 
-# 테스트 아이디
-<h3>testId: test</h3>
-<h3>testPw: test</h3>
-
 <h1 align="center">무신사 클론 쇼핑몰 서비스</h1>
 <div align="center">
     <a href="www.naver.com">사이트</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
@@ -35,9 +31,8 @@
     <p>useSWR 은 배지가 따로 없음</p>
     
     
-| <td colspan=2>테스트아이디 |
-|-|-|
 | 아이디 | 비밀번호 |
+|:-:|:-:|
 | test | test |
     
     
