@@ -1,9 +1,3 @@
-<style>
-td, th {
-   border: none!important;
-}
-</style>
-
 <h1>🛠 현재 백엔드 수정 작업 진행중</h1>
 <h3>1. 상세페이지 장바구니</h3>
 <h3>2. 상세페이지 구매</h3>
@@ -45,7 +39,6 @@ td, th {
     
 </div>
 
-
 # 💻프로젝트 소개
 
 <div align="center">
@@ -54,8 +47,12 @@ td, th {
 
 ### 기능 소개
 
-| <img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%"> | <img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%"> |
-| <img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%"> | <img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%"> |
+<div width="45%">
+    <h1>Blockchain Foundations
+</h1>
+    <h3>블록체인을 만드는 가장 기초 및 핵심 개념을 배웁니다. 블록 (Blocks), 해시 (Hahes), 보안 (Security) 등을 직접 만들어보면서 배우게 됩니다.</h3>
+</div>
+| <img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
 
 > 로그인 페이지에서 소셜로그인, 유효성 검사, 아이디 비밀번호 찾기를 할 수 있어요
 
