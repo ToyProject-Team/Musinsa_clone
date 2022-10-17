@@ -12,6 +12,7 @@ const { sequelize, Op, Sequelize } = require('sequelize');
 const authJWT = require('../utils/middlewares/authJWT');
 const axios = require('axios');
 const { Order, MyCart } = require('../models');
+const { title } = require('process');
 const router = express.Router();
 
 function checkParams(bigCategory, price) {
@@ -28,54 +29,80 @@ const s3 = new AWS.S3({
 
 router.get('/productList', async (req, res, next) => {
     try {
+        let {
+            productTitle,
+            page,
+            mainSort,
+            priceMin,
+            priceMax,
+            price,
+            bigCategoryId,
+            smallCategoryId,
+        } = req.query;
+
+        // 음수 가격 검색 금지
+        if (!priceMin && priceMin < 0) {
+            priceMin = 0;
+        }
+
+        if (price == 1) {
+            priceMin = priceMin ? priceMin : 0;
+            priceMax = priceMax ? priceMax : 50000;
+        } else if (price == 2) {
+            priceMin = priceMin ? priceMin : 50000;
+            priceMax = priceMax ? priceMax : 100000;
+        } else if (price == 3) {
+            priceMin = priceMin ? priceMin : 100000;
+            priceMax = priceMax ? priceMax : 200000;
+        } else if (price == 4) {
+            priceMin = priceMin ? priceMin : 200000;
+            priceMax = priceMax ? priceMax : 300000;
+        } else if (price) {
+            priceMin = priceMin ? priceMin : 300000;
+        }
+
         const startIndx =
-            req.query.page == undefined || req.query.page <= 0
-                ? 0
-                : (Number(req.query.page) - 1) * 100;
-        console.log(req.query);
+            page == undefined || page <= 0 ? 0 : (Number(page) - 1) * 100;
 
-        let whereStatement = {
-            productPrice: {
-                [Op.between]: [
-                    req.query.priceMin
-                        ? Number(req.query.priceMin)
-                        : req.query.price
-                        ? req.query.price == 1
-                            ? 0
-                            : req.query.price == 2
-                            ? 50000
-                            : req.query.price == 3
-                            ? 100000
-                            : req.query.price == 4
-                            ? 200000
-                            : 300000
-                        : 0,
-                    req.query.priceMax
-                        ? Number(req.query.priceMax)
-                        : req.query.price
-                        ? req.query.price == 1
-                            ? 50000
-                            : req.query.price == 2
-                            ? 100000
-                            : req.query.price == 3
-                            ? 200000
-                            : req.query.price == 4
-                            ? 300000
-                            : 700000
-                        : 700000,
-                ],
-            },
-        };
+        let whereStatement = {};
 
-        if (req.query.bigCategoryId) {
-            whereStatement.bigCategoryId = {
-                [Op.eq]: Number(req.query.bigCategoryId),
+        if (priceMin || priceMax) {
+            let statements = [];
+
+            if (priceMin) {
+                statements.push({ [Op.gte]: priceMin });
+            }
+
+            if (priceMax) {
+                statements.push({ [Op.lte]: priceMax });
+            }
+
+            whereStatement.productPrice = {
+                [Op.and]: statements,
             };
         }
 
-        if (req.query.smallCategoryId) {
+        if (productTitle) {
+            let titles = productTitle.split(',');
+
+            whereStatement.productTitle = {
+                [Op.and]: titles.map((title) => {
+                    return {
+                        [Op.like]: `%${title}%`,
+                    };
+                }),
+            };
+        }
+
+        if (bigCategoryId) {
+            whereStatement.bigCategoryId = {
+                [Op.eq]: Number(bigCategoryId),
+            };
+        }
+
+        if (smallCategoryId) {
             whereStatement.smallCategoryId = {
-                [Op.eq]: Number(req.query.smallCategoryId),
+                [Op.eq]: Number(smallCategoryId),
             };
         }
 
@@ -95,17 +122,16 @@ router.get('/productList', async (req, res, next) => {
                         model: ProductSubTag,
                         attributes: ['name', 'amount'],
                     },
-                    // attributes: ["src"]
                 },
             ],
             order: [
-                req.query.mainSort == 1
+                mainSort == 1
                     ? ['productPrice', 'ASC']
-                    : req.query.mainSort == 2
+                    : mainSort == 2
                     ? ['productPrice', 'DESC']
-                    : req.query.mainSort == 3
+                    : mainSort == 3
                     ? ['comments', 'DESC']
-                    : req.query.mainSort == 4
+                    : mainSort == 4
                     ? ['comments', 'ASC']
                     : ['id', 'ASC'],
             ],
@@ -393,27 +419,29 @@ router.post('/purchase', authJWT, async (req, res, next) => {
         // 결제 검증하기
         const { amount, status } = paymentData;
 
-        let priceSum = 0
+        let priceSum = 0;
         for (i = 0; i < orderList.length; i++) {
-            priceSum += Number(req.body.orderList[i].price)
+            priceSum += Number(req.body.orderList[i].price);
         }
 
         if (amount != priceSum) {
             return res.status(405).send({ message: '위조된 결제 시도입니다' });
         }
 
-        for (i = 0 ; i < req.body.orderList.length; i++) {
+        for (i = 0; i < req.body.orderList.length; i++) {
             const isExistedOrder = await Order.findOne({
                 where: {
                     UserId: req.myId,
                     ProductId: req.body.orderList[i].ProductId,
                     ProductMainTagId: req.body.orderList[i].ProductMainTagId,
-                    ProductSubTagId: req.body.orderList[i].ProductSubTagId
+                    ProductSubTagId: req.body.orderList[i].ProductSubTagId,
                 },
             });
             // console.log(isExistedOrder)
             if (isExistedOrder) {
-                return res.status(407).send({ message: '이미 접수된 주문입니다' });
+                return res
+                    .status(407)
+                    .send({ message: '이미 접수된 주문입니다' });
             }
             await Order.create({
                 UserId: req.myId,
@@ -425,7 +453,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
                 cancelableAmount: req.body.orderList[i].price,
                 ImpUid: imp_uid,
                 ProductMainTagId: req.body.orderList[i].ProductMainTagId,
-                ProductSubTagId: req.body.orderList[i].ProductSubTagId
+                ProductSubTagId: req.body.orderList[i].ProductSubTagId,
             });
         }
         res.status(200).send({ message: '일반 결제 성공' });
@@ -437,11 +465,10 @@ router.post('/purchase', authJWT, async (req, res, next) => {
 
 router.post('/checkAmount', authJWT, async (req, res, next) => {
     try {
-
     } catch (e) {
-        console.error(e)
-        next(e)
+        console.error(e);
+        next(e);
     }
-})
+});
 
 module.exports = router;
