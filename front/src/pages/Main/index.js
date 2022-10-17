@@ -222,15 +222,16 @@ const Main = () => {
     //handleFilter함수 사용해서 쿼리문 추가
     //smallCategoryId추가(중분류)
     const onSort = val => {
-        {
+        if (val > 0) {
             filterVal.bigCategoryId
                 ? handleFilter(val, 'smallCategoryId')
                 : setFilterVal(() => {
                       return { bigCategoryId: 1, smallCategoryId: val };
                   });
+            clickBold();
+        } else {
+            onReset();
         }
-
-        clickBold();
     };
 
     //price추가
@@ -303,7 +304,7 @@ const Main = () => {
     return (
         <>
             <DialLog />
-            <Header />
+            <Header filterVal={filterVal} setFilterVal={setFilterVal} />
             <ScrollContainer>
                 <Sidebar
                     filterVal={filterVal}
@@ -372,15 +373,6 @@ const Main = () => {
                                     </form>
                                 </div>
                             </CategoryName>
-                            <div
-                                className="all_item"
-                                onClick={() => {
-                                    onReset();
-                                }}
-                                style={{ color: 'black', fontWeight: 'bold' }}
-                            >
-                                전체
-                            </div>
                             <div className="all_item_list">
                                 <ul>
                                     {smallCategory[
@@ -390,19 +382,15 @@ const Main = () => {
                                             if (searchInput === '') return val;
                                             else if (val.includes(searchInput)) return val;
                                         })
-                                        .map((data, idx) =>
-                                            idx === 0 ? null : (
-                                                <li
-                                                    className={
-                                                        clickCate[idx] ? 'active' : 'inactive'
-                                                    }
-                                                    onClick={() => onSort(idx)}
-                                                    key={idx}
-                                                >
-                                                    {data}
-                                                </li>
-                                            ),
-                                        )}
+                                        .map((data, idx) => (
+                                            <li
+                                                className={clickCate[idx] ? 'active' : 'inactive'}
+                                                onClick={() => onSort(idx)}
+                                                key={idx}
+                                            >
+                                                {data}
+                                            </li>
+                                        ))}
                                 </ul>
                             </div>
                         </MiddleCategory>
