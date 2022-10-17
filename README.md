@@ -35,18 +35,12 @@
     <p>useSWR 은 배지가 따로 없음</p>
     
     
-One    | Two | Three | Four    | Five  | Six
--|||||-
-Span <td colspan=3>triple  <td colspan=2>double
+| Sloth name   | Sloth colors | Sloth powers |
+| ------------ | ------------ | ------------ |
+| Stormy       | Gray         | Wind         |
     
     
 </div>
-
-
-
-One    | Two | Three | Four    | Five  | Six
--|||||-
-Span <td colspan=3>triple  <td colspan=2>double
     
 
 # 💻프로젝트 소개
