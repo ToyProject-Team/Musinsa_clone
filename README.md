@@ -47,8 +47,7 @@
 
 ### 기능 소개
 
-<span valign="top">Blockchain Foundations</span>
-<img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
+<table><tr><td valign="center"><img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%"> text </td></tr></table>
 
 > 로그인 페이지에서 소셜로그인, 유효성 검사, 아이디 비밀번호 찾기를 할 수 있어요
 
