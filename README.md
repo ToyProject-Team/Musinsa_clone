@@ -18,8 +18,6 @@
     <a href="www.naver.com">PPT</a>
 </div>
 <div align="center">
-    기술 스택 들어갈 예정
-    Scss, Context, useSWR...
     <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white"/>
     <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white"/>
     <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=for-the-badge&logo=Visual Studio Code&logoColor=white"/>
@@ -28,7 +26,9 @@
     <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white"/>   
     <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white"/>
     <img src="https://img.shields.io/badge/useContext-764ABC?style=for-the-badge&logoColor=white"/>
-    <p>useSWR 은 배지가 따로 없음</p>
+    <p>useSWR 은 배지가 따로 없음 / 
+    기술 스택 들어갈 예정
+    Scss, Context, useSWR...</p>
     
 <h3>🧪테스트 아이디</h3>
     
