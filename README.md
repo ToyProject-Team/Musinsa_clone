@@ -10,10 +10,6 @@
 <br />
 <div align="center"><img src="https://user-images.githubusercontent.com/110218594/195773693-4b1828da-8903-4b07-9ba6-fcab1e240418.png" alt="Material Bread logo"></div>
 
-# 테스트 아이디
-<h3>testId: test</h3>
-<h3>testPw: test</h3>
-
 <h1 align="center">무신사 클론 쇼핑몰 서비스</h1>
 <div align="center">
     <a href="www.naver.com">사이트</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
@@ -22,8 +18,6 @@
     <a href="www.naver.com">PPT</a>
 </div>
 <div align="center">
-    기술 스택 들어갈 예정
-    Scss, Context, useSWR...
     <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white"/>
     <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white"/>
     <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=for-the-badge&logo=Visual Studio Code&logoColor=white"/>
@@ -32,12 +26,15 @@
     <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white"/>   
     <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white"/>
     <img src="https://img.shields.io/badge/useContext-764ABC?style=for-the-badge&logoColor=white"/>
-    <p>useSWR 은 배지가 따로 없음</p>
+    <p>useSWR 은 배지가 따로 없음 / 
+    기술 스택 들어갈 예정
+    Scss, Context, useSWR...</p>
     
+<h3>🧪테스트 아이디</h3>
     
-| One    | Two | Three | Four    | Five  | Six
-|-|-|-|-|-|-
-| Span <td colspan=3>triple  <td colspan=2>double
+|:-:|:-:|
+| 아이디 | 비밀번호 |
+| test | test |
     
     
 </div>
