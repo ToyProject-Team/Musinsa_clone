@@ -25,7 +25,7 @@
 </div>
 <div align="center">
     기술 스택 들어갈 예정
-    React, Style-Component, Scss, Context, Axios, useSWR, NodeJs...
+    Scss, Context, useSWR...
     <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white"/>
     <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white"/>
     <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=for-the-badge&logo=Visual Studio Code&logoColor=white"/>
