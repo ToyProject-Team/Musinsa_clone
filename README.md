@@ -34,10 +34,14 @@
     <img src="https://img.shields.io/badge/useContext-764ABC?style=for-the-badge&logoColor=white"/>
     <p>useSWR 은 배지가 따로 없 </p>
     
+    
+    <div align="center">
     테스트 아이디
     :---: | :---: 
     아이디 | 비밀번호
     test | test
+    </div>
+    
     
 </div>
 
