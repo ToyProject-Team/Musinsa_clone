@@ -14,9 +14,7 @@
 <h3>testId: test</h3>
 <h3>testPw: test</h3>
 
-# ❓ What is the Musinsa Project?
-
-<h1 align="center">000 서비스</h1>
+<h1 align="center">무신사 클론 쇼핑몰 서비스</h1>
 <div align="center">
     <a href="www.naver.com">사이트</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
     <a href="www.naver.com">노션</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
