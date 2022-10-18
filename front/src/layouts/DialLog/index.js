@@ -91,8 +91,8 @@ const DialLog = props => {
                         </button>
                     </Link>
                 </div>
-                <div>
-                    <a title="공유 하기" onClick={() => setModalAuth(e => !e)}>
+                <div onClick={() => setModalAuth(e => !e)}>
+                    <a title="공유 하기">
                         <AiOutlineShareAlt />
                     </a>
                 </div>

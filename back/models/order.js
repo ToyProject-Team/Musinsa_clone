@@ -46,14 +46,29 @@ module.exports = class Order extends Model {
         );
     }
     static associate(db) {
-        db.Order.belongsTo(db.Product, { foreignKey: 'ProductId' });
+        db.Order.belongsTo(db.Product, {
+            foreignKey: {
+                name: 'ProductId',
+                allowNull: false,
+            },
+        });
         db.Order.belongsTo(db.ProductMainTag, {
-            foreignKey: 'ProductMainTagId',
+            foreignKey: {
+                name: 'ProductMainTagId',
+                allowNull: false,
+            },
         });
         db.Order.belongsTo(db.ProductSubTag, {
-            foreignKey: 'ProductSubTagId',
+            foreignKey: {
+                name: 'ProductSubTagId',
+                allowNull: false,
+            },
         });
-
-        db.Order.belongsTo(db.User, { foreignKey: 'UserId' });
+        db.Order.belongsTo(db.User, {
+            foreignKey: {
+                name: 'UserId',
+                allowNull: false,
+            },
+        });
     }
 };

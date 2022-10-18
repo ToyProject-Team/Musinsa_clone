@@ -12,7 +12,9 @@ import {
 } from './styles';
 
 const ImageZoom = ({ img, alt }) => {
-    const [sideBar, setSidebar] = useState(Cookies.get('sideBarToggle') === 'false' ? false : true);
+    const { sideBar } = useGlobalState();
+    console.log(sideBar);
+
     const [show, setShow] = useState(false);
     const [mouseCursor, setMouseCursor] = useState({ x: 0, y: 0 });
     const [mousePosition, setMousePosition] = useState({

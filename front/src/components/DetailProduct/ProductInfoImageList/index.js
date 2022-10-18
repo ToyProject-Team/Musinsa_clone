@@ -27,7 +27,7 @@ const ProductInfoImageList = ({ image }) => {
     return (
         <img
             ref={imgRef}
-            key={image.id}
+            rel="preload"
             data-src={
                 image.src +
                 getParametersForUnsplash({

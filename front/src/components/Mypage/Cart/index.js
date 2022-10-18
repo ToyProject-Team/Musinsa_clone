@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { MypageMain } from 'pages/Mypage/styles.js';
 import CartTable from 'components/Mypage/Cart/Table';
 import { OrderTable, CartPayment, OrderBtn, ModalStyle } from 'components/Mypage/Cart/styles';
-import { FaPlus, FaEquals } from 'react-icons/fa';
+import { FaPlus } from '@react-icons/all-files/fa/FaPlus';
+import { FaEquals } from '@react-icons/all-files/fa/FaEquals';
 import Order from 'components/Order';
 import OrderModal from 'components/Modals/OrderModal';
 import { thousandComma } from 'utils/thousandComma';
@@ -80,6 +81,8 @@ function Cart() {
 
     const [modalOrder, setModalOrder] = useState(false);
 
+    const [checkList, setCheckList] = useState({});
+
     // 체크
     const checkItem = useCallback(() => {
         setCheckBox(check => !check);
@@ -100,15 +103,36 @@ function Cart() {
     const onClickOrder = useCallback(() => {
         setModalOrder(false);
         setOrder(true);
-    }, []);
+        let arrBsId = [];
+        let arrPrice = [];
+        let arrAmount = [];
+        cartList.map(v =>
+            v.check
+                ? arrBsId.push(v.id) &&
+                  arrPrice.push(v.Product.productPrice * v.packingAmount) &&
+                  arrAmount.push(v.packingAmount)
+                : arrBsId.filter(f => f !== v.id) &&
+                  arrPrice.filter(f => f !== v.Product.productPrice * v.packingAmount) &&
+                  arrAmount.filter(f => f !== v.packingAmount),
+        );
+
+        setCheckList({ shoppingBasketId: arrBsId, price: arrPrice, amout: arrAmount });
+
+        // console.log('ok', arrBsId, arrPrice, arrAmount);
+    }, [cartList]);
+
+    console.log('check', checkList);
 
     // 모두 체크 확인 및 총상품 금액
 
-    // let prdId = [];
+    const [basketId, setBasketId] = useState([]);
+    // console.log(basketId);
 
     useEffect(() => {
         let arrId = [];
         cartList.map(v => (v.check ? arrId.push(v.id) : arrId.filter(f => f !== v.id)));
+
+        setBasketId(arrId);
 
         if (cartList.length === arrId.length && cartList.length != 0) setCheckBox(true);
         else setCheckBox(false);
@@ -205,12 +229,7 @@ function Cart() {
                     </CartPayment>
                     <OrderBtn>
                         <button onClick={onClickOrderButton}>결제하기</button>
-                        {order && (
-                            <Order
-                                pay={pay}
-                                ShoppingBasketId={cartList.map(v => (v.check ? v.id : null))}
-                            />
-                        )}
+                        {order && <Order pay={pay} checkList={checkList} />}
                     </OrderBtn>
                 </div>
 

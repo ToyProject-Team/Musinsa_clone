@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { ListOuter, ListWrapper } from './styles';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import { AiFillStar } from '@react-icons/all-files/ai/AiFillStar';
 
 const ShowList = props => {
     const navigate = useNavigate();
@@ -52,9 +53,55 @@ const ShowList = props => {
                                         ></img>
                                     </div>
                                     <div className="item_info">
-                                        <p>{data.productTitle}</p>
+                                        <p
+                                            style={{
+                                                fontWeight: 'bold',
+                                                paddingBottom: '3px',
+                                                fontSize: '13px',
+                                            }}
+                                        >
+                                            {data.productTitle}
+                                        </p>
                                         <p>{data.productPrice.toLocaleString('ko-KR')}원</p>
-                                        <p>MEMBERSHIP PRICE</p>
+                                    </div>
+                                    <div className="choice">Members' Choice</div>
+                                    <div className="item_like">
+                                        <p style={{ color: 'red' }}>❤</p>
+                                        <p className="likes">{data.likes}</p>
+                                    </div>
+                                    <div className="item_comment">
+                                        {data.comments < 100 ? null : data.comments < 2000 ? (
+                                            <p style={{ color: '#FF923A' }}>
+                                                <AiFillStar />
+                                            </p>
+                                        ) : data.comments < 4000 ? (
+                                            <p style={{ color: '#FF923A' }}>
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                            </p>
+                                        ) : data.comments < 8000 ? (
+                                            <p style={{ color: '#FF923A' }}>
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                            </p>
+                                        ) : data.comments < 10000 ? (
+                                            <p style={{ color: '#FF923A' }}>
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                            </p>
+                                        ) : (
+                                            <p style={{ color: '#FF923A' }}>
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                                <AiFillStar />
+                                            </p>
+                                        )}
+                                        <p className="comments">{data.comments}</p>
                                     </div>
                                 </div>
                             </div>

@@ -16,22 +16,22 @@ const HeaderInfo = () => {
     return (
         <Header>
             <CategoryWrapper>
-                <p
-                    onClick={() =>
-                        navigate(`/products?bigCategoryId=${detail.product.BigCategoryId}`)
-                    }
-                >
-                    {bigCategory[detail.product.BigCategoryId]}
+                <p onClick={() => navigate(`/?bigCategoryId=${detail.product.BigCategoryId}`)}>
+                    {bigCategory[detail.product.BigCategoryId - 1]}
                 </p>
                 <span> &gt; </span>
                 <p
                     onClick={() =>
                         navigate(
-                            `/products?bigCategoryId=${detail.product.BigCategoryId}&smallCategoryId=${detail.product.SmallCategoryId}`,
+                            `/?bigCategoryId=${detail.product.BigCategoryId}&smallCategoryId=${detail.product.SmallCategoryId}`,
                         )
                     }
                 >
-                    {smallCategory[detail.product.BigCategoryId][detail.product.SmallCategoryId]}
+                    {
+                        smallCategory[detail.product.BigCategoryId - 1][
+                            detail.product.SmallCategoryId
+                        ]
+                    }
                 </p>
             </CategoryWrapper>
             <p>{detail.product.productTitle}</p>

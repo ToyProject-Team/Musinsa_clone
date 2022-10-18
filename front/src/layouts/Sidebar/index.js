@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { SContainer, SDiv } from './styles';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { bigCategory, alpabet } from 'utils/bigCategory';
@@ -17,22 +17,29 @@ const Sidebar = props => {
     const [cancel, setCancel] = useState(Cookies.get('sideBarToggle') === 'false' ? false : true);
     const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
 
+    useEffect(() => {
+        const payload = {
+            sideBar: cancel,
+        };
+        dispatch({ type: SIDEBAR, payload });
+    }, []);
+
     //Main - filterVal 수정 등
     const sendSmallCate = (big, small) => {
         // smallCate index가 0인 경우(전체) / 아닌경우
         // smallCate index가 1이상인 경우에는 bigCateId가 이미 있는경우/없는경우
         //이중 삼항연산자
 
-        props.setClickCate(
-            Array.from({
-                length: smallCategory[big].length,
-            }).fill(false),
-        );
+        // props.setClickCate(
+        //     Array.from({
+        //         length: smallCategory[big].length,
+        //     }).fill(false),
+        // );
 
-        const newArr = props.clickCate;
-        if (newArr.includes(true)) {
-            newArr[props.clickCate.indexOf(true)] = false;
-        }
+        // const newArr = props.clickCate;
+        // if (newArr.includes(true)) {
+        //     newArr[props.clickCate.indexOf(true)] = false;
+        // }
 
         const { pathname } = location;
 
@@ -42,28 +49,23 @@ const Sidebar = props => {
                 props.setFilterVal(data => {
                     return { ...data, bigCategoryId: big + 1 };
                 });
-                // props.setClickCate(() => newArr);
-                // props.setClickPrice(() => props.clickPrice.fill(false));
-                // props.setClickMainSort(() => props.clickMainSort.fill(false));
             } else {
                 if (props.filterVal.bigCategoryId - 1 === big) {
                     props.setFilterVal(prev => {
                         return { ...prev, smallCategoryId: small };
                     });
-                    // newArr[small] = true;
-                    // props.setClickCate(() => newArr);
                 } else {
                     props.setFilterVal(data => {
                         return { bigCategoryId: big + 1, smallCategoryId: small };
                     });
-                    // newArr[small] = true;
-                    // props.setClickCate(() => newArr);
-                    // props.setClickPrice(() => props.clickPrice.fill(false));
-                    // props.setClickMainSort(() => props.clickMainSort.fill(false));
                 }
             }
         } else {
-            return navigate(`/?bigCategoryId=${big + 1}&smallCategoryId=${small}`);
+            if (small === 0) {
+                return navigate(`/?bigCategoryId=${big + 1}`);
+            } else {
+                return navigate(`/?bigCategoryId=${big + 1}&smallCategoryId=${small}`);
+            }
         }
     };
 
@@ -74,7 +76,6 @@ const Sidebar = props => {
     const onClickToggle = useCallback(() => {
         setCancel(e => !e);
         Cookies.set('sideBarToggle', !cancel);
-        console.log(cancel);
         const payload = {
             sideBar: !cancel,
         };

@@ -10,7 +10,7 @@ import { useScript } from 'hooks/useScript';
 
 const impNumber = process.env.REACT_APP_PAYMENT;
 
-const Order = ({ modal, pay, ShoppingBasketId }) => {
+const Order = ({ modal, pay, checkList }) => {
     const jQueryScript = useScript('https://code.jquery.com/jquery-1.12.4.min.js');
     const iamportScript = useScript('https://cdn.iamport.kr/js/iamport.payment-1.1.8.js');
 
@@ -27,8 +27,8 @@ const Order = ({ modal, pay, ShoppingBasketId }) => {
         if (iamportScript === 'ready' && jQueryScript === 'ready') {
             let pg = '';
             let pay_method = '';
-            let price = 10;
-            let productPrice = 10;
+            let price = 100;
+
             if (pay === 'card') pg = 'html5_inicis';
             else if (pay === 'Virtual') pg = 'html5_inicis';
             else if (pay === 'kakao') pg = 'kakaopay';
@@ -58,13 +58,7 @@ const Order = ({ modal, pay, ShoppingBasketId }) => {
                         // 결제 성공 시 로직,
                         if (productId == undefined) {
                             const data = {
-                                purchasedDataList: [
-                                    {
-                                        shoppingBasketId: ShoppingBasketId,
-                                        price,
-                                        amount: 1,
-                                    },
-                                ],
+                                purchasedDataList: [checkList],
                                 MerchantUid: rsp.merchant_uid,
                                 imp_uid: rsp.imp_uid,
                             };
@@ -78,11 +72,19 @@ const Order = ({ modal, pay, ShoppingBasketId }) => {
                             });
                         } else {
                             const data = {
-                                imp_uid: rsp.imp_uid,
-                                Merchant_uid: rsp.merchant_uid,
-                                ProductId: productId,
-                                price,
-                                amount: 2,
+                                authPayment: {
+                                    imp_uid: rsp.imp_uid,
+                                    Merchant_uid: rsp.merchant_uid,
+                                },
+                                orderList: [
+                                    {
+                                        ProductId: '2',
+                                        price: '132100',
+                                        amount: '3',
+                                        ProductMainTagId: '3',
+                                        ProductSubTagId: '4',
+                                    },
+                                ],
                             };
                             PostHeaderBodyApi(
                                 '/api/product/purchase',

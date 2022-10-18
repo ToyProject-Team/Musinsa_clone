@@ -293,7 +293,7 @@ const Main = () => {
 
     // //페이지네이션 관련
     const [page, setPage] = useState(1);
-    const [items, setItems] = useState(18);
+    const [items, setItems] = useState(75);
     const handlePageChange = page => {
         setPage(page); //페이지바뀔때마다
     };
@@ -390,19 +390,15 @@ const Main = () => {
                                             if (searchInput === '') return val;
                                             else if (val.includes(searchInput)) return val;
                                         })
-                                        .map((data, idx) =>
-                                            idx === 0 ? null : (
-                                                <li
-                                                    className={
-                                                        clickCate[idx] ? 'active' : 'inactive'
-                                                    }
-                                                    onClick={() => onSort(idx)}
-                                                    key={idx}
-                                                >
-                                                    {data}
-                                                </li>
-                                            ),
-                                        )}
+                                        .map((data, idx) => (
+                                            <li
+                                                className={clickCate[idx] ? 'active' : 'inactive'}
+                                                onClick={() => onSort(idx)}
+                                                key={idx}
+                                            >
+                                                {data}
+                                            </li>
+                                        ))}
                                 </ul>
                             </div>
                         </MiddleCategory>
