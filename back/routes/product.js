@@ -8,10 +8,10 @@ const ProductMainTag = require('../models/productMainTag');
 const ProductSubTag = require('../models/productSubTag');
 const AWS = require('aws-sdk');
 const fs = require('fs');
-const { sequelize, Op, Sequelize } = require('sequelize');
+const { Op, Sequelize, QueryTypes } = require('sequelize');
 const authJWT = require('../utils/middlewares/authJWT');
 const axios = require('axios');
-const { Order, MyCart } = require('../models');
+const { Order, MyCart, sequelize } = require('../models');
 const router = express.Router();
 
 function checkParams(bigCategory, price) {
@@ -435,9 +435,11 @@ router.post('/purchase', authJWT, async (req, res, next) => {
     }
 });
 
-router.post('/checkAmount', authJWT, async (req, res, next) => {
+router.post('/search', authJWT, async (req, res, next) => {
     try {
-
+        await Product.findAll({
+            
+        })
     } catch (e) {
         console.error(e)
         next(e)
