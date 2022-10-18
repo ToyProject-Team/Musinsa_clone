@@ -38,7 +38,7 @@ router.post('/signup', async (req, res, next) => {
             return res
                 .status(401)
                 .send({ message: '이미 사용중인 아이디 입니다' });
-
+        console.log(req.headers.encryptioncode)
         if (req.headers.encryptioncode) {
             bytes = CryptoJS.AES.decrypt(
                 req.headers.encryptioncode,
