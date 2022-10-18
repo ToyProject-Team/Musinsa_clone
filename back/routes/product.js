@@ -259,12 +259,12 @@ router.post('/addCart', authJWT, async (req, res, next) => {
                 c.amount
             FROM products as a
             INNER JOIN ProductMainTags as b
-             ON a.Id = b.productid
+             ON a.id = b.ProductId
             INNER JOIN productsubtags as c
-             ON b.Id = c.productmaintagid 
+             ON b.id = c.ProductMainTagId 
             WHERE b.ProductId = :productId
-            AND b.Id = :mainTagId
-            AND c.Id = :subTagId
+            AND b.id = :mainTagId
+            AND c.id = :subTagId
             LIMIT 1`;
             console.log(query);
             const checkProduct = await sequelize.query(query, {
