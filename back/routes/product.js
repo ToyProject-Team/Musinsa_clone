@@ -252,7 +252,7 @@ router.post('/addCart', authJWT, async (req, res, next) => {
                     .status(400)
                     .send({ message: '이미 추가된 카테고리입니다' });
             }
-
+            console.log("????")
             const query = `
             SELECT 
                 c.id,
