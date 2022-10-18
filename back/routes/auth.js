@@ -44,7 +44,7 @@ router.post('/signup', async (req, res, next) => {
                 req.headers.encryptioncode,
                 'secret key 123',
             );
-
+            console.log(bytes)
             req.headers.encryptioncode = JSON.parse(
                 bytes.toString(CryptoJS.enc.Utf8),
             );
