@@ -231,6 +231,8 @@ router.post('/addCart', authJWT, async (req, res, next) => {
         console.log(exUser);
         for (i = 0; i < req.body.addCarts.length; i++) {
             console.log(i, '번쨰!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            console.log(req.body.addCarts[i]);
+            
             const checkMyCart = await exUser.getMyCarts({
                 where: {
                     [Op.and]: [
