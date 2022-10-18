@@ -262,7 +262,7 @@ router.post('/addCart', authJWT, async (req, res, next) => {
             FROM Products as a
             INNER JOIN ProductMainTags as b
              ON a.id = b.ProductId
-            INNER JOIN Productsubtags as c
+            INNER JOIN ProductSubTags as c
              ON b.id = c.ProductMainTagId 
             WHERE b.ProductId = :productId
             AND b.id = :mainTagId
