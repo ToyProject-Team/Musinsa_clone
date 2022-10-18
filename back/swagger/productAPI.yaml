@@ -263,10 +263,10 @@
                                   packingAmount:
                                       type: number
                                       example: 2
-                                  productMainTagId:
+                                  mainTagId:
                                       type: number
                                       example: 1
-                                  productSubTagId:
+                                  subTagId:
                                       type: number
                                       example: 1
         responses:
@@ -279,6 +279,20 @@
                         message:
                             type: string
                             example: 이미 추가된 카테고리입니다
+            401:
+                description: 존재하지 않는 상품을 장바구니에 추가할 경우
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: 존재하지 않는 상품을 장바구니에 추가하고있습니다
+            402:
+                description: 실제 재고보다 담으려는 수가 더 많을 경우
+                schema:
+                    properties:
+                        message:
+                            type: string
+                            example: 재고보다 담으려는 수량이 더 많습니다
             500:
                 $ref: './openapi.yaml#/serverError'
 

@@ -7,10 +7,11 @@ const Comment = require('../models/comment');
 const ProductMainTag = require('../models/productMainTag');
 const ProductSubTag = require('../models/productSubTag');
 const AWS = require('aws-sdk');
-const { sequelize, Op, Sequelize } = require('sequelize');
+const fs = require('fs');
+const { Op, Sequelize, QueryTypes } = require('sequelize');
 const authJWT = require('../utils/middlewares/authJWT');
 const axios = require('axios');
-const { Order, MyCart } = require('../models');
+const { Order, MyCart, sequelize } = require('../models');
 const router = express.Router();
 
 require('dotenv');
@@ -230,6 +231,8 @@ router.post('/addCart', authJWT, async (req, res, next) => {
         console.log(exUser);
         for (i = 0; i < req.body.addCarts.length; i++) {
             console.log(i, '번쨰!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            console.log(req.body.addCarts[i]);
+            
             const checkMyCart = await exUser.getMyCarts({
                 where: {
                     [Op.and]: [
@@ -251,15 +254,15 @@ router.post('/addCart', authJWT, async (req, res, next) => {
                     .status(400)
                     .send({ message: '이미 추가된 카테고리입니다' });
             }
-
+            console.log("????")
             const query = `
             SELECT 
                 c.id,
                 c.amount
-            FROM products as a
-            INNER JOIN productmaintags as b
+            FROM Products as a
+            INNER JOIN ProductMainTags as b
              ON a.id = b.ProductId
-            INNER JOIN productsubtags as c
+            INNER JOIN ProductSubTags as c
              ON b.id = c.ProductMainTagId 
             WHERE b.ProductId = :productId
             AND b.id = :mainTagId
@@ -456,7 +459,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
     }
 });
 
-router.post('/checkAmount', authJWT, async (req, res, next) => {
+router.post('/search', authJWT, async (req, res, next) => {
     try {
     } catch (e) {
         console.error(e);
