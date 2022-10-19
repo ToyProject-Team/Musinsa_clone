@@ -38,13 +38,13 @@ router.post('/signup', async (req, res, next) => {
             return res
                 .status(401)
                 .send({ message: '이미 사용중인 아이디 입니다' });
-
+        console.log(req.headers.encryptioncode)
         if (req.headers.encryptioncode) {
             bytes = CryptoJS.AES.decrypt(
                 req.headers.encryptioncode,
                 'secret key 123',
             );
-
+            console.log(bytes)
             req.headers.encryptioncode = JSON.parse(
                 bytes.toString(CryptoJS.enc.Utf8),
             );
