@@ -39,7 +39,6 @@ if (process.env.ASYNC_ENV == 0) {
     })
     .then(() => {
       console.log("db 연결 성공");
-      exists();
     })
     .catch(console.error);
 }
@@ -90,7 +89,6 @@ app.use(function(err, req, res, next) {
 
 var AWS = require('aws-sdk');
 var fs = require('fs');
-const { expire, exists } = require("./utils/redis");
 require('dotenv')
 
 const s3 = new AWS.S3({
@@ -171,3 +169,5 @@ app.use('/temp', (req, res) => {
 
 //포트 설정
 // const server = httpServer.listen(80);
+const server = app.listen(80);
+// webSocket(server)
