@@ -38,14 +38,21 @@ module.exports = class MyCart extends Model {
         );
     }
     static associate(db) {
-        db.MyCart.belongsTo(db.Product, { foreignKey: 'ProductId' });
+        db.MyCart.belongsTo(db.Product, {
+            foreignKey: {
+                name: 'ProductId',
+                allowNull: false,
+            },
+        });
         db.MyCart.belongsTo(db.ProductMainTag, {
-            foreignKey: 'ProductMainTagId',
+            foreignKey: { name: 'ProductMainTagId', allowNull: false },
         });
         db.MyCart.belongsTo(db.ProductSubTag, {
-            foreignKey: 'ProductSubTagId',
+            foreignKey: { name: 'ProductSubTagId', allowNull: false },
         });
 
-        db.MyCart.belongsTo(db.User, { foreignKey: 'UserId' });
+        db.MyCart.belongsTo(db.User, {
+            foreignKey: { name: 'UserId', allowNull: false },
+        });
     }
 };
