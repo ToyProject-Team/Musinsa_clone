@@ -5,7 +5,7 @@
     "main": "app.js",
     "scripts": {
         "api-docs": "swagger-cli bundle swagger/openapi.yaml --outfile swagger.yaml --type yaml",
-        "sync": "cross-env NODE_ENV=production cross-env ASYNC_ENV=0 nodemon apps",
+        "sync": "cross-env NODE_ENV=production cross-env ASYNC_ENV=0 apps",
         "start": "cross-env NODE_ENV=production nodemon apps",
         "db:create": "cross-env NODE_ENV=production npx sequelize db:create",
         "db:seed:all": "cross-env NODE_ENV=production npx sequelize db:seed:all",
