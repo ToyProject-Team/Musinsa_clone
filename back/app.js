@@ -171,7 +171,3 @@ app.use('/temp', (req, res) => {
 
 //포트 설정
 // const server = httpServer.listen(80);
-
-if
-
-// webSocket(server)
