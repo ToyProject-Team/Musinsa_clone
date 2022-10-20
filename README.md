@@ -23,6 +23,8 @@
     <a href="www.naver.com">위키</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
     <a href="www.naver.com">PPT</a>
 </div>
+<br />
+<br />
 <div align="center">
     <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white"/>
     <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white"/>
@@ -36,6 +38,7 @@
     기술 스택 들어갈 예정
     Scss, Context, useSWR...</p>
     
+<br />
 <h3>🧪 테스트 아이디</h3>
     
 | 아이디 | 비밀번호 |
