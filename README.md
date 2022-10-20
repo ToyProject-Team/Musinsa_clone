@@ -65,9 +65,25 @@
     <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
 
 <div>
-<h3>📌 Pages with many features</h3>
+<h3>📌 Check all products</h3>
 <h4>• 메인페이지</h4>
 <p>상품을 검색하고 조건에 따라 필터링/정렬을 할 수 있어요.</p>
+</div>
+</div>
+    
+    
+<br />
+<br />
+<br />
+<br />
+<br />
+<div>
+    <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
+
+<div>
+<h3>📌 All the functions of the product</h3>
+<h4>• 상세페이지</h4>
+<p>상품의 상세정보를 확인하고 상품의 구매, 좋아요, 장바구니에 담을 수 있고 이미지도 줌도 가능해요.</p>
 </div>
 </div>
     
@@ -82,12 +98,15 @@
     <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
 
 <div>
-<h3>📌 Pages with many features</h3>
+<h3>📌 Check the status of all products</h3>
 <h4>• 마이페이지</h4>
 <p>주문내역, 좋아요, 장바구니를 확인하고 상품을 관리 할 수 있어요.</p>
 </div>
 </div>
     
+<br />
+<br />
+<br />
 <br />
 <br />
     
