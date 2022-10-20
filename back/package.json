@@ -11,7 +11,7 @@
         "db:seed:all": "cross-env NODE_ENV=production npx sequelize db:seed:all",
         "db:seed:undo:all": "cross-env NODE_ENV=production npx sequelize db:seed:undo:all",
         "production": "cross-env ASYNC_ENV=0 pm2 start app.js",
-        "production:start": "cross-env ASYNC_ENV=0 sudo node app.js"
+        "production:start": "sudo cross-env ASYNC_ENV=0 node app.js"
     },
     "author": "",
     "license": "MIT",
