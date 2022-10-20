@@ -49,7 +49,7 @@
 
 
 <div>
-    <img  align="right" src="https://user-images.githubusercontent.com/101618759/196857707-e9135b20-7442-4fd0-b1cd-a5c02c41354c.jpg" width="45%">
+    <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
 
 <div style="height: 255px;">
 <h3>타이틀 들어가는 항목</h3>
@@ -60,6 +60,7 @@
 </div>
 </div>
     
+<br />
 <br />
     
 > 이런식으로 넣으면 될까요? 너무 하얗고 비어보일까요???
