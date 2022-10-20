@@ -46,17 +46,43 @@
 </div>
 
 ## 📝 기능 소개
+<div>
+    <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
 
+<div>
+<h3>📌 Pages with many features</h3>
+<h4>• 로그인 페이지</h4>
+<p>소셜로그인, 유효성검사, 아이디/비밀번호 찾기를 할 수 있어요.</p>
+<h4>• 회원가입 페이지</h4>
+<p>주소검색, 휴대폰/이메일 인증을 할수 있어요.</p>
+</div>
+</div>
+    
+<br />
+<br />
 
 <div>
     <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
 
-<div style="height: 255px;">
+<div>
 <h3>📌 Pages with many features</h3>
-<h4>1. 로그인 페이지</h4>
-<p>소셜로그인, 유효성검사, 아이디/비밀번호 찾기를 할수 있습니다.</p>
-<h4>2. 회원가입 페이지</h4>
-<p>주소검색, 휴대폰/이메일 인증을 할수 있습니다.</p>
+<h4>• 메인페이지</h4>
+<p>상품을 검색하고 조건에 따라 필터링/정렬을 할 수 있어요.</p>
+</div>
+</div>
+    
+<br />
+<br />
+<br />
+<br />
+
+<div>
+    <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
+
+<div>
+<h3>📌 Pages with many features</h3>
+<h4>• 마이페이지</h4>
+<p>주문내역, 좋아요, 장바구니를 확인하고 상품을 관리 할 수 있어요.</p>
 </div>
 </div>
     
