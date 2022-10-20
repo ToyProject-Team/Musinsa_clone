@@ -30,7 +30,7 @@
     기술 스택 들어갈 예정
     Scss, Context, useSWR...</p>
     
-<h3>🧪테스트 아이디</h3>
+<h3>🧪 테스트 아이디</h3>
     
 | 아이디 | 비밀번호 |
 |:-:|:-:|
@@ -39,20 +39,20 @@
     
 </div>
 
-# 💻프로젝트 소개
+# 💻 프로젝트 소개
 
 <div align="center">
     로그인, 상품 검색 및 정렬, 장바구니 기능, 상품 결제 및 결제취소 등<br>전반적인 쇼핑몰의 구성부터 기능까지 무신사 클론코딩을 통해 구현해 보았습니다.
 </div>
 
-## 기능 소개
+## 📝 기능 소개
 
 
 <div>
     <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
 
 <div style="height: 255px;">
-<h3>Sign-in/membership with many features</h3>
+<h3>📌 Pages with many features</h3>
 <h4>1. 로그인 페이지</h4>
 <p>소셜로그인, 유효성검사, 아이디/비밀번호 찾기를 할수 있습니다.</p>
 <h4>2. 회원가입 페이지</h4>
