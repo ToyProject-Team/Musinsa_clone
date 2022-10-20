@@ -48,7 +48,7 @@
 ### 기능 소개
 
 <div style="clear: both;">
-  <div style="float: left; margin-right 1em;">
+  <div style="float: right;">
     <img src="https://user-images.githubusercontent.com/101618759/196857707-e9135b20-7442-4fd0-b1cd-a5c02c41354c.jpg" width="45%">
   </div>
   <div>
