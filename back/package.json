@@ -5,12 +5,13 @@
     "main": "app.js",
     "scripts": {
         "api-docs": "swagger-cli bundle swagger/openapi.yaml --outfile swagger.yaml --type yaml",
-        "sync": "cross-env NODE_ENV=production cross-env ASYNC_ENV=0 apps",
+        "sync": "cross-env NODE_ENV=production cross-env ASYNC_ENV=0 nodemon apps",
         "start": "cross-env NODE_ENV=production nodemon apps",
         "db:create": "cross-env NODE_ENV=production npx sequelize db:create",
         "db:seed:all": "cross-env NODE_ENV=production npx sequelize db:seed:all",
         "db:seed:undo:all": "cross-env NODE_ENV=production npx sequelize db:seed:undo:all",
-        "production": "cross-env ASYNC_ENV=0 sudo pm2 start app"
+        "production": "cross-env ASYNC_ENV=0 pm2 start app.js",
+        "production:start": "cross-env ASYNC_ENV=0 sudo node app.js"
     },
     "author": "",
     "license": "MIT",
@@ -24,6 +25,7 @@
         "connect-redis": "^6.1.3",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
+        "cross-env": "^6.0.3",
         "crypto-js": "^4.1.1",
         "dotenv": "^16.0.1",
         "express": "^4.18.1",
@@ -50,8 +52,5 @@
         "swagger-ui-express": "^4.5.0",
         "ws": "^8.8.1",
         "yamljs": "^0.3.0"
-    },
-    "devDependencies": {
-        "cross-env": "^7.0.3"
     }
 }
