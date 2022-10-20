@@ -48,7 +48,7 @@
 ### 기능 소개
 
 
-<div>
+<div hegith="255">
     <img  align="right" src="https://user-images.githubusercontent.com/101618759/196857707-e9135b20-7442-4fd0-b1cd-a5c02c41354c.jpg" width="45%">
 
     <h3>타이틀 들어가는 항목</h3>
