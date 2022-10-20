@@ -52,7 +52,7 @@
     <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
 
 <div style="height: 255px;">
-<h3>타이틀 들어가는 항목</h3>
+<h3>Sign-in/membership with many features</h3>
 <h4>1. 로그인 페이지</h4>
 <p>소셜로그인, 유효성검사, 아이디/비밀번호 찾기를 할수 있습니다.</p>
 <h4>2. 회원가입 페이지</h4>
