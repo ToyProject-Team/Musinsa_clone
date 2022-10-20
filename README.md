@@ -51,9 +51,11 @@
 <div>
     <img  align="right" src="https://user-images.githubusercontent.com/101618759/196857707-e9135b20-7442-4fd0-b1cd-a5c02c41354c.jpg" width="45%">
 
+<div height="255">
 <h3>타이틀 들어가는 항목</h3>
 <h4>1. 로그인 페이지</h4>
 <p>로그인 페이지에서</p>
+</div>
 </div>
     
 <br />
