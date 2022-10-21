@@ -386,13 +386,13 @@ router.post('/purchase', authJWT, async (req, res, next) => {
                         '상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요',
                 });
             }
-            if (!req.body.authPayment) {
+            if (!req.body.authPayment.Merchant_uid) {
                 return res.status(401).send({
                     message:
                         '주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요',
                 });
             }
-            if (!req.body.Merchant_uid) {
+            if (!req.body.authPayment.imp_uid) {
                 return res.status(402).send({
                     message:
                         'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요',
