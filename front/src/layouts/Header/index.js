@@ -117,6 +117,8 @@ const Header = props => {
                 const value = [...search, inputValue];
                 localStorage.setItem('keywords', JSON.stringify(value));
             }
+
+            props.setFilterVal({ productTitle: inputValue });
         },
         [search, inputValue],
     );
@@ -129,6 +131,7 @@ const Header = props => {
             const value = [...search, inputValue];
             localStorage.setItem('keywords', JSON.stringify(value));
         }
+        //console.log(inputValue);
     }, [search, inputValue]);
 
     const onClickDeleteSearchAll = useCallback(() => {
