@@ -392,7 +392,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
                         '주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요',
                 });
             }
-            if (!req.body.imp_uid) {
+            if (!req.body.Merchant_uid) {
                 return res.status(402).send({
                     message:
                         'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요',
