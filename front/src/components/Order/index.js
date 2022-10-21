@@ -30,7 +30,7 @@ const Order = ({ modal, pay, orderArr }) => {
             let price = 0;
 
             if (productId == undefined) price = 100;
-            else price = checkList.reduce((a, b) => Number(a.price) + Number(b.price));
+            else price = orderArr.reduce((a, b) => Number(a.price) + Number(b.price));
             let i = 0;
 
             if (pay === 'card') pg = 'html5_inicis';
@@ -83,7 +83,7 @@ const Order = ({ modal, pay, orderArr }) => {
                                     imp_uid: rsp.imp_uid,
                                     Merchant_uid: rsp.merchant_uid,
                                 },
-                                orderList: checkList,
+                                orderList: orderArr,
                             };
 
                             PostHeaderBodyApi(
