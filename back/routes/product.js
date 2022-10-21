@@ -9,7 +9,7 @@ const ProductSubTag = require('../models/productSubTag');
 const AWS = require('aws-sdk');
 const { Op, Sequelize, QueryTypes } = require('sequelize');
 const authJWT = require('../utils/middlewares/authJWT');
-const { Order, MyCart } = require('../models');
+const { Order, MyCart, sequelize } = require('../models');
 const {
     getIamportAccessToken,
     getIamportPaymentData,
@@ -224,38 +224,33 @@ router.get('/productDetail', async (req, res, next) => {
 
 router.post('/addCart', authJWT, async (req, res, next) => {
     try {
-        console.log(req.body);
+        console.log(req.body)
         const exUser = await User.findOne({
             where: {
                 id: req.myId,
             },
         });
-        console.log(exUser);
+        console.log(exUser)
         for (i = 0; i < req.body.addCarts.length; i++) {
-            console.log(i, '번쨰!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-            console.log(req.body.addCarts[i]);
-
+            console.log(i, "번쨰!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             const checkMyCart = await exUser.getMyCarts({
                 where: {
-                    [Op.and]: [
-                        {
-                            ProductId: req.body.addCarts[i].productId,
-                        },
-                        {
-                            ProductMainTagId: req.body.addCarts[i].mainTagId,
-                        },
-                        {
-                            ProductSubTagId: req.body.addCarts[i].subTagId,
-                        },
-                    ],
-                },
+                    [Op.and]: [{
+                        ProductId: req.body.addCarts[i].productId
+                    }, {
+                        ProductMainTagId: req.body.addCarts[i].mainTagId
+                    }, {
+                        ProductSubTagId: req.body.addCarts[i].subTagId
+                    }
+                ]}
             });
-            console.log(checkMyCart);
+            
             if (checkMyCart.length > 0) {
                 return res
                     .status(400)
                     .send({ message: '이미 추가된 카테고리입니다' });
             }
+
             const query = `
             SELECT 
                 c.id,
@@ -268,33 +263,30 @@ router.post('/addCart', authJWT, async (req, res, next) => {
             WHERE b.ProductId = :productId
             AND b.id = :mainTagId
             AND c.id = :subTagId
-            LIMIT 1`;
-            console.log(query);
-            const checkProduct = await sequelize.query(query, {
-                replacements: {
-                    productId: req.body.addCarts[i].productId,
-                    mainTagId: req.body.addCarts[i].mainTagId,
-                    subTagId: req.body.addCarts[i].subTagId,
-                },
-                type: QueryTypes.SELECT,
-            });
-            console.log(checkProduct);
+            LIMIT 1`; 
+            console.log(query)
+            const checkProduct = await sequelize.query(
+                query,
+                { 
+                    replacements: {
+                        productId: req.body.addCarts[i].productId,
+                        mainTagId: req.body.addCarts[i].mainTagId,
+                        subTagId: req.body.addCarts[i].subTagId
+                    },
+                    type: QueryTypes.SELECT 
+                }
+            )
+            console.log(checkProduct)
             if (!checkProduct) {
-                return res.status(401).send({
-                    message: '존재하지 않는 상품을 장바구니에 추가하고있습니다',
-                });
+                return res.status(401).send({ message: "존재하지 않는 상품을 장바구니에 추가하고있습니다" })
             }
 
             if (checkProduct[0].amount < req.body.addCarts[i].packingAmount) {
-                return res
-                    .status(402)
-                    .send({ message: '재고보다 담으려는 수량이 더 많습니다' });
+                return res.status(402).send({ message: "재고보다 담으려는 수량이 더 많습니다" })
             }
             await ProductSubTag.update(
                 {
-                    amount: Sequelize.literal(
-                        `amount - ${req.body.addCarts[i].packingAmount}`,
-                    ),
+                    amount: Sequelize.literal(`amount - ${req.body.addCarts[i].packingAmount}`),
                 },
                 {
                     where: {
@@ -303,6 +295,7 @@ router.post('/addCart', authJWT, async (req, res, next) => {
                 },
             );
 
+
             await MyCart.create({
                 packingAmount: req.body.addCarts[i].packingAmount,
                 UserId: req.myId,
@@ -310,7 +303,7 @@ router.post('/addCart', authJWT, async (req, res, next) => {
                 ProductMainTagId: req.body.addCarts[i].mainTagId,
                 ProductSubTagId: req.body.addCarts[i].subTagId,
                 packingAmount: req.body.addCarts[i].packingAmount,
-            });
+            })
         }
 
         res.status(200).send({ success: true });
@@ -362,36 +355,7 @@ router.post('/likeProduct', authJWT, async (req, res, next) => {
 router.post('/purchase', authJWT, async (req, res, next) => {
     try {
         console.log(req.body);
-        if (!req.body.ProductId) {
-            return res.status(400).send({
-                message:
-                    '상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요',
-            });
-        }
-        if (!req.body.Merchant_uid) {
-            return res.status(401).send({
-                message:
-                    '주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요',
-            });
-        }
-        if (!req.body.imp_uid) {
-            return res.status(402).send({
-                message:
-                    'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요',
-            });
-        }
-        if (!req.body.price) {
-            return res.status(403).send({
-                message:
-                    '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
-            });
-        }
-        if (!req.body.amount) {
-            return res.status(406).send({
-                message:
-                    '구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
-            });
-        }
+        
 
         const { imp_uid, Merchant_uid } = req.body.authPayment; // req의 query에서 imp_uid, Merchant_uid 추출
         // 액세스 토큰(access token) 발급 받기
@@ -405,15 +369,48 @@ router.post('/purchase', authJWT, async (req, res, next) => {
         const { amount, status } = paymentData;
 
         let priceSum = 0;
-        for (i = 0; i < orderList.length; i++) {
-            priceSum += Number(req.body.orderList[i].price);
+        for (i = 0; i < req.body.orderList.length; i++) {
+            priceSum += Number(req.body.orderList[i].price) * Number(req.body.orderList[i].amount);
         }
-
+        console.log("amount ==", amount)
+        console.log("priceSum ==", priceSum)
         if (amount != priceSum) {
             return res.status(405).send({ message: '위조된 결제 시도입니다' });
         }
 
         for (i = 0; i < req.body.orderList.length; i++) {
+
+            if (!req.body.orderList[i].ProductId) {
+                return res.status(400).send({
+                    message:
+                        '상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요',
+                });
+            }
+            if (!req.body.authPayment.Merchant_uid) {
+                return res.status(401).send({
+                    message:
+                        '주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요',
+                });
+            }
+            if (!req.body.authPayment.imp_uid) {
+                return res.status(402).send({
+                    message:
+                        'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요',
+                });
+            }
+            if (!req.body.orderList[i].price) {
+                return res.status(403).send({
+                    message:
+                        '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
+                });
+            }
+            if (!req.body.orderList[i].amount) {
+                return res.status(406).send({
+                    message:
+                        '구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
+                });
+            }
+
             const isExistedOrder = await Order.findOne({
                 where: {
                     UserId: req.myId,

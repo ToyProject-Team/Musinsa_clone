@@ -1,35 +1,32 @@
-<h1>🛠 현재 백엔드 수정 작업 진행중</h1>
-<h3>1. 상세페이지 장바구니</h3>
-<h3>2. 상세페이지 구매</h3>
-<h3>3. 장바구니 페이지 구매</h3>
-<h3>4. 주문내역 조회</h3>
-<h3>5. 헤더 검색</h3>
-    
-    
-    
-<br />
 <div align="center"><img src="https://user-images.githubusercontent.com/110218594/195773693-4b1828da-8903-4b07-9ba6-fcab1e240418.png" alt="Material Bread logo"></div>
 
 <h1 align="center">무신사 클론 쇼핑몰 서비스</h1>
+<div align="center">
+    로그인, 상품 검색 및 정렬, 장바구니 기능, 상품 결제 및 결제취소 등<br>전반적인 쇼핑몰의 구성부터 기능까지 무신사 클론코딩을 통해 구현해 보았습니다.
+</div>
+
+<br />
+
 <div align="center">
     <a href="www.naver.com">사이트</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
     <a href="www.naver.com">노션</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
     <a href="www.naver.com">위키</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
     <a href="www.naver.com">PPT</a>
 </div>
+<br />
+<br />
 <div align="center">
     <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=white"/>
     <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white"/>
     <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=for-the-badge&logo=Visual Studio Code&logoColor=white"/>
     <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white"/>
-    <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"/>   
+    <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"/><br>   
     <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white"/>   
     <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white"/>
     <img src="https://img.shields.io/badge/useContext-764ABC?style=for-the-badge&logoColor=white"/>
-    <p>useSWR 은 배지가 따로 없음 / 
-    기술 스택 들어갈 예정
-    Scss, Context, useSWR...</p>
-    
+    <img src="https://img.shields.io/badge/useSWR-49BDA5?style=for-the-badge&logoColor=white"/>
+
+<br />
 <h3>🧪 테스트 아이디</h3>
     
 | 아이디 | 비밀번호 |
@@ -39,57 +36,88 @@
     
 </div>
 
-# 💻 프로젝트 소개
-
-<div align="center">
-    로그인, 상품 검색 및 정렬, 장바구니 기능, 상품 결제 및 결제취소 등<br>전반적인 쇼핑몰의 구성부터 기능까지 무신사 클론코딩을 통해 구현해 보았습니다.
-</div>
-
-## 📝 기능 소개
-
+# 💻 기능 소개
 
 <div>
     <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
 
-<div style="height: 255px;">
+<div>
 <h3>📌 Pages with many features</h3>
-<h4>1. 로그인 페이지</h4>
-<p>소셜로그인, 유효성검사, 아이디/비밀번호 찾기를 할수 있습니다.</p>
-<h4>2. 회원가입 페이지</h4>
-<p>주소검색, 휴대폰/이메일 인증을 할수 있습니다.</p>
+<h4>• 로그인 페이지</h4>
+<p>소셜로그인, 유효성검사, 아이디/비밀번호 찾기를 할 수 있어요.</p>
+<h4>• 회원가입 페이지</h4>
+<p>주소검색, 휴대폰/이메일 인증을 할수 있어요.</p>
 </div>
 </div>
     
 <br />
 <br />
-    
-> 이런식으로 넣으면 될까요? 너무 하얗고 비어보일까요???
 
 <div>
-<img src="https://user-images.githubusercontent.com/101618759/196857707-e9135b20-7442-4fd0-b1cd-a5c02c41354c.jpg" width="45%">
-<img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
-<img src="https://user-images.githubusercontent.com/101618759/196857732-68345ad8-202f-4908-aec4-afe3024a6206.jpg" width="45%">
-<img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
-<img src="https://user-images.githubusercontent.com/101618759/196857763-4eacb521-b0af-48fa-801e-12d4283d9d10.jpg" width="45%"> 
-<img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
+    <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
+
+<div>
+<h3>📌 Check all products</h3>
+<h4>• 메인페이지</h4>
+<p>상품을 검색하고 조건에 따라 필터링/정렬을 할 수 있어요.</p>
+</div>
 </div>
     
-> 로그인 페이지에서 소셜로그인, 유효성 검사, 아이디 비밀번호 찾기를 할 수 있어요
+    
+<br />
+<br />
+<br />
+<br />
+<br />
+<div>
+    <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
 
-- 소셜로그인 이미지와 상세 설명
-- 유효성 검사~ 이미지와 상세 설명~
-- 비밀 번호 찾기~
+<div>
+<h3>📌 All the functions of the product</h3>
+<h4>• 상세페이지</h4>
+<p>상품의 상세정보를 확인하고 상품의 구매, 좋아요, 장바구니에 담을 수 있고 이미지도 줌도 가능해요.</p>
+</div>
+</div>
+    
+    
+<br />
+<br />
+<br />
+<br />
+<br />
 
-> 회원가입 페이지에서 휴대폰 / 이메일 인증을 할 수 있어요
+<div>
+    <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
 
-- 회원가입 페이지 이미지 / 기능 상세 설명~??
+<div>
+<h3>📌 Check the status of all products</h3>
+<h4>• 마이페이지</h4>
+<p>주문내역, 좋아요, 장바구니를 확인하고 상품을 관리 할 수 있어요.</p>
+</div>
+</div>
+    
+<br />
+<br />
+<br />
+<br />
+<br />
+    
+# 🎨 Skills
+### - Front
+* React
+* React Router
+* Styled Component
+* UseConText
+* USESWR
 
-> 메인페이지에서 상품을 검색하고, 조건에 따라 필터링 / 정렬할 수 있어요
-
-> 디테일 페이지에서 상품이미지를 확대하고 옵션을 선택 할 수 있어요
-
-> 마이 페이지에서 주문 내역, 좋아요 상품, 장바구니 내역을 볼 수 있어요
-
+### - Back
+* Node
+* JWT
+* Jenkins
+* Redis
+* MySql
+* 결제 API    
+    
 > 레이아웃 컴포넌트
 >
 > - 헤더에서 상품 검색 기능과, 주문내역 / 장바구니 상품 알림 기능을 이용 할 수 있어요<br>
@@ -104,7 +132,7 @@
 송민지 | 서경주 | 김우혁 | 이다노 
 :---: | :---: | :---: | :---: 
 <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> 
-<a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> 
+<a href="https://github.com/devchosil">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> 
 FrontEnd | FrontEnd | FrontEnd | FrontEnd
  
 </div>
@@ -112,8 +140,8 @@ FrontEnd | FrontEnd | FrontEnd | FrontEnd
     
 이민서 | 이준영
 :---: | :---:
-<a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a>
-<a href="www.naver.com">git으로 이동하기</a> | 301 
+<a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://avatars.githubusercontent.com/u/7973448?s=400&u=800b64efe4bbb92dab15f37b3f34ae8e211d4989&v=4" alt="Material Bread logo"></a>
+<a href="https://github.com/nacho1415">GitHub</a> | <a href="https://github.com/2jun0">GitHub</a> 
 BackEnd | BackEnd
  
 </div>
