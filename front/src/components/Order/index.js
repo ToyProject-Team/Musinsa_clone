@@ -27,7 +27,10 @@ const Order = ({ modal, pay, checkList }) => {
         if (iamportScript === 'ready' && jQueryScript === 'ready') {
             let pg = '';
             let pay_method = '';
-            let price = 100;
+            let price = 0;
+
+            if (productId == undefined) price = 100;
+            else price = checkList.reduce((a, b) => Number(a.price) + Number(b.price));
 
             if (pay === 'card') pg = 'html5_inicis';
             else if (pay === 'Virtual') pg = 'html5_inicis';
@@ -76,24 +79,21 @@ const Order = ({ modal, pay, checkList }) => {
                                     imp_uid: rsp.imp_uid,
                                     Merchant_uid: rsp.merchant_uid,
                                 },
-                                orderList: [
-                                    {
-                                        ProductId: '2',
-                                        price: '132100',
-                                        amount: '3',
-                                        ProductMainTagId: '3',
-                                        ProductSubTagId: '4',
-                                    },
-                                ],
+                                orderList: checkList,
                             };
+
                             PostHeaderBodyApi(
                                 '/api/product/purchase',
                                 data,
                                 'Authorization',
                                 accessToken,
-                            ).then(res => {
-                                setModalOrder(true);
-                            });
+                            )
+                                .then(res => {
+                                    setModalOrder(true);
+                                })
+                                .catch(err => {
+                                    console.error(err);
+                                });
                         }
                     } else {
                         // 결제 실패 시 로직,

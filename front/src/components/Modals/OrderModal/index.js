@@ -73,25 +73,27 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price, pay, setPay }) 
                             <th className="modal" scope="row">
                                 수령인
                             </th>
-                            <td>{info.recipient}</td>
+                            <td>{info.recipient ? info.recipient : '없음'}</td>
                         </tr>
                         <tr>
                             <th className="modal" scope="row">
                                 휴대전화
                             </th>
-                            <td>{info.addressNumber}</td>
+                            <td>{info.addressNumber ? info.addressNumber : '없음'}</td>
                         </tr>
                         <tr>
                             <th className="modal" scope="row">
                                 전화번호
                             </th>
-                            <td>{info.recipientNumber}</td>
+                            <td>{info.recipientNumber ? info.recipientNumber : '없음'}</td>
                         </tr>
                         <tr>
                             <th className="modal" scope="row">
                                 배송지 주소
                             </th>
-                            <td className="address-input">{info.address}</td>
+                            <td className="address-input">
+                                {info.address ? info.address : '없음'}
+                            </td>
                         </tr>
                     </tbody>
                 </table>

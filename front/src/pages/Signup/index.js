@@ -295,7 +295,7 @@ const Signup = () => {
                 ? (headerData = {
                       emailCheck: authEmailCheck,
                       phoneCheck: authPhoneCheck,
-                      encryptioncode: JSON.parse(kakao),
+                      encryptioncode: kakao,
                   })
                 : (headerData = {
                       emailCheck: authEmailCheck,
