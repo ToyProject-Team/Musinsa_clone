@@ -41,6 +41,12 @@ const ShowList = props => {
                     )
                     .map((data, idx) => (
                         <ListOuter key={data.id}>
+                            <div className="hotItem">
+                                {data.likes > 700 ? <span className="hot">인기 상품</span> : null}
+                                {data.likes < 701 && data.comments > 8000 ? (
+                                    <span className="recommend">무신사 추천</span>
+                                ) : null}
+                            </div>
                             <div
                                 onClick={() => {
                                     goDetail(data);

@@ -18,6 +18,28 @@ export const ListOuter = styled.li`
     border-bottom: 1px solid #ddd;
     box-sizing: border-box;
 
+    .hotItem {
+        position: absolute;
+        // width: 80px;
+        color: white;
+        right: 0;
+        top: 8px;
+        z-index: 20;
+        .hot {
+            background-color: #c43d3d;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 5px;
+        }
+        .recommend {
+            /* background-color: #4162c9; */
+            background-color: #92bd55;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 5px;
+        }
+    }
+
     // @media only screen and (min-width: 0) {
     //     width: 25% !important;
     // }
@@ -49,7 +71,7 @@ export const ListOuter = styled.li`
         vertical-align: top;
         background: transparent;
         height: 280px;
-        // padding-top: 15px;
+        padding-top: 5px;
         margin: 15px auto 20px;
     }
 
