@@ -181,6 +181,8 @@ router.post('/purchase', authJWT, async (req, res, next) => {
                     break;
                 }
 
+                console.log("price ==", price)
+                console.log("amount * product.productPrice ==", amount * product.productPrice)
                 /** 실제 price 값이 나오는지 */
                 if (price != amount * product.productPrice) {
                     isValidatePruchase = false;
