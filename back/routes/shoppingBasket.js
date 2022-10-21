@@ -138,6 +138,10 @@ router.post('/purchase', authJWT, async (req, res, next) => {
             .map(({ price }) => price)
             .reduce((pre, cur) => pre + cur);
 
+        console.error('sumPurchasedPrice, totalPrice', [
+            sumPurchasedPrice,
+            totalPrice,
+        ]);
         isValidatePruchase = sumPurchasedPrice == totalPrice;
 
         if (isValidatePruchase) {
