@@ -138,10 +138,6 @@ router.post('/purchase', authJWT, async (req, res, next) => {
             .map(({ price }) => price)
             .reduce((pre, cur) => pre + cur);
 
-        console.error('sumPurchasedPrice, totalPrice', [
-            sumPurchasedPrice,
-            totalPrice,
-        ]);
         isValidatePruchase = sumPurchasedPrice == totalPrice;
 
         if (isValidatePruchase) {
@@ -166,12 +162,6 @@ router.post('/purchase', authJWT, async (req, res, next) => {
 
                 const productSubTag = shoppingBasket.ProductSubTag;
                 const product = shoppingBasket.Product;
-
-                console.error('price ==', price);
-                console.error(
-                    'amount * product.productPrice ==',
-                    amount * product.productPrice,
-                );
 
                 /** 장바구니와 입력된 개수와 같은지 */
                 if (amount != shoppingBasket.packingAmount) {
