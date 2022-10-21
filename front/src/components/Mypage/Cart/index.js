@@ -75,8 +75,8 @@ function Cart() {
 
     const [modalOrder, setModalOrder] = useState(false);
 
-    let [checkList, setCheckList] = useState([]);
-    const [orderArr, setOrderArr] = useState([{ shoppingBasketId: '', price: '', amount: '' }]);
+    const [checkList, setCheckList] = useState([]);
+    const [orderArr, setOrderArr] = useState([]);
 
     // 체크
     const checkItem = useCallback(() => {
@@ -95,7 +95,6 @@ function Cart() {
     }, []);
 
     // 결제
-
     const onClickOrder = useCallback(() => {
         setModalOrder(false);
         setOrder(true);
@@ -112,10 +111,16 @@ function Cart() {
                   arrPrice.filter(f => f !== v.Product.productPrice * v.packingAmount) &&
                   arrAmount.filter(f => f !== v.packingAmount),
         );
-        for (let i = 0; i < checkList.length; i++) {
-            setOrderArr([
-                { shoppingBasketId: arrBsId[i], price: arrPrice[i], amount: arrAmount[i] },
-            ]);
+
+        const arr = [];
+        for (let i = 0; i < arrBsId.length; i++) {
+            let obj = {
+                shoppingBasketId: arrBsId[i],
+                price: 100 * arrAmount[i],
+                amount: arrAmount[i],
+            };
+            arr.push(obj);
+            setOrderArr(arr);
         }
     }, [cartList]);
 

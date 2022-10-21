@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
     ScrollContainer,
     MainContainer,
@@ -28,8 +28,6 @@ import Pagination from 'react-js-pagination';
 import { URLquery } from 'utils/URLquery';
 import { Oval } from 'react-loader-spinner';
 
-// export const MainContext = createContext();
-
 const Main = () => {
     const navigate = useNavigate();
 
@@ -47,9 +45,10 @@ const Main = () => {
     //쿼리스트링 활용
     const location = useLocation();
     const query = URLquery(location);
-
     //query or {}
     const [filterVal, setFilterVal] = useState(query || {});
+
+    //useMemo는 바뀐 부분만 호출되도록 함
 
     //가격 배열
     const priceArr = [
@@ -152,12 +151,9 @@ const Main = () => {
     const makeQS = () => {
         let result = '?';
         let count = 0;
-
         for (let [key, value] of Object.entries(filterVal)) {
-            if (value > 0) {
-                if (++count > 1) result += `&`;
-                result += `${key}=${value}`;
-            }
+            if (++count > 1) result += `&`;
+            result += `${key}=${value}`;
         }
 
         return result;
@@ -216,15 +212,6 @@ const Main = () => {
         clickBold();
         clickBoldPrice();
         clickBoldMainSort();
-
-        // const arr = Object.entries(filterVal);
-        // const arr2 = Object.values(filterVal);
-
-        // console.log(arr);
-        // console.log(arr2);
-
-        // console.log(filterVal);
-        // console.log(result);
     }, [filterVal]);
 
     useEffect(() => {
@@ -235,16 +222,15 @@ const Main = () => {
     //handleFilter함수 사용해서 쿼리문 추가
     //smallCategoryId추가(중분류)
     const onSort = val => {
-        if (val > 0) {
+        {
             filterVal.bigCategoryId
                 ? handleFilter(val, 'smallCategoryId')
                 : setFilterVal(() => {
                       return { bigCategoryId: 1, smallCategoryId: val };
                   });
-            clickBold();
-        } else {
-            onReset();
         }
+
+        clickBold();
     };
 
     //price추가
@@ -294,9 +280,6 @@ const Main = () => {
                 data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
             ),
         );
-        // setFilterVal(prev => {
-        //     return { ...prev, productTitle: searchTerm };
-        // });
     };
 
     //검색창 select박스 reset
@@ -320,7 +303,7 @@ const Main = () => {
     return (
         <>
             <DialLog />
-            <Header filterVal={filterVal} setFilterVal={setFilterVal} />
+            <Header />
             <ScrollContainer>
                 <Sidebar
                     filterVal={filterVal}
@@ -389,6 +372,15 @@ const Main = () => {
                                     </form>
                                 </div>
                             </CategoryName>
+                            <div
+                                className="all_item"
+                                onClick={() => {
+                                    onReset();
+                                }}
+                                style={{ color: 'black', fontWeight: 'bold' }}
+                            >
+                                전체
+                            </div>
                             <div className="all_item_list">
                                 <ul>
                                     {smallCategory[
@@ -398,15 +390,19 @@ const Main = () => {
                                             if (searchInput === '') return val;
                                             else if (val.includes(searchInput)) return val;
                                         })
-                                        .map((data, idx) => (
-                                            <li
-                                                className={clickCate[idx] ? 'active' : 'inactive'}
-                                                onClick={() => onSort(idx)}
-                                                key={idx}
-                                            >
-                                                {data}
-                                            </li>
-                                        ))}
+                                        .map((data, idx) =>
+                                            idx === 0 ? null : (
+                                                <li
+                                                    className={
+                                                        clickCate[idx] ? 'active' : 'inactive'
+                                                    }
+                                                    onClick={() => onSort(idx)}
+                                                    key={idx}
+                                                >
+                                                    {data}
+                                                </li>
+                                            ),
+                                        )}
                                 </ul>
                             </div>
                         </MiddleCategory>

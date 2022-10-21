@@ -29,9 +29,8 @@ const Order = ({ modal, pay, orderArr }) => {
             let pay_method = '';
             let price = 0;
 
-            if (productId == undefined) price = 100;
+            if (productId == undefined) price = orderArr.reduce((a, b) => a + b.price, 0);
             else price = orderArr.reduce((a, b) => Number(a.price) + Number(b.price));
-            let i = 0;
 
             if (pay === 'card') pg = 'html5_inicis';
             else if (pay === 'Virtual') pg = 'html5_inicis';
