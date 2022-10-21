@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { SContainer, SDiv } from './styles';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { bigCategory, alpabet } from 'utils/bigCategory';
@@ -16,6 +16,13 @@ const Sidebar = props => {
     // const [cancel, setCancel] = useState(true);
     const [cancel, setCancel] = useState(Cookies.get('sideBarToggle') === 'false' ? false : true);
     const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
+
+    useEffect(() => {
+        const payload = {
+            sideBar: cancel,
+        };
+        dispatch({ type: SIDEBAR, payload });
+    }, []);
 
     //Main - filterVal 수정 등
     const sendSmallCate = (big, small) => {
@@ -69,7 +76,6 @@ const Sidebar = props => {
     const onClickToggle = useCallback(() => {
         setCancel(e => !e);
         Cookies.set('sideBarToggle', !cancel);
-        console.log(cancel);
         const payload = {
             sideBar: !cancel,
         };

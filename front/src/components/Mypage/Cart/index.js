@@ -16,7 +16,10 @@ import fetcher from 'utils/fetcher';
 function Cart() {
     const [cartList, setCartList] = useState([]);
     const loginToken = getData().accessToken;
+<<<<<<< HEAD
     // console.log(getData());
+=======
+>>>>>>> 4a5c5a7dd43ea6013c97e7f427453be0c30b7b26
 
     //장바구니 리스트 가져오기
     useEffect(() => {
@@ -25,7 +28,7 @@ function Cart() {
         });
     }, []);
 
-    //장바구니 리스트 삭제
+    //장바구니 리스트
     const { data: shoppingNumber, mutate } = useSWR(
         loginToken ? '/api/shoppingBasket/shoppingList' : null,
         url => fetcher(url, loginToken),

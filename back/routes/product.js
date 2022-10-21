@@ -7,17 +7,14 @@ const Comment = require('../models/comment');
 const ProductMainTag = require('../models/productMainTag');
 const ProductSubTag = require('../models/productSubTag');
 const AWS = require('aws-sdk');
-const fs = require('fs');
-const { sequelize, Op, Sequelize } = require('sequelize');
+const { Op, Sequelize, QueryTypes } = require('sequelize');
 const authJWT = require('../utils/middlewares/authJWT');
-const axios = require('axios');
-const { Order, MyCart } = require('../models');
+const { Order, MyCart, sequelize } = require('../models');
+const {
+    getIamportAccessToken,
+    getIamportPaymentData,
+} = require('../utils/iamport');
 const router = express.Router();
-
-function checkParams(bigCategory, price) {
-    if (!bigCategory) {
-    }
-}
 
 require('dotenv');
 const s3 = new AWS.S3({
@@ -28,54 +25,80 @@ const s3 = new AWS.S3({
 
 router.get('/productList', async (req, res, next) => {
     try {
+        let {
+            productTitle,
+            page,
+            mainSort,
+            priceMin,
+            priceMax,
+            price,
+            bigCategoryId,
+            smallCategoryId,
+        } = req.query;
+
+        // 음수 가격 검색 금지
+        if (!priceMin && priceMin < 0) {
+            priceMin = 0;
+        }
+
+        if (price == 1) {
+            priceMin = priceMin ? priceMin : 0;
+            priceMax = priceMax ? priceMax : 50000;
+        } else if (price == 2) {
+            priceMin = priceMin ? priceMin : 50000;
+            priceMax = priceMax ? priceMax : 100000;
+        } else if (price == 3) {
+            priceMin = priceMin ? priceMin : 100000;
+            priceMax = priceMax ? priceMax : 200000;
+        } else if (price == 4) {
+            priceMin = priceMin ? priceMin : 200000;
+            priceMax = priceMax ? priceMax : 300000;
+        } else if (price) {
+            priceMin = priceMin ? priceMin : 300000;
+        }
+
         const startIndx =
-            req.query.page == undefined || req.query.page <= 0
-                ? 0
-                : (Number(req.query.page) - 1) * 100;
-        console.log(req.query);
+            page == undefined || page <= 0 ? 0 : (Number(page) - 1) * 100;
 
-        let whereStatement = {
-            productPrice: {
-                [Op.between]: [
-                    req.query.priceMin
-                        ? Number(req.query.priceMin)
-                        : req.query.price
-                        ? req.query.price == 1
-                            ? 0
-                            : req.query.price == 2
-                            ? 50000
-                            : req.query.price == 3
-                            ? 100000
-                            : req.query.price == 4
-                            ? 200000
-                            : 300000
-                        : 0,
-                    req.query.priceMax
-                        ? Number(req.query.priceMax)
-                        : req.query.price
-                        ? req.query.price == 1
-                            ? 50000
-                            : req.query.price == 2
-                            ? 100000
-                            : req.query.price == 3
-                            ? 200000
-                            : req.query.price == 4
-                            ? 300000
-                            : 700000
-                        : 700000,
-                ],
-            },
-        };
+        let whereStatement = {};
 
-        if (req.query.bigCategoryId) {
-            whereStatement.bigCategoryId = {
-                [Op.eq]: Number(req.query.bigCategoryId),
+        if (priceMin || priceMax) {
+            let statements = [];
+
+            if (priceMin) {
+                statements.push({ [Op.gte]: priceMin });
+            }
+
+            if (priceMax) {
+                statements.push({ [Op.lte]: priceMax });
+            }
+
+            whereStatement.productPrice = {
+                [Op.and]: statements,
             };
         }
 
-        if (req.query.smallCategoryId) {
+        if (productTitle) {
+            let titles = productTitle.split(',');
+
+            whereStatement.productTitle = {
+                [Op.and]: titles.map((title) => {
+                    return {
+                        [Op.like]: `%${title}%`,
+                    };
+                }),
+            };
+        }
+
+        if (bigCategoryId) {
+            whereStatement.bigCategoryId = {
+                [Op.eq]: Number(bigCategoryId),
+            };
+        }
+
+        if (smallCategoryId) {
             whereStatement.smallCategoryId = {
-                [Op.eq]: Number(req.query.smallCategoryId),
+                [Op.eq]: Number(smallCategoryId),
             };
         }
 
@@ -95,17 +118,16 @@ router.get('/productList', async (req, res, next) => {
                         model: ProductSubTag,
                         attributes: ['name', 'amount'],
                     },
-                    // attributes: ["src"]
                 },
             ],
             order: [
-                req.query.mainSort == 1
+                mainSort == 1
                     ? ['productPrice', 'ASC']
-                    : req.query.mainSort == 2
+                    : mainSort == 2
                     ? ['productPrice', 'DESC']
-                    : req.query.mainSort == 3
+                    : mainSort == 3
                     ? ['comments', 'DESC']
-                    : req.query.mainSort == 4
+                    : mainSort == 4
                     ? ['comments', 'ASC']
                     : ['id', 'ASC'],
             ],
@@ -202,31 +224,27 @@ router.get('/productDetail', async (req, res, next) => {
 
 router.post('/addCart', authJWT, async (req, res, next) => {
     try {
-        console.log(req.body);
+        console.log(req.body)
         const exUser = await User.findOne({
             where: {
                 id: req.myId,
             },
         });
-        console.log(exUser);
+        console.log(exUser)
         for (i = 0; i < req.body.addCarts.length; i++) {
-            console.log(i, '번쨰!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            console.log(i, "번쨰!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             const checkMyCart = await exUser.getMyCarts({
                 where: {
-                    [Op.and]: [
-                        {
-                            ProductId: req.body.addCarts[i].productId,
-                        },
-                        {
-                            ProductMainTagId: req.body.addCarts[i].mainTagId,
-                        },
-                        {
-                            ProductSubTagId: req.body.addCarts[i].subTagId,
-                        },
-                    ],
-                },
+                    [Op.and]: [{
+                        ProductId: req.body.addCarts[i].productId
+                    }, {
+                        ProductMainTagId: req.body.addCarts[i].mainTagId
+                    }, {
+                        ProductSubTagId: req.body.addCarts[i].subTagId
+                    }
+                ]}
             });
-            console.log(checkMyCart);
+            
             if (checkMyCart.length > 0) {
                 return res
                     .status(400)
@@ -237,41 +255,38 @@ router.post('/addCart', authJWT, async (req, res, next) => {
             SELECT 
                 c.id,
                 c.amount
-            FROM products as a
-            INNER JOIN productmaintags as b
+            FROM Products as a
+            INNER JOIN ProductMainTags as b
              ON a.id = b.ProductId
-            INNER JOIN productsubtags as c
+            INNER JOIN ProductSubTags as c
              ON b.id = c.ProductMainTagId 
             WHERE b.ProductId = :productId
             AND b.id = :mainTagId
             AND c.id = :subTagId
-            LIMIT 1`;
-            console.log(query);
-            const checkProduct = await sequelize.query(query, {
-                replacements: {
-                    productId: req.body.addCarts[i].productId,
-                    mainTagId: req.body.addCarts[i].mainTagId,
-                    subTagId: req.body.addCarts[i].subTagId,
-                },
-                type: QueryTypes.SELECT,
-            });
-            console.log(checkProduct);
+            LIMIT 1`; 
+            console.log(query)
+            const checkProduct = await sequelize.query(
+                query,
+                { 
+                    replacements: {
+                        productId: req.body.addCarts[i].productId,
+                        mainTagId: req.body.addCarts[i].mainTagId,
+                        subTagId: req.body.addCarts[i].subTagId
+                    },
+                    type: QueryTypes.SELECT 
+                }
+            )
+            console.log(checkProduct)
             if (!checkProduct) {
-                return res.status(401).send({
-                    message: '존재하지 않는 상품을 장바구니에 추가하고있습니다',
-                });
+                return res.status(401).send({ message: "존재하지 않는 상품을 장바구니에 추가하고있습니다" })
             }
 
             if (checkProduct[0].amount < req.body.addCarts[i].packingAmount) {
-                return res
-                    .status(402)
-                    .send({ message: '재고보다 담으려는 수량이 더 많습니다' });
+                return res.status(402).send({ message: "재고보다 담으려는 수량이 더 많습니다" })
             }
             await ProductSubTag.update(
                 {
-                    amount: Sequelize.literal(
-                        `amount - ${req.body.addCarts[i].packingAmount}`,
-                    ),
+                    amount: Sequelize.literal(`amount - ${req.body.addCarts[i].packingAmount}`),
                 },
                 {
                     where: {
@@ -280,6 +295,7 @@ router.post('/addCart', authJWT, async (req, res, next) => {
                 },
             );
 
+
             await MyCart.create({
                 packingAmount: req.body.addCarts[i].packingAmount,
                 UserId: req.myId,
@@ -287,7 +303,7 @@ router.post('/addCart', authJWT, async (req, res, next) => {
                 ProductMainTagId: req.body.addCarts[i].mainTagId,
                 ProductSubTagId: req.body.addCarts[i].subTagId,
                 packingAmount: req.body.addCarts[i].packingAmount,
-            });
+            })
         }
 
         res.status(200).send({ success: true });
@@ -339,81 +355,75 @@ router.post('/likeProduct', authJWT, async (req, res, next) => {
 router.post('/purchase', authJWT, async (req, res, next) => {
     try {
         console.log(req.body);
-        if (!req.body.ProductId) {
-            return res.status(400).send({
-                message:
-                    '상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요',
-            });
-        }
-        if (!req.body.Merchant_uid) {
-            return res.status(401).send({
-                message:
-                    '주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요',
-            });
-        }
-        if (!req.body.imp_uid) {
-            return res.status(402).send({
-                message:
-                    'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요',
-            });
-        }
-        if (!req.body.price) {
-            return res.status(403).send({
-                message:
-                    '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
-            });
-        }
-        if (!req.body.amount) {
-            return res.status(406).send({
-                message:
-                    '구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
-            });
-        }
+        
 
         const { imp_uid, Merchant_uid } = req.body.authPayment; // req의 query에서 imp_uid, Merchant_uid 추출
         // 액세스 토큰(access token) 발급 받기
-        const getToken = await axios({
-            url: 'https://api.iamport.kr/users/getToken',
-            method: 'post', // POST method
-            headers: { 'Content-Type': 'application/json' }, // "Content-Type": "application/json"
-            data: {
-                imp_key: '3360868424546062', // REST API 키
-                imp_secret:
-                    'R0poOeLPunhouN0YaMFSRKJh1ACv6C9Atijr0BHTBUB2DWk3sc7Fv3s3qvlqpZprvqli25IWWG7brjXq', // REST API Secret
-            },
-        });
-        const { access_token } = getToken.data.response; // 인증 토큰
-        // imp_uid로 아임포트 서버에서 결제 정보 조회
-        const getPaymentData = await axios({
-            url: `https://api.iamport.kr/payments/${imp_uid}`, // imp_uid 전달
-            method: 'get', // GET method
-            headers: { Authorization: access_token }, // 인증 토큰 Authorization header에 추가
-        });
-        const paymentData = getPaymentData.data.response; // 조회한 결제 정보
+        const iamportAccessToken = await getIamportAccessToken(); // 인증 토큰
+
+        const paymentData = await getIamportPaymentData(
+            iamportAccessToken,
+            imp_uid,
+        );
         // 결제 검증하기
         const { amount, status } = paymentData;
 
-        let priceSum = 0
-        for (i = 0; i < orderList.length; i++) {
-            priceSum += Number(req.body.orderList[i].price)
+        let priceSum = 0;
+        for (i = 0; i < req.body.orderList.length; i++) {
+            priceSum += Number(req.body.orderList[i].price) * Number(req.body.orderList[i].amount);
         }
-
+        console.log("amount ==", amount)
+        console.log("priceSum ==", priceSum)
         if (amount != priceSum) {
             return res.status(405).send({ message: '위조된 결제 시도입니다' });
         }
 
-        for (i = 0 ; i < req.body.orderList.length; i++) {
+        for (i = 0; i < req.body.orderList.length; i++) {
+
+            if (!req.body.orderList[i].ProductId) {
+                return res.status(400).send({
+                    message:
+                        '상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요',
+                });
+            }
+            if (!req.body.authPayment.Merchant_uid) {
+                return res.status(401).send({
+                    message:
+                        '주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요',
+                });
+            }
+            if (!req.body.authPayment.imp_uid) {
+                return res.status(402).send({
+                    message:
+                        'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요',
+                });
+            }
+            if (!req.body.orderList[i].price) {
+                return res.status(403).send({
+                    message:
+                        '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
+                });
+            }
+            if (!req.body.orderList[i].amount) {
+                return res.status(406).send({
+                    message:
+                        '구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
+                });
+            }
+
             const isExistedOrder = await Order.findOne({
                 where: {
                     UserId: req.myId,
                     ProductId: req.body.orderList[i].ProductId,
                     ProductMainTagId: req.body.orderList[i].ProductMainTagId,
-                    ProductSubTagId: req.body.orderList[i].ProductSubTagId
+                    ProductSubTagId: req.body.orderList[i].ProductSubTagId,
                 },
             });
             // console.log(isExistedOrder)
             if (isExistedOrder) {
-                return res.status(407).send({ message: '이미 접수된 주문입니다' });
+                return res
+                    .status(407)
+                    .send({ message: '이미 접수된 주문입니다' });
             }
             await Order.create({
                 UserId: req.myId,
@@ -425,7 +435,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
                 cancelableAmount: req.body.orderList[i].price,
                 ImpUid: imp_uid,
                 ProductMainTagId: req.body.orderList[i].ProductMainTagId,
-                ProductSubTagId: req.body.orderList[i].ProductSubTagId
+                ProductSubTagId: req.body.orderList[i].ProductSubTagId,
             });
         }
         res.status(200).send({ message: '일반 결제 성공' });
@@ -435,13 +445,12 @@ router.post('/purchase', authJWT, async (req, res, next) => {
     }
 });
 
-router.post('/checkAmount', authJWT, async (req, res, next) => {
+router.post('/search', authJWT, async (req, res, next) => {
     try {
-
     } catch (e) {
-        console.error(e)
-        next(e)
+        console.error(e);
+        next(e);
     }
-})
+});
 
 module.exports = router;

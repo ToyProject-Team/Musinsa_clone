@@ -82,6 +82,10 @@ module.exports = class User extends Model {
         });
         db.User.hasMany(db.MyCart, {
             as: 'myCarts',
+            foreignKey: {
+                name: 'UserId',
+                allowNull: false,
+            },
         });
         db.User.belongsToMany(db.Product, {
             through: db.Comment,

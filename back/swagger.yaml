@@ -711,6 +711,11 @@ paths:
       summary: 상품 리스트
       parameters:
         - in: query
+          name: productTitle
+          schema:
+            type: string
+          description: '제품 이름 검색용 쿼리입니다. 제품 이름의 부분을 검색합니다. <br>`다중 검색 쿼리를 사용하려면 ,를 사용하세요 "Shirt,Red"`'
+        - in: query
           name: mainSort
           schema:
             type: integer
@@ -961,10 +966,10 @@ paths:
                     packingAmount:
                       type: number
                       example: 2
-                    productMainTagId:
+                    mainTagId:
                       type: number
                       example: 1
-                    productSubTagId:
+                    subTagId:
                       type: number
                       example: 1
       responses:
@@ -977,6 +982,20 @@ paths:
               message:
                 type: string
                 example: 이미 추가된 카테고리입니다
+        '401':
+          description: 존재하지 않는 상품을 장바구니에 추가할 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 존재하지 않는 상품을 장바구니에 추가하고있습니다
+        '402':
+          description: 실제 재고보다 담으려는 수가 더 많을 경우
+          schema:
+            properties:
+              message:
+                type: string
+                example: 재고보다 담으려는 수량이 더 많습니다
         '500':
           $ref: '#/serverError'
   /api/product/likeProduct:
@@ -1223,10 +1242,10 @@ paths:
                       type: number
                       example: 3
               merchant_uid:
-                type: number
+                type: string
                 example: 4234234
               imp_uid:
-                type: number
+                type: string
                 example: 1244
       responses:
         '200':
@@ -1376,6 +1395,12 @@ components:
             src:
               type: string
               example: Accessory/Accessory23
+        SmallCategoryId:
+          type: number
+          example: 1
+        BigCategoryId:
+          type: number
+          example: 1
         ProductMainTags:
           type: array
           items:

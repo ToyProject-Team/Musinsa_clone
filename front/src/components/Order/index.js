@@ -27,8 +27,15 @@ const Order = ({ modal, pay, orderArr }) => {
         if (iamportScript === 'ready' && jQueryScript === 'ready') {
             let pg = '';
             let pay_method = '';
+<<<<<<< HEAD
             let price = 100;
             let i = 0;
+=======
+            let price = 0;
+
+            if (productId == undefined) price = 100;
+            else price = checkList.reduce((a, b) => Number(a.price) + Number(b.price));
+>>>>>>> 4a5c5a7dd43ea6013c97e7f427453be0c30b7b26
 
             if (pay === 'card') pg = 'html5_inicis';
             else if (pay === 'Virtual') pg = 'html5_inicis';
@@ -61,7 +68,11 @@ const Order = ({ modal, pay, orderArr }) => {
                         console.log('mer', rsp.merchant_uid, 'imp', rsp.imp_uid);
                         if (productId == undefined) {
                             const data = {
+<<<<<<< HEAD
                                 purchasedDataList: orderArr,
+=======
+                                purchasedDataList: [checkList],
+>>>>>>> 4a5c5a7dd43ea6013c97e7f427453be0c30b7b26
                                 MerchantUid: rsp.merchant_uid,
                                 imp_uid: rsp.imp_uid,
                             };
@@ -76,20 +87,25 @@ const Order = ({ modal, pay, orderArr }) => {
                             });
                         } else {
                             const data = {
-                                imp_uid: rsp.imp_uid,
-                                Merchant_uid: rsp.merchant_uid,
-                                ProductId: productId,
-                                price,
-                                amount: 2,
+                                authPayment: {
+                                    imp_uid: rsp.imp_uid,
+                                    Merchant_uid: rsp.merchant_uid,
+                                },
+                                orderList: checkList,
                             };
+
                             PostHeaderBodyApi(
                                 '/api/product/purchase',
                                 data,
                                 'Authorization',
                                 accessToken,
-                            ).then(res => {
-                                setModalOrder(true);
-                            });
+                            )
+                                .then(res => {
+                                    setModalOrder(true);
+                                })
+                                .catch(err => {
+                                    console.error(err);
+                                });
                         }
                     } else {
                         // 결제 실패 시 로직,

@@ -390,19 +390,15 @@ const Main = () => {
                                             if (searchInput === '') return val;
                                             else if (val.includes(searchInput)) return val;
                                         })
-                                        .map((data, idx) =>
-                                            idx === 0 ? null : (
-                                                <li
-                                                    className={
-                                                        clickCate[idx] ? 'active' : 'inactive'
-                                                    }
-                                                    onClick={() => onSort(idx)}
-                                                    key={idx}
-                                                >
-                                                    {data}
-                                                </li>
-                                            ),
-                                        )}
+                                        .map((data, idx) => (
+                                            <li
+                                                className={clickCate[idx] ? 'active' : 'inactive'}
+                                                onClick={() => onSort(idx)}
+                                                key={idx}
+                                            >
+                                                {data}
+                                            </li>
+                                        ))}
                                 </ul>
                             </div>
                         </MiddleCategory>

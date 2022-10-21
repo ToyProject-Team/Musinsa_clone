@@ -56,6 +56,8 @@ router.get('/shoppingList', authJWT, async (req, res, next) => {
                         'productPrice',
                         'likes',
                         'comments',
+                        'SmallCategoryId',
+                        'BigCategoryId',
                     ],
 
                     include: [
@@ -164,18 +166,29 @@ router.post('/purchase', authJWT, async (req, res, next) => {
                 /** 장바구니와 입력된 개수와 같은지 */
                 if (amount != shoppingBasket.packingAmount) {
                     isValidatePruchase = false;
+                    console.error(
+                        `위조된 결제 시도: 장바구니와 입력된 개수와 다름[${amount} != ${shoppingBasket.packingAmount}]`,
+                    );
                     break;
                 }
 
                 /** productSubTag개수를 초과한 경우 */
-                if (amount <= productSubTag.amount) {
+                if (amount > productSubTag.amount) {
                     isValidatePruchase = false;
+                    console.error(
+                        `위조된 결제 시도: productSubTag개수를 초과[${amount} != ${productSubTag.amount}]`,
+                    );
                     break;
                 }
 
                 /** 실제 price 값이 나오는지 */
                 if (price != amount * product.productPrice) {
                     isValidatePruchase = false;
+                    console.error(
+                        `위조된 결제 시도: 실제 가격 값과 다름[${price} != ${
+                            amount * product.productPrice
+                        }]`,
+                    );
                     break;
                 }
             }

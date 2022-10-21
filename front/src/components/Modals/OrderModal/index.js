@@ -36,7 +36,7 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price, pay, setPay }) 
         const asyncFunction = async () => {
             try {
                 const data = {
-                    keys: ['address'],
+                    keys: ['address', 'recipientNumber', 'recipient', 'addressNumber'],
                 };
                 const result = await PostHeaderBodyApi(
                     '/api/auth/getUserData',
@@ -51,6 +51,7 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price, pay, setPay }) 
 
         asyncFunction();
     }, []);
+    console.log(info);
 
     return (
         <Modal show={show} onCloseModal={onCloseModal}>
@@ -72,25 +73,27 @@ const OrderModal = ({ show, onCloseModal, onClickConfirm, price, pay, setPay }) 
                             <th className="modal" scope="row">
                                 수령인
                             </th>
-                            <td>허허</td>
+                            <td>{info.recipient ? info.recipient : '없음'}</td>
                         </tr>
                         <tr>
                             <th className="modal" scope="row">
                                 휴대전화
                             </th>
-                            <td>010-1234-5678</td>
+                            <td>{info.addressNumber ? info.addressNumber : '없음'}</td>
                         </tr>
                         <tr>
                             <th className="modal" scope="row">
                                 전화번호
                             </th>
-                            <td>010-1234-5678</td>
+                            <td>{info.recipientNumber ? info.recipientNumber : '없음'}</td>
                         </tr>
                         <tr>
                             <th className="modal" scope="row">
                                 배송지 주소
                             </th>
-                            <td className="address-input">{info.address}</td>
+                            <td className="address-input">
+                                {info.address ? info.address : '없음'}
+                            </td>
                         </tr>
                     </tbody>
                 </table>

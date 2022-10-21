@@ -17,23 +17,51 @@ const { promisify } = require('util');
 dotenv.config();
 router.post('/signup', async (req, res, next) => {
     try {
+        const {
+            loginId,
+            password,
+            aggreement,
+            email,
+            phoneNumber,
+            recipientNumber,
+            recipient,
+            addressNumber,
+            agreement,
+            address,
+        } = req.body;
+
         const exUser = await User.findOne({
-            where: {
-                loginId: req.body.loginId,
-            },
+            where: { loginId },
         });
-        console.log(req.headers.encryptioncode);
+
+        if (exUser)
+            return res
+                .status(401)
+                .send({ message: '이미 사용중인 아이디 입니다' });
+        console.log(req.headers.encryptioncode)
         if (req.headers.encryptioncode) {
             bytes = CryptoJS.AES.decrypt(
                 req.headers.encryptioncode,
                 'secret key 123',
             );
-            console.log(bytes, 'DASdasd');
+            console.log(bytes)
             req.headers.encryptioncode = JSON.parse(
                 bytes.toString(CryptoJS.enc.Utf8),
             );
-            console.log(req.headers.encryptioncode);
         }
+
+        const overlapEmail = await User.findOne({
+            where: {
+                email: req.body.email,
+            },
+        });
+
+        if (overlapEmail) {
+            return res
+                .status(402)
+                .send({ message: '이미 사용중인 이메일 입니다' });
+        }
+
         const client = redisClient;
         const getAsync = promisify(client.get).bind(client);
         const checkSMS = await getAsync(
@@ -52,48 +80,32 @@ router.post('/signup', async (req, res, next) => {
             });
         }
 
-        if (exUser) {
-            return res
-                .status(401)
-                .send({ message: '이미 사용중인 아이디 입니다' });
-        }
-
-        const overlapEmail = await User.findOne({
-            where: {
-                email: req.body.email,
-            },
-        });
-
-        if (overlapEmail) {
-            return res
-                .status(402)
-                .send({ message: '이미 사용중인 이메일 입니다' });
-        }
         if (checkSMS) {
-            if (req.body.phoneNumber !== checkSMS) {
+            if (phoneNumber !== checkSMS) {
                 return res.status(403).send({
                     message: '휴대폰 인증이 완료된 번호를 보내야합니다',
                 });
             }
         } else {
-            if (req.body.email !== checkEmail) {
+            if (email !== checkEmail) {
                 return res.status(405).send({
                     message: '이메일 인증이 완료된 이메일을 보내야합니다',
                 });
             }
         }
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
         const newUser = await User.create({
-            loginId: req.body.loginId,
+            loginId,
             password: hashedPassword,
             email: checkEmail ? checkEmail : null,
-            agreement: req.body.agreement == 1 ? 1 : 0,
-            address: req.body.address,
+            agreement: agreement == 1 ? 1 : 0,
+            address,
             phoneNumber: checkSMS ? checkSMS : null,
             socialEmail: checkSocialEmail ? checkSocialEmail : null,
-            recipientNumber: req.body.recipientNumber,
-            recipient: req.body.recipient,
-            addressNumber: req.body.addressNumber,
+            recipientNumber,
+            recipient,
+            addressNumber,
         });
 
         return res.status(200).send({ success: true });
@@ -596,10 +608,22 @@ router.post('/checkIsLoginIdCheckUser', (req, res, next) => {
 });
 
 router.post('/getUserData', authJWT, async (req, res, next) => {
-    const ALLOWED_KEYS = ['address'];
+    const ALLOWED_KEYS = [
+        'address',
+        'loginId',
+        'email',
+        'password',
+        'nickname',
+        'phoneNumber',
+        'socialEmail',
+        'rank',
+        'recipientNumber',
+        'recipient',
+        'addressNumber',
+    ];
 
     try {
-        const keys = req.body.keys;
+        const { keys } = req.body;
 
         // 모든 키값 중 하나라도 ALLOWED_KEYS 값에 없다면 에러
         if (
@@ -610,6 +634,12 @@ router.post('/getUserData', authJWT, async (req, res, next) => {
         ) {
             res.status(400).send({
                 message: `허용되지 않은 key값을 요청할 수 없습니다. 허용되는 키값: [${ALLOWED_KEYS}]`,
+            });
+        }
+
+        if (keys && keys.length == 0) {
+            res.status(401).send({
+                message: `keys값이 아무것도 없습니다. key값을 넣어주세요. 허용되는 키값: [${ALLOWED_KEYS}]`,
             });
         }
 
