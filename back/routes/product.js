@@ -224,77 +224,69 @@ router.get('/productDetail', async (req, res, next) => {
 
 router.post('/addCart', authJWT, async (req, res, next) => {
     try {
-        console.log(req.body);
+        console.log(req.body)
         const exUser = await User.findOne({
             where: {
                 id: req.myId,
             },
         });
-        console.log(exUser);
+        console.log(exUser)
         for (i = 0; i < req.body.addCarts.length; i++) {
-            console.log(i, '번쨰!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-            console.log(req.body.addCarts[i]);
-
+            console.log(i, "번쨰!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             const checkMyCart = await exUser.getMyCarts({
                 where: {
-                    [Op.and]: [
-                        {
-                            ProductId: req.body.addCarts[i].productId,
-                        },
-                        {
-                            ProductMainTagId: req.body.addCarts[i].mainTagId,
-                        },
-                        {
-                            ProductSubTagId: req.body.addCarts[i].subTagId,
-                        },
-                    ],
-                },
+                    [Op.and]: [{
+                        ProductId: req.body.addCarts[i].productId
+                    }, {
+                        ProductMainTagId: req.body.addCarts[i].mainTagId
+                    }, {
+                        ProductSubTagId: req.body.addCarts[i].subTagId
+                    }
+                ]}
             });
-            console.log(checkMyCart);
+            
             if (checkMyCart.length > 0) {
                 return res
                     .status(400)
                     .send({ message: '이미 추가된 카테고리입니다' });
             }
+
             const query = `
             SELECT 
                 c.id,
                 c.amount
-            FROM Products as a
-            INNER JOIN ProductMainTags as b
+            FROM products as a
+            INNER JOIN productmaintags as b
              ON a.id = b.ProductId
-            INNER JOIN ProductSubTags as c
+            INNER JOIN productsubtags as c
              ON b.id = c.ProductMainTagId 
             WHERE b.ProductId = :productId
             AND b.id = :mainTagId
             AND c.id = :subTagId
-            LIMIT 1`;
-            console.log(query);
-            const checkProduct = await sequelize.query(query, {
-                replacements: {
-                    productId: req.body.addCarts[i].productId,
-                    mainTagId: req.body.addCarts[i].mainTagId,
-                    subTagId: req.body.addCarts[i].subTagId,
-                },
-                type: QueryTypes.SELECT,
-            });
-            console.log(checkProduct);
+            LIMIT 1`; 
+            console.log(query)
+            const checkProduct = await sequelize.query(
+                query,
+                { 
+                    replacements: {
+                        productId: req.body.addCarts[i].productId,
+                        mainTagId: req.body.addCarts[i].mainTagId,
+                        subTagId: req.body.addCarts[i].subTagId
+                    },
+                    type: QueryTypes.SELECT 
+                }
+            )
+            console.log(checkProduct)
             if (!checkProduct) {
-                return res.status(401).send({
-                    message: '존재하지 않는 상품을 장바구니에 추가하고있습니다',
-                });
+                return res.status(401).send({ message: "존재하지 않는 상품을 장바구니에 추가하고있습니다" })
             }
 
             if (checkProduct[0].amount < req.body.addCarts[i].packingAmount) {
-                return res
-                    .status(402)
-                    .send({ message: '재고보다 담으려는 수량이 더 많습니다' });
+                return res.status(402).send({ message: "재고보다 담으려는 수량이 더 많습니다" })
             }
             await ProductSubTag.update(
                 {
-                    amount: Sequelize.literal(
-                        `amount - ${req.body.addCarts[i].packingAmount}`,
-                    ),
+                    amount: Sequelize.literal(`amount - ${req.body.addCarts[i].packingAmount}`),
                 },
                 {
                     where: {
@@ -303,6 +295,7 @@ router.post('/addCart', authJWT, async (req, res, next) => {
                 },
             );
 
+
             await MyCart.create({
                 packingAmount: req.body.addCarts[i].packingAmount,
                 UserId: req.myId,
@@ -310,7 +303,7 @@ router.post('/addCart', authJWT, async (req, res, next) => {
                 ProductMainTagId: req.body.addCarts[i].mainTagId,
                 ProductSubTagId: req.body.addCarts[i].subTagId,
                 packingAmount: req.body.addCarts[i].packingAmount,
-            });
+            })
         }
 
         res.status(200).send({ success: true });
