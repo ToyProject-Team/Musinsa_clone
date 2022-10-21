@@ -401,7 +401,8 @@ router.post('/purchase', authJWT, async (req, res, next) => {
         for (i = 0; i < orderList.length; i++) {
             priceSum += Number(req.body.orderList[i].price);
         }
-
+        console.log("amount ==", amount)
+        console.log("priceSum ==", priceSum)
         if (amount != priceSum) {
             return res.status(405).send({ message: '위조된 결제 시도입니다' });
         }
