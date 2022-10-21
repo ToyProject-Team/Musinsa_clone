@@ -49,8 +49,6 @@ const PurchaseForm = () => {
     const [firstSelectId, setFirstSelectId] = useState();
     const [selectArr, setSelectArr] = useState([]);
 
-    const [totalPrice, setTotalPrice] = useState(0);
-
     const [pay, setPay] = useState('card');
     const [order, setOrder] = useState(false);
 
@@ -214,7 +212,7 @@ const PurchaseForm = () => {
         [selectArr],
     );
 
-    const TotalPr = useMemo(() => {
+    const totalPrice = useMemo(() => {
         return selectArr.length > 0
             ? selectArr?.map(v => Number(v[2]))?.reduce((a, b) => a + b) *
                   detail.product.rookiePrice
@@ -278,8 +276,8 @@ const PurchaseForm = () => {
         for (let list of selectArr) {
             const obj = {
                 productId: query.productId,
-                productMainTagId: Number(list[0]),
-                productSubTagId: Number(list[1]),
+                mainTagId: Number(list[0]),
+                subTagId: Number(list[1]),
                 packingAmount: list[2],
             };
             addCarts.push(obj);
@@ -426,7 +424,7 @@ const PurchaseForm = () => {
 
             <TotalPrice>
                 <p>총 상품 금액</p>
-                <div>{thousandComma(TotalPr)}원</div>
+                <div>{thousandComma(totalPrice)}원</div>
             </TotalPrice>
             <ButtonWrapper>
                 <ButtonBuy onClick={onClickOrderButton}>바로구매</ButtonBuy>
@@ -445,7 +443,7 @@ const PurchaseForm = () => {
                     show={modalOrder}
                     onCloseModal={onCloseModal}
                     onClickConfirm={onClickOrder}
-                    price={thousandComma(totalPrice * detail.product.rookiePrice)}
+                    price={thousandComma(totalPrice)}
                     pay={pay}
                     setPay={setPay}
                 ></OrderModal>
