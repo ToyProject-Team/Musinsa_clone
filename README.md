@@ -113,33 +113,6 @@
 <br />
 <br />
     
-> 이런식으로 넣으면 될까요? 너무 하얗고 비어보일까요???
-
-<div>
-<img src="https://user-images.githubusercontent.com/101618759/196857707-e9135b20-7442-4fd0-b1cd-a5c02c41354c.jpg" width="45%">
-<img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
-<img src="https://user-images.githubusercontent.com/101618759/196857732-68345ad8-202f-4908-aec4-afe3024a6206.jpg" width="45%">
-<img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
-<img src="https://user-images.githubusercontent.com/101618759/196857763-4eacb521-b0af-48fa-801e-12d4283d9d10.jpg" width="45%"> 
-<img src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
-</div>
-    
-> 로그인 페이지에서 소셜로그인, 유효성 검사, 아이디 비밀번호 찾기를 할 수 있어요
-
-- 소셜로그인 이미지와 상세 설명
-- 유효성 검사~ 이미지와 상세 설명~
-- 비밀 번호 찾기~
-
-> 회원가입 페이지에서 휴대폰 / 이메일 인증을 할 수 있어요
-
-- 회원가입 페이지 이미지 / 기능 상세 설명~??
-
-> 메인페이지에서 상품을 검색하고, 조건에 따라 필터링 / 정렬할 수 있어요
-
-> 디테일 페이지에서 상품이미지를 확대하고 옵션을 선택 할 수 있어요
-
-> 마이 페이지에서 주문 내역, 좋아요 상품, 장바구니 내역을 볼 수 있어요
-
 > 레이아웃 컴포넌트
 >
 > - 헤더에서 상품 검색 기능과, 주문내역 / 장바구니 상품 알림 기능을 이용 할 수 있어요<br>
@@ -163,7 +136,7 @@ FrontEnd | FrontEnd | FrontEnd | FrontEnd
 이민서 | 이준영
 :---: | :---:
 <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a>
-<a href="www.naver.com">git으로 이동하기</a> | 301 
+<a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> 
 BackEnd | BackEnd
  
 </div>
