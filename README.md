@@ -103,20 +103,20 @@
 <br />
     
 # 🎨 Skills
-### Front
+### 🧶 Front
 * React
 * React Router
 * Styled Component
 * UseConText
 * USESWR
 
-### Back
+### 🛠 Back
 * Node
 * JWT
 * Jenkins
 * Redis
 * MySql
-* 결제 API    
+* 결제 API  
 
 <br />
 <br />
