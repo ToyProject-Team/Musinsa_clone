@@ -5,6 +5,7 @@ import { FiPlus } from '@react-icons/all-files/fi/FiPlus';
 import { FiX } from '@react-icons/all-files/fi/FiX';
 import { thousandComma } from 'utils/thousandComma';
 import { smallCategory } from 'utils/smallCategory';
+import { bigCategory } from 'utils/bigCategory';
 import { CheckLabel, ItemUl } from './styles';
 import OrderModal from 'components/Modals/OrderModal';
 import Order from 'components/Order';
@@ -53,10 +54,6 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
             : setCartList(cartList);
     }, [cartList]);
 
-    // 삭제
-    // const removeItem = useCallback(() => {
-    // 	setCartList(prev => prev.filter(v => v.Product.id !== item.Product.id));
-    // }, [cartList]);
 
     // 결제 모달창
     const onCloseModal = useCallback(() => {
@@ -121,10 +118,8 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
                                         <ItemUl>
                                             <li>
                                                 <a href={`/detail?productId=${item.Product.id}`}>
-                                                    {' '}
-                                                    청바지{' '}
+                                                    {bigCategory[item.Product.BigCategoryId]} / {smallCategory[item.Product.BigCategoryId][item.Product.SmallCategoryId]}
                                                 </a>
-                                                {/* <a href="/"> {smallCategory[item.bigCategory][item.smallCategory]}</a> */}
                                             </li>
                                             <li>
                                                 <a href={`/detail?productId=${item.Product.id}`}>
