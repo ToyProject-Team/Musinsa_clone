@@ -115,8 +115,8 @@
     
 송민지 | 서경주 | 김우혁 | 이다노 
 :---: | :---: | :---: | :---: 
-<a href="https://github.com/devchosil"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> 
-<a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> 
+<a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> 
+<a href="https://github.com/devchosil">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> 
 FrontEnd | FrontEnd | FrontEnd | FrontEnd
  
 </div>
