@@ -135,7 +135,7 @@ FrontEnd | FrontEnd | FrontEnd | FrontEnd
 이민서 | 이준영
 :---: | :---:
 <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://avatars.githubusercontent.com/u/7973448?s=400&u=800b64efe4bbb92dab15f37b3f34ae8e211d4989&v=4" alt="Material Bread logo"></a>
-<a href="https://github.com/2jun0">GitHub</a> | <a href="https://github.com/2jun0">GitHub</a> 
+<a href="https://github.com/nacho1415">GitHub</a> | <a href="https://github.com/2jun0">GitHub</a> 
 BackEnd | BackEnd
  
 </div>
