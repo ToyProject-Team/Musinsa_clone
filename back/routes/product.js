@@ -355,36 +355,7 @@ router.post('/likeProduct', authJWT, async (req, res, next) => {
 router.post('/purchase', authJWT, async (req, res, next) => {
     try {
         console.log(req.body);
-        if (!req.body.ProductId) {
-            return res.status(400).send({
-                message:
-                    '상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요',
-            });
-        }
-        if (!req.body.Merchant_uid) {
-            return res.status(401).send({
-                message:
-                    '주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요',
-            });
-        }
-        if (!req.body.imp_uid) {
-            return res.status(402).send({
-                message:
-                    'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요',
-            });
-        }
-        if (!req.body.price) {
-            return res.status(403).send({
-                message:
-                    '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
-            });
-        }
-        if (!req.body.amount) {
-            return res.status(406).send({
-                message:
-                    '구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
-            });
-        }
+        
 
         const { imp_uid, Merchant_uid } = req.body.authPayment; // req의 query에서 imp_uid, Merchant_uid 추출
         // 액세스 토큰(access token) 발급 받기
@@ -408,6 +379,38 @@ router.post('/purchase', authJWT, async (req, res, next) => {
         }
 
         for (i = 0; i < req.body.orderList.length; i++) {
+
+            if (!req.body.orderList[i].ProductId) {
+                return res.status(400).send({
+                    message:
+                        '상품에 대한 식별 번호가 지급되지 않았습니다 구매할 상품에 대한 상품 식별 번호를 넘겨주세요',
+                });
+            }
+            if (!req.body.orderList[i].Merchant_uid) {
+                return res.status(401).send({
+                    message:
+                        '주문 번호가 지급되지 않았습니다 주문 번호를 넘겨주세요',
+                });
+            }
+            if (!req.body.orderList[i].imp_uid) {
+                return res.status(402).send({
+                    message:
+                        'uniqueKey가 지급되지 않았습니다. uniqueKey를 넘겨주세요',
+                });
+            }
+            if (!req.body.orderList[i].price) {
+                return res.status(403).send({
+                    message:
+                        '가격 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
+                });
+            }
+            if (!req.body.orderList[i].amount) {
+                return res.status(406).send({
+                    message:
+                        '구매갯수 정보가 지급되지 않았습니다. 가격 정보를 넘겨주세요',
+                });
+            }
+
             const isExistedOrder = await Order.findOne({
                 where: {
                     UserId: req.myId,
