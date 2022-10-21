@@ -10,7 +10,7 @@ import { useScript } from 'hooks/useScript';
 
 const impNumber = process.env.REACT_APP_PAYMENT;
 
-const Order = ({ modal, pay, checkList }) => {
+const Order = ({ modal, pay, orderArr }) => {
     const jQueryScript = useScript('https://code.jquery.com/jquery-1.12.4.min.js');
     const iamportScript = useScript('https://cdn.iamport.kr/js/iamport.payment-1.1.8.js');
 
@@ -31,6 +31,7 @@ const Order = ({ modal, pay, checkList }) => {
 
             if (productId == undefined) price = 100;
             else price = checkList.reduce((a, b) => Number(a.price) + Number(b.price));
+            let i = 0;
 
             if (pay === 'card') pg = 'html5_inicis';
             else if (pay === 'Virtual') pg = 'html5_inicis';
@@ -57,14 +58,17 @@ const Order = ({ modal, pay, checkList }) => {
                 },
                 rsp => {
                     // callback
+                    console.log(rsp.merchant_uid, rsp.imp_uid);
                     if (rsp.success) {
                         // 결제 성공 시 로직,
+                        console.log('mer', rsp.merchant_uid, 'imp', rsp.imp_uid);
                         if (productId == undefined) {
                             const data = {
-                                purchasedDataList: [checkList],
+                                purchasedDataList: orderArr,
                                 MerchantUid: rsp.merchant_uid,
                                 imp_uid: rsp.imp_uid,
                             };
+
                             PostHeaderBodyApi(
                                 '/api/shoppingBasket/purchase',
                                 data,

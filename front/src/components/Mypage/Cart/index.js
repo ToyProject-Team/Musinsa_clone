@@ -40,12 +40,7 @@ function Cart() {
         const params = {
             shoppingBasketId: id,
         };
-        DeleteHeaderBodyApi(
-            '/api/shoppingBasket/del',
-            params,
-            'Authorization',
-            loginToken.accessToken,
-        )
+        DeleteHeaderBodyApi('/api/shoppingBasket/del', params, 'Authorization', loginToken)
             .then(res => {
                 const deleteList = cartList.filter(prev => prev.id !== id);
                 setCartList(deleteList);
@@ -80,7 +75,8 @@ function Cart() {
 
     const [modalOrder, setModalOrder] = useState(false);
 
-    const [checkList, setCheckList] = useState({});
+    let [checkList, setCheckList] = useState([]);
+    const [orderArr, setOrderArr] = useState([{ shoppingBasketId: '', price: '', amount: '' }]);
 
     // 체크
     const checkItem = useCallback(() => {
@@ -99,12 +95,14 @@ function Cart() {
     }, []);
 
     // 결제
+
     const onClickOrder = useCallback(() => {
         setModalOrder(false);
         setOrder(true);
         let arrBsId = [];
         let arrPrice = [];
         let arrAmount = [];
+
         cartList.map(v =>
             v.check
                 ? arrBsId.push(v.id) &&
@@ -114,24 +112,22 @@ function Cart() {
                   arrPrice.filter(f => f !== v.Product.productPrice * v.packingAmount) &&
                   arrAmount.filter(f => f !== v.packingAmount),
         );
-
-        setCheckList({ shoppingBasketId: arrBsId, price: arrPrice, amout: arrAmount });
-
-        // console.log('ok', arrBsId, arrPrice, arrAmount);
+        for (let i = 0; i < checkList.length; i++) {
+            setOrderArr([
+                { shoppingBasketId: arrBsId[i], price: arrPrice[i], amount: arrAmount[i] },
+            ]);
+        }
     }, [cartList]);
 
-    console.log('check', checkList);
+    // console.log('check', checkList);
+    console.log('order', orderArr);
 
     // 모두 체크 확인 및 총상품 금액
-
-    const [basketId, setBasketId] = useState([]);
-    // console.log(basketId);
-
     useEffect(() => {
         let arrId = [];
         cartList.map(v => (v.check ? arrId.push(v.id) : arrId.filter(f => f !== v.id)));
 
-        setBasketId(arrId);
+        setCheckList(arrId);
 
         if (cartList.length === arrId.length && cartList.length != 0) setCheckBox(true);
         else setCheckBox(false);
@@ -228,7 +224,7 @@ function Cart() {
                     </CartPayment>
                     <OrderBtn>
                         <button onClick={onClickOrderButton}>결제하기</button>
-                        {order && <Order pay={pay} checkList={checkList} />}
+                        {order && <Order pay={pay} checkList={checkList} orderArr={orderArr} />}
                     </OrderBtn>
                 </div>
 

@@ -5,6 +5,7 @@ import { FiPlus } from '@react-icons/all-files/fi/FiPlus';
 import { FiX } from '@react-icons/all-files/fi/FiX';
 import { thousandComma } from 'utils/thousandComma';
 import { smallCategory } from 'utils/smallCategory';
+import { bigCategory } from 'utils/bigCategory';
 import { CheckLabel, ItemUl } from './styles';
 import OrderModal from 'components/Modals/OrderModal';
 import Order from 'components/Order';
@@ -14,7 +15,7 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
     const [pay, setPay] = useState('card');
     const [order, setOrder] = useState(false);
     const id = item.id;
-    const amountValue = item.ProductSubTag.amount== 0 ? 0 : item.packingAmount ;
+    const amountValue = item.ProductSubTag.amount == 0 ? 0 : item.packingAmount;
 
     // 수량 기입
     const handleChange = useCallback(
@@ -48,13 +49,11 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
 
     // 체크
     const checkItem = useCallback(() => {
-        setCartList(prev => prev.map(v => (v.id === item.id ? { ...v, check: !v.check } : v)));
+        item.ProductSubTag.amount > 0
+            ? setCartList(prev => prev.map(v => (v.id === item.id ? { ...v, check: !v.check } : v)))
+            : setCartList(cartList);
     }, [cartList]);
 
-    // 삭제
-    // const removeItem = useCallback(() => {
-    // 	setCartList(prev => prev.filter(v => v.Product.id !== item.Product.id));
-    // }, [cartList]);
 
     // 결제 모달창
     const onCloseModal = useCallback(() => {
@@ -98,13 +97,17 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
                                                 ? item.check
                                                     ? 'active'
                                                     : ''
-                                                : ''
+                                                : 'sold'
                                         }
                                     ></CheckLabel>
                                 </td>
                                 <td className="top">
                                     <div>
-                                        <ImgSpan>
+                                        <ImgSpan
+                                            className={
+                                                item.ProductSubTag.amount === 0 ? 'soldout' : ''
+                                            }
+                                        >
                                             <a href={`/detail?productId=${item.Product.id}`}>
                                                 <img
                                                     src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${item.Product.ProductImg.src}`}
@@ -114,8 +117,9 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
                                         </ImgSpan>
                                         <ItemUl>
                                             <li>
-                                                <a href="/"> 청바지 </a>
-                                                {/* <a href="/"> {smallCategory[item.bigCategory][item.smallCategory]}</a> */}
+                                                <a href={`/detail?productId=${item.Product.id}`}>
+                                                    {bigCategory[item.Product.BigCategoryId]} / {smallCategory[item.Product.BigCategoryId][item.Product.SmallCategoryId]}
+                                                </a>
                                             </li>
                                             <li>
                                                 <a href={`/detail?productId=${item.Product.id}`}>
@@ -138,7 +142,7 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
                                         <button value={1} onClick={minusCount}>
                                             <FiMinus
                                                 style={
-                                                    item.packingAmount === 1
+                                                    amountValue <= 1
                                                         ? { color: '#ddd' }
                                                         : { color: '#777' }
                                                 }
@@ -150,14 +154,17 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
                                             onChange={handleChange}
                                         ></input>
                                         <button value={1} onClick={plusCount}>
-                                            <FiPlus style={{ color: '#777' }} />
+                                            <FiPlus
+                                                style={
+                                                    amountValue === 0
+                                                        ? { color: '#ddd' }
+                                                        : { color: '#777' }
+                                                }
+                                            />
                                         </button>
                                     </div>
                                 </td>
-                                <td>
-                                    {thousandComma(item.Product.productPrice * amountValue)}
-                                    원
-                                </td>
+                                <td>{thousandComma(item.Product.productPrice * amountValue)}원</td>
                                 <td>
                                     택배배송 <br />
                                     <strong>

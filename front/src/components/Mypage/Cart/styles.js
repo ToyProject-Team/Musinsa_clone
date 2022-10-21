@@ -213,6 +213,21 @@ export const ImgSpan = styled.span`
         top: 50%;
         transform: translateY(-50%);
     }
+    &.soldout {
+        &::after {
+            content: 'sold out';
+            position: absolute;
+            top: 25%;
+            left: 20px;
+            width: 40px;
+            font-size: 17px;
+            font-weight: bold;
+            text-align: center;
+        }
+        img {
+            opacity: 0.2;
+        }
+    }
 `;
 
 // 결제하기 modal
