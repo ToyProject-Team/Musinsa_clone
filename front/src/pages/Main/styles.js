@@ -103,6 +103,11 @@ export const MiddleCategory = styled.div`
             display: inline-block;
             // max-width: 800px;
 
+            li:first-of-type {
+                color: black;
+                font-weight: bold;
+            }
+
             .inactive {
                 float: left;
                 width: 145px;
@@ -136,6 +141,7 @@ export const OtherCategory = styled.div`
     border-bottom: solid 1px;
     border-color: rgb(212, 212, 212);
     padding-left: 15px;
+    line-height: 20px;
 
     &:hover {
         background-color: #f2f2f2;
@@ -150,10 +156,13 @@ export const OtherCategory = styled.div`
             display: flex;
             // min-width: 1200px;
 
+            li {
+                line-height: 20px;
+            }
+
             .inactive {
                 float: left;
                 flex-shrink: 0;
-                line-height: 20px;
                 vertical-align: center;
                 // width: 145px;
                 padding-right: 17px;
@@ -168,7 +177,6 @@ export const OtherCategory = styled.div`
             .active {
                 float: left;
                 flex-shrink: 0;
-                line-height: 20px;
                 vertical-align: center;
                 // width: 120px;
                 padding-right: 17px;
@@ -217,15 +225,19 @@ export const OtherCategory = styled.div`
     }
 
     .search_items {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
         padding-top: 15px;
         padding-bottom: 15px;
+
         // border-left: 1px solid #ddd;
 
         input {
             width: 130px;
-            height: 19px;
-            margin: 0;
-            padding: 2px 5px px;
+            height: 20px;
+            /* margin: 0;
+            padding: 2px; */
             vertical-align: middle;
             border: 1px solid #ddd;
             background: #fff;
@@ -234,9 +246,10 @@ export const OtherCategory = styled.div`
         .search_btn {
             display: inline-block;
             font-weight: bold;
-            line-height: 15px;
-            padding: 3px 4px 2px 4px;
-            margin: -3px 0 0 4px;
+            height: 20px;
+            padding: 1px 4px 1px 4px;
+            margin-left: 10px;
+            /* margin: -3px 0 0 4px; */
             border: 1px solid #ddd;
             background: #fff;
             cursor: pointer;

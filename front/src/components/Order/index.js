@@ -10,7 +10,7 @@ import { useScript } from 'hooks/useScript';
 
 const impNumber = process.env.REACT_APP_PAYMENT;
 
-const Order = ({ modal, pay, orderArr }) => {
+const Order = ({ modal, pay, orderArr, checkList }) => {
     const jQueryScript = useScript('https://code.jquery.com/jquery-1.12.4.min.js');
     const iamportScript = useScript('https://cdn.iamport.kr/js/iamport.payment-1.1.8.js');
 
@@ -27,15 +27,12 @@ const Order = ({ modal, pay, orderArr }) => {
         if (iamportScript === 'ready' && jQueryScript === 'ready') {
             let pg = '';
             let pay_method = '';
-<<<<<<< HEAD
-            let price = 100;
-            let i = 0;
-=======
             let price = 0;
 
-            if (productId == undefined) price = 100;
+            if (productId == undefined)
+                price = orderArr.reduce((a, b) => a + b.price, 0);
             else price = checkList.reduce((a, b) => Number(a.price) + Number(b.price));
->>>>>>> 4a5c5a7dd43ea6013c97e7f427453be0c30b7b26
+            let i = 0;
 
             if (pay === 'card') pg = 'html5_inicis';
             else if (pay === 'Virtual') pg = 'html5_inicis';
@@ -62,18 +59,13 @@ const Order = ({ modal, pay, orderArr }) => {
                 },
                 rsp => {
                     // callback
-                    console.log(rsp.merchant_uid, rsp.imp_uid);
                     if (rsp.success) {
                         // 결제 성공 시 로직,
                         console.log('mer', rsp.merchant_uid, 'imp', rsp.imp_uid);
                         if (productId == undefined) {
                             const data = {
-<<<<<<< HEAD
                                 purchasedDataList: orderArr,
-=======
-                                purchasedDataList: [checkList],
->>>>>>> 4a5c5a7dd43ea6013c97e7f427453be0c30b7b26
-                                MerchantUid: rsp.merchant_uid,
+                                merchant_uid: rsp.merchant_uid,
                                 imp_uid: rsp.imp_uid,
                             };
 

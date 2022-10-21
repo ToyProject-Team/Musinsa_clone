@@ -16,10 +16,7 @@ import fetcher from 'utils/fetcher';
 function Cart() {
     const [cartList, setCartList] = useState([]);
     const loginToken = getData().accessToken;
-<<<<<<< HEAD
-    // console.log(getData());
-=======
->>>>>>> 4a5c5a7dd43ea6013c97e7f427453be0c30b7b26
+
 
     //장바구니 리스트 가져오기
     useEffect(() => {
@@ -79,7 +76,6 @@ function Cart() {
 
     const [modalOrder, setModalOrder] = useState(false);
 
-    let [checkList, setCheckList] = useState([]);
     const [orderArr, setOrderArr] = useState([{ shoppingBasketId: '', price: '', amount: '' }]);
 
     // 체크
@@ -99,7 +95,6 @@ function Cart() {
     }, []);
 
     // 결제
-
     const onClickOrder = useCallback(() => {
         setModalOrder(false);
         setOrder(true);
@@ -116,10 +111,16 @@ function Cart() {
                   arrPrice.filter(f => f !== v.Product.productPrice * v.packingAmount) &&
                   arrAmount.filter(f => f !== v.packingAmount),
         );
-        for (let i = 0; i < checkList.length; i++) {
-            setOrderArr([
-                { shoppingBasketId: arrBsId[i], price: arrPrice[i], amount: arrAmount[i] },
-            ]);
+
+        const arr =[];
+        for (let i = 0; i < arrBsId.length; i++) {
+            let obj = {
+                shoppingBasketId: arrBsId[i],
+                price: arrPrice[i],
+                amount: arrAmount[i]
+            };
+            arr.push(obj);
+            setOrderArr(arr);
         }
     }, [cartList]);
 
@@ -128,10 +129,8 @@ function Cart() {
 
     // 모두 체크 확인 및 총상품 금액
     useEffect(() => {
-        let arrId = [];
+        let arrId= [];
         cartList.map(v => (v.check ? arrId.push(v.id) : arrId.filter(f => f !== v.id)));
-
-        setCheckList(arrId);
 
         if (cartList.length === arrId.length && cartList.length != 0) setCheckBox(true);
         else setCheckBox(false);
@@ -228,7 +227,7 @@ function Cart() {
                     </CartPayment>
                     <OrderBtn>
                         <button onClick={onClickOrderButton}>결제하기</button>
-                        {order && <Order pay={pay} checkList={checkList} orderArr={orderArr} />}
+                        {order && <Order pay={pay} orderArr={orderArr} />}
                     </OrderBtn>
                 </div>
 
