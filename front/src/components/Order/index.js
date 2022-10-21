@@ -22,6 +22,7 @@ const Order = ({ modal, pay, orderArr }) => {
     const { productId } = query;
 
     const [modalOrder, setModalOrder] = useState(false);
+    console.log(orderArr);
 
     useEffect(() => {
         if (iamportScript === 'ready' && jQueryScript === 'ready') {
@@ -29,23 +30,18 @@ const Order = ({ modal, pay, orderArr }) => {
             let pay_method = '';
             let price = 0;
 
-            if (productId == undefined) price = orderArr.reduce((a, b) => a + b.price, 0);
-            else price = orderArr.reduce((a, b) => Number(a.price) + Number(b.price));
+            price = orderArr.reduce((a, b) => a + Number(b.price), 0);
 
             if (pay === 'card') pg = 'html5_inicis';
-            else if (pay === 'Virtual') pg = 'html5_inicis';
             else if (pay === 'kakao') pg = 'kakaopay';
             else if (pay == 'payco') pg = 'payco';
-
-            if (pay === 'Virtual') pay_method = 'vbank';
-            else pay_method = 'card';
 
             var { IMP } = window; // 생략가능
             IMP.init(impNumber); // <-- 본인 가맹점 식별코드 삽입
             IMP.request_pay(
                 {
                     pg,
-                    pay_method,
+                    pay_method: 'card',
                     merchant_uid: `mid_${new Date().getTime()}`,
                     name: 'Test 상품',
                     amount: price,
@@ -57,10 +53,8 @@ const Order = ({ modal, pay, orderArr }) => {
                 },
                 rsp => {
                     // callback
-                    console.log(rsp.merchant_uid, rsp.imp_uid);
                     if (rsp.success) {
                         // 결제 성공 시 로직,
-                        console.log('mer', rsp.merchant_uid, 'imp', rsp.imp_uid);
                         if (productId == undefined) {
                             const data = {
                                 purchasedDataList: orderArr,
