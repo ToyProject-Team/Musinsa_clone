@@ -9,7 +9,7 @@ const ProductSubTag = require('../models/productSubTag');
 const AWS = require('aws-sdk');
 const { Op, Sequelize, QueryTypes } = require('sequelize');
 const authJWT = require('../utils/middlewares/authJWT');
-const { Order, MyCart } = require('../models');
+const { Order, MyCart, sequelize } = require('../models');
 const {
     getIamportAccessToken,
     getIamportPaymentData,
