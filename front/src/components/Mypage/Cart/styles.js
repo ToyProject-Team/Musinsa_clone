@@ -180,7 +180,7 @@ export const OrderBtn = styled.div`
     text-align: center;
     clear: both;
     position: relative;
-    button {
+    & > button {
         margin: 0 1px;
         border: 1px solid #000000;
         background-color: #000000;
