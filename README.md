@@ -34,9 +34,8 @@
     <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white"/>   
     <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white"/>
     <img src="https://img.shields.io/badge/useContext-764ABC?style=for-the-badge&logoColor=white"/>
-    <p>useSWR 은 배지가 따로 없음 / 
-    기술 스택 들어갈 예정
-    Scss, Context, useSWR...</p>
+    <img src="https://img.shields.io/badge/useSWR-FFCC22?style=for-the-badge&logoColor=white"/>
+
     
 <br />
 <h3>🧪 테스트 아이디</h3>
