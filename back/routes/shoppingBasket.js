@@ -170,7 +170,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
                 }
 
                 /** productSubTag개수를 초과한 경우 */
-                if (amount <= productSubTag.amount) {
+                if (amount > productSubTag.amount) {
                     isValidatePruchase = false;
                     break;
                 }
