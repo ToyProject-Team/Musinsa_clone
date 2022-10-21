@@ -370,7 +370,7 @@ router.post('/purchase', authJWT, async (req, res, next) => {
 
         let priceSum = 0;
         for (i = 0; i < req.body.orderList.length; i++) {
-            priceSum += Number(req.body.orderList[i].price);
+            priceSum += Number(req.body.orderList[i].price) * Number(req.body.orderList[i].amount);
         }
         console.log("amount ==", amount)
         console.log("priceSum ==", priceSum)
