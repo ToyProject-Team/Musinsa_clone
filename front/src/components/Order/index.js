@@ -10,7 +10,7 @@ import { useScript } from 'hooks/useScript';
 
 const impNumber = process.env.REACT_APP_PAYMENT;
 
-const Order = ({ modal, pay, orderArr }) => {
+const Order = ({ modal, pay, orderArr, checkList }) => {
     const jQueryScript = useScript('https://code.jquery.com/jquery-1.12.4.min.js');
     const iamportScript = useScript('https://cdn.iamport.kr/js/iamport.payment-1.1.8.js');
 
@@ -58,7 +58,7 @@ const Order = ({ modal, pay, orderArr }) => {
                         if (productId == undefined) {
                             const data = {
                                 purchasedDataList: orderArr,
-                                MerchantUid: rsp.merchant_uid,
+                                merchant_uid: rsp.merchant_uid,
                                 imp_uid: rsp.imp_uid,
                             };
 
