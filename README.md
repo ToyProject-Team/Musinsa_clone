@@ -102,6 +102,22 @@
 <br />
 <br />
     
+# 🎨 Skills
+### - Front
+* React
+* React Router
+* Styled Component
+* UseConText
+* USESWR
+
+### - Back
+* Node
+* JWT
+* Jenkins
+* Redis
+* MySql
+* 결제 API    
+    
 > 레이아웃 컴포넌트
 >
 > - 헤더에서 상품 검색 기능과, 주문내역 / 장바구니 상품 알림 기능을 이용 할 수 있어요<br>
