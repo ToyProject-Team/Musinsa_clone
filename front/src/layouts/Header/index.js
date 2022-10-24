@@ -24,9 +24,9 @@ import { FaCommentsDollar } from 'react-icons/fa';
 
 import { useMainState, useMainDispatch } from 'context/MainContext';
 import { ALL, TITLE } from 'context/MainContext';
+import NoticeList from 'components/NoticeList';
 
 const Header = props => {
-    const location = useLocation();
     const token = getData()?.accessToken;
     const [login, setLogin] = useState(getData());
     const [inputValue, onChangeInputValue, setInputValue] = useInput();
@@ -40,42 +40,18 @@ const Header = props => {
     }, []);
 
     const navigate = useNavigate();
-    const state = useMainState();
     const dispatch = useMainDispatch();
 
     //알림 추가, 더미데이터
     const [noticeList, setNoticeList] = useState([]);
-
-    const dummyData = {
-        id: 0,
-        MerchantUid: '3914619',
-        orderPrice: 24970,
-        amount: 1,
-        state: '2',
-        createdAt: '2017-07-21T17:32:28.000Z',
-        ProductMainTag: {
-            name: 'M',
-        },
-        ProductSubTag: {
-            id: 142,
-            name: '빨간색',
-            amount: 1,
-        },
-        Product: {
-            productTitle: 'Car',
-            ProductImg: {
-                src: 'Accessory/Accessory23',
-            },
-        },
-    };
 
     useEffect(() => {
         if (window.location.host.includes('local')) return;
 
         PostQueryApi(`/api/product/productList`).catch(() => {
             setModalFirst(true);
-        });
-    }, []);
+        }, []);
+    });
 
     const { data: shoppingNumber, mutate } = useSWR(
         token ? '/api/shoppingBasket/shoppingList' : null,
@@ -84,26 +60,6 @@ const Header = props => {
             refreshInterval: 0,
         },
     );
-
-    const onClickHello = useCallback(() => {
-        const params = {
-            productId: 1,
-        };
-        PostHeaderBodyApi('/api/product/likeProduct', params, 'Authorization', token).then(() => {
-            mutate();
-        });
-    }, []);
-
-    const onClickHell2o = useCallback(() => {
-        const params = {
-            productId: 1,
-        };
-        DeleteHeaderBodyApi('/api/mypage/favoriteGoods/del', params, 'Authorization', token).then(
-            () => {
-                mutate();
-            },
-        );
-    }, []);
 
     const formSub = useCallback(
         e => {
@@ -193,13 +149,15 @@ const Header = props => {
         };
         dispatch({ type: ALL, payload });
     };
-    // const onClickNotice = () => {
-    //     setNotice(!notice);
-    //     //알림창에 넣을 orderLsit 호출
-    //     GetTokenApi('/api/order/orderList', token).then(res => {
-    //         setNoticeList(res.data);
-    //     });
-    // };
+
+    const onClickNotice = () => {
+        console.log(123123);
+        setNotice(!notice);
+        //알림창에 넣을 orderLsit 호출
+        GetTokenApi('/api/order/orderList', token).then(res => {
+            setNoticeList(res.data);
+        });
+    };
 
     return (
         <>
@@ -249,7 +207,7 @@ const Header = props => {
                                             return (
                                                 <li key={idx}>
                                                     <a>{text}</a>
-                                                    <div class="box-edit">
+                                                    <div className="box-edit">
                                                         <a
                                                             href="#"
                                                             className="move"
@@ -286,22 +244,38 @@ const Header = props => {
                         )}
                         {login ? (
                             <div>
-                                <div className="flex" onClick={() => setNotice(!notice)}>
+                                <div className="flex" onClick={onClickNotice}>
                                     <a>알림</a>
+                                    {console.log(noticeList)}
                                     <CountNum>{shoppingNumber ? 'N' : 0}</CountNum>
                                 </div>
                                 <article className={notice ? 'block' : 'none'}>
-                                    {noticeList ? (
-                                        noticeList?.map((data, idx) => {
-                                            <div>
-                                                {/* <p>
-                                                    <img
-                                                        src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.Product.ProductImg.src}`}
-                                                    />
-                                                </p> */}
-                                                <p>{data.Product.productTitle}</p>
-                                            </div>;
-                                        })
+                                    {noticeList.length > 0 ? (
+                                        <>
+                                            <button className="list-button" type="button">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="18"
+                                                    height="18"
+                                                    viewBox="0 0 18 18"
+                                                >
+                                                    <title>알림 레이어 닫기</title>
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M13.646 3.646l.708.708L9.707 9l4.647 4.646-.708.708L9 9.707l-4.646 4.647-.708-.708L8.293 9 3.646 4.354l.708-.708L9 8.293l4.646-4.647z"
+                                                    ></path>
+                                                </svg>
+                                            </button>
+                                            <p className="list-p">
+                                                PC에서는 공지, 구매 정보 알림만 확인하실 수
+                                                있습니다. <br />그 외 알림은 앱에서 확인 가능합니다.
+                                            </p>
+                                            <div className="list-container">
+                                                {noticeList.reverse().map(item => (
+                                                    <NoticeList key={item.id} item={item} />
+                                                ))}
+                                            </div>
+                                        </>
                                     ) : (
                                         <>
                                             <p>
@@ -327,7 +301,7 @@ const Header = props => {
                                 <CountNum>{shoppingNumber ? shoppingNumber.length : 0}</CountNum>
                             </Link>
                         </div>
-                        <div onClick={onClickHell2o}>
+                        <div>
                             <Link to="/mypage/orderlist">주문배송조회</Link>
                         </div>
                         {login ? (
