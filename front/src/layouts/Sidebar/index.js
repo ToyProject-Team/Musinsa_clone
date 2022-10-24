@@ -5,17 +5,23 @@ import { bigCategory, alpabet } from 'utils/bigCategory';
 import { smallCategory } from 'utils/smallCategory';
 import Cookies from 'js-cookie';
 import { SIDEBAR, useGlobalDispatch } from 'context/GlobalContext';
-
+import { useMainState, useMainDispatch } from 'context/MainContext';
+import { CATEGORY } from 'context/MainContext';
 import { AiOutlinePlus } from '@react-icons/all-files/ai/AiOutlinePlus';
 import { AiOutlineMinus } from '@react-icons/all-files/ai/AiOutlineMinus';
 
-const Sidebar = props => {
+const Sidebar = () => {
     const dispatch = useGlobalDispatch();
     const location = useLocation();
     const navigate = useNavigate();
     // const [cancel, setCancel] = useState(true);
     const [cancel, setCancel] = useState(Cookies.get('sideBarToggle') === 'false' ? false : true);
     const [open, setOpen] = useState(Array.from({ length: bigCategory.length }, () => false));
+
+    const state = useMainState();
+    const dispatchMain = useMainDispatch();
+
+    const [clickSideBar, setClickSideBar] = useState([]);
 
     useEffect(() => {
         const payload = {
@@ -24,47 +30,69 @@ const Sidebar = props => {
         dispatch({ type: SIDEBAR, payload });
     }, []);
 
+    useEffect(() => {
+        if (state.bigCategoryId > 0) {
+            setClickSideBar(
+                Array.from({
+                    length: smallCategory[state.bigCategoryId].length,
+                }).fill(false),
+            );
+        }
+    }, [open]);
+
     //Main - filterVal 수정 등
     const sendSmallCate = (big, small) => {
         // smallCate index가 0인 경우(전체) / 아닌경우
         // smallCate index가 1이상인 경우에는 bigCateId가 이미 있는경우/없는경우
         //이중 삼항연산자
 
-        // props.setClickCate(
-        //     Array.from({
-        //         length: smallCategory[big].length,
-        //     }).fill(false),
-        // );
-
-        // const newArr = props.clickCate;
-        // if (newArr.includes(true)) {
-        //     newArr[props.clickCate.indexOf(true)] = false;
-        // }
+        const newArr = clickSideBar;
+        if (clickSideBar.includes(true)) {
+            newArr[clickSideBar.indexOf(true)] = false;
+        }
+        newArr[small] = true;
+        setClickSideBar(newArr);
 
         const { pathname } = location;
 
         if (pathname !== '/detail') {
             if (small === 0) {
-                delete props.filterVal.smallCategoryId;
-                props.setFilterVal(data => {
-                    return { ...data, bigCategoryId: big + 1 };
-                });
+                const payload = {
+                    bigCategoryId: big + 1,
+                    smallCategoryId: 0,
+                };
+                dispatchMain({ type: CATEGORY, payload });
             } else {
-                if (props.filterVal.bigCategoryId - 1 === big) {
-                    props.setFilterVal(prev => {
-                        return { ...prev, smallCategoryId: small };
-                    });
+                if (state.bigCategoryId - 1 === big) {
+                    const payload = {
+                        bigCategoryId: state.bigCategoryId,
+                        smallCategoryId: small,
+                    };
+                    dispatchMain({ type: CATEGORY, payload });
                 } else {
-                    props.setFilterVal(data => {
-                        return { bigCategoryId: big + 1, smallCategoryId: small };
-                    });
+                    const payload = {
+                        bigCategoryId: big + 1,
+                        smallCategoryId: small,
+                    };
+                    dispatchMain({ type: CATEGORY, payload });
                 }
             }
         } else {
+            navigate('/');
             if (small === 0) {
-                return navigate(`/?bigCategoryId=${big + 1}`);
+                //return navigate(`/?bigCategoryId=${big + 1}`);
+                const payload = {
+                    bigCategoryId: big + 1,
+                    smallCategoryId: 0,
+                };
+                dispatchMain({ type: CATEGORY, payload });
             } else {
-                return navigate(`/?bigCategoryId=${big + 1}&smallCategoryId=${small}`);
+                //return navigate(`/?bigCategoryId=${big + 1}&smallCategoryId=${small}`);
+                const payload = {
+                    bigCategoryId: big + 1,
+                    smallCategoryId: small,
+                };
+                dispatchMain({ type: CATEGORY, payload });
             }
         }
     };
@@ -117,7 +145,12 @@ const Sidebar = props => {
                                             sendSmallCate(idx, idex);
                                         }}
                                     >
-                                        <span key={idex}>{small}</span>
+                                        <span
+                                            key={idex}
+                                            className={clickSideBar[idex] ? 'active' : 'inactive'}
+                                        >
+                                            {small}
+                                        </span>
                                         <span>{`(${idex + 1})`}</span>
                                     </li>
                                 ))}

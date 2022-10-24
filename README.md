@@ -115,8 +115,11 @@
 * JWT
 * Jenkins
 * Redis
+* S3
 * MySql
-* 결제 API  
+* Express
+* Sequelize
+* 결제 API(IAMPORT)  
 
 <br />
 <br />
@@ -138,7 +141,7 @@
 송민지 | 서경주 | 김우혁 | 이다노 
 :---: | :---: | :---: | :---: 
 <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> 
-<a href="https://github.com/devchosil">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> 
+<a href="https://github.com/devchosil">GitHub</a> | <a href="https://github.com/joooo1028">GitHub</a> | <a href="www.naver.com">GitHub</a> | <a href="www.naver.com">GitHub</a> 
 FrontEnd | FrontEnd | FrontEnd | FrontEnd
  
 </div>
@@ -148,18 +151,23 @@ FrontEnd | FrontEnd | FrontEnd | FrontEnd
 :---: | :---:
 <a href="www.naver.com"><img width="180" height="180" src="https://user-images.githubusercontent.com/110218594/195768697-95dead67-fe4f-42a2-be59-218602e70506.png" alt="Material Bread logo"></a> | <a href="www.naver.com"><img width="180" height="180" src="https://avatars.githubusercontent.com/u/7973448?s=400&u=800b64efe4bbb92dab15f37b3f34ae8e211d4989&v=4" alt="Material Bread logo"></a>
 <a href="https://github.com/nacho1415">GitHub</a> | <a href="https://github.com/2jun0">GitHub</a> 
-BackEnd | BackEnd
+BackEnd(메인 개발) | BackEnd(서브 개발)
  
 </div>
 　
  
 # 🛠 기술적 도전
 
+### Front
 <details>
 <summary>🛠 토글버튼 도저언</summary>
 <div markdown="1">
 
-안녕
+### Backend
+* 휴대폰 인증, 이메일 인증, 소셜 로그인 등 인증 절차가 필요한 부분은 모두 토큰 도입
+* 풍부한 가데이터를 생성하여 실제 무신사사이트처럼 클론 
+*  Jenkins를 사용하여 CI/CD 구축 
+*  Vultr을 사용한 서버 배포
 
 </div>
 </details>

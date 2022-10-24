@@ -4,23 +4,57 @@ const initialFilterVal = {
     bigCategoryId: 0,
     smallCategoryId: 0,
     mainSort: 0,
-    page: 0,
     price: 0,
     priceMin: 0,
     priceMax: 0,
-    productTitle: 0,
+    productTitle: '',
 };
 
 // ? ? ?
-//export const BIGCATEGORYID = 'BIGCATEGORYID';
+export const ALL = 'ALL';
+export const CATEGORY = 'CATEGORY';
+export const MAINSORT = 'MAINSORT';
+export const PRICE = 'PRICE';
+export const TITLE = 'TITLE';
+export const ALLTITLE = 'ALLTITLE';
 
 function MainReducer(state, action) {
     switch (action.type) {
-        case BIGCATEGORYID:
+        case ALL:
             return {
                 ...state,
-                bigCategoryId: action.payload.sideBar,
-                //(Main에서 입력하거나 받는 숫자값을 넣고 싶음)
+                bigCategoryId: action.payload.bigCategoryId,
+                smallCategoryId: action.payload.smallCategoryId,
+                mainSort: action.payload.mainSort,
+                price: action.payload.price,
+                priceMin: action.payload.priceMin,
+                priceMax: action.payload.priceMax,
+                productTitle: action.payload.productTitle,
+            };
+        case CATEGORY:
+            return {
+                ...state,
+                bigCategoryId: action.payload.bigCategoryId,
+                smallCategoryId: action.payload.smallCategoryId,
+            };
+
+        case MAINSORT:
+            return {
+                ...state,
+                mainSort: action.payload.mainSort,
+            };
+        case PRICE:
+            return {
+                ...state,
+                price: action.payload.price,
+                priceMin: action.payload.priceMin,
+                priceMax: action.payload.priceMax,
+            };
+
+        case TITLE:
+            return {
+                ...state,
+                productTitle: action.payload.productTitle,
             };
 
         default:
