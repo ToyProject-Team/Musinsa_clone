@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [14.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -24,8 +24,8 @@ jobs:
     
     - name: npm install
       run: npm install
-      working-directory: ${{ env.front-directory }}
+      working-directory: 'front'
     
     - name: Run front server
       run: npm run start
-      working-directory: ${{ env.front-directory }}
+      working-directory: 'front'
