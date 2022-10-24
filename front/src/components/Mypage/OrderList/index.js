@@ -53,7 +53,7 @@ function OrderList() {
 								</th>
 							</tr>
 						</thead>
-						{orderData.slice(items * (page - 1), items * (page - 1) + items).map((data, index) => (
+						{orderData.reverse().slice(items * (page - 1), items * (page - 1) + items).map((data, index) => (
 							<Tr 
 							key={index}
 							data={data} />
@@ -64,7 +64,7 @@ function OrderList() {
 						<Pagination
 							activePage={page}
 							itemsCountPerPage={items}
-							totalItemsCount={orderData.length - 1}
+							totalItemsCount={orderData.length}
 							pageRangeDisplayed={5}
 							onChange={handlePageChange}
 							hideNavigation={true}
