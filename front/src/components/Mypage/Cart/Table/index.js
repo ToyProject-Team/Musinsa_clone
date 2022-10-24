@@ -10,7 +10,7 @@ import { CheckLabel, ItemUl } from './styles';
 import OrderModal from 'components/Modals/OrderModal';
 import Order from 'components/Order';
 
-function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
+function CartTable({ item, setCartList, cartList, cartRemove }) {
     const [modalOrder, setModalOrder] = useState(false);
     const [pay, setPay] = useState('card');
     const [order, setOrder] = useState(false);
@@ -20,9 +20,15 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
     // 수량 기입
     const handleChange = useCallback(
         ({ target: { value } }) => {
-            setCartList(prev =>
-                prev.map(v => (v.id === item.id ? { ...v, packingAmount: Number(value) } : v)),
-            );
+            if (value > item.ProductSubTag.amount) {
+                alert('상품의 재고보다 많은 수량을 선택할 수 없습니다');
+            } else if (value == 0) {
+                alert('수량을 줄일 수 없습니다.');
+            } else {
+                setCartList(prev =>
+                    prev.map(v => (v.id === item.id ? { ...v, packingAmount: Number(value) } : v)),
+                );
+            }
         },
         [cartList],
     );
