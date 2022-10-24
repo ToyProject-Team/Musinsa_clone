@@ -158,11 +158,16 @@ BackEnd(메인 개발) | BackEnd(서브 개발)
  
 # 🛠 기술적 도전
 
+### Front
 <details>
 <summary>🛠 토글버튼 도저언</summary>
 <div markdown="1">
 
-안녕
+### Backend
+* 휴대폰 인증, 이메일 인증, 소셜 로그인 등 인증 절차가 필요한 부분은 모두 토큰 도입
+* 풍부한 가데이터를 생성하여 실제 무신사사이트처럼 클론 
+*  Jenkins를 사용하여 CI/CD 구축 
+*  Vultr을 사용한 서버 배포
 
 </div>
 </details>
