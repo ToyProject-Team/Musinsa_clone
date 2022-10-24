@@ -239,6 +239,14 @@ const Main = () => {
         clickBold();
         clickBoldPrice();
         clickBoldMainSort();
+
+        // if (state.smallCategoryId === 0) {
+        //     const newArr = clickSideBar;
+        //     if (clickSideBar.includes(true)) {
+        //         newArr[clickSideBar.indexOf(true)] = false;
+        //     }
+        //     setClickSideBar(newArr);
+        // }
     }, [state]);
 
     useEffect(() => {
@@ -268,7 +276,7 @@ const Main = () => {
             onReset();
         }
 
-        clickBold();
+        //clickBold();
     };
 
     //price추가
@@ -430,15 +438,6 @@ const Main = () => {
                                     </form>
                                 </div>
                             </CategoryName>
-                            <div
-                                className="all_item"
-                                onClick={() => {
-                                    onReset();
-                                }}
-                                style={{ color: 'black', fontWeight: 'bold' }}
-                            >
-                                전체
-                            </div>
                             <div className="all_item_list">
                                 <ul>
                                     {smallCategory[
@@ -448,19 +447,15 @@ const Main = () => {
                                             if (searchInput === '') return val;
                                             else if (val.includes(searchInput)) return val;
                                         })
-                                        .map((data, idx) =>
-                                            idx === 0 ? null : (
-                                                <li
-                                                    className={
-                                                        clickCate[idx] ? 'active' : 'inactive'
-                                                    }
-                                                    onClick={() => onSort(idx)}
-                                                    key={idx}
-                                                >
-                                                    {data}
-                                                </li>
-                                            ),
-                                        )}
+                                        .map((data, idx) => (
+                                            <li
+                                                className={clickCate[idx] ? 'active' : 'inactive'}
+                                                onClick={() => onSort(idx)}
+                                                key={idx}
+                                            >
+                                                {data}
+                                            </li>
+                                        ))}
                                 </ul>
                             </div>
                         </MiddleCategory>

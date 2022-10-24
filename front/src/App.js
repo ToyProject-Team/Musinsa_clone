@@ -108,7 +108,7 @@ function App() {
                             <Route exact path="/*" element={<Main />} /> {/* => 메인페이지 */}
                             <Route path="login/*" element={<LogIn />} /> {/* => 로그인페이지 */}
                             <Route path="signup" element={<SignUp />} /> {/* => 회원가입 페이지 */}
-                            <Route path="find/*" element={<Find />} />{' '}
+                            <Route path="find/*" element={<Find />} />
                             {/* => 아이디 패스워드 찾기 페이지 */}
                             <Route path="detail/*" element={<Dtail />} /> {/* => 상세페이지 */}
                             <Route path="mypage/*" element={<MyPage />} /> {/* => 마이페이지 */}
