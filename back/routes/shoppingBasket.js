@@ -164,13 +164,13 @@ router.post('/purchase', authJWT, async (req, res, next) => {
                 const product = shoppingBasket.Product;
 
                 /** 장바구니와 입력된 개수와 같은지 */
-                if (amount != shoppingBasket.packingAmount) {
-                    isValidatePruchase = false;
-                    console.error(
-                        `위조된 결제 시도: 장바구니와 입력된 개수와 다름[${amount} != ${shoppingBasket.packingAmount}]`,
-                    );
-                    break;
-                }
+                // if (amount != shoppingBasket.packingAmount) {
+                //     isValidatePruchase = false;
+                //     console.error(
+                //         `위조된 결제 시도: 장바구니와 입력된 개수와 다름[${amount} != ${shoppingBasket.packingAmount}]`,
+                //     );
+                //     break;
+                // }
 
                 /** productSubTag개수를 초과한 경우 */
                 if (amount > productSubTag.amount) {

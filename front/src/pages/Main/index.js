@@ -27,9 +27,25 @@ import DialLog from 'layouts/DialLog';
 import Pagination from 'react-js-pagination';
 import { URLquery } from 'utils/URLquery';
 import { Oval } from 'react-loader-spinner';
+import { useMainState, useMainDispatch, ALL } from 'context/MainContext';
+import { CATEGORY, MAINSORT, PRICE, TITLE, ALLTITLE } from 'context/MainContext';
 
 const Main = () => {
     const navigate = useNavigate();
+
+    const state = useMainState();
+    const dispatch = useMainDispatch();
+    // const payload = {수정할 값}
+    // dispatch{{ type: BIG, payload}}
+    // useEffect(() => {
+    //     // const payload = { bigCategoryId: 3 };
+    //     // dispatch({ type: BIG, payload });
+    //     console.log(state.bigCategoryId);
+    // }, []);
+
+    //리듀서에서
+    //case: BIG
+    //bigCategoryId : action.payload.bigCategoryId
 
     const ShowList = loadable(() => import('components/ProductList'), {
         fallback: (
@@ -46,7 +62,7 @@ const Main = () => {
     const location = useLocation();
     const query = URLquery(location);
     //query or {}
-    const [filterVal, setFilterVal] = useState(query || {});
+    //const [state, setstate] = useState(query || {});
 
     //useMemo는 바뀐 부분만 호출되도록 함
 
@@ -62,20 +78,20 @@ const Main = () => {
     //MainSort 배열
     const mainSortArr = ['낮은 가격순', '높은 가격순', '후기순'];
 
-    //parameter 추가
-    const handleFilter = (val, name) => {
-        setFilterVal(prev => {
-            return { ...prev, [name]: val };
-        });
-    };
+    // //parameter 추가
+    // const handleFilter = (val, name) => {
+    //     setstate(prev => {
+    //         return { ...prev, [name]: val };
+    //     });
+    // };
 
     //smallCateId 삭제 함수(중분류 - 전체)
     const onReset = () => {
-        delete filterVal.smallCategoryId;
-        //setFilterVal(filterVal)는 작동X useEffect 감지안되나바
-        setFilterVal(value => {
-            return { ...filterVal };
-        });
+        const payload = {
+            bigCategoryId: state.bigCategoryId,
+            smallCategoryId: 0,
+        };
+        dispatch({ type: CATEGORY, payload });
 
         const newArr = clickCate;
         if (newArr.includes(true)) {
@@ -86,10 +102,12 @@ const Main = () => {
 
     //Price 삭제 함수(가격 - 전체보기)
     const onResetPrice = () => {
-        delete filterVal.price;
-        setFilterVal(value => {
-            return { ...filterVal };
-        });
+        const payload = {
+            price: 0,
+            priceMin: 0,
+            priceMax: 0,
+        };
+        dispatch({ type: PRICE, payload });
 
         const newArr = clickPrice;
         if (newArr.includes(true)) {
@@ -100,11 +118,12 @@ const Main = () => {
 
     //priceMin, Max 삭제함수
     const onResetPriceRange = () => {
-        delete filterVal.priceMin;
-        delete filterVal.priceMax;
-        setFilterVal(value => {
-            return { ...filterVal };
-        });
+        const payload = {
+            price: 0,
+            priceMin: 0,
+            priceMax: 0,
+        };
+        dispatch({ type: PRICE, payload });
 
         setMinPriceInput('');
         setMaxPriceInput('');
@@ -112,17 +131,17 @@ const Main = () => {
 
     //mainSort 삭제함수
     const onResetMainSort = () => {
-        delete filterVal.mainSort;
-        setFilterVal(value => {
-            return { ...filterVal };
-        });
+        const payload = {
+            mainSort: 0,
+        };
+        dispatch({ type: MAINSORT, payload });
 
         setClickMainSort(clickMainSort.fill(false));
     };
 
     //클릭한 요소 style변경
     //전체 요소수와 같은 배열 생성 - 모두  false로 채움 - 클릭한 요소만 true로 변경
-    //filterVal 변했을때, clickCate가 바로 변하지 않음(smallCate 숫자가 안변함)
+    //state 변했을때, clickCate가 바로 변하지 않음(smallCate 숫자가 안변함)
 
     const [clickCate, setClickCate] = useState([]);
 
@@ -138,32 +157,35 @@ const Main = () => {
         }).fill(false),
     );
 
-    // useMemo(() => {
-    //     setClickCate(data => {
-    //         return Array.from({
-    //             length: smallCategory[filterVal.bigCategoryId - 1 || 0].length,
-    //         }).fill(false);
-    //     });
-
-    //     console.log('useMemo 작동');
-    // }, [filterVal.bigCategoryId]);
-
     const makeQS = () => {
         let result = '?';
         let count = 0;
-        for (let [key, value] of Object.entries(filterVal)) {
-            if (++count > 1) result += `&`;
-            result += `${key}=${value}`;
+        const titleKey = Object.keys(state)[6];
+        const titleValue = Object.values(state)[6];
+
+        for (let [key, value] of Object.entries(state)) {
+            if (value > 0) {
+                if (++count > 1) result += `&`;
+                result += `${key}=${value}`;
+            }
+        }
+        let finalResult = result;
+        if (state.productTitle !== '' && state.productTitle !== undefined) {
+            finalResult += `&${titleKey}=${titleValue}`;
         }
 
-        return result;
+        // if(state.productTitle!=='') {
+
+        // }
+
+        return finalResult;
     };
 
     const clickBold = () => {
         const newArr = clickCate;
         if (newArr.includes(true)) newArr[clickCate.indexOf(true)] = false;
 
-        newArr[filterVal.smallCategoryId && filterVal.smallCategoryId] = true;
+        newArr[state.smallCategoryId] = true;
         setClickCate(() => newArr);
     };
 
@@ -172,7 +194,7 @@ const Main = () => {
 
         if (newArr.includes(true)) newArr[clickPrice.indexOf(true)] = false;
 
-        newArr[filterVal.price && filterVal.price - 1] = true;
+        newArr[state.price - 1] = true;
 
         // else {
         //     if (newArr.includes(true)) newArr[clickPrice.indexOf(true)] = false;
@@ -186,22 +208,27 @@ const Main = () => {
 
         if (newArr.includes(true)) newArr[clickMainSort.indexOf(true)] = false;
 
-        newArr[filterVal.mainSort && filterVal.mainSort - 1] = true;
+        newArr[state.mainSort - 1] = true;
 
         // else {
         //     if (newArr.includes(true)) newArr[clickMainSort.indexOf(true)] = false;
         // }
 
         // if (newArr.includes(true)) newArr[clickMainSort.indexOf(true)] = false;
-        // newArr[filterVal.mainSort && filterVal.mainSort - 1] = true;
+        // newArr[state.mainSort && state.mainSort - 1] = true;
         setClickMainSort(newArr);
     };
+
+    // useEffect(() => {
+    //     console.log(state);
+    // }, [state]);
 
     useEffect(() => {
         const result = makeQS();
 
         if (result == '?') {
             PostQueryApi(`/api/product/productList`).then(res => setProduct(res.data.productData));
+            navigate('/');
         } else {
             PostQueryApi(`/api/product/productList${result}`).then(res =>
                 setProduct(res.data.productData),
@@ -212,22 +239,33 @@ const Main = () => {
         clickBold();
         clickBoldPrice();
         clickBoldMainSort();
-    }, [filterVal]);
+    }, [state]);
 
     useEffect(() => {
         setMinPriceInput('');
         setMaxPriceInput('');
-    }, [filterVal.bigCategoryId]);
+    }, [state.bigCategoryId]);
 
     //handleFilter함수 사용해서 쿼리문 추가
     //smallCategoryId추가(중분류)
     const onSort = val => {
-        {
-            filterVal.bigCategoryId
-                ? handleFilter(val, 'smallCategoryId')
-                : setFilterVal(() => {
-                      return { bigCategoryId: 1, smallCategoryId: val };
-                  });
+        if (val > 0) {
+            if (state.bigCategoryId > 0) {
+                const payload = {
+                    bigCategoryId: state.bigCategoryId,
+                    smallCategoryId: val,
+                };
+                dispatch({ type: CATEGORY, payload });
+            } else {
+                const payload = {
+                    bigCategoryId: 1,
+                    smallCategoryId: val,
+                };
+                dispatch({ type: CATEGORY, payload });
+                clickBold();
+            }
+        } else {
+            onReset();
         }
 
         clickBold();
@@ -235,21 +273,26 @@ const Main = () => {
 
     //price추가
     const onFilterPrice = val => {
-        delete filterVal.priceMin;
-        delete filterVal.priceMax;
         setMinPriceInput('');
         setMaxPriceInput('');
-        handleFilter(val, 'price');
+        const payload = {
+            price: val,
+            priceMin: 0,
+            priceMax: 0,
+        };
+        dispatch({ type: PRICE, payload });
 
         clickBoldPrice();
     };
 
     //pricaRange 추가
     const onFilterPriceRange = (val1, val2) => {
-        delete filterVal.price;
-        setFilterVal(prev => {
-            return { ...prev, priceMin: val1, priceMax: val2 };
-        });
+        const payload = {
+            price: 0,
+            priceMin: val1,
+            priceMax: val2,
+        };
+        dispatch({ type: PRICE, payload });
 
         const newArr = clickPrice;
         if (newArr.includes(true)) newArr[clickPrice.indexOf(true)] = false;
@@ -258,7 +301,10 @@ const Main = () => {
 
     //mainSort 추가
     const onMainSort = val => {
-        handleFilter(val, 'mainSort');
+        const payload = {
+            mainSort: val,
+        };
+        dispatch({ type: MAINSORT, payload });
 
         clickBoldMainSort();
     };
@@ -275,19 +321,33 @@ const Main = () => {
     //검색창 함수
     const onSearch = () => {
         setSearch(true);
-        setProduct(
-            product.filter(data =>
-                data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
-            ),
-        );
+
+        const payload = {
+            productTitle: searchTerm,
+        };
+        dispatch({ type: TITLE, payload });
+        // setProduct(
+        //     product.filter(data =>
+        //         data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
+        //     ),
+        // );
     };
 
     //검색창 select박스 reset
     const onResetSearch = () => {
         setSearch(false);
-        PostQueryApi(`/api/product/productList${location.search}`).then(res =>
-            setProduct(res.data.productData),
-        );
+
+        //payload = { productTitle : ''}은 적용이 안됨
+        const payload = {
+            bigCategoryId: state.bigCategoryId,
+            smallCategoryId: state.smallCategoryId,
+            mainSort: state.mainSort,
+            price: state.price,
+            priceMin: state.priceMin,
+            priceMax: state.priceMax,
+            productTitle: '',
+        };
+        dispatch({ type: ALL, payload });
         setSearchTerm('');
     };
 
@@ -303,18 +363,9 @@ const Main = () => {
     return (
         <>
             <DialLog />
-            <Header />
+            <Header setSearch={setSearch} />
             <ScrollContainer>
-                <Sidebar
-                    filterVal={filterVal}
-                    setFilterVal={setFilterVal}
-                    clickCate={clickCate}
-                    setClickCate={setClickCate}
-                    clickPrice={clickPrice}
-                    setClickPrice={setClickPrice}
-                    clickMainSort={clickMainSort}
-                    setClickMainSort={setClickMainSort}
-                ></Sidebar>
+                <Sidebar />
                 <MainContainer>
                     {/* 카테고리 */}
                     <Category>
@@ -322,34 +373,41 @@ const Main = () => {
                             <div
                                 className="page_title"
                                 onClick={() => {
-                                    setFilterVal(data => {
-                                        return { ...data, bigCategoryId: filterVal.bigCategoryId };
-                                    });
+                                    const payload = {
+                                        bigCategoryId: state.bigCategoryId,
+                                        smallCategoryId: 0,
+                                        mainSort: 0,
+                                        price: 0,
+                                        priceMin: 0,
+                                        priceMax: 0,
+                                        productTitle: '',
+                                    };
+                                    dispatch({ type: ALL, payload });
                                 }}
                             >
-                                {filterVal.bigCategoryId
-                                    ? bigCategory[filterVal.bigCategoryId - 1]
+                                {state.bigCategoryId
+                                    ? bigCategory[state.bigCategoryId - 1]
                                     : bigCategory[0]}
                             </div>
                             <div className="hash_tag">
                                 #
-                                {filterVal.bigCategoryId
-                                    ? bigCategory[filterVal.bigCategoryId - 1]
+                                {state.bigCategoryId
+                                    ? bigCategory[state.bigCategoryId - 1]
                                     : bigCategory[0]}
                             </div>
                             <div className="hash_tag">
                                 #
-                                {filterVal.bigCategoryId
-                                    ? alpabet[filterVal.bigCategoryId - 1]
+                                {state.bigCategoryId
+                                    ? alpabet[state.bigCategoryId - 1]
                                     : alpabet[0]}
                             </div>
                             <div className="hash_tag">
                                 #
-                                {filterVal.bigCategoryId
-                                    ? smallCategory[filterVal.bigCategoryId - 1][
+                                {state.bigCategoryId
+                                    ? smallCategory[state.bigCategoryId - 1][
                                           Math.floor(
                                               Math.random() *
-                                                  smallCategory[filterVal.bigCategoryId - 1].length,
+                                                  smallCategory[state.bigCategoryId - 1].length,
                                           )
                                       ]
                                     : smallCategory[0][1]}
@@ -384,7 +442,7 @@ const Main = () => {
                             <div className="all_item_list">
                                 <ul>
                                     {smallCategory[
-                                        filterVal.bigCategoryId ? filterVal.bigCategoryId - 1 : 0
+                                        state.bigCategoryId ? state.bigCategoryId - 1 : 0
                                     ]
                                         .filter(val => {
                                             if (searchInput === '') return val;
@@ -504,7 +562,7 @@ const Main = () => {
                     <ItemSection>
                         <SelectBox>
                             <div
-                                className={filterVal.smallCategoryId ? 'visible' : 'invisible'}
+                                className={state.smallCategoryId ? 'visible' : 'invisible'}
                                 onClick={() => {
                                     onReset();
                                 }}
@@ -513,42 +571,38 @@ const Main = () => {
                                     중분류:{' '}
                                     {
                                         smallCategory[
-                                            filterVal.bigCategoryId
-                                                ? filterVal.bigCategoryId - 1
-                                                : 0
-                                        ][filterVal.smallCategoryId]
+                                            state.bigCategoryId ? state.bigCategoryId - 1 : 0
+                                        ][state.smallCategoryId]
                                     }
                                 </span>
                                 <span className="select-medium-button">&#160;X</span>
                             </div>
                             <div
-                                className={filterVal.price ? 'visible' : 'invisible'}
+                                className={state.price ? 'visible' : 'invisible'}
                                 onClick={() => {
                                     onResetPrice();
                                 }}
                             >
                                 <span className="select-medium">
-                                    가격: {priceArr[filterVal.price - 1]}
+                                    가격: {priceArr[state.price - 1]}
                                 </span>
                                 <span className="select-medium-button">&#160;X</span>
                             </div>
                             {/* 최소, 최대가격 */}
                             <div
                                 className={
-                                    filterVal.priceMin || filterVal.priceMax
-                                        ? 'visible'
-                                        : 'invisible'
+                                    state.priceMin || state.priceMax ? 'visible' : 'invisible'
                                 }
                                 onClick={() => {
                                     onResetPriceRange();
                                 }}
                             >
                                 <span className="select-medium">
-                                    가격: {filterVal.priceMin ? `${filterVal.priceMin}원 ` : null}
+                                    가격: {state.priceMin ? `${state.priceMin}원 ` : null}
                                 </span>
                                 <span className="select-medium">~</span>
                                 <span className="select-medium">
-                                    {filterVal.priceMax ? ` ${filterVal.priceMax}원` : null}
+                                    {state.priceMax ? ` ${state.priceMax}원` : null}
                                 </span>
                                 <span className="select-medium-button">&#160;X</span>
                             </div>
@@ -558,17 +612,19 @@ const Main = () => {
                                     onResetSearch();
                                 }}
                             >
-                                <span className="select-medium">검색: {searchTerm}</span>
+                                <span className="select-medium">
+                                    검색: {searchTerm || state.productTitle}
+                                </span>
                                 <span className="select-medium-button">&#160;X</span>
                             </div>
                             <div
-                                className={filterVal.mainSort ? 'visible' : 'invisible'}
+                                className={state.mainSort ? 'visible' : 'invisible'}
                                 onClick={() => {
                                     onResetMainSort();
                                 }}
                             >
                                 <span className="select-medium">
-                                    정렬: {mainSortArr[filterVal.mainSort - 1]}
+                                    정렬: {mainSortArr[state.mainSort - 1]}
                                 </span>
                                 <span className="select-medium-button">&#160;X</span>
                             </div>
@@ -603,14 +659,7 @@ const Main = () => {
                                 </PaginationWapper>
                             </SortBox>
                             <ListBox>
-                                <ShowList
-                                    product={product}
-                                    items={items}
-                                    page={page}
-                                    filterVal={filterVal}
-                                    setFilterVal={setFilterVal}
-                                    //memoVal={memoVal}
-                                />
+                                <ShowList product={product} items={items} page={page} />
                             </ListBox>
                         </Items>
                     </ItemSection>

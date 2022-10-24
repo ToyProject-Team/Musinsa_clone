@@ -22,8 +22,12 @@ import { AiOutlineSearch } from '@react-icons/all-files/ai/AiOutlineSearch';
 import { IoMdArrowDropup } from '@react-icons/all-files/io/IoMdArrowDropup';
 import { FaCommentsDollar } from 'react-icons/fa';
 
+import { useMainState, useMainDispatch } from 'context/MainContext';
+import { ALL, TITLE } from 'context/MainContext';
+import NoticeList from 'components/NoticeList';
+import { useMemo } from 'react';
+
 const Header = props => {
-    const location = useLocation();
     const token = getData()?.accessToken;
     const [login, setLogin] = useState(getData());
     const [inputValue, onChangeInputValue, setInputValue] = useInput();
@@ -36,47 +40,19 @@ const Header = props => {
         setModalFirst(false);
     }, []);
 
+    const navigate = useNavigate();
+    const dispatch = useMainDispatch();
+
     //알림 추가, 더미데이터
     const [noticeList, setNoticeList] = useState([]);
-
-    const dummyData = {
-        id: 0,
-        MerchantUid: '3914619',
-        orderPrice: 24970,
-        amount: 1,
-        state: '2',
-        createdAt: '2017-07-21T17:32:28.000Z',
-        ProductMainTag: {
-            name: 'M',
-        },
-        ProductSubTag: {
-            id: 142,
-            name: '빨간색',
-            amount: 1,
-        },
-        Product: {
-            productTitle: 'Car',
-            ProductImg: {
-                src: 'Accessory/Accessory23',
-            },
-        },
-    };
 
     useEffect(() => {
         if (window.location.host.includes('local')) return;
 
         PostQueryApi(`/api/product/productList`).catch(() => {
             setModalFirst(true);
-        });
-    }, []);
-
-    useEffect(() => {
-        GetTokenApi('/api/order/orderList', token).then(res => {
-            setNoticeList(res.data);
-        });
-        // console.log(noticeList[0].Product.productTitle);
-        // console.log(noticeList[0].Product.ProductImg.src);
-    }, [notice]);
+        }, []);
+    });
 
     const { data: shoppingNumber, mutate } = useSWR(
         token ? '/api/shoppingBasket/shoppingList' : null,
@@ -86,25 +62,13 @@ const Header = props => {
         },
     );
 
-    const onClickHello = useCallback(() => {
-        const params = {
-            productId: 1,
-        };
-        PostHeaderBodyApi('/api/product/likeProduct', params, 'Authorization', token).then(() => {
-            mutate();
-        });
-    }, []);
-
-    const onClickHell2o = useCallback(() => {
-        const params = {
-            productId: 1,
-        };
-        DeleteHeaderBodyApi('/api/mypage/favoriteGoods/del', params, 'Authorization', token).then(
-            () => {
-                mutate();
-            },
-        );
-    }, []);
+    const { data: noticeNumber, mutate: noticeMutate } = useSWR(
+        token ? '/api/order/orderList' : null,
+        url => fetcher(url, token),
+        {
+            refreshInterval: 0,
+        },
+    );
 
     const formSub = useCallback(
         e => {
@@ -118,7 +82,12 @@ const Header = props => {
                 localStorage.setItem('keywords', JSON.stringify(value));
             }
 
-            props.setFilterVal({ productTitle: inputValue });
+            props.setSearch(true);
+            const payload = {
+                productTitle: inputValue,
+            };
+            dispatch({ type: TITLE, payload });
+            setInputValue('');
         },
         [search, inputValue],
     );
@@ -131,7 +100,13 @@ const Header = props => {
             const value = [...search, inputValue];
             localStorage.setItem('keywords', JSON.stringify(value));
         }
-        //console.log(inputValue);
+
+        props.setSearch(true);
+        const payload = {
+            productTitle: inputValue,
+        };
+        dispatch({ type: TITLE, payload });
+        setInputValue('');
     }, [search, inputValue]);
 
     const onClickDeleteSearchAll = useCallback(() => {
@@ -170,22 +145,54 @@ const Header = props => {
             });
     }, [login]);
 
-    // const onClickNotice = () => {
-    //     setNotice(!notice);
-    //     //알림창에 넣을 orderLsit 호출
-    //     GetTokenApi('/api/order/orderList', token).then(res => {
-    //         setNoticeList(res.data);
-    //     });
-    // };
+    const goMain = () => {
+        navigate('/');
+        const payload = {
+            bigCategoryId: 0,
+            smallCategoryId: 0,
+            mainSort: 0,
+            price: 0,
+            priceMin: 0,
+            priceMax: 0,
+            productTitle: '',
+        };
+        dispatch({ type: ALL, payload });
+    };
+
+    const onClickNotice = useCallback(async () => {
+        setNotice(!notice);
+        //알림창에 넣을 orderLsit 호출
+        if (!notice)
+            await GetTokenApi('/api/order/orderList', token).then(res => {
+                setNoticeList(res.data);
+            });
+    }, [notice]);
+
+    const noticeDay = useMemo(() => {
+        let value;
+
+        if (!noticeNumber) return false;
+        else value = noticeNumber[noticeNumber.length - 1].createdAt.slice(0, 10).split('-');
+
+        const today = new Date();
+        const timeValue = new Date(value);
+
+        const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+
+        const betweenTimeHour = Math.floor(betweenTime / 60);
+        if (betweenTimeHour < 24) {
+            return true;
+        }
+    }, [noticeNumber]);
 
     return (
         <>
             <HContainer>
                 <HDiv>
                     <div>
-                        <Link to="/">
+                        <div onClick={goMain}>
                             <HLogo>MUSINSA</HLogo>
-                        </Link>
+                        </div>
                     </div>
                     <HSearch>
                         <div>
@@ -226,7 +233,7 @@ const Header = props => {
                                             return (
                                                 <li key={idx}>
                                                     <a>{text}</a>
-                                                    <div class="box-edit">
+                                                    <div className="box-edit">
                                                         <a
                                                             href="#"
                                                             className="move"
@@ -263,22 +270,41 @@ const Header = props => {
                         )}
                         {login ? (
                             <div>
-                                <div className="flex" onClick={() => setNotice(!notice)}>
+                                <div className="flex" onClick={onClickNotice}>
                                     <a>알림</a>
-                                    <CountNum>{shoppingNumber ? 'N' : 0}</CountNum>
+                                    {noticeDay && <CountNum>N</CountNum>}
                                 </div>
                                 <article className={notice ? 'block' : 'none'}>
-                                    {noticeList ? (
-                                        noticeList?.map((data, idx) => {
-                                            <div>
-                                                {/* <p>
-                                                    <img
-                                                        src={`https://musinsa-s3.s3.ap-northeast-2.amazonaws.com/image/${data.Product.ProductImg.src}`}
-                                                    />
-                                                </p> */}
-                                                <p>{data.Product.productTitle}</p>
-                                            </div>;
-                                        })
+                                    {noticeList.length > 0 ? (
+                                        <>
+                                            <button
+                                                className="list-button"
+                                                type="button"
+                                                onClick={onClickNotice}
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    width="18"
+                                                    height="18"
+                                                    viewBox="0 0 18 18"
+                                                >
+                                                    <title>알림 레이어 닫기</title>
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M13.646 3.646l.708.708L9.707 9l4.647 4.646-.708.708L9 9.707l-4.646 4.647-.708-.708L8.293 9 3.646 4.354l.708-.708L9 8.293l4.646-4.647z"
+                                                    ></path>
+                                                </svg>
+                                            </button>
+                                            <p className="list-p">
+                                                PC에서는 공지, 구매 정보 알림만 확인하실 수
+                                                있습니다. <br />그 외 알림은 앱에서 확인 가능합니다.
+                                            </p>
+                                            <div className="list-container">
+                                                {noticeList.reverse().map(item => (
+                                                    <NoticeList key={item.id} item={item} />
+                                                ))}
+                                            </div>
+                                        </>
                                     ) : (
                                         <>
                                             <p>
@@ -304,7 +330,7 @@ const Header = props => {
                                 <CountNum>{shoppingNumber ? shoppingNumber.length : 0}</CountNum>
                             </Link>
                         </div>
-                        <div onClick={onClickHell2o}>
+                        <div>
                             <Link to="/mypage/orderlist">주문배송조회</Link>
                         </div>
                         {login ? (

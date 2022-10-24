@@ -284,16 +284,16 @@ router.post('/addCart', authJWT, async (req, res, next) => {
             if (checkProduct[0].amount < req.body.addCarts[i].packingAmount) {
                 return res.status(402).send({ message: "재고보다 담으려는 수량이 더 많습니다" })
             }
-            await ProductSubTag.update(
-                {
-                    amount: Sequelize.literal(`amount - ${req.body.addCarts[i].packingAmount}`),
-                },
-                {
-                    where: {
-                        id: checkProduct[0].id,
-                    },
-                },
-            );
+            // await ProductSubTag.update(
+            //     {
+            //         amount: Sequelize.literal(`amount - ${req.body.addCarts[i].packingAmount}`),
+            //     },
+            //     {
+            //         where: {
+            //             id: checkProduct[0].id,
+            //         },
+            //     },
+            // );
 
 
             await MyCart.create({

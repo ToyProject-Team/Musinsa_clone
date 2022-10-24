@@ -169,6 +169,14 @@ export const SDiv = styled.div`
                         color: #b2b2b2;
                     }
 
+                    & .active {
+                        color: black;
+                    }
+
+                    & .inactive {
+                        color: #b2b2b2;
+                    }
+
                     &:hover {
                         cursor: pointer;
                         color: black;
