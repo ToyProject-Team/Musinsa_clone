@@ -53,7 +53,7 @@ const PurchaseForm = () => {
 
     const [pay, setPay] = useState('card');
     const [order, setOrder] = useState(false);
-    const [checkList, setCheckList] = useState();
+    const [orderArr, setOrderArr] = useState();
 
     const [modalOrder, setModalOrder] = useState(false);
     const [modalBasket, setModalBasket] = useState(false);
@@ -341,7 +341,7 @@ const PurchaseForm = () => {
             orderList.push(obj);
         }
 
-        setCheckList(orderList);
+        setOrderArr(orderList);
         setModalOrder(true);
     }, [selectArr]);
 
@@ -449,7 +449,7 @@ const PurchaseForm = () => {
             </TotalPrice>
             <ButtonWrapper>
                 <ButtonBuy onClick={onClickOrderButton}>바로구매</ButtonBuy>
-                {order && <Order pay={pay} checkList={checkList} />}
+                {order && <Order pay={pay} orderArr={orderArr} />}
                 <ButtonLike clickedlike={clickedlike} onClick={onLikeClicked}>
                     <Button clickedlike={clickedlike} />
                     <Like clickedlike={clickedlike}>{thousandComma(detail.product.likes)}</Like>

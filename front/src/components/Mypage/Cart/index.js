@@ -76,7 +76,8 @@ function Cart() {
 
     const [modalOrder, setModalOrder] = useState(false);
 
-    const [orderArr, setOrderArr] = useState([{ shoppingBasketId: '', price: '', amount: '' }]);
+    const [checkList, setCheckList] = useState([]);
+    const [orderArr, setOrderArr] = useState([]);
 
     // 체크
     const checkItem = useCallback(() => {

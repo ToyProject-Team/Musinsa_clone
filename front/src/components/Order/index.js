@@ -29,10 +29,8 @@ const Order = ({ modal, pay, orderArr, checkList }) => {
             let pay_method = '';
             let price = 0;
 
-            if (productId == undefined)
-                price = orderArr.reduce((a, b) => a + b.price, 0);
-            else price = checkList.reduce((a, b) => Number(a.price) + Number(b.price));
-            let i = 0;
+            if (productId == undefined) price = orderArr.reduce((a, b) => a + b.price, 0);
+            else price = orderArr.reduce((a, b) => Number(a.price) + Number(b.price));
 
             if (pay === 'card') pg = 'html5_inicis';
             else if (pay === 'Virtual') pg = 'html5_inicis';
@@ -83,7 +81,7 @@ const Order = ({ modal, pay, orderArr, checkList }) => {
                                     imp_uid: rsp.imp_uid,
                                     Merchant_uid: rsp.merchant_uid,
                                 },
-                                orderList: checkList,
+                                orderList: orderArr,
                             };
 
                             PostHeaderBodyApi(
