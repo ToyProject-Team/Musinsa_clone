@@ -401,6 +401,7 @@ export const HUser = styled.div`
             line-height: 1.5;
             z-index: 11;
             animation: fadeIn 0.4s;
+            z-index: 99;
 
             & p:last-of-type {
                 padding: 20px;
@@ -409,7 +410,7 @@ export const HUser = styled.div`
             & span {
                 position: absolute;
                 font-size: 46px;
-                top: -16%;
+                top: -6%;
                 left: 42%;
                 z-index: 4;
                 & svg {
