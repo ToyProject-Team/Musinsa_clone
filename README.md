@@ -116,7 +116,9 @@
 * Jenkins
 * Redis
 * MySql
-* 결제 API  
+* Express
+* Sequelize
+* 결제 API(IAMPORT)  
 
 <br />
 <br />
