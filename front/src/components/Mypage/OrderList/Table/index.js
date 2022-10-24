@@ -60,8 +60,8 @@ function OrderList({ data }) {
                 <td>{data.createdAt.substr(0, 10)}</td>
                 <td>{data.id}</td>
                 <td>
-                    {thousandComma(data.orderPrice * data.ProductSubTag.amount)}원<br />
-                    <span>({data.ProductSubTag.amount}개)</span>
+                    {thousandComma(data.orderPrice * data.amount)}원<br />
+                    <span>({data.amount}개)</span>
                 </td>
                 <td colSpan="2">
                     <span>주문완료</span>
