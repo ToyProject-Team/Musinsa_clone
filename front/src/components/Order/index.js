@@ -30,12 +30,7 @@ const Order = ({ modal, pay, orderArr, checkList }) => {
             let pay_method = '';
             let price = 0;
 
-<<<<<<< HEAD
-            if (productId == undefined) price = orderArr.reduce((a, b) => a + b.price, 0);
-            else price = orderArr.reduce((a, b) => Number(a.price) + Number(b.price));
-=======
             price = orderArr.reduce((a, b) => a + Number(b.price), 0);
->>>>>>> 4b25ad5c36d92212ef58f926b47c71131595fd91
 
             if (pay === 'card') pg = 'html5_inicis';
             else if (pay === 'kakao') pg = 'kakaopay';

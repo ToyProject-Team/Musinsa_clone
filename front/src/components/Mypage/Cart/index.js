@@ -76,10 +76,6 @@ function Cart() {
 
     const [modalOrder, setModalOrder] = useState(false);
 
-<<<<<<< HEAD
-    const [checkList, setCheckList] = useState([]);
-=======
->>>>>>> 4b25ad5c36d92212ef58f926b47c71131595fd91
     const [orderArr, setOrderArr] = useState([]);
 
     // 체크
