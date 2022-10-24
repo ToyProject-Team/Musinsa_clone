@@ -446,7 +446,7 @@ export const HUser = styled.div`
     & .list-container {
         width: 375px;
         overflow-y: auto;
-        max-height: 590px;
+        max-height: 530px;
         margin: 0;
         padding: 0;
         border: 0;

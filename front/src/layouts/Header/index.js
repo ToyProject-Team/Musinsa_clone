@@ -25,6 +25,7 @@ import { FaCommentsDollar } from 'react-icons/fa';
 import { useMainState, useMainDispatch } from 'context/MainContext';
 import { ALL, TITLE } from 'context/MainContext';
 import NoticeList from 'components/NoticeList';
+import { useMemo } from 'react';
 
 const Header = props => {
     const token = getData()?.accessToken;
@@ -55,6 +56,14 @@ const Header = props => {
 
     const { data: shoppingNumber, mutate } = useSWR(
         token ? '/api/shoppingBasket/shoppingList' : null,
+        url => fetcher(url, token),
+        {
+            refreshInterval: 0,
+        },
+    );
+
+    const { data: noticeNumber, mutate: noticeMutate } = useSWR(
+        token ? '/api/order/orderList' : null,
         url => fetcher(url, token),
         {
             refreshInterval: 0,
@@ -150,14 +159,31 @@ const Header = props => {
         dispatch({ type: ALL, payload });
     };
 
-    const onClickNotice = () => {
-        console.log(123123);
+    const onClickNotice = useCallback(async () => {
         setNotice(!notice);
         //알림창에 넣을 orderLsit 호출
-        GetTokenApi('/api/order/orderList', token).then(res => {
-            setNoticeList(res.data);
-        });
-    };
+        if (!notice)
+            await GetTokenApi('/api/order/orderList', token).then(res => {
+                setNoticeList(res.data);
+            });
+    }, [notice]);
+
+    const noticeDay = useMemo(() => {
+        let value;
+
+        if (!noticeNumber) return false;
+        else value = noticeNumber[noticeNumber.length - 1].createdAt.slice(0, 10).split('-');
+
+        const today = new Date();
+        const timeValue = new Date(value);
+
+        const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+
+        const betweenTimeHour = Math.floor(betweenTime / 60);
+        if (betweenTimeHour < 24) {
+            return true;
+        }
+    }, [noticeNumber]);
 
     return (
         <>
@@ -246,13 +272,16 @@ const Header = props => {
                             <div>
                                 <div className="flex" onClick={onClickNotice}>
                                     <a>알림</a>
-                                    {console.log(noticeList)}
-                                    <CountNum>{shoppingNumber ? 'N' : 0}</CountNum>
+                                    {noticeDay && <CountNum>N</CountNum>}
                                 </div>
                                 <article className={notice ? 'block' : 'none'}>
                                     {noticeList.length > 0 ? (
                                         <>
-                                            <button className="list-button" type="button">
+                                            <button
+                                                className="list-button"
+                                                type="button"
+                                                onClick={onClickNotice}
+                                            >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     width="18"

@@ -3,8 +3,6 @@ import { List } from './styles';
 import { ReactComponent as BasketIcon } from 'assets/svg/Basket.svg';
 
 const NoticeList = ({ item }) => {
-    console.log(item);
-
     function timeForToday(value) {
         const today = new Date();
         const timeValue = new Date(value);
