@@ -6,11 +6,12 @@ import { BiShoppingBag } from '@react-icons/all-files/bi/BiShoppingBag';
 import { AiOutlineShareAlt } from '@react-icons/all-files/ai/AiOutlineShareAlt';
 import { RiArrowDownSLine } from '@react-icons/all-files/ri/RiArrowDownSLine';
 import { RiArrowUpSLine } from '@react-icons/all-files/ri/RiArrowUpSLine';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import UrlCopyModal from 'components/Modals/UrlCopyModal';
 
 const DialLog = props => {
     const saveUrl = useLocation();
+    const navigate = useNavigate();
 
     // 다이얼 로그
     const [basic, setBasic] = useState({

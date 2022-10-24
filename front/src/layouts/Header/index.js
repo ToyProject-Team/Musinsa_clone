@@ -22,6 +22,9 @@ import { AiOutlineSearch } from '@react-icons/all-files/ai/AiOutlineSearch';
 import { IoMdArrowDropup } from '@react-icons/all-files/io/IoMdArrowDropup';
 import { FaCommentsDollar } from 'react-icons/fa';
 
+import { useMainState, useMainDispatch } from 'context/MainContext';
+import { ALL, TITLE } from 'context/MainContext';
+
 const Header = props => {
     const location = useLocation();
     const token = getData()?.accessToken;
@@ -35,6 +38,10 @@ const Header = props => {
     const onCloseModal = useCallback(() => {
         setModalFirst(false);
     }, []);
+
+    const navigate = useNavigate();
+    const state = useMainState();
+    const dispatch = useMainDispatch();
 
     //알림 추가, 더미데이터
     const [noticeList, setNoticeList] = useState([]);
@@ -69,14 +76,6 @@ const Header = props => {
             setModalFirst(true);
         });
     }, []);
-
-    useEffect(() => {
-        GetTokenApi('/api/order/orderList', token).then(res => {
-            setNoticeList(res.data);
-        });
-        // console.log(noticeList[0].Product.productTitle);
-        // console.log(noticeList[0].Product.ProductImg.src);
-    }, [notice]);
 
     const { data: shoppingNumber, mutate } = useSWR(
         token ? '/api/shoppingBasket/shoppingList' : null,
@@ -118,7 +117,12 @@ const Header = props => {
                 localStorage.setItem('keywords', JSON.stringify(value));
             }
 
-            props.setFilterVal({ productTitle: inputValue });
+            props.setSearch(true);
+            const payload = {
+                productTitle: inputValue,
+            };
+            dispatch({ type: TITLE, payload });
+            setInputValue('');
         },
         [search, inputValue],
     );
@@ -131,7 +135,13 @@ const Header = props => {
             const value = [...search, inputValue];
             localStorage.setItem('keywords', JSON.stringify(value));
         }
-        //console.log(inputValue);
+
+        props.setSearch(true);
+        const payload = {
+            productTitle: inputValue,
+        };
+        dispatch({ type: TITLE, payload });
+        setInputValue('');
     }, [search, inputValue]);
 
     const onClickDeleteSearchAll = useCallback(() => {
@@ -170,6 +180,19 @@ const Header = props => {
             });
     }, [login]);
 
+    const goMain = () => {
+        navigate('/');
+        const payload = {
+            bigCategoryId: 0,
+            smallCategoryId: 0,
+            mainSort: 0,
+            price: 0,
+            priceMin: 0,
+            priceMax: 0,
+            productTitle: '',
+        };
+        dispatch({ type: ALL, payload });
+    };
     // const onClickNotice = () => {
     //     setNotice(!notice);
     //     //알림창에 넣을 orderLsit 호출
@@ -183,9 +206,9 @@ const Header = props => {
             <HContainer>
                 <HDiv>
                     <div>
-                        <Link to="/">
+                        <div onClick={goMain}>
                             <HLogo>MUSINSA</HLogo>
-                        </Link>
+                        </div>
                     </div>
                     <HSearch>
                         <div>
