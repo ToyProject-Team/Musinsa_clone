@@ -29,14 +29,20 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
 
     // 수량 증가
     const plusCount = useCallback(() => {
-        setCartList(prev =>
-            prev.map(v => (v.id === item.id ? { ...v, packingAmount: v.packingAmount + 1 } : v)),
-        );
+        if (amountValue >= item.ProductSubTag.amount) {
+            alert('상품의 재고보다 많은 수량을 선택할 수 없습니다');
+        } else {
+            setCartList(prev =>
+                prev.map(v =>
+                    v.id === item.id ? { ...v, packingAmount: v.packingAmount + 1 } : v,
+                ),
+            );
+        }
     }, [cartList]);
 
     // 수량 감소
     const minusCount = useCallback(() => {
-        if (item.count === 1) {
+        if (amountValue === 1) {
             alert('수량을 줄일 수 없습니다.');
         } else {
             setCartList(prev =>
@@ -53,7 +59,6 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
             ? setCartList(prev => prev.map(v => (v.id === item.id ? { ...v, check: !v.check } : v)))
             : setCartList(cartList);
     }, [cartList]);
-
 
     // 결제 모달창
     const onCloseModal = useCallback(() => {
@@ -118,7 +123,12 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
                                         <ItemUl>
                                             <li>
                                                 <a href={`/detail?productId=${item.Product.id}`}>
-                                                    {bigCategory[item.Product.BigCategoryId]} / {smallCategory[item.Product.BigCategoryId][item.Product.SmallCategoryId]}
+                                                    {bigCategory[item.Product.BigCategoryId]} /{' '}
+                                                    {
+                                                        smallCategory[item.Product.BigCategoryId][
+                                                            item.Product.SmallCategoryId
+                                                        ]
+                                                    }
                                                 </a>
                                             </li>
                                             <li>
@@ -175,7 +185,10 @@ function CartTable({ item, setCartList, cartList, cartRemove, setToTalPrice }) {
                                 </td>
                                 <td>
                                     <div>
-                                        <button className="btn" onClick={onClickOrderButton}>
+                                        <button
+                                            className="btn"
+                                            onClick={amountValue === 0 ? false : onClickOrderButton}
+                                        >
                                             결제하기
                                         </button>
                                         {order && <Order pay={pay} />}
