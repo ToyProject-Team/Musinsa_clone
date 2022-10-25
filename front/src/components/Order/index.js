@@ -103,7 +103,7 @@ const Order = ({ modal, pay, orderArr, checkList }) => {
 
     const onCloseModal = useCallback(() => {
         setModalOrder(false);
-        
+        window.location.reload();
     }, []);
 
     return (
