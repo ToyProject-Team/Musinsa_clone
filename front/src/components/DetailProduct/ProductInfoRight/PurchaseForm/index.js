@@ -333,7 +333,7 @@ const PurchaseForm = () => {
         for (let list of selectArr) {
             const obj = {
                 ProductId: query.productId,
-                price: String(detail.product.rookiePrice),
+                price: String(detail.product.rookiePrice * list[2]),
                 amount: String(list[2]),
                 ProductMainTagId: list[0],
                 ProductSubTagId: list[1],
