@@ -10,19 +10,6 @@ function OrderList({ data }) {
     const [show, setShow] = useState(false);
     const [cancelPay, setCancelPay] = useState(false);
 
-    const orderState = () => {
-        switch (data.state) {
-            case 1:
-                return '주문완료';
-            case 2:
-                return '환불완료';
-        }
-    };
-
-    const onClickCancelPay = useCallback(e => {
-        setShow(true);
-    }, []);
-
     const onCloseModal = useCallback(() => {
         setShow(false);
     }, [show]);

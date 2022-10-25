@@ -304,6 +304,7 @@ const PurchaseForm = () => {
             setModalBasket(true);
             mutate();
         } catch (error) {
+            alert('이미 추가된 카테고리입니다');
             console.error(error);
         }
     }, [selectArr]);
@@ -333,7 +334,7 @@ const PurchaseForm = () => {
         for (let list of selectArr) {
             const obj = {
                 ProductId: query.productId,
-                price: String(detail.product.rookiePrice * list[2]),
+                price: String(detail.product.rookiePrice),
                 amount: String(list[2]),
                 ProductMainTagId: list[0],
                 ProductSubTagId: list[1],
@@ -449,7 +450,7 @@ const PurchaseForm = () => {
             </TotalPrice>
             <ButtonWrapper>
                 <ButtonBuy onClick={onClickOrderButton}>바로구매</ButtonBuy>
-                {order && <Order pay={pay} orderArr={orderArr} />}
+                {order && <Order pay={pay} orderArr={orderArr} setOrder={setOrder} />}
                 <ButtonLike clickedlike={clickedlike} onClick={onLikeClicked}>
                     <Button clickedlike={clickedlike} />
                     <Like clickedlike={clickedlike}>{thousandComma(detail.product.likes)}</Like>

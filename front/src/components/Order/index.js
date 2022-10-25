@@ -10,7 +10,7 @@ import { useScript } from 'hooks/useScript';
 
 const impNumber = process.env.REACT_APP_PAYMENT;
 
-const Order = ({ modal, pay, orderArr, checkList }) => {
+const Order = ({ modal, pay, orderArr, checkList, setOrder }) => {
     const jQueryScript = useScript('https://code.jquery.com/jquery-1.12.4.min.js');
     const iamportScript = useScript('https://cdn.iamport.kr/js/iamport.payment-1.1.8.js');
 
@@ -22,7 +22,7 @@ const Order = ({ modal, pay, orderArr, checkList }) => {
     const { productId } = query;
 
     const [modalOrder, setModalOrder] = useState(false);
-    console.log(orderArr);
+    console.log(123, orderArr);
 
     useEffect(() => {
         if (iamportScript === 'ready' && jQueryScript === 'ready') {
@@ -30,7 +30,8 @@ const Order = ({ modal, pay, orderArr, checkList }) => {
             let pay_method = '';
             let price = 0;
 
-            price = orderArr.reduce((a, b) => a + Number(b.price), 0);
+            if (productId == undefined) price = orderArr.reduce((a, b) => a + Number(b.price), 0);
+            else price = orderArr.reduce((a, b) => a + Number(b.price) * Number(b.amount), 0);
 
             if (pay === 'card') pg = 'html5_inicis';
             else if (pay === 'kakao') pg = 'kakaopay';
@@ -94,6 +95,7 @@ const Order = ({ modal, pay, orderArr, checkList }) => {
                         }
                     } else {
                         // 결제 실패 시 로직,
+                        setOrder(false);
                         console.log('error');
                     }
                 },

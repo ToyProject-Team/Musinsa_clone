@@ -123,9 +123,6 @@ function Cart() {
         }
     }, [cartList]);
 
-    // console.log('check', checkList);
-    console.log('order', orderArr);
-
     // 모두 체크 확인 및 총상품 금액
     useEffect(() => {
         let arrId = [];
@@ -149,10 +146,6 @@ function Cart() {
             );
         } else setSum(0);
     }, [cartList]);
-
-    console.log('cart', cartList);
-    // console.log('prdid', prdId);
-    // console.log('arrId',arrId);
 
     return (
         <>
@@ -226,7 +219,7 @@ function Cart() {
                     </CartPayment>
                     <OrderBtn>
                         <button onClick={onClickOrderButton}>결제하기</button>
-                        {order && <Order pay={pay} orderArr={orderArr} />}
+                        {order && <Order pay={pay} orderArr={orderArr} setOrder={setOrder} />}
                     </OrderBtn>
                 </div>
 
