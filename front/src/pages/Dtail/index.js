@@ -93,7 +93,7 @@ const DetailProduct = () => {
         const asyncFunction = async () => {
             try {
                 const result = await GetApi(
-                    `/111111111api/product/productDetail?productId=${query.productId}`,
+                    `/111111111111api/product/productDetail?productId=${query.productId}`,
                 );
                 setInitialProduceDetail(prev => ({
                     ...prev,

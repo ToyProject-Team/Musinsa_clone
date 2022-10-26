@@ -89,8 +89,21 @@ function Cart() {
     }, [modalOrder]);
 
     // 바로구매
-    const onClickOrderButton = useCallback(() => {
-        setModalOrder(true);
+    const onClickOrderButton = useCallback(e => {
+        // console.log(e);
+        // const orderList = [];
+        // for (let list of selectArr) {
+        //     const obj = {
+        //         ProductId: query.productId,
+        //         price: String(detail.product.rookiePrice),
+        //         amount: String(list[2]),
+        //         ProductMainTagId: list[0],
+        //         ProductSubTagId: list[1],
+        //     };
+        //     orderList.push(obj);
+        // }
+        // setOrderArr(orderList);
+        // setModalOrder(true);
     }, []);
 
     // 결제
