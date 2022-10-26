@@ -9,10 +9,9 @@
 <br />
 
 <div align="center">
-    <a href="www.naver.com">사이트</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-    <a href="www.naver.com">노션</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-    <a href="www.naver.com">위키</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-    <a href="www.naver.com">PPT</a>
+    <a href="http://141.164.48.244:3000/">사이트</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <a href="https://github.com/ToyProject-Team/Musinsa_clone/wiki">위키</a><span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <a href="https://docs.google.com/presentation/u/1/d/1Nn7MhcmpXiQOWOc7ciQRVUS_mUedsQuyE9tZ6UYzZRI/edit#slide=id.g13e370b04ed_1_118">PPT</a>
 </div>
 <br />
 <br />
