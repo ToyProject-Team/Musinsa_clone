@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ListOuter, ListWrapper } from './styles';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
@@ -6,8 +6,6 @@ import { AiFillStar } from '@react-icons/all-files/ai/AiFillStar';
 
 const ShowList = props => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const history = createBrowserHistory();
 
     const goDetail = data => {
         navigate(`/detail?productId=${data.id}`);

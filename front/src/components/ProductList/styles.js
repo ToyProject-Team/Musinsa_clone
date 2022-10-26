@@ -40,22 +40,6 @@ export const ListOuter = styled.li`
         }
     }
 
-    // @media only screen and (min-width: 0) {
-    //     width: 25% !important;
-    // }
-
-    // @media only screen and (min-width: 1200px) {
-    //     width: 20% !important;
-    // }
-
-    // @media only screen and (min-width: 1200px) {
-    // 	width: 16.66666667% !important;
-    // }
-
-    // @media only screen and (min-width: 1700px) {
-    //     width: 14.2857143% !important;
-    // }
-
     &:hover {
         background-color: #f2f2f2;
         z-index: 1;
@@ -176,6 +160,7 @@ export const ListOuter = styled.li`
                 color: #000;
                 background: #fff;
                 padding: 6px 10px 6px 10px;
+                z-index: 100;
             }
             .close {
                 display: none;

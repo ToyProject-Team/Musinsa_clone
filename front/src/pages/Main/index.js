@@ -98,6 +98,12 @@ const Main = () => {
             newArr[clickCate.indexOf(true)] = false;
         }
         setClickCate(newArr);
+
+        const secondArr = clickSideBar;
+        if (secondArr.includes(true)) {
+            secondArr[clickSideBar.indexOf(true)] = false;
+        }
+        setClickSideBar(newArr);
     };
 
     //Price 삭제 함수(가격 - 전체보기)
@@ -144,6 +150,7 @@ const Main = () => {
     //state 변했을때, clickCate가 바로 변하지 않음(smallCate 숫자가 안변함)
 
     const [clickCate, setClickCate] = useState([]);
+    const [clickSideBar, setClickSideBar] = useState([]);
 
     const [clickPrice, setClickPrice] = useState(
         Array.from({
@@ -239,20 +246,17 @@ const Main = () => {
         clickBold();
         clickBoldPrice();
         clickBoldMainSort();
-
-        // if (state.smallCategoryId === 0) {
-        //     const newArr = clickSideBar;
-        //     if (clickSideBar.includes(true)) {
-        //         newArr[clickSideBar.indexOf(true)] = false;
-        //     }
-        //     setClickSideBar(newArr);
-        // }
     }, [state]);
 
     useEffect(() => {
         setMinPriceInput('');
         setMaxPriceInput('');
+        setPage(1);
     }, [state.bigCategoryId]);
+
+    useEffect(() => {
+        setPage(1);
+    }, [state.smallCategoryId]);
 
     //handleFilter함수 사용해서 쿼리문 추가
     //smallCategoryId추가(중분류)
@@ -373,7 +377,7 @@ const Main = () => {
             <DialLog />
             <Header setSearch={setSearch} />
             <ScrollContainer>
-                <Sidebar />
+                <Sidebar clickSideBar={clickSideBar} setClickSideBar={setClickSideBar} />
                 <MainContainer>
                     {/* 카테고리 */}
                     <Category>
