@@ -184,9 +184,10 @@ function CartTable({ item, setCartList, cartList, cartRemove }) {
                                 <td>
                                     택배배송 <br />
                                     <strong>
-                                        {item.Product.productPrice * amountValue > 30000
+                                        {/* {item.Product.productPrice * amountValue > 30000
                                             ? '배송비 무료'
-                                            : `${dlvChr}원`}
+                                            : `${dlvChr}원`} */}
+                                        무료 배송
                                     </strong>
                                 </td>
                                 <td>
@@ -215,8 +216,8 @@ function CartTable({ item, setCartList, cartList, cartRemove }) {
                     onCloseModal={onCloseModal}
                     onClickConfirm={onClickOrder}
                     price={thousandComma(
-                        item.Product.productPrice * item.packingAmount +
-                            (item.Product.productPrice * item.packingAmount > 30000 ? 0 : 3000),
+                        item.Product.productPrice * item.packingAmount,
+                        // (item.Product.productPrice * item.packingAmount > 30000 ? 0 : 3000),
                     )}
                     pay={pay}
                     setPay={setPay}

@@ -201,7 +201,8 @@ function Cart() {
                         <li>
                             <p>배송비</p>
                             <p>
-                                <span>{sum > 30000 || sum === 0 ? 0 : thousandComma(3000)}</span>원
+                                <span>0</span>원
+                                {/* <span>{sum > 30000 || sum === 0 ? 0 : thousandComma(3000)}</span>원 */}
                             </p>
                         </li>
                         <li>
@@ -211,7 +212,8 @@ function Cart() {
                             <p>최종 결제 금액</p>
                             <p>
                                 <span>
-                                    {thousandComma(sum + (sum > 30000 || sum === 0 ? 0 : 3000))}
+                                    {thousandComma(sum)}
+                                    {/* {thousandComma(sum + (sum > 30000 || sum === 0 ? 0 : 3000))} */}
                                 </span>
                                 원
                             </p>
@@ -228,7 +230,8 @@ function Cart() {
                         show={modalOrder}
                         onCloseModal={onCloseModal}
                         onClickConfirm={onClickOrder}
-                        price={thousandComma(sum + (sum > 30000 ? 0 : 3000))}
+                        price={thousandComma(sum)}
+                        // price={thousandComma(sum + (sum > 30000 ? 0 : 3000))}
                         pay={pay}
                         setPay={setPay}
                     ></OrderModal>
