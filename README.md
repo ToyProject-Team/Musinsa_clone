@@ -150,11 +150,17 @@ BackEnd(메인 개발) | BackEnd(서브 개발)
  
 # 🛠 기술적 도전
 ### Front
-<details>
-<summary>🛠 토글버튼 도저언</summary>
-<div markdown="1">
-</div>
-</details>
+* useSWR를 이용하여 realTime 데이터 연동
+* useContext를 사용하여 props의 간소화 및 유지보수 개선
+* 카카오 API를 이용한 소셜회원가입 및 소셜 로그인
+* 메인페이지 filter, sort Click 이벤트를 통한 url query 변경, 이후 Axios를 통해 query문을 통한 데이터 통신
+* 데테일 페이지 onMouseOver 이벤트를 활용한 상품 이미지 줌 기능
+* 최적화 => 
+    * CDN 이미지를 활용한 이미지 최적화
+    * react-icons 대신 @react-icons/all-files를 활용한 아이콘 최적화
+* 아임포트를 이용한 test 결제 기능
+* 장바구니 기능 구현(삭제, 결제, 수량변경 등)
+
 
 ### Backend
 * 휴대폰 인증, 이메일 인증, 소셜 로그인 등 인증 절차가 필요한 부분은 모두 토큰 도입
