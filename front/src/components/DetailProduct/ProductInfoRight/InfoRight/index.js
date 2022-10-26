@@ -215,7 +215,7 @@ const ProductInfoRight = ({ data }) => {
                         </DetailInfo>
                     </DetailInfoWrapper>
                     <TextBox>
-                        <li>3만원 이상 시 무료배송입니다.</li>
+                        <li>무신사 회원은 무료배송입니다.</li>
                         <li>회원 특별 혜택</li>
                     </TextBox>
                 </InfoWrapper>
