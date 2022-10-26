@@ -155,7 +155,7 @@ BackEnd(메인 개발) | BackEnd(서브 개발)
 * 카카오 API를 이용한 소셜회원가입 및 소셜 로그인
 * 메인페이지 filter, sort Click 이벤트를 통한 url query 변경, 이후 Axios를 통해 query문을 통한 데이터 통신
 * 데테일 페이지 onMouseOver 이벤트를 활용한 상품 이미지 줌 기능
-* 최적화 => 
+* 최적화 진행
     * CDN 이미지를 활용한 이미지 최적화
     * react-icons 대신 @react-icons/all-files를 활용한 아이콘 최적화
 * 아임포트를 이용한 test 결제 기능
