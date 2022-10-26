@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Redirect, Route } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Routes, Redirect, Route } from 'react-router-dom';
 import loadable from '@loadable/component';
 import { UserProvider } from 'context/UserContext';
 import { GlobalProvider } from 'context/GlobalContext';
@@ -103,7 +103,7 @@ function App() {
         <GlobalProvider>
             <UserProvider>
                 <MainProvider>
-                    <BrowserRouter basename={process.env.PUBLIC_URL}>
+                    <HashRouter basename={process.env.PUBLIC_URL}>
                         <Routes>
                             <Route exact path="/*" element={<Main />} /> {/* => 메인페이지 */}
                             <Route path="login/*" element={<LogIn />} /> {/* => 로그인페이지 */}
@@ -122,7 +122,7 @@ function App() {
                             <Route path="footer/notice" element={<Notice />} />
                             <Route path="footer/declar" element={<Declar />} />
                         </Routes>
-                    </BrowserRouter>
+                    </HashRouter>
                 </MainProvider>
             </UserProvider>
         </GlobalProvider>
