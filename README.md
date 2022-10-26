@@ -1,6 +1,7 @@
 <div align="center"><img src="https://user-images.githubusercontent.com/110218594/195773693-4b1828da-8903-4b07-9ba6-fcab1e240418.png" alt="Material Bread logo"></div>
 
 <h1 align="center">무신사 클론 쇼핑몰 서비스</h1>
+<h1 href="http://141.164.48.244:3000">서버 주소</h1>
 <div align="center">
     로그인, 상품 검색 및 정렬, 장바구니 기능, 상품 결제 및 결제취소 등<br>전반적인 쇼핑몰의 구성부터 기능까지 무신사 클론코딩을 통해 구현해 보았습니다.
 </div>
