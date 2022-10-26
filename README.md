@@ -39,7 +39,7 @@
 # 💻 기능 소개
 
 <div>
-    <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
+    <img  align="right" src="https://user-images.githubusercontent.com/101618759/197943521-46fc6bb6-00f9-418f-8603-e9b6a85a1acd.gif" width="45%">
 
 <div>
 <h3>📌 Pages with many features</h3>
@@ -54,7 +54,7 @@
 <br />
 
 <div>
-    <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
+    <img  align="right" src="https://user-images.githubusercontent.com/101618759/197943525-3fbbf517-4b72-47cb-8704-756bf63c9150.gif" width="45%">
 
 <div>
 <h3>📌 Check all products</h3>
@@ -87,7 +87,7 @@
 <br />
 
 <div>
-    <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
+    <img  align="right" src="https://user-images.githubusercontent.com/101618759/197943539-1cab9033-7f98-4b15-889f-ee6789e68e10.gif" width="45%">
 
 <div>
 <h3>📌 Check the status of all products</h3>
