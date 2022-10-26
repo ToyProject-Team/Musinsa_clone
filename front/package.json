@@ -61,5 +61,6 @@
   },
   "devDependencies": {
     "cra-bundle-analyzer": "^0.1.1"
-  }
+  },
+  "homepage": "http://141.164.48.244:3000"
 }
