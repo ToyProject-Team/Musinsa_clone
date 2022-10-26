@@ -103,7 +103,7 @@ function App() {
         <GlobalProvider>
             <UserProvider>
                 <MainProvider>
-                    <HashRouter basename="/">
+                    <BrowserRouter basename="/">
                         <Routes>
                             <Route exact path="/*" element={<Main />} /> {/* => 메인페이지 */}
                             <Route path="login/*" element={<LogIn />} /> {/* => 로그인페이지 */}
@@ -122,7 +122,7 @@ function App() {
                             <Route path="footer/notice" element={<Notice />} />
                             <Route path="footer/declar" element={<Declar />} />
                         </Routes>
-                    </HashRouter>
+                    </BrowserRouter>
                 </MainProvider>
             </UserProvider>
         </GlobalProvider>
