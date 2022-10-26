@@ -14,6 +14,7 @@ function CartTable({ item, setCartList, cartList, cartRemove }) {
     const [modalOrder, setModalOrder] = useState(false);
     const [pay, setPay] = useState('card');
     const [order, setOrder] = useState(false);
+    const [orderArr, setOrderArr] = useState([]);
     const id = item.id;
     const amountValue = item.ProductSubTag.amount == 0 ? 0 : item.packingAmount;
 
@@ -74,8 +75,16 @@ function CartTable({ item, setCartList, cartList, cartRemove }) {
 
     // 바로구매
     const onClickOrderButton = useCallback(() => {
+        let obj = {
+            shoppingBasketId: item.id,
+            price: item.Product.productPrice * amountValue,
+            amount: amountValue,
+        };
+        const orderList = [obj];
+
+        setOrderArr(orderList);
         setModalOrder(true);
-    }, []);
+    }, [amountValue]);
 
     // 결제
     const onClickOrder = useCallback(() => {
@@ -197,7 +206,13 @@ function CartTable({ item, setCartList, cartList, cartRemove }) {
                                         >
                                             결제하기
                                         </button>
-                                        {order && <Order pay={pay} />}
+                                        {order && (
+                                            <Order
+                                                pay={pay}
+                                                orderArr={orderArr}
+                                                setOrder={setOrder}
+                                            />
+                                        )}
                                         <button className="del_btn" onClick={e => cartRemove(id)}>
                                             <FiX />
                                         </button>

@@ -10,10 +10,9 @@ import { useScript } from 'hooks/useScript';
 
 const impNumber = process.env.REACT_APP_PAYMENT;
 
-const Order = ({ modal, pay, orderArr, checkList, setOrder }) => {
+const Order = ({ pay, orderArr, setOrder }) => {
     const jQueryScript = useScript('https://code.jquery.com/jquery-1.12.4.min.js');
     const iamportScript = useScript('https://cdn.iamport.kr/js/iamport.payment-1.1.8.js');
-    console.log(123, orderArr);
 
     const data = getData();
     const { accessToken } = data;
