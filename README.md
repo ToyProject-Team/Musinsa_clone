@@ -70,7 +70,7 @@
 <br />
 <br />
 <div>
-    <img  align="right" src="https://user-images.githubusercontent.com/101618759/196099589-c248f757-07a2-47cc-955e-9a67d2234070.gif" width="45%">
+    <img  align="right" src="https://user-images.githubusercontent.com/101618759/198002009-6dfbda29-77c2-46d1-b5f5-5aa0389724bb.gif" width="45%">
 
 <div>
 <h3>📌 All the functions of the product</h3>
