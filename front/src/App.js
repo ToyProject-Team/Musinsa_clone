@@ -103,7 +103,7 @@ function App() {
         <GlobalProvider>
             <UserProvider>
                 <MainProvider>
-                    <BrowserRouter>
+                    <BrowserRouter basename={process.env.PUBLIC_URL}>
                         <Routes>
                             <Route exact path="/*" element={<Main />} /> {/* => 메인페이지 */}
                             <Route path="login/*" element={<LogIn />} /> {/* => 로그인페이지 */}
