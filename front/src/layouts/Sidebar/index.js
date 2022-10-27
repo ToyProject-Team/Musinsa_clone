@@ -36,16 +36,18 @@ const Sidebar = props => {
         // smallCate index가 1이상인 경우에는 bigCateId가 이미 있는경우/없는경우
         //이중 삼항연산자
 
-        const newArr = props.clickSideBar;
-        if (props.clickSideBar.includes(true)) {
-            newArr[props.clickSideBar.indexOf(true)] = false;
-        }
-        newArr[small] = true;
-        props.setClickSideBar(() => newArr);
-
         const { pathname } = location;
 
         if (pathname !== '/detail') {
+            const newArr = props.clickSideBar;
+            if (props.clickSideBar.includes(true)) {
+                newArr[props.clickSideBar.indexOf(true)] = false;
+            }
+            newArr[small] = true;
+            props.setClickSideBar(() => {
+                return newArr;
+            });
+
             if (small === 0) {
                 const payload = {
                     bigCategoryId: big + 1,
@@ -70,12 +72,12 @@ const Sidebar = props => {
         } else {
             navigate('/');
             if (small === 0) {
-                //return navigate(`/?bigCategoryId=${big + 1}`);
                 const payload = {
                     bigCategoryId: big + 1,
                     smallCategoryId: 0,
                 };
                 dispatchMain({ type: CATEGORY, payload });
+                // return navigate(`/?bigCategoryId=${big + 1}`);
             } else {
                 //return navigate(`/?bigCategoryId=${big + 1}&smallCategoryId=${small}`);
                 const payload = {
@@ -90,11 +92,15 @@ const Sidebar = props => {
     const onClickCategory = useCallback(idx => {
         setOpen(prev => [...prev].map((v, index) => (idx === index ? (v ? false : true) : false)));
 
-        props.setClickSideBar(
-            Array.from({
-                length: smallCategory[idx].length,
-            }).fill(false),
-        );
+        const { pathname } = location;
+
+        if (pathname !== '/detail') {
+            props.setClickSideBar(
+                Array.from({
+                    length: smallCategory[idx].length,
+                }).fill(false),
+            );
+        }
     }, []);
 
     const onClickToggle = useCallback(() => {

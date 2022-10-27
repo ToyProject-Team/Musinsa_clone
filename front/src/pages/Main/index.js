@@ -35,17 +35,6 @@ const Main = () => {
 
     const state = useMainState();
     const dispatch = useMainDispatch();
-    // const payload = {수정할 값}
-    // dispatch{{ type: BIG, payload}}
-    // useEffect(() => {
-    //     // const payload = { bigCategoryId: 3 };
-    //     // dispatch({ type: BIG, payload });
-    //     console.log(state.bigCategoryId);
-    // }, []);
-
-    //리듀서에서
-    //case: BIG
-    //bigCategoryId : action.payload.bigCategoryId
 
     const ShowList = loadable(() => import('components/ProductList'), {
         fallback: (
@@ -61,10 +50,6 @@ const Main = () => {
     //쿼리스트링 활용
     const location = useLocation();
     const query = URLquery(location);
-    //query or {}
-    //const [state, setstate] = useState(query || {});
-
-    //useMemo는 바뀐 부분만 호출되도록 함
 
     //가격 배열
     const priceArr = [
@@ -77,13 +62,6 @@ const Main = () => {
 
     //MainSort 배열
     const mainSortArr = ['낮은 가격순', '높은 가격순', '후기순'];
-
-    // //parameter 추가
-    // const handleFilter = (val, name) => {
-    //     setstate(prev => {
-    //         return { ...prev, [name]: val };
-    //     });
-    // };
 
     //smallCateId 삭제 함수(중분류 - 전체)
     const onReset = () => {
@@ -146,9 +124,6 @@ const Main = () => {
     };
 
     //클릭한 요소 style변경
-    //전체 요소수와 같은 배열 생성 - 모두  false로 채움 - 클릭한 요소만 true로 변경
-    //state 변했을때, clickCate가 바로 변하지 않음(smallCate 숫자가 안변함)
-
     const [clickCate, setClickCate] = useState([]);
     const [clickSideBar, setClickSideBar] = useState([]);
 
@@ -181,10 +156,6 @@ const Main = () => {
             finalResult += `&${titleKey}=${titleValue}`;
         }
 
-        // if(state.productTitle!=='') {
-
-        // }
-
         return finalResult;
     };
 
@@ -192,50 +163,36 @@ const Main = () => {
         const newArr = clickCate;
         if (newArr.includes(true)) newArr[clickCate.indexOf(true)] = false;
 
-        newArr[state.smallCategoryId] = true;
+        newArr[state.smallCategoryId ? state.smallCategoryId : 0] = true;
+
         setClickCate(() => newArr);
     };
 
     const clickBoldPrice = () => {
         const newArr = clickPrice;
-
         if (newArr.includes(true)) newArr[clickPrice.indexOf(true)] = false;
-
         newArr[state.price - 1] = true;
-
-        // else {
-        //     if (newArr.includes(true)) newArr[clickPrice.indexOf(true)] = false;
-        // }
-
         setClickPrice(newArr);
     };
 
     const clickBoldMainSort = () => {
         const newArr = clickMainSort;
-
         if (newArr.includes(true)) newArr[clickMainSort.indexOf(true)] = false;
-
         newArr[state.mainSort - 1] = true;
-
-        // else {
-        //     if (newArr.includes(true)) newArr[clickMainSort.indexOf(true)] = false;
-        // }
-
-        // if (newArr.includes(true)) newArr[clickMainSort.indexOf(true)] = false;
-        // newArr[state.mainSort && state.mainSort - 1] = true;
         setClickMainSort(newArr);
     };
-
-    // useEffect(() => {
-    //     console.log(state);
-    // }, [state]);
 
     useEffect(() => {
         const result = makeQS();
 
-        if (result == '?') {
+        if (result == '?' && Object.keys(query).length === 0) {
             PostQueryApi(`/api/product/productList`).then(res => setProduct(res.data.productData));
             navigate('/');
+        }
+        if (result == '?' && Object.keys(query).length > 0) {
+            PostQueryApi(`/api/product/productList/${location.search}`).then(res =>
+                setProduct(res.data.productData),
+            );
         } else {
             PostQueryApi(`/api/product/productList${result}`).then(res =>
                 setProduct(res.data.productData),
@@ -258,7 +215,6 @@ const Main = () => {
         setPage(1);
     }, [state.smallCategoryId]);
 
-    //handleFilter함수 사용해서 쿼리문 추가
     //smallCategoryId추가(중분류)
     const onSort = val => {
         if (val > 0) {
@@ -279,8 +235,6 @@ const Main = () => {
         } else {
             onReset();
         }
-
-        //clickBold();
     };
 
     //price추가
@@ -338,11 +292,6 @@ const Main = () => {
             productTitle: searchTerm,
         };
         dispatch({ type: TITLE, payload });
-        // setProduct(
-        //     product.filter(data =>
-        //         data.productTitle.toLowerCase().includes(searchTerm.toLowerCase()),
-        //     ),
-        // );
     };
 
     //검색창 select박스 reset
@@ -652,13 +601,16 @@ const Main = () => {
                                         totalItemsCount={length}
                                         pageRangeDisplayed={10}
                                         onChange={handlePageChange}
-                                        // hideNavigation={true}
-                                        // hideFirstLastPages={true}
                                     />
                                 </PaginationWapper>
                             </SortBox>
                             <ListBox>
-                                <ShowList product={product} items={items} page={page} />
+                                <ShowList
+                                    product={product}
+                                    items={items}
+                                    page={page}
+                                    clickSideBar={clickSideBar}
+                                />
                             </ListBox>
                         </Items>
                     </ItemSection>

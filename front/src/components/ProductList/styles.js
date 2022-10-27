@@ -42,7 +42,7 @@ export const ListOuter = styled.li`
 
     &:hover {
         background-color: #f2f2f2;
-        z-index: 1;
+        z-index: 30;
     }
 
     div {

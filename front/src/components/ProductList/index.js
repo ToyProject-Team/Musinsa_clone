@@ -9,7 +9,6 @@ const ShowList = props => {
 
     const goDetail = data => {
         navigate(`/detail?productId=${data.id}`);
-        //localStorage.setItem('memo', location.search);
     };
 
     //옵션 데이터
